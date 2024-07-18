@@ -1,7 +1,21 @@
-<script setup></script>
+<script setup>
+import { useLinkStore } from "@/stores/link";
+import { useRouter } from "vue-router";
+
+const linkStore = useLinkStore();
+const { goHome } = linkStore;
+
+const router = useRouter();
+
+const goHomeLink = function () {
+  goHome();
+  router.push({ name: "home" });
+};
+</script>
 
 <template>
-  <div class="logo-container">
+  <!-- 로고 클릭 시 메인페이지 이동 -->
+  <div class="logo-container" @click="goHomeLink">
     <img src="@/assets/logo.svg" alt="코끼리 로고" />
     <div class="logo-first-name">코</div>
     <div class="logo-second-name">끼리</div>

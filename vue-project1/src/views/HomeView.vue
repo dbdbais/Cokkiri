@@ -1,9 +1,7 @@
 <script setup>
-import TheWelcome from '../components/TheWelcome.vue'
+import FriendList from "@/components/friend/FriendList.vue";
 </script>
 
 <template>
-  <main>
-    <TheWelcome />
-  </main>
+  <FriendList />
 </template>

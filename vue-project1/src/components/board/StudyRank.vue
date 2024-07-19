@@ -2,7 +2,7 @@
 
 <template>
   <div class="container">
-    <h3 class="title small-title">이달의 랭킹</h3>
+    <div class="title small-title">이달의 랭킹</div>
     <div class="rank"></div>
   </div>
 </template>

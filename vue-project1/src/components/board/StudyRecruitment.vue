@@ -54,7 +54,7 @@ const goDetail = function (group) {
 
 <template>
   <div class="container">
-    <h3 class="title small-title">정기 스터디 모집</h3>
+    <div class="title small-title">정기 스터디 모집</div>
     <div class="recruitment">
       <StudyDetail v-if="studyDetail" :detail-data="detailData" />
       <StudySearch />
@@ -76,8 +76,7 @@ const goDetail = function (group) {
 .container {
   background-color: transparent;
 }
-.modal {
-}
+
 .small-title {
   font-size: 25px;
   background-color: transparent;

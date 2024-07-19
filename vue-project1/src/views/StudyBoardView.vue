@@ -1,6 +1,9 @@
 <template>
+  <div class="header">
+    <Logo />
+    <div class="title top-title">스터디 모집 게시판</div>
+  </div>
   <div class="board-home">
-    <h2 class="title top-title">스터디 모집 게시판</h2>
     <div class="board-container">
       <StudyRecruitment />
       <StudyRank />
@@ -11,12 +14,21 @@
 <script setup>
 import StudyRecruitment from "@/components/board/StudyRecruitment.vue";
 import StudyRank from "@/components/board/StudyRank.vue";
+import Logo from "@/components/Logo.vue";
 </script>
 
 <style scoped>
+.header {
+  display: flex;
+  align-items: center;
+}
+.top-title {
+  margin-left: 30px;
+}
 .board-home {
   display: flex;
   justify-content: center;
+  margin-top: 20px;
 }
 /* 정기 스터디 모집 게시판 전체 */
 .board-container {
@@ -34,11 +46,5 @@ import StudyRank from "@/components/board/StudyRank.vue";
   /* 배치 */
   display: flex;
   justify-content: center;
-}
-/* 맨위 글자 */
-.top-title {
-  position: absolute;
-  top: 30px;
-  left: 130px;
 }
 </style>

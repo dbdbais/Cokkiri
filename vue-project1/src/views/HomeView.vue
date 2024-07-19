@@ -1,13 +1,18 @@
 <template>
   <div id="main" class="box-row">
     <Logo class="logo" />
-    <!-- 스터디 모집 게시판 클릭 시 이동(이동 후 스터디 모집 게시판 글자 삭제) -->
-    <RouterLink
-      :to="{ name: 'studyRecruitment' }"
-      v-if="linkStore.studyRecruitmentlink"
-      @click="linkStore.gostudyRecruitment"
-      >스터디 모집 게시판</RouterLink
+
+    <div
+      class="title"
+      @click="
+        () => {
+          router.push({ name: 'studyBoard' });
+        }
+      "
     >
+      스터디 모집 게시판
+    </div>
+
     <div class="box-col">
       <Profile />
       <FriendsList />
@@ -33,9 +38,7 @@ import MainContent from "@/components/home/MainContent.vue";
 
 import { RouterLink, RouterView, useRouter } from "vue-router";
 
-import { useLinkStore } from "@/stores/link";
 const router = useRouter();
-const linkStore = useLinkStore();
 </script>
 
 <style>

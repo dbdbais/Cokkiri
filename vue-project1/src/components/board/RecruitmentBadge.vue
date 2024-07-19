@@ -13,12 +13,12 @@ defineProps({
 <style scoped>
 .recruitment-badge {
   /* 크기 */
-  width: 70px;
-  height: 30px;
+  width: 80px;
+  height: 40px;
   /* 폰트, 테두리 */
   border: 5px solid;
   border-radius: 10px;
-  font-size: 13px;
+  font-size: 15px;
   /* 배치 */
   display: flex;
   justify-content: center;

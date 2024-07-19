@@ -3,24 +3,12 @@ import Logo from "@/components/Logo.vue";
 import { ref } from "vue";
 
 import { RouterLink, RouterView, useRouter } from "vue-router";
-import { useLinkStore } from "./stores/link";
 
 // router 사용
 const router = useRouter();
-// link 이동과 관련된 상태를 관리할 store
-const linkStore = useLinkStore();
 </script>
 
 <template>
-  <Logo class="logo" />
-  <!-- 스터디 모집 게시판 클릭 시 이동(이동 후 스터디 모집 게시판 글자 삭제) -->
-  <RouterLink
-    :to="{ name: 'studyRecruitment' }"
-    v-if="linkStore.studyRecruitmentlink"
-    @click="linkStore.gostudyRecruitment"
-    >스터디 모집 게시판</RouterLink
-  >
-
   <RouterView />
 </template>
 

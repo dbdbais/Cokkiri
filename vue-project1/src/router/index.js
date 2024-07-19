@@ -1,7 +1,6 @@
 import { createRouter, createWebHistory } from "vue-router";
 import HomeView from "@/views/HomeView.vue";
-import StudyRecruitmentHomeView from "@/views/StudyRecruitmentHomeView.vue";
-import { useLinkStore } from "@/stores/link";
+import StudyBoardView from "@/views/StudyBoardView.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -12,9 +11,9 @@ const router = createRouter({
       component: HomeView,
     },
     {
-      path: "/study_recruitment",
-      name: "studyRecruitment",
-      component: StudyRecruitmentHomeView,
+      path: "/study_board",
+      name: "studyBoard",
+      component: StudyBoardView,
     },
   ],
 });

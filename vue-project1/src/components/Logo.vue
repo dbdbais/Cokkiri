@@ -1,14 +1,9 @@
 <script setup>
-import { useLinkStore } from "@/stores/link";
 import { useRouter } from "vue-router";
-
-const linkStore = useLinkStore();
-const { goHome } = linkStore;
 
 const router = useRouter();
 
 const goHomeLink = function () {
-  goHome();
   router.push({ name: "home" });
 };
 </script>

@@ -1,0 +1,37 @@
+.box-row {
+    display: flex;
+    flex-direction: row;
+}
+
+.box-col {
+    display: flex;
+    flex-direction: column;
+}
+
+/* 퍼플-블루 박스 */
+.box-p {
+  border: 5px solid #3b72ff;
+  border-radius: 10px;
+  background-color: #c191ff;
+}
+
+/* 화이트블루-스카이블루 박스 */
+.box-wb {
+  border: 5px solid #81c3ff;
+  border-radius: 10px;
+  background-color: #dbe7ff;
+}
+
+/* 스카이블루-블루 박스 */
+.box-sb {
+  border: 5px solid #3b72ff;
+  border-radius: 10px;
+  background-color: #9fbaff;
+루
+
+/* 화이트-청록색 박스 */
+.box-w {
+  border: 5px solid #5bb5d9;
+  border-radius: 10px;
+  background-color: #f6f6f6;
+}

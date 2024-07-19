@@ -12,23 +12,21 @@ const linkStore = useLinkStore();
 </script>
 
 <template>
-  <Logo class="logo" />
-  <!-- 스터디 모집 게시판 클릭 시 이동(이동 후 스터디 모집 게시판 글자 삭제) -->
-  <RouterLink
-    :to="{ name: 'studyRecruitment' }"
-    v-if="linkStore.studyRecruitmentlink"
-    @click="linkStore.gostudyRecruitment"
-    >스터디 모집 게시판</RouterLink
-  >
-
+  <div style="display: flex;">
+    <Logo class="logo" />
+    <!-- 스터디 모집 게시판 클릭 시 이동(이동 후 스터디 모집 게시판 글자 삭제) -->
+    <RouterLink :to="{ name: 'studyRecruitment' }" v-if="linkStore.studyRecruitmentlink"
+      @click="linkStore.gostudyRecruitment">스터디 모집 게시판</RouterLink>
+  </div>
   <RouterView />
 </template>
 
-<style scoped>
+<style>
 .logo {
   margin-top: 15px;
   margin-left: 30px;
 }
+
 /* 링크 (스터디 모집 게시판, 문제 목록) */
 a {
   color: white;

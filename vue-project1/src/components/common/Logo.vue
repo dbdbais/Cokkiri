@@ -22,6 +22,7 @@ const goHomeLink = function () {
   position: relative;
   opacity: 0.5;
 }
+
 .logo-first-name,
 .logo-second-name {
   /* 위치 */
@@ -35,11 +36,13 @@ const goHomeLink = function () {
   background-color: rgba(0, 0, 0, 0);
   -webkit-text-stroke: 1px black;
 }
+
 /* 코 */
 .logo-first-name {
   left: 30px;
   color: #9fbaff;
 }
+
 /* 끼리 */
 .logo-second-name {
   left: 45px;

@@ -58,13 +58,8 @@ const goDetail = function (group) {
     <div class="recruitment">
       <StudyDetail v-if="studyDetail" :detail-data="detailData" />
       <StudySearch />
-      <StudyRecruitmentGroup
-        v-for="group in studyGroup"
-        :key="group.id"
-        :group-data="group"
-        :class="preventCilck"
-        @click="goDetail(group)"
-      />
+      <StudyRecruitmentGroup v-for="group in studyGroup" :key="group.id" :group-data="group" :class="preventCilck"
+        @click="goDetail(group)" />
       <!-- <StudyRecruitmentGroup />
       <StudyRecruitmentGroup />
       <StudyRecruitmentGroup /> -->
@@ -76,17 +71,20 @@ const goDetail = function (group) {
 .container {
   background-color: transparent;
 }
-.modal {
-}
+
+.modal {}
+
 .small-title {
   font-size: 25px;
   background-color: transparent;
   margin-bottom: 5px;
 }
+
 /* 스터디 상세정보 클릭시 다른 스터디 클릭 금지 */
 .prevent-click {
   pointer-events: none;
 }
+
 /* 정기 스터디 모집 */
 .recruitment {
   /* 크기 */
@@ -102,10 +100,10 @@ const goDetail = function (group) {
   border: 5px solid #3b72ff;
   border-radius: 10px;
 }
+
 @keyframes downModal {
-  from {
-  }
-  to {
-  }
+  from {}
+
+  to {}
 }
 </style>

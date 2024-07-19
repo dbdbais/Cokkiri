@@ -1,9 +1,9 @@
 <template>
     <div class="main-content">
         <div class="tabs">
+            <button>전체</button>
             <button>공부방</button>
             <button>게임방</button>
-            <button>장기 스터디</button>
         </div>
         <div class="rooms">
             <Room v-for="room in rooms" :key="room.id" :room="room" />

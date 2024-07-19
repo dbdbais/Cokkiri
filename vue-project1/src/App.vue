@@ -1,11 +1,6 @@
 <script setup>
-import Logo from "@/components/Logo.vue";
 import { ref } from "vue";
-
-import { RouterLink, RouterView, useRouter } from "vue-router";
-
-// router 사용
-const router = useRouter();
+import { RouterView } from "vue-router";
 </script>
 
 <template>
@@ -13,11 +8,6 @@ const router = useRouter();
 </template>
 
 <style>
-.logo {
-  margin-top: 15px;
-  margin-left: 30px;
-}
-
 /* 링크 (스터디 모집 게시판, 문제 목록) */
 a {
   color: white;

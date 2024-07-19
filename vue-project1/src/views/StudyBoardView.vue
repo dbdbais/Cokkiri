@@ -18,6 +18,7 @@ import StudyRank from "@/components/board/StudyRank.vue";
   display: flex;
   justify-content: center;
 }
+
 /* 정기 스터디 모집 게시판 전체 */
 .board-container {
   /* 크기 */
@@ -35,6 +36,7 @@ import StudyRank from "@/components/board/StudyRank.vue";
   display: flex;
   justify-content: center;
 }
+
 /* 맨위 글자 */
 .top-title {
   position: absolute;

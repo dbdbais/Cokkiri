@@ -3,7 +3,7 @@
     <Logo class="logo" />
 
     <div
-      class="title"
+      class="title main-title"
       @click="
         () => {
           router.push({ name: 'studyBoard' });

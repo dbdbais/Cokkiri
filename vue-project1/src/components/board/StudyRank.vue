@@ -2,7 +2,7 @@
 
 <template>
   <div class="container">
-    <div class="title small-title">이달의 랭킹</div>
+    <div class="title sub-title">이달의 랭킹</div>
     <div class="rank"></div>
   </div>
 </template>
@@ -11,11 +11,6 @@
 .container {
   background-color: transparent;
   margin-left: 40px;
-}
-.small-title {
-  font-size: 25px;
-  background-color: transparent;
-  margin-bottom: 5px;
 }
 /* 이달의 랭킹 */
 .rank {

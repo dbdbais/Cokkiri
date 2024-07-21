@@ -12,8 +12,8 @@ const goHomeLink = function () {
   <!-- 로고 클릭 시 메인페이지 이동 -->
   <div class="logo-container" @click="goHomeLink">
     <img src="@/assets/logo.svg" alt="코끼리 로고" />
-    <div class="logo-first-name">코</div>
-    <div class="logo-second-name">끼리</div>
+    <div class="title logo-first-name">코</div>
+    <div class="title logo-second-name">끼리</div>
   </div>
 </template>
 
@@ -26,14 +26,7 @@ const goHomeLink = function () {
 .logo-second-name {
   /* 위치 */
   position: absolute;
-  top: 15px;
-  /* 폰트 */
-  font-family: "RixInooAriDuriR";
-  font-size: 20px;
-
-  /* 색깔 */
-  background-color: rgba(0, 0, 0, 0);
-  -webkit-text-stroke: 1px black;
+  top: 20px;
 }
 /* 코 */
 .logo-first-name {
@@ -42,6 +35,7 @@ const goHomeLink = function () {
 }
 /* 끼리 */
 .logo-second-name {
+  width: 50px;
   left: 45px;
   color: white;
 }

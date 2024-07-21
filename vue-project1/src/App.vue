@@ -13,11 +13,6 @@ const router = useRouter();
 </template>
 
 <style>
-.logo {
-  margin-top: 15px;
-  margin-left: 30px;
-}
-
 /* 링크 (스터디 모집 게시판, 문제 목록) */
 a {
   color: white;

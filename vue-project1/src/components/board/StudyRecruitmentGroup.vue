@@ -36,6 +36,7 @@ defineProps({
   position: absolute;
   bottom: 5px;
   right: 15px;
+  background-color: transparent;
 }
 .member > img {
   margin-top: 10px;

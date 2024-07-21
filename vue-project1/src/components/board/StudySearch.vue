@@ -1,7 +1,9 @@
 <script setup></script>
 
 <template>
-  <div class="search"></div>
+  <div class="box-pb search">
+    <button class="title search-btn">검색</button>
+  </div>
 </template>
 
 <style scoped>
@@ -11,9 +13,19 @@
   width: 880px;
   height: 70px;
   margin-top: 20px;
-  /* 색깔, 테두리 */
-  background-color: #8220ff;
-  border: 3px solid #84a5f8;
+  position: relative;
+}
+.search-btn {
+  padding: 10px 20px;
+  position: absolute;
+  top: 3px;
+  right: 3px;
+
+  font-size: 20px;
+
+  border-width: 5px;
   border-radius: 10px;
+  border-color: #8aabff;
+  background-color: #cfdbfb;
 }
 </style>

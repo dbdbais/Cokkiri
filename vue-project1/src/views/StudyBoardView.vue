@@ -1,7 +1,7 @@
 <template>
   <div class="header">
-    <Logo />
-    <div class="title top-title">스터디 모집 게시판</div>
+    <Logo class="logo" />
+    <div class="title main-title top-title">스터디 모집 게시판</div>
   </div>
   <div class="board-home">
     <div class="board-container">
@@ -24,6 +24,7 @@ import Logo from "@/components/Logo.vue";
 }
 .top-title {
   margin-left: 30px;
+  margin-top: 20px;
 }
 .board-home {
   display: flex;

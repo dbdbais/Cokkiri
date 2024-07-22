@@ -160,19 +160,11 @@ const closeBtn = function () {
   <div class="container">
     <div class="title sub-title">정기 스터디 모집</div>
     <div class="recruitment">
-      <StudyDetail
-        v-if="studyDetail"
-        :detail-data="detailData"
-        @close="closeBtn"
-      />
+      <StudyDetail v-if="studyDetail" :detail-data="detailData" @close="closeBtn" />
       <StudySearch />
-      <StudyRecruitmentGroup
-        v-for="group in studyGroup"
-        :key="group.id"
-        :group-data="group"
-        :class="preventCilck"
-        @click="goDetail(group)"
-      />
+      <StudyRecruitmentGroup v-for="group in studyGroup" :key="group.id" :group-data="group" :class="preventCilck"
+        @click="goDetail(group)" />
+
     </div>
   </div>
 </template>
@@ -186,6 +178,7 @@ const closeBtn = function () {
 .prevent-click {
   pointer-events: none;
 }
+
 /* 정기 스터디 모집 */
 .recruitment {
   /* 크기 */
@@ -201,10 +194,10 @@ const closeBtn = function () {
   border: 5px solid #3b72ff;
   border-radius: 10px;
 }
+
 @keyframes downModal {
-  from {
-  }
-  to {
-  }
+  from {}
+
+  to {}
 }
 </style>

@@ -1,11 +1,6 @@
 <script setup>
-import Logo from "@/components/Logo.vue";
 import { ref } from "vue";
-
-import { RouterLink, RouterView, useRouter } from "vue-router";
-
-// router 사용
-const router = useRouter();
+import { RouterView } from "vue-router";
 </script>
 
 <template>

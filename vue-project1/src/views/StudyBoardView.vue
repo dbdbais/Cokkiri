@@ -22,15 +22,18 @@ import Logo from "@/components/Logo.vue";
   display: flex;
   align-items: center;
 }
+
 .top-title {
   margin-left: 30px;
   margin-top: 20px;
 }
+
 .board-home {
   display: flex;
   justify-content: center;
   margin-top: 20px;
 }
+
 /* 정기 스터디 모집 게시판 전체 */
 .board-container {
   /* 크기 */

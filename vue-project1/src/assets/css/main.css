@@ -2,9 +2,24 @@
   margin: 0;
   padding: 0;
   cursor: url(./src/assets/cursor.svg) 4 5, auto;
-  background-color: #cadcff;
   box-sizing: border-box;
 }
+
+html,
+body {
+  background-color: #cadcff;
+}
+
+/* 링크 (스터디 모집 게시판, 문제 목록) */
+a {
+  color: white;
+  text-decoration: none;
+  /* 폰트 */
+  font-size: 30px;
+  font-family: "RixInooAriDuriR";
+  -webkit-text-stroke: 1px black;
+}
+
 .box-row {
   display: flex;
   flex-direction: row;
@@ -25,7 +40,7 @@
 /* 화이트블루-스카이블루 박스 */
 .box-wb {
   border: 5px solid #81c3ff;
-  border-radius: 10px;
+  border-radius: 1px;
   background-color: #dbe7ff;
 }
 /* 퍼블-스카이블루 박스 */

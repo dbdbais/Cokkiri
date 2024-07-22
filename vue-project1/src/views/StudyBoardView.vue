@@ -14,7 +14,7 @@
 <script setup>
 import StudyRecruitment from "@/components/board/StudyRecruitment.vue";
 import StudyRank from "@/components/board/StudyRank.vue";
-import Logo from "@/components/Logo.vue";
+import Logo from "@/components/common/Logo.vue";
 </script>
 
 <style scoped>

@@ -17,15 +17,10 @@
 
 <script setup>
 import Logo from "@/components/common/Logo.vue";
-
 import Header from "@/components/home/Header.vue";
 import Profile from "@/components/home/Profile.vue";
 import FriendsList from "@/components/home/FriendsList.vue";
 import MainContent from "@/components/home/MainContent.vue";
-
-import { RouterLink, useRouter } from "vue-router";
-
-const router = useRouter();
 </script>
 
 <style>

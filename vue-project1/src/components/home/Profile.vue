@@ -1,45 +1,31 @@
 <template>
-    <div class="box-wbb">
-        <img src="" alt="Profile Picture" />
-        <div class="info">
-            <h2>김퐁덕</h2>
-            <div class="progress">
-                <div class="progress-bar" style="width: 35%;"></div>
-            </div>
+    <div id="profile-container" class="box-p box-col">
+        <div id="name" class="title main-title">김종덕</div>
+        <div id="rank-container" class="box-row box-wb">
+            <img id="rank-img" src="@/assets/rank/orange.svg" alt="rank" class="rank" />
+            <Exp id="rank-exp"></Exp>
         </div>
     </div>
 </template>
 
-<script>
-
-export default {
-    name: 'Profile'
-}
+<script setup>
+import Exp from "@/components/home/Exp.vue";
 </script>
 
 <style scoped>
-.profile {
-    display: flex;
-    align-items: center;
-    padding: 20px;
-    background-color: #d4e4ff;
-    width: 300px;
+#name {
+    margin-bottom: 5px;
+    font-size: 27px
 }
 
-.info {
-    margin-left: 10px;
+#rank-img {
+    width: 30px;
+    height: 30px;
+    margin: 10px 10px;
 }
 
-.progress {
-    background-color: #eee;
-    border-radius: 5px;
-    overflow: hidden;
-    width: 100px;
-    height: 10px;
-}
-
-.progress-bar {
-    background-color: #ff9999;
-    height: 100%;
+#rank-exp {
+    height: 30px;
+    margin: 10px 10px;
 }
 </style>

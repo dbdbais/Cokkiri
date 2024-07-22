@@ -1,20 +1,12 @@
 <template>
-  <div id="main" class="box-row">
-    <Logo class="logo" />
-
-    <div class="title main-title" @click="() => {
-        router.push({ name: 'studyBoard' });
-      }
-      ">
-      스터디 모집 게시판
+  <div id="main-container" class="box-row">
+    <div id="main-left" class="box-col">
+      <Logo class="logo" />
+      <div id="profile-btn" class="title main-title">개인 프로필</div>
+      <Profile id="profile" />
+      <FriendsList id="friends-list" />
     </div>
-
-    <div class="box-col">
-
-      <Profile />
-      <FriendsList />
-    </div>
-    <div class="box-col right">
+    <div id="main-right" class="box-col right">
       <Header />
       <div class="main-container">
         <MainContent />
@@ -37,6 +29,31 @@ const router = useRouter();
 </script>
 
 <style>
+#main-left {
+  width: 350px;
+  margin-left: 35px;
+  margin-right: 35px;
+}
+
+#profile-btn {
+  margin-top: 60px;
+}
+
+#profile {
+  width: 340px;
+  height: 130px;
+  margin-top: 20px;
+  padding: 15px;
+}
+
+#friends-list {
+  width: 340px;
+  height: 500px;
+  margin-top: 20px;
+  padding: 15px;
+}
+
+
 #main {
   width: 100vw;
   height: 100vh;
@@ -52,10 +69,5 @@ const router = useRouter();
   width: 1500px;
   margin-left: 20px;
   margin-right: 20px;
-}
-
-.main-container {
-  display: flex;
-  flex: 1;
 }
 </style>

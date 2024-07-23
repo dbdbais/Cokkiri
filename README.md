@@ -8,6 +8,6 @@
 - master(main)
     - develop
         - be
-            - feature/compiler
+            - feature-be/compiler
         - fe
-            - feature/main-page
+            - feature-fe/main-page

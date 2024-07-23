@@ -1,5 +1,5 @@
 <template>
-  <div class="box-sb time content md" v-if="studyTime.time">
+  <div class="box-main-group time content md" v-if="studyTime.time">
     {{ week[studyTime.week] }}:{{ studyTime.time }}
   </div>
 </template>

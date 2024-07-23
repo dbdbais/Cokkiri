@@ -1,7 +1,7 @@
 <script setup></script>
 
 <template>
-  <div class="box-pb search">
+  <div class="box-pdb search">
     <button class="title search-btn">검색</button>
   </div>
 </template>
@@ -15,6 +15,7 @@
   margin-top: 20px;
   position: relative;
 }
+
 .search-btn {
   padding: 10px 20px;
   position: absolute;

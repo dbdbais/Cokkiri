@@ -1,12 +1,15 @@
 div<template>
     <div class="accordion">
-        <div v-for="(item, index) in items" :key="index" class="accordion-item ">
-            <button class="accordion-header" @click="toggle(index)">
-                {{ item.title }}
-            </button>
+        <div v-for="(item, index) in items" :key="index" class="accordion-item">
+            <div class="accordion-header box-main-group" @click="toggle(index)">
+                <span class="title header-title">{{ item.title }}</span>
+            </div>
             <div v-if="isOpen(index)" class="accordion-content">
-                <div v-for="(member, index2) in item.member" :key="index2">
-                    <slot :name="`content-${index2}`">{{ member.name }}</slot>
+                <div v-for="(member, index2) in item.member" :key="index2" class="box-main-exp box-content">
+                    <img id="friend-profile" src="@/assets/exit.svg">
+                    <slot :name="`content-${index2}`" class="title-member">
+                        <span class="title friend-name">{{ member.name }}</span>
+                    </slot>
                 </div>
             </div>
         </div>
@@ -19,6 +22,11 @@ import friendList from "@/assets/data/friendList.json";
 
 const items = ref([]);
 
+items.value.push({
+    title: "친구",
+    member: friendList.friendList.member
+});
+
 friendList.studyList.forEach(study => {
     items.value.push({
         title: study.title,
@@ -26,15 +34,11 @@ friendList.studyList.forEach(study => {
     })
 });
 
-items.value.push({
-    title: "친구",
-    member: friendList.friendList.member
-});
-
 const openIndex = ref(null);
 
 const toggle = (index) => {
     openIndex.value = openIndex.value === index ? null : index;
+
 };
 
 const isOpen = (index) => {
@@ -43,28 +47,45 @@ const isOpen = (index) => {
 
 </script>
 
-<style>
-.accordion {
-    border: 1px solid #ccc;
-    border-radius: 4px;
-}
-
+<style scoped>
 .accordion-item {
-    border-bottom: 1px solid #ccc;
+    margin-top: 1px;
 }
 
 .accordion-header {
-    background: #f1f1f1;
-    border: none;
-    width: 100%;
-    text-align: left;
-    padding: 10px;
-    cursor: pointer;
-    font-size: 16px;
+    height: 35px;
+    padding: 3px 5px;
 }
 
-.accordion-content {
-    padding: 10px;
-    background: #fff;
+.box-main-group {
+    border: 3px solid #3b72ff;
+    border-radius: 1px;
+}
+
+.box-content {
+    display: flex;
+    align-items: center;
+    height: 60px;
+    padding: 5px 15px;
+}
+
+.header-title {
+    margin-left: 5px;
+    font-size: 18px;
+}
+
+.box-main-exp {
+    border-radius: 1px;
+}
+
+.friend-name {
+    margin-left: 15px;
+    font-size: 30px;
+}
+
+#friend-profile {
+    width: 30px;
+    height: 30px;
+
 }
 </style>

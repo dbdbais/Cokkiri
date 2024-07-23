@@ -6,11 +6,9 @@
       <Profile id="profile" />
       <FriendsList id="friends-list" />
     </div>
-    <div id="main-right" class="box-col right">
-      <Header />
-      <div class="main-container">
-        <MainContent />
-      </div>
+    <div id="main-right" class="box-col">
+      <Header id="header" class="box-col" />
+      <MainContent id="main-content" />
     </div>
   </div>
 </template>
@@ -23,7 +21,8 @@ import FriendsList from "@/components/home/FriendsList.vue";
 import MainContent from "@/components/home/MainContent.vue";
 </script>
 
-<style>
+<style scoped>
+/* 왼쪽 영역 */
 #main-left {
   width: 350px;
   margin-left: 35px;
@@ -43,26 +42,28 @@ import MainContent from "@/components/home/MainContent.vue";
 
 #friends-list {
   width: 340px;
-  height: 500px;
+  height: 635px;
   margin-top: 20px;
   padding: 15px;
 }
 
-
-#main {
-  width: 100vw;
-  height: 100vh;
+/* 오른쪽 영역 */
+#main-right {
+  width: 1400px;
+  margin-left: 35px;
+  margin-right: 35px;
 }
 
-.left {
-  width: 300px;
-  margin-left: 20px;
-  margin-right: 20px;
+#header {
+  width: 1400px;
+  height: 130px;
+  margin-top: 20px;
 }
 
-.right {
-  width: 1500px;
-  margin-left: 20px;
-  margin-right: 20px;
+#main-content {
+  width: 1400px;
+  height: 800px;
+  margin-top: 20px;
+  padding: 15px 50px;
 }
 </style>

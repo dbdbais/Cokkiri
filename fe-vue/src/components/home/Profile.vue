@@ -1,7 +1,7 @@
 <template>
-    <div id="profile-container" class="box-p box-col">
+    <div class="box-main-con box-col">
         <div id="name" class="title main-title">김종덕</div>
-        <div id="rank-container" class="box-row box-wb">
+        <div id="rank-container" class="box-row box-main-exp">
             <img id="rank-img" :src="imageSrc" alt="rank" class="rank" />
             <Exp id="rank-exp" :grade="grade" :percentage="percentage"></Exp>
         </div>

@@ -1,10 +1,10 @@
 <template>
-    <div class="box-p">
-        <div id="add-friend-container" class="box-wb box-row">
+    <div class="box-main-con">
+        <div id="add-friend-container" class="box-main-exp box-row">
             <img src="@/assets/friend-plus.svg" alt="add-friend" class="icon" />
             <div id="add-friend-btn" class="title main-title">친구 추가</div>
         </div>
-        <Accordion />
+        <Accordion id="friend-list" />
     </div>
 </template>
 
@@ -23,5 +23,9 @@ import Accordion from "@/components/home/Accordion.vue"
 #add-friend-btn {
     margin-left: 12px;
     font-size: 25px;
+}
+
+#friend-list {
+    margin-top: 15px;
 }
 </style>

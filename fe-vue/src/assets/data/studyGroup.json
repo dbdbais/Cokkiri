@@ -8,32 +8,32 @@
             "member": [
                 {
                     "id": 0,
-                    "img": "/src/assets/rank/seed.svg",
+                    "img": "/src/assets/rank/0-seed.svg",
                     "cnt": 1
                 },
                 {
                     "id": 1,
-                    "img": "/src/assets/rank/kiwi.svg",
+                    "img": "/src/assets/rank/1-kiwi.svg",
                     "cnt": 1
                 },
                 {
                     "id": 2,
-                    "img": "/src/assets/rank/apple.svg",
+                    "img": "/src/assets/rank/2-apple.svg",
                     "cnt": 0
                 },
                 {
                     "id": 3,
-                    "img": "/src/assets/rank/orange.svg",
+                    "img": "/src/assets/rank/3-orange.svg",
                     "cnt": 0
                 },
                 {
                     "id": 4,
-                    "img": "/src/assets/rank/koreamelon.svg",
+                    "img": "/src/assets/rank/4-koreamelon.svg",
                     "cnt": 2
                 },
                 {
                     "id": 5,
-                    "img": "/src/assets/rank/durian.svg",
+                    "img": "/src/assets/rank/5-durian.svg",
                     "cnt": 1
                 }
             ],
@@ -93,32 +93,32 @@
             "member": [
                 {
                     "id": 0,
-                    "img": "/src/assets/rank/seed.svg",
+                    "img": "/src/assets/rank/0-seed.svg",
                     "cnt": 1
                 },
                 {
                     "id": 1,
-                    "img": "/src/assets/rank/kiwi.svg",
+                    "img": "/src/assets/rank/1-kiwi.svg",
                     "cnt": 1
                 },
                 {
                     "id": 2,
-                    "img": "/src/assets/rank/apple.svg",
+                    "img": "/src/assets/rank/2-apple.svg",
                     "cnt": 0
                 },
                 {
                     "id": 3,
-                    "img": "/src/assets/rank/orange.svg",
+                    "img": "/src/assets/rank/3-orange.svg",
                     "cnt": 0
                 },
                 {
                     "id": 4,
-                    "img": "/src/assets/rank/koreamelon.svg",
+                    "img": "/src/assets/rank/4-koreamelon.svg",
                     "cnt": 2
                 },
                 {
                     "id": 5,
-                    "img": "/src/assets/rank/durian.svg",
+                    "img": "/src/assets/rank/5-durian.svg",
                     "cnt": 1
                 }
             ],
@@ -178,32 +178,32 @@
             "member": [
                 {
                     "id": 0,
-                    "img": "/src/assets/rank/seed.svg",
+                    "img": "/src/assets/rank/0-seed.svg",
                     "cnt": 0
                 },
                 {
                     "id": 1,
-                    "img": "/src/assets/rank/kiwi.svg",
+                    "img": "/src/assets/rank/1-kiwi.svg",
                     "cnt": 0
                 },
                 {
                     "id": 2,
-                    "img": "/src/assets/rank/apple.svg",
+                    "img": "/src/assets/rank/2-apple.svg",
                     "cnt": 1
                 },
                 {
                     "id": 3,
-                    "img": "/src/assets/rank/orange.svg",
+                    "img": "/src/assets/rank/3-orange.svg",
                     "cnt": 0
                 },
                 {
                     "id": 4,
-                    "img": "/src/assets/rank/koreamelon.svg",
+                    "img": "/src/assets/rank/4-koreamelon.svg",
                     "cnt": 2
                 },
                 {
                     "id": 5,
-                    "img": "/src/assets/rank/durian.svg",
+                    "img": "/src/assets/rank/5-durian.svg",
                     "cnt": 1
                 }
             ],
@@ -263,32 +263,32 @@
             "member": [
                 {
                     "id": 0,
-                    "img": "/src/assets/rank/seed.svg",
+                    "img": "/src/assets/rank/0-seed.svg",
                     "cnt": 1
                 },
                 {
                     "id": 1,
-                    "img": "/src/assets/rank/kiwi.svg",
+                    "img": "/src/assets/rank/1-kiwi.svg",
                     "cnt": 1
                 },
                 {
                     "id": 2,
-                    "img": "/src/assets/rank/apple.svg",
+                    "img": "/src/assets/rank/2-apple.svg",
                     "cnt": 0
                 },
                 {
                     "id": 3,
-                    "img": "/src/assets/rank/orange.svg",
+                    "img": "/src/assets/rank/3-orange.svg",
                     "cnt": 0
                 },
                 {
                     "id": 4,
-                    "img": "/src/assets/rank/koreamelon.svg",
+                    "img": "/src/assets/rank/4-koreamelon.svg",
                     "cnt": 2
                 },
                 {
                     "id": 5,
-                    "img": "/src/assets/rank/durian.svg",
+                    "img": "/src/assets/rank/5-durian.svg",
                     "cnt": 1
                 }
             ],

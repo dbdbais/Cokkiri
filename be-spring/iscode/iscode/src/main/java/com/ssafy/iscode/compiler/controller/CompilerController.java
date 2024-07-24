@@ -13,15 +13,15 @@ import java.io.OutputStreamWriter;
 import java.nio.charset.StandardCharsets;
 
 /**
- * 코드 컴파일러 컨트롤러 클래스
+ * Code compiler controller class
  */
 @RestController
 public class CompilerController {
 
     /**
-     * 인덱스 페이지를 표시하는 메서드
+     * Method to display the index page
      *
-     * @return 인덱스 페이지에 대한 ModelAndView 객체
+     * @return ModelAndView object for the index page
      */
     @RequestMapping("/")
     public ModelAndView index() {
@@ -29,23 +29,23 @@ public class CompilerController {
     }
 
     /**
-     * 사용자로부터 받은 코드를 컴파일하고 실행하는 메서드
+     * Method to compile and execute the code received from the user
      *
-     * @param language 코드를 작성한 프로그래밍 언어
-     * @param code 컴파일할 소스 코드
-     * @param input 실행 시 사용할 입력 값
-     * @return 컴파일 및 실행 결과 또는 오류 메시지
+     * @param language Programming language of the code
+     * @param code Source code to compile
+     * @param input Input value to use during execution
+     * @return Compilation and execution result or error message
      */
     @PostMapping("/compile")
     public String compileCode(@RequestParam String language, @RequestParam String code, @RequestParam String input) {
         String result = "";
-        File sourceFile = null;  // 소스 코드 파일을 저장할 변수
+        File sourceFile = null;  // Variable to store the source code file
 
         try {
             ProcessBuilder processBuilder = new ProcessBuilder();
-            processBuilder.directory(new File(System.getProperty("java.io.tmpdir"))); // 임시 디렉토리를 작업 디렉토리로 설정
+            processBuilder.directory(new File(System.getProperty("java.io.tmpdir"))); // Set the working directory to the temporary directory
 
-            // 언어별로 다른 컴파일 및 실행 명령어 설정
+            // Set different compile and run commands for each language
             switch (language) {
                 case "python":
                     sourceFile = new File(processBuilder.directory(), "temp.py");
@@ -53,7 +53,7 @@ public class CompilerController {
                         writer.write(code);
                     }
                     processBuilder.command("python", sourceFile.getAbsolutePath());
-                    processBuilder.environment().put("PYTHONIOENCODING", "UTF-8"); // UTF-8 인코딩 설정
+                    processBuilder.environment().put("PYTHONIOENCODING", "UTF-8"); // Set UTF-8 encoding
                     break;
 
                 case "java":
@@ -61,9 +61,9 @@ public class CompilerController {
                     try (BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(sourceFile), StandardCharsets.UTF_8))) {
                         writer.write(code);
                     }
-                    processBuilder.command("javac", "-encoding", "UTF-8", sourceFile.getName()); // 자바 컴파일 명령어
-                    runProcess(processBuilder); // 컴파일 실행
-                    processBuilder.command("java", "-Dfile.encoding=UTF-8", "-cp", processBuilder.directory().getAbsolutePath(), "Temp"); // 자바 실행 명령어
+                    processBuilder.command("javac", "-encoding", "UTF-8", sourceFile.getName()); // Java compile command
+                    runProcess(processBuilder); // Run the compilation
+                    processBuilder.command("java", "-Dfile.encoding=UTF-8", "-cp", processBuilder.directory().getAbsolutePath(), "Temp"); // Java run command
                     break;
 
                 case "c":
@@ -71,9 +71,9 @@ public class CompilerController {
                     try (BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(sourceFile), StandardCharsets.UTF_8))) {
                         writer.write(code);
                     }
-                    processBuilder.command("gcc", "-o", "temp", sourceFile.getName()); // C 컴파일 명령어
-                    runProcess(processBuilder); // 컴파일 실행
-                    processBuilder.command(new File(processBuilder.directory(), "temp").getAbsolutePath()); // C 실행 파일 실행 명령어
+                    processBuilder.command("gcc", "-o", "temp", sourceFile.getName()); // C compile command
+                    runProcess(processBuilder); // Run the compilation
+                    processBuilder.command(new File(processBuilder.directory(), "temp").getAbsolutePath()); // C executable run command
                     break;
 
                 case "cpp":
@@ -81,9 +81,9 @@ public class CompilerController {
                     try (BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(sourceFile), StandardCharsets.UTF_8))) {
                         writer.write(code);
                     }
-                    processBuilder.command("g++", "-o", "temp", sourceFile.getName()); // C++ 컴파일 명령어
-                    runProcess(processBuilder); // 컴파일 실행
-                    processBuilder.command(new File(processBuilder.directory(), "temp").getAbsolutePath()); // C++ 실행 파일 실행 명령어
+                    processBuilder.command("g++", "-o", "temp", sourceFile.getName()); // C++ compile command
+                    runProcess(processBuilder); // Run the compilation
+                    processBuilder.command(new File(processBuilder.directory(), "temp").getAbsolutePath()); // C++ executable run command
                     break;
 
                 default:
@@ -93,29 +93,29 @@ public class CompilerController {
             if (sourceFile != null) {
                 Process process = processBuilder.start();
                 
-                // 입력값을 프로세스에 전달
+                // Provide input to the process
                 try (BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(process.getOutputStream(), StandardCharsets.UTF_8))) {
                     writer.write(input);
                 }
                 
-                result = readProcessOutput(process); // 프로세스 출력값 읽기
-                process.waitFor(); // 프로세스 종료 대기
-                sourceFile.delete(); // 소스 파일 삭제
-                new File(processBuilder.directory(), "temp").delete(); // 생성된 실행 파일 삭제
-                new File(processBuilder.directory(), "Temp.class").delete(); // 자바 클래스 파일 삭제
+                result = readProcessOutput(process); // Read the process output
+                process.waitFor(); // Wait for the process to finish
+                sourceFile.delete(); // Delete the source file
+                new File(processBuilder.directory(), "temp").delete(); // Delete the generated executable file
+                new File(processBuilder.directory(), "Temp.class").delete(); // Delete the Java class file
             }
         } catch (Exception e) {
-            result = "Error: " + e.getMessage(); // 예외 발생 시 오류 메시지 설정
+            result = "Error: " + e.getMessage(); // Set error message if an exception occurs
         }
         return result;
     }
 
     /**
-     * 주어진 프로세스를 실행하고, 에러가 발생하면 예외를 던지는 메서드
+     * Method to run the given process and throw an exception if an error occurs
      *
-     * @param processBuilder 실행할 프로세스가 설정된 ProcessBuilder 객체
-     * @throws IOException I/O 오류가 발생한 경우
-     * @throws InterruptedException 프로세스 실행이 중단된 경우
+     * @param processBuilder ProcessBuilder object with the process to execute
+     * @throws IOException If an I/O error occurs
+     * @throws InterruptedException If the process execution is interrupted
      */
     private void runProcess(ProcessBuilder processBuilder) throws IOException, InterruptedException {
         Process process = processBuilder.start();
@@ -127,17 +127,17 @@ public class CompilerController {
             }
             process.waitFor();
             if (errorOutput.length() > 0) {
-                throw new IOException(errorOutput.toString()); // 오류 메시지가 존재하면 예외 던짐
+                throw new IOException(errorOutput.toString()); // Throw exception if error messages exist
             }
         }
     }
 
     /**
-     * 주어진 프로세스의 출력을 읽어오는 메서드
+     * Method to read the output of the given process
      *
-     * @param process 출력값을 읽을 프로세스
-     * @return 프로세스의 출력값 또는 오류 메시지
-     * @throws IOException I/O 오류가 발생한 경우
+     * @param process Process to read the output from
+     * @return Output of the process or error messages
+     * @throws IOException If an I/O error occurs
      */
     private String readProcessOutput(Process process) throws IOException {
         StringBuilder result = new StringBuilder();
@@ -153,6 +153,6 @@ public class CompilerController {
                 result.append("Error: ").append(line).append("\n");
             }
         }
-        return result.toString(); // 프로세스 출력값 반환
+        return result.toString(); // Return the process output
     }
 }

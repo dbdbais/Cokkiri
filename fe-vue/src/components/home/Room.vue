@@ -8,8 +8,9 @@
             </div>
             <div class="room-extra-info">
                 <div class="item-cate box-main-group font-main-pagi">{{ room.category }}</div>
-                <div class="item-parti box-main-group font-main-pagi">{{ room.people }}/{{ room.maxPeople }}</div>
-                <div class="item-join box-main-group">Join
+                <div class="item-parti box-main-group font-main-pagi">{{ room.people }} / {{ room.maxPeople }}</div>
+                <div class="item-join box-main-group">
+                    <img src="@/assets/study-member.svg">
                 </div>
             </div>
         </div>
@@ -44,6 +45,7 @@ const props = defineProps({
     height: 60px;
     border-radius: 5px;
     padding: 5px 10px;
+    border: 3px solid #3b72ff;
 }
 
 .box-main-num {
@@ -62,11 +64,32 @@ const props = defineProps({
     gap: 10px;
 }
 
+.box-main-group {
+    height: 40px;
+    border: 3px solid #3b72ff;
+}
+
 .item-cate {
     grid-column: 1 / 3;
+    padding-top: 5px;
+    font-size: 22px;
+    text-align: center;
 }
 
 .item-parti {
     grid-column: 6 / 8;
+    padding-top: 5px;
+    font-size: 22px;
+    text-align: center;
+}
+
+.item-join {
+    grid-column: 8 / 9;
+}
+
+.item-join img {
+    width: 26px;
+    margin-top: 4px;
+    margin-left: 5.5px;
 }
 </style>

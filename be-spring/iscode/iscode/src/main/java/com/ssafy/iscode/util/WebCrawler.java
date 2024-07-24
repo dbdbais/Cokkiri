@@ -7,6 +7,8 @@ import org.jsoup.select.Elements;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 
 @Component
@@ -19,7 +21,8 @@ public class WebCrawler {
         String url = "https://www.acmicpc.net/problem/";
         //String problemName = "21611";
         Document document = Jsoup.connect(url+pid).get();
-        //
+
+
 
         Elements elem = document.select("#problem-body");
 
@@ -44,6 +47,10 @@ public class WebCrawler {
         // problem name
         Document document = Jsoup.connect(url+problemName).get();
 
+        List<String> inputList = new ArrayList<>();
+        List<String> outputList = new ArrayList<>();
+
+
         Elements elem = document.select("#problem-body");
 
         // delete button element & hint
@@ -57,6 +64,7 @@ public class WebCrawler {
 
         //print element
         System.out.println(elem);
+
 
     }
 }

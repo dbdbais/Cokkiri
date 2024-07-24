@@ -22,7 +22,7 @@ public class APIConnection {
     //WebCrawler Dependency Injection
 
     static BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
-
+/*
     public Problem run(Long id) throws IOException {
 
         String baseurl = "https://solved.ac/api/v3";
@@ -79,12 +79,12 @@ public class APIConnection {
         }
 
         String info = webCrawler.getProblemInfo(id);
-        Problem prob = new Problem(id,type,title,level,info, avgTries);
+        //Problem prob = new Problem(id,type,title,level,info, avgTries);
         System.out.println(prob);
         return prob;
         //return info of Problem
     }
-
+*/
 
     //for Test
     public static void main(String[] args) throws IOException {
@@ -149,8 +149,9 @@ public class APIConnection {
 
 
         String info = webCrawler.getProblemInfo(no);
-        Problem prob = new Problem(no,type,title,level,info, avgTries);
-        System.out.println(prob);
+        System.out.println(info);
+       // Problem prob = new Problem(no,type,title,level,info, avgTries);
+       // System.out.println(prob);
 
     }
 }

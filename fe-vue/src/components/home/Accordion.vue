@@ -10,16 +10,19 @@ div<template>
                     <slot :name="`content-${index2}`" class="title-member">
                         <span class="title friend-name">{{ member.name }}</span>
                     </slot>
-                    <img src="@/assets/message.svg" class="message-icon">
+                    <img src="@/assets/message.svg" class="message-icon" @click="openModal(member)">
                 </div>
             </div>
         </div>
+        <Chat v-if="isModalOpen" @close="closeModal" :selectedMember="selectedMember" />
     </div>
 </template>
 
 <script setup>
 import { ref } from 'vue';
 import friendList from "@/assets/data/friendList.json";
+import { useModal } from "@/composables/useModal";
+import Chat from "@/components/home/modal/Chat.vue";
 
 const items = ref([]);
 
@@ -39,13 +42,13 @@ const openIndex = ref(null);
 
 const toggle = (index) => {
     openIndex.value = openIndex.value === index ? null : index;
-
 };
 
 const isOpen = (index) => {
     return openIndex.value === index;
 };
 
+const { isModalOpen, selectedMember, openModal, closeModal } = useModal();
 </script>
 
 <style scoped>

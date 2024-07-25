@@ -15,6 +15,7 @@ import AddFriend from "@/components/home/modal/AddFriend.vue";
 import { useModal } from "@/composables/useModal";
 
 const { isModalOpen, openModal, closeModal } = useModal();
+
 </script>
 
 <style scoped>

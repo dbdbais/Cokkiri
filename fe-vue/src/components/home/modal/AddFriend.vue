@@ -1,7 +1,6 @@
 <script setup>
 import { ref } from "vue";
 import addFriend from "@/assets/data/addFriend.json";
-import Pagination from "@/components/common/Pagination.vue";
 
 const friendList = ref(addFriend.friends);
 </script>

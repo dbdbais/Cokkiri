@@ -6,10 +6,11 @@ div<template>
             </div>
             <div v-if="isOpen(index)" class="accordion-content">
                 <div v-for="(member, index2) in item.member" :key="index2" class="box-main-exp box-content">
-                    <img id="friend-profile" src="@/assets/exit.svg">
+                    <img class="friend-profile" src="@/assets/elephant-profile2.svg">
                     <slot :name="`content-${index2}`" class="title-member">
                         <span class="title friend-name">{{ member.name }}</span>
                     </slot>
+                    <img src="@/assets/message.svg" class="message-icon">
                 </div>
             </div>
         </div>
@@ -64,6 +65,7 @@ const isOpen = (index) => {
 
 .box-content {
     display: flex;
+    position: relative;
     align-items: center;
     height: 60px;
     padding: 5px 15px;
@@ -83,9 +85,15 @@ const isOpen = (index) => {
     font-size: 30px;
 }
 
-#friend-profile {
-    width: 30px;
-    height: 30px;
+.friend-profile {
+    width: 45px;
+    height: 45px;
+    border-radius: 100%;
+}
 
+.message-icon {
+    position: absolute;
+    width: 40px;
+    right: 15px;
 }
 </style>

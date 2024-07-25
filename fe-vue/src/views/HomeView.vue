@@ -19,6 +19,7 @@ import Header from "@/components/home/Header.vue";
 import Profile from "@/components/home/Profile.vue";
 import FriendsList from "@/components/home/FriendsList.vue";
 import MainContent from "@/components/home/MainContent.vue";
+import '@/assets/css/home.css';
 </script>
 
 <style scoped>

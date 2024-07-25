@@ -1,0 +1,20 @@
+/* =============================
+          Home Page CSS
+   ============================= */
+
+/* Home Page Modal */
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0);
+  width: 1920px;
+  height: 1080px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}

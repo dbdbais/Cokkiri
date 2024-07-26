@@ -1,7 +1,15 @@
+/* =============================
+            Variables
+   ============================= */
+
 :root {
   --primary-fill-color: #c191ff;
   --secondary-fill-color: #dbe7ff;
 }
+
+/* =============================
+            Global CSS
+   ============================= */
 
 * {
   margin: 0;
@@ -10,20 +18,74 @@
   box-sizing: border-box;
 }
 
-html,
 body {
   background-color: #cadcff;
 }
+
+/* =============================
+              Font
+   ============================= */
 
 /* 링크 (스터디 모집 게시판, 문제 목록) */
 a {
   color: white;
   text-decoration: none;
-  /* 폰트 */
   font-size: 30px;
   font-family: "RixInooAriDuriR";
   -webkit-text-stroke: 1px black;
 }
+
+.font-main-pagi {
+  font-family: "RixInooAriDuriR";
+  color: #ccff61;
+  -webkit-text-stroke: 1px #378705;
+}
+
+/* 제목 글자 */
+.title {
+  /* 폰트 */
+  color: white;
+  font-family: "RixInooAriDuriR";
+
+  -webkit-text-stroke: 1px black;
+  background-color: transparent;
+}
+
+.main-title {
+  font-size: 30px;
+}
+
+.sub-title {
+  font-size: 25px;
+  margin-bottom: 5px;
+  margin-left: 5px;
+}
+
+.content-title {
+  font-size: 20px;
+  margin-bottom: 5px;
+  margin-left: 15px;
+
+  background-color: transparent;
+}
+
+/* 글자 중앙 정렬 */
+.md {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* 퍼플 글자 */
+.text-p {
+  color: #3b72ff;
+  font-family: "yg-jalnan";
+  font-size: 18px;
+}
+
+/* =============================
+            Box Layout
+   ============================= */
 
 .box-in {
   display: inline-block;
@@ -39,19 +101,9 @@ a {
   flex-direction: column;
 }
 
-/* ===================================== 
-              폰트
-   ===================================== */
-
-.font-main-pagi {
-  font-family: "RixInooAriDuriR";
-  color: #ccff61;
-  -webkit-text-stroke: 1px #378705;
-}
-
-/* ===================================== 
-              박스
-   ===================================== */
+/* =============================
+            Box Style
+   ============================= */
 
 /* 메인 페이지 컨테이너 박스 */
 .box-main-con {
@@ -141,47 +193,6 @@ a {
   border-radius: 10px;
   background-color: #ff4d4d;
 }
-/* 퍼플 글자 */
-.text-p {
-  color: #3b72ff;
-  font-family: "yg-jalnan";
-  font-size: 18px;
-}
-/* 글자 중앙 정렬 */
-.md {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-/* 제목 글자 */
-.title {
-  /* 폰트 */
-  color: white;
-  font-family: "RixInooAriDuriR";
-
-  -webkit-text-stroke: 1px black;
-  background-color: transparent;
-}
-.main-title {
-  font-size: 30px;
-}
-.sub-title {
-  font-size: 25px;
-  margin-bottom: 5px;
-  margin-left: 5px;
-}
-.content-title {
-  font-size: 20px;
-  margin-bottom: 5px;
-  margin-left: 15px;
-
-  background-color: transparent;
-}
-/* 로고 위치 */
-.logo {
-  margin-top: 15px;
-  margin-left: 30px;
-}
 
 /* 정기 게시판 제출 버튼 */
 .board-btn {
@@ -216,4 +227,33 @@ a {
     format("woff");
   font-weight: normal;
   font-style: normal;
+}
+
+/* =============================
+               보류
+   ============================= */
+
+/* 로고 위치 */
+.logo {
+  margin-top: 15px;
+  margin-left: 30px;
+}
+
+/* =============================
+            Modal Style
+   ============================= */
+
+.modal-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0);
+  width: 1920px;
+  height: 1080px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
 }

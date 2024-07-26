@@ -1,10 +1,13 @@
 <script setup>
+import "@/assets/css/board.css";
 import StudySearch from "@/components/board/StudySearch.vue";
 import StudyRecruitmentGroup from "@/components/board/StudyRecruitmentGroup.vue";
 import StudyDetail from "@/components/board/StudyDetail.vue";
-import { ref } from "vue";
+import StudyCreate from "./StudyCreate.vue";
 import studyGroupJson from "@/assets/data/studyGroup.json";
+import { ref } from "vue";
 const studyDetail = ref(false);
+const studyCreate = ref(false);
 
 const studyGroup = ref(studyGroupJson);
 const detailData = ref("");
@@ -13,6 +16,10 @@ const preventCilck = ref("");
 const goDetail = function (group) {
   studyDetail.value = true;
   detailData.value = group;
+};
+
+const goCreate = function () {
+  studyCreate.value = true;
 };
 
 const closeBtn = function () {
@@ -24,11 +31,23 @@ const closeBtn = function () {
   <div class="container">
     <div class="title sub-title">정기 스터디 모집</div>
     <div class="recruitment">
-      <StudyDetail v-if="studyDetail" :detail-data="detailData" @close="closeBtn" />
+      <StudyDetail
+        v-if="studyDetail"
+        :detail-data="detailData"
+        @close="closeBtn"
+      />
+      <StudyCreate v-if="studyCreate" />
       <StudySearch />
-      <StudyRecruitmentGroup v-for="group in studyGroup" :key="group.id" :group-data="group" :class="preventCilck"
-        @click="goDetail(group)" />
-
+      <StudyRecruitmentGroup
+        v-for="group in studyGroup"
+        :key="group.id"
+        :group-data="group"
+        :class="preventCilck"
+        @click="goDetail(group)"
+      />
+    </div>
+    <div class="create-btn btn bold-text md" @click="goCreate">
+      스터디 만들기
     </div>
   </div>
 </template>
@@ -60,8 +79,10 @@ const closeBtn = function () {
 }
 
 @keyframes downModal {
-  from {}
+  from {
+  }
 
-  to {}
+  to {
+  }
 }
 </style>

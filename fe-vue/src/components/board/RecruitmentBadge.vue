@@ -5,7 +5,10 @@ defineProps({
 </script>
 
 <template>
-  <div class="recruitment-badge content" :class="groupBadge ? 'open' : 'close'">
+  <div
+    class="recruitment-badge nomal-text"
+    :class="groupBadge ? 'open' : 'close'"
+  >
     {{ groupBadge ? "모집중" : "종료" }}
   </div>
 </template>

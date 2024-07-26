@@ -185,7 +185,7 @@ a {
 
 /* 정기 게시판 제출 버튼 */
 .board-btn {
-  width: 100%;
+  width: 620px;
   height: 60px;
 
   font-size: 25px;
@@ -195,8 +195,9 @@ a {
   border-radius: 10px;
 
   color: white;
+  background-color: #ff4d4d;
 }
-.content {
+.nomal-text {
   font-family: "yg-jalnan";
   /* background-color: transparent; */
 }

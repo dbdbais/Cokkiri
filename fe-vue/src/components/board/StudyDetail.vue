@@ -16,8 +16,13 @@ const closeBtn = function () {
 </script>
 
 <template>
-  <div class="study-detail box-main-con">
-    <img src="/src/assets/exit.svg" alt="나가기" class="exit" @click="closeBtn" />
+  <div class="study-detail board-modal box-main-con">
+    <img
+      src="/src/assets/exit.svg"
+      alt="나가기"
+      class="exit"
+      @click="closeBtn"
+    />
     <div class="detail-content">
       <RecruitmentBadge class="badge" />
       <div class="title sub-title group-name">{{ detailData.groupName }}</div>
@@ -26,7 +31,11 @@ const closeBtn = function () {
           {{ detailData.groupData.lang }}
         </div>
         <div class="box-psb text-p md member">
-          <div v-for="member in detailData.groupData.member" :key="member.id" class="rank md">
+          <div
+            v-for="member in detailData.groupData.member"
+            :key="member.id"
+            class="rank md"
+          >
             <img :src="member.img" alt="등급" />
             <span style="margin-left: 8px">{{ member.cnt }}명</span>
           </div>
@@ -34,22 +43,30 @@ const closeBtn = function () {
       </div>
       <div class="middle">
         <div class="box-psb box-col times">
-          <div class="text-p content-title">시간</div>
+          <div class="text-p nomal-text-title">시간</div>
           <div class="time-list">
-            <StudyDetailTime v-for="time in detailData.groupData.times" :key="time.week" :study-time="time" />
+            <StudyDetailTime
+              v-for="time in detailData.groupData.times"
+              :key="time.week"
+              :study-time="time"
+            />
           </div>
         </div>
         <div class="box-psb box-col rules">
-          <div class="text-p content-title">규칙</div>
+          <div class="text-p nomal-text-title">규칙</div>
           <div class="rule-list">
-            <StudyDetailRule v-for="rule in detailData.groupData.rules" :key="rule.id" :study-rule="rule" />
+            <StudyDetailRule
+              v-for="rule in detailData.groupData.rules"
+              :key="rule.id"
+              :study-rule="rule"
+            />
           </div>
         </div>
       </div>
       <div class="bottom">
         <div class="box-psb text-p intro">{{ detailData.groupData.intro }}</div>
       </div>
-      <button class="content board-btn">가입신청</button>
+      <button class="nomal-text board-btn">가입신청</button>
     </div>
   </div>
 </template>
@@ -121,13 +138,6 @@ span {
 }
 
 .study-detail {
-  width: 700px;
-  height: 700px;
-  z-index: 1;
-  position: absolute;
-  top: 5px;
-  left: 350px;
-
   display: flex;
   justify-content: center;
 }
@@ -149,9 +159,5 @@ span {
   width: 620px;
   height: 300px;
   background-color: transparent;
-}
-
-.board-btn {
-  background-color: #ff4d4d;
 }
 </style>

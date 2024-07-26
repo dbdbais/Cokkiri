@@ -1,5 +1,5 @@
 <template>
-  <div class="box-main-group rule content md">
+  <div class="box-main-group rule nomal-text md">
     {{ studyRule.rule }}
   </div>
 </template>

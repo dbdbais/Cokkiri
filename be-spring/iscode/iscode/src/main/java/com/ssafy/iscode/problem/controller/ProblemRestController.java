@@ -1,5 +1,6 @@
 package com.ssafy.iscode.problem.controller;
 
+import com.ssafy.iscode.problem.model.dto.Problem;
 import com.ssafy.iscode.problem.service.ProblemService;
 import com.ssafy.iscode.util.APIConnection;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,8 +30,10 @@ public class ProblemRestController {
     }
 
     @GetMapping("/insert")
-    public void insert(@RequestParam Long id) throws IOException {
+    public Problem insert(@RequestParam Long id) throws IOException {
         System.out.println("called");
-        //ps.insertProblem(apiConnection.run(id));
+        Problem ip = apiConnection.getProblem(id);
+        ps.insertProblem(ip);
+        return ip;
     }
 }

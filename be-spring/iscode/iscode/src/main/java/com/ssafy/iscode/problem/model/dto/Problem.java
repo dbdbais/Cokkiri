@@ -11,6 +11,7 @@ public class Problem {
     @Column(name = "algo_num")
     private Long no;
 
+    @Column(name = "algo_type")
     private List<String> algoType;
     @Column(name = "algo_title")
     private String title;
@@ -18,27 +19,16 @@ public class Problem {
     private int level;
     @Column(name = "algo_info" ,columnDefinition = "LONGTEXT")
     private String info;
-    @Column(name="algo_tries")
-    private double tries;
+    @Column(name="algo_percent")
+    private double algoPercent;
 
     @Column(name = "algo_input")
-    private List<String> input;
+    private List<String> algoInput;
 
     @Column(name = "algo_output")
-    private List<String> output;
+    private List<String> algoOutput;
 
     public Problem() {
-    }
-
-    public Problem(Long no, List<String> algoType, String title, int level, String info, double tries, List<String> input, List<String> output) {
-        this.no = no;
-        this.algoType = algoType;
-        this.title = title;
-        this.level = level;
-        this.info = info;
-        this.tries = tries;
-        this.input = input;
-        this.output = output;
     }
 
     public Long getNo() {
@@ -81,27 +71,41 @@ public class Problem {
         this.info = info;
     }
 
-    public double getTries() {
-        return tries;
+    public double getAlgoPercent() {
+        return algoPercent;
     }
 
-    public void setTries(double tries) {
-        this.tries = tries;
+    public void setAlgoPercent(double algoPercent) {
+        this.algoPercent = algoPercent;
     }
 
-    public List<String> getInput() {
-        return input;
+    public List<String> getAlgoInput() {
+        return algoInput;
     }
 
-    public void setInput(List<String> input) {
-        this.input = input;
+    public void setAlgoInput(List<String> algoInput) {
+        this.algoInput = algoInput;
     }
 
-    public List<String> getOutput() {
-        return output;
+    public List<String> getAlgoOutput() {
+        return algoOutput;
     }
 
-    public void setOutput(List<String> output) {
-        this.output = output;
+    public void setAlgoOutput(List<String> algoOutput) {
+        this.algoOutput = algoOutput;
+    }
+
+    @Override
+    public String toString() {
+        return "Problem{" +
+                "no=" + no +
+                ", algoType=" + algoType +
+                ", title='" + title + '\'' +
+                ", level=" + level +
+                ", info='" + info + '\'' +
+                ", algoPercent=" + algoPercent +
+                ", algoInput=" + algoInput +
+                ", algoOutput=" + algoOutput +
+                '}';
     }
 }

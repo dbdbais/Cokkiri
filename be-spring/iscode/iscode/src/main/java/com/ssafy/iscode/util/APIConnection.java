@@ -22,8 +22,8 @@ public class APIConnection {
     //WebCrawler Dependency Injection
 
     static BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
-/*
-    public Problem run(Long id) throws IOException {
+
+    public Problem getProblem(Long id) throws IOException {
 
         String baseurl = "https://solved.ac/api/v3";
         //SOLVED API url
@@ -33,7 +33,7 @@ public class APIConnection {
         WebClient webClient = WebClient.create(baseurl);
         //create WEB Client
 
-        System.out.print("검색한 문제 번호를 입력 : ");
+        //System.out.print("검색한 문제 번호를 입력 : ");
 
         Mono<String> mono = webClient.get()
                 .uri(url+"?problemId="+id)
@@ -78,13 +78,16 @@ public class APIConnection {
             }
         }
 
-        String info = webCrawler.getProblemInfo(id);
-        //Problem prob = new Problem(id,type,title,level,info, avgTries);
+        Problem prob = webCrawler.crawlProblem(id);
+        prob.setAlgoType(type);
+        prob.setTitle(title);
+        prob.setLevel(level);
+
         System.out.println(prob);
         return prob;
         //return info of Problem
     }
-*/
+
 
     //for Test
     public static void main(String[] args) throws IOException {
@@ -101,6 +104,7 @@ public class APIConnection {
 
         System.out.print("검색한 문제 번호를 입력 : ");
         no = Long.parseLong(in.readLine());
+
 
         Mono <String> mono = webClient.get()
                 .uri(url+"?problemId="+no)
@@ -148,7 +152,7 @@ public class APIConnection {
 //            this.tries = tries;
 
 
-        String info = webCrawler.getProblemInfo(no);
+        String info = webCrawler.crawlProblem(no).getInfo();
         System.out.println(info);
        // Problem prob = new Problem(no,type,title,level,info, avgTries);
        // System.out.println(prob);

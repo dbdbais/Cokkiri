@@ -1,5 +1,6 @@
 package com.ssafy.iscode.util;
 
+import com.ssafy.iscode.problem.model.dto.Problem;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -15,14 +16,19 @@ import java.util.List;
 public class WebCrawler {
 
     //GET Problem Information of BaekJoon OJS
-    public String getProblemInfo(Long pid) throws IOException {
-        //Crawl Problem info by pid
+    public Problem crawlProblem(Long pid) throws IOException {
+
 
         String url = "https://www.acmicpc.net/problem/";
+        // problem url
         //String problemName = "21611";
+
+        Problem prob = new Problem();
+
+        // problem name
         Document document = Jsoup.connect(url+pid).get();
 
-
+        double percent = 0.0;
 
         Elements elem = document.select("#problem-body");
 
@@ -34,8 +40,51 @@ public class WebCrawler {
             Element p = new Element("span").text(anchor.text());
             anchor.replaceWith(p);
         }
-        // return element to HTML
-        return elem.html();
+
+        // Select the #problem-info element
+        Element problemInfo = document.selectFirst("#problem-info");
+
+        if (problemInfo != null) {
+            // Select the first tr within tbody
+            Element firstRow = problemInfo.selectFirst("tbody tr");
+
+            if (firstRow != null) {
+                // Select the last td in the first tr
+                Element lastTd = firstRow.select("td").last();
+
+                if (lastTd != null) {
+                    // Extract the text from the last td and convert it to a Double
+                    String percentText = lastTd.text();
+                    percent = Double.parseDouble(percentText.replace("%", "").trim());
+                }
+            }
+        }
+        System.out.println("Percent: "+percent);
+
+        List<String> inputList = new ArrayList<>();
+        List<String> outputList = new ArrayList<>();
+
+
+
+
+        // extract sample inputs
+        Elements sampleInputs = document.select("[id^=sample-input]");
+        for (Element input : sampleInputs) {
+            inputList.add(input.text());
+        }
+
+        // extract sample outputs
+        Elements sampleOutputs = document.select("[id^=sample-output]");
+        for (Element output : sampleOutputs) {
+            outputList.add(output.text());
+        }
+        prob.setNo(pid);
+        //prob.setAlgoInput(inputList);
+        //prob.setAlgoOutput(outputList);
+        prob.setAlgoPercent(percent);
+        //set HTML
+        prob.setInfo(elem.html());
+        return prob;
     }
     public static void main(String[] args) throws IOException {
 
@@ -46,6 +95,28 @@ public class WebCrawler {
         String problemName = "21611";
         // problem name
         Document document = Jsoup.connect(url+problemName).get();
+
+        Double percent = 0.0;
+
+        // Select the #problem-info element
+        Element problemInfo = document.selectFirst("#problem-info");
+
+        if (problemInfo != null) {
+            // Select the first tr within tbody
+            Element firstRow = problemInfo.selectFirst("tbody tr");
+
+            if (firstRow != null) {
+                // Select the last td in the first tr
+                Element lastTd = firstRow.select("td").last();
+
+                if (lastTd != null) {
+                    // Extract the text from the last td and convert it to a Double
+                    String percentText = lastTd.text();
+                    percent = Double.parseDouble(percentText.replace("%", "").trim());
+                }
+            }
+        }
+        System.out.println("Percent: "+percent);
 
         List<String> inputList = new ArrayList<>();
         List<String> outputList = new ArrayList<>();
@@ -61,6 +132,22 @@ public class WebCrawler {
             Element p = new Element("span").text(anchor.text());
             anchor.replaceWith(p);
         }
+
+        // extract sample inputs
+        Elements sampleInputs = document.select("[id^=sample-input]");
+        for (Element input : sampleInputs) {
+            inputList.add(input.text());
+        }
+
+        // extract sample outputs
+        Elements sampleOutputs = document.select("[id^=sample-output]");
+        for (Element output : sampleOutputs) {
+            outputList.add(output.text());
+        }
+
+        // print extracted inputs and outputs
+        System.out.println("Sample Inputs: " + inputList);
+        System.out.println("Sample Outputs: " + outputList);
 
         //print element
         System.out.println(elem);

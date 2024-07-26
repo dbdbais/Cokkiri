@@ -1,3 +1,8 @@
+:root {
+  --primary-fill-color: #c191ff;
+  --secondary-fill-color: #dbe7ff;
+}
+
 * {
   margin: 0;
   padding: 0;

@@ -14,12 +14,14 @@
         <div id="room-container" class="rooms">
             <Room v-for="room in rooms" :key="room.id" :room="room" />
         </div>
+        <Pagination id="pagi-container" />
     </div>
 </template>
 
 <script setup>
 import { ref } from 'vue'
 import Room from './Room.vue'
+import Pagination from '@/components/common/Pagination.vue'
 import roomList from '@/assets/data/roomList.json'
 
 const rooms = ref(roomList.roomList.room)

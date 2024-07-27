@@ -16,7 +16,7 @@ public class ProblemRestController {
     ProblemService ps;
 
     @Autowired
-    public ProblemRestController(APIConnection apiConnection, ProblemService ps) {
+    public ProblemRestController(ProblemService ps) {
         this.ps = ps;
     }
 

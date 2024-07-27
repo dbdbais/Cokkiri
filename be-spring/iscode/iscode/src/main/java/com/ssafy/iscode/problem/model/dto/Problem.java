@@ -1,9 +1,17 @@
 package com.ssafy.iscode.problem.model.dto;
 
 
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.persistence.*;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
 @Entity
 @Table(name="Algo")
 public class Problem {
@@ -11,8 +19,11 @@ public class Problem {
     @Column(name = "algo_num")
     private Long no;
 
+    @ElementCollection(fetch = FetchType.LAZY)
+    @CollectionTable(name = "algo_type", joinColumns = @JoinColumn(name = "algo_num"))
     @Column(name = "algo_type")
     private List<String> algoType;
+
     @Column(name = "algo_title")
     private String title;
     @Column(name = "algo_level")
@@ -22,14 +33,15 @@ public class Problem {
     @Column(name="algo_percent")
     private double algoPercent;
 
-    @Column(name = "algo_input")
-    private List<String> algoInput;
+    @ElementCollection(fetch = FetchType.LAZY)
+    @CollectionTable(name = "algo_input", joinColumns = @JoinColumn(name = "algo_num"))
+    @Column(name = "algo_input_value")
+    private Map<Integer, String> algoInput;
 
-    @Column(name = "algo_output")
-    private List<String> algoOutput;
-
-    public Problem() {
-    }
+    @ElementCollection(fetch = FetchType.LAZY)
+    @CollectionTable(name = "algo_output", joinColumns = @JoinColumn(name = "algo_num"))
+    @Column(name = "algo_output_value")
+    private Map<Integer, String> algoOutput;
 
     public Long getNo() {
         return no;
@@ -79,19 +91,19 @@ public class Problem {
         this.algoPercent = algoPercent;
     }
 
-    public List<String> getAlgoInput() {
+    public Map<Integer, String> getAlgoInput() {
         return algoInput;
     }
 
-    public void setAlgoInput(List<String> algoInput) {
+    public void setAlgoInput(Map<Integer, String> algoInput) {
         this.algoInput = algoInput;
     }
 
-    public List<String> getAlgoOutput() {
+    public Map<Integer, String> getAlgoOutput() {
         return algoOutput;
     }
 
-    public void setAlgoOutput(List<String> algoOutput) {
+    public void setAlgoOutput(Map<Integer, String> algoOutput) {
         this.algoOutput = algoOutput;
     }
 

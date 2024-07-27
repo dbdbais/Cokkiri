@@ -9,7 +9,9 @@ import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 @Component
@@ -61,26 +63,27 @@ public class WebCrawler {
         }
         System.out.println("Percent: "+percent);
 
-        List<String> inputList = new ArrayList<>();
-        List<String> outputList = new ArrayList<>();
+        Map<Integer,String> inputList = new HashMap<>();
+        Map<Integer,String> outputList = new HashMap<>();
 
-
-
+        int iidx = 1;
+        int oidx = 1;
 
         // extract sample inputs
         Elements sampleInputs = document.select("[id^=sample-input]");
         for (Element input : sampleInputs) {
-            inputList.add(input.text());
+            inputList.put(iidx++,input.text());
         }
 
         // extract sample outputs
         Elements sampleOutputs = document.select("[id^=sample-output]");
         for (Element output : sampleOutputs) {
-            outputList.add(output.text());
+            outputList.put(oidx++,output.text());
         }
+
         prob.setNo(pid);
-        //prob.setAlgoInput(inputList);
-        //prob.setAlgoOutput(outputList);
+        prob.setAlgoInput(inputList);
+        prob.setAlgoOutput(outputList);
         prob.setAlgoPercent(percent);
         //set HTML
         prob.setInfo(elem.html());
@@ -118,9 +121,8 @@ public class WebCrawler {
         }
         System.out.println("Percent: "+percent);
 
-        List<String> inputList = new ArrayList<>();
-        List<String> outputList = new ArrayList<>();
-
+        HashMap<Integer,String> inputList = new HashMap<>();
+        HashMap<Integer,String> outputList = new HashMap<>();
 
         Elements elem = document.select("#problem-body");
 
@@ -133,16 +135,20 @@ public class WebCrawler {
             anchor.replaceWith(p);
         }
 
+
+        int iidx = 1;
+        int oidx = 1;
+
         // extract sample inputs
         Elements sampleInputs = document.select("[id^=sample-input]");
         for (Element input : sampleInputs) {
-            inputList.add(input.text());
+            inputList.put(iidx++,input.text());
         }
 
         // extract sample outputs
         Elements sampleOutputs = document.select("[id^=sample-output]");
         for (Element output : sampleOutputs) {
-            outputList.add(output.text());
+            outputList.put(oidx++,output.text());
         }
 
         // print extracted inputs and outputs

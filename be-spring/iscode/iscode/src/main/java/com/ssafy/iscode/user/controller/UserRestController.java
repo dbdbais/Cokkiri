@@ -11,7 +11,7 @@ import java.util.List;
 @RequestMapping("/userapi")
 public class UserRestController {
 
-    UserService userService;
+    private UserService userService;
 
     @Autowired
     public UserRestController(UserService us) {

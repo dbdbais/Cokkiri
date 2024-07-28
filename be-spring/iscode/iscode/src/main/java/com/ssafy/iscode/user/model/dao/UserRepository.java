@@ -30,7 +30,7 @@ public class UserRepository {
             }
             return 1; // successfully saved
         } catch (Exception e) {
-            e.printStackTrace();;
+            e.printStackTrace();
             return 0; // failed
         }
     }

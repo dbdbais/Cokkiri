@@ -7,22 +7,24 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.List;
-
 @Entity
-@Table(name = "message_room")
+@Table(name = "mru")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class MessageRoomDto {
+public class MessageRoomUser {
 
     @Id
-    @Column(name = "mr_id")
+    @Column(name = "mru_id")
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    // user list (maximum: 2)
-    @OneToMany(mappedBy = "room", fetch = FetchType.LAZY)
-    private List<MessageRoomUser> users;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "mr_id")
+    private MessageRoomDto room;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private User user;
 }

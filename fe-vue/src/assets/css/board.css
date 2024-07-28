@@ -1,27 +1,32 @@
+/* 스터디 만들기 버튼 스타일 */
 .create-btn {
   background-color: #eadcfc;
   border: solid #1c59f6;
   border-radius: 10px;
 }
+/* 두꺼운 글씨 */
 .bold-text {
   color: white;
   font-family: "RixInooAriDuriR";
   font-size: 20px;
-
   -webkit-text-stroke: 1px black;
 }
+/* 버튼 사이즈 */
 .btn {
   width: 150px;
   height: 50px;
 }
+
+/* 스터디 만들기 안에 박스 */
 .create-box {
   width: 620px;
   height: 550px;
-
+  padding: 30px;
   background-color: #dbe7ff;
   border: solid #3b72ff;
   border-radius: 10px;
 }
+/* 스터디 만들기 모달 */
 .board-modal {
   width: 700px;
   height: 700px;
@@ -33,11 +38,12 @@
   border: solid #3b72ff;
   border-radius: 10px;
 }
+
 .flex-align {
   display: flex;
   align-items: center;
 }
-
+/* 세로 가운데 정렬 */
 .md-col {
   display: flex;
   flex-direction: column;

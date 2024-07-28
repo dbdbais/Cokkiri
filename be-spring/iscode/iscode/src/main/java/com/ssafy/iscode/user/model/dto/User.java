@@ -1,7 +1,9 @@
 package com.ssafy.iscode.user.model.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -23,19 +25,25 @@ public class User {
     @Column(name ="user_percent")
     private double percent;
 
+    @JsonIgnore
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<UserFriend> friends;
 
+    @JsonIgnore
+    @OneToMany(mappedBy = "friendUser", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<UserFriend> friendOf;
 
     public User() {
     }
 
 
-
-    public User(String id, String nickname, String password, Tier tier, double percent) {
+    public User(String id, String nickname, String password, Tier tier, double percent, List<UserFriend> friends) {
         this.id = id;
         this.nickname = nickname;
         this.password = password;
         this.tier = tier;
         this.percent = percent;
+        this.friends = friends;
     }
 
     public String getId() {
@@ -76,6 +84,14 @@ public class User {
 
     public void setPercent(double percent) {
         this.percent = percent;
+    }
+
+    public List<UserFriend> getFriends() {
+        return friends;
+    }
+
+    public void setFriends(List<UserFriend> friends) {
+        this.friends = friends;
     }
 
     @Override

@@ -1,6 +1,8 @@
 package com.ssafy.iscode.user.controller;
 
+import com.ssafy.iscode.user.model.dto.Status;
 import com.ssafy.iscode.user.model.dto.User;
+import com.ssafy.iscode.user.model.dto.UserFriend;
 import com.ssafy.iscode.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -29,6 +31,16 @@ public class UserRestController {
     @GetMapping("{id}")
     public User getUser(@PathVariable String id){
         return userService.getUser(id);
+    }
+    @GetMapping("/friends/{id}")
+    public List<UserFriend> getFriends(@PathVariable String id){
+        return userService.getUserFriends(id);
+    }
+    @PostMapping("/friends")
+    public int insertRelation(@RequestParam String userId,
+                              @RequestParam String friendUserId,
+                              @RequestParam Status status){
+        return userService.insertFriend(userId,friendUserId,status);
     }
     @GetMapping("/login")
     public int login(@RequestBody User user){

@@ -147,13 +147,6 @@ span {
   left: 40px;
 }
 
-.exit {
-  position: absolute;
-  right: 15px;
-  top: 15px;
-  background-color: transparent;
-}
-
 .detail-content {
   margin-top: 70px;
   width: 620px;

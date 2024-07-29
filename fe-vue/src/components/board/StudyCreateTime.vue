@@ -31,7 +31,6 @@ const selected = function () {
 </script>
 <template>
   <div>
-    <div class="bold-text" style="margin-top: 15px">스터디 시간</div>
     <div class="flex-align time">
       <div>
         <div class="select" v-for="day in week" :key="day.id">
@@ -98,12 +97,7 @@ input[type="time"] {
   color: #3b72ff;
   border-color: #3b72ff;
 }
-/* 인원 선택 박스 방향키 항상 표시 */
-input[type="number"]::-webkit-inner-spin-button,
-input[type="number"]::-webkit-outer-spin-button {
-  -webkit-appearance: inner-spin-button;
-  opacity: 1;
-}
+
 /* 요일 선택 부분 커스텀 */
 .select input[type="radio"] {
   display: none;

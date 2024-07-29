@@ -21,7 +21,7 @@
 .create-box {
   width: 620px;
   height: 550px;
-  padding: 30px;
+  padding: 20px;
   background-color: #dbe7ff;
   border: solid #3b72ff;
   border-radius: 10px;
@@ -48,4 +48,11 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+}
+
+.exit {
+  position: absolute;
+  right: 15px;
+  top: 15px;
+  background-color: transparent;
 }

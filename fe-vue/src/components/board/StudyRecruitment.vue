@@ -36,7 +36,14 @@ const closeBtn = function () {
         :detail-data="detailData"
         @close="closeBtn"
       />
-      <StudyCreate v-if="studyCreate" />
+      <StudyCreate
+        v-if="studyCreate"
+        @createExit="
+          () => {
+            studyCreate = false;
+          }
+        "
+      />
       <StudySearch />
       <StudyRecruitmentGroup
         v-for="group in studyGroup"

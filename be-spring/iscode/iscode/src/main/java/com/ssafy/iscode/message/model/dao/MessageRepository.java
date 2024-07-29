@@ -33,7 +33,7 @@ public class MessageRepository {
 
     // find all messages by room id
     public List<MessageDto> findAllByRoomId(Long roomId) {
-        String query = "SELECT m FROM MessageDto m"
+        String query = "SELECT m FROM MessageDto m "
             + "WHERE m.messageRoom.id = :roomId";
         return em.createQuery(query, MessageDto.class)
                 .setParameter("roomId", roomId)

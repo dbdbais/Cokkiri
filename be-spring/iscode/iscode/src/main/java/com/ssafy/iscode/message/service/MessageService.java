@@ -1,9 +1,14 @@
 package com.ssafy.iscode.message.service;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.ssafy.iscode.message.model.dao.MessageRepository;
 import com.ssafy.iscode.message.model.dao.MessageRoomRepository;
 import com.ssafy.iscode.message.model.dao.MessageRoomUserRepository;
 import com.ssafy.iscode.message.model.dto.MessageDto;
+import com.ssafy.iscode.message.model.dto.MessageResponseDto;
 import com.ssafy.iscode.message.model.dto.MessageRoomDto;
 import com.ssafy.iscode.message.model.dto.MessageRoomUser;
 import com.ssafy.iscode.user.model.dao.UserRepository;
@@ -64,8 +69,19 @@ public class MessageService {
     }
 
     // find all messages by room id
-    public List<MessageDto> getMessagesByRoomId(Long roomId) {
-        return messageRepository.findAllByRoomId(roomId);
+    public List<MessageResponseDto> getMessagesByRoomId(Long roomId) {
+        List<MessageDto> messages = messageRepository.findAllByRoomId(roomId);
+        List<MessageResponseDto> list = new ArrayList<>();
+
+        for (MessageDto message: messages) {
+            MessageResponseDto m = new MessageResponseDto();
+            m.setUserName(message.getSender().getNickname());
+            m.setContent(message.getContent());
+
+            list.add(m);
+        }
+
+        return list;
     }
 
     // save message

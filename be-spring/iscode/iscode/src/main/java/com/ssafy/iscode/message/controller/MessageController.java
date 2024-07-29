@@ -1,6 +1,8 @@
 package com.ssafy.iscode.message.controller;
 
+import com.google.gson.JsonArray;
 import com.ssafy.iscode.message.model.dto.MessageDto;
+import com.ssafy.iscode.message.model.dto.MessageResponseDto;
 import com.ssafy.iscode.message.service.MessageService;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,8 +38,8 @@ public class MessageController {
     }
 
     @GetMapping("/{roomId}")
-    public ResponseEntity<List<MessageDto>> getMessages(@PathVariable("roomId") Long roomId) {
-        List<MessageDto> messages = messageService.getMessagesByRoomId(roomId);
+    public ResponseEntity<List<MessageResponseDto>> getMessages(@PathVariable("roomId") Long roomId) {
+        List<MessageResponseDto> messages = messageService.getMessagesByRoomId(roomId);
 
         if(messages.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);

@@ -1,0 +1,13 @@
+.rule-container,
+.member-container {
+  background-color: #c191ff;
+  margin: 20px 0px;
+}
+.box {
+  border: 5px solid #3b72ff;
+  border-radius: 10px;
+}
+
+.rule-box {
+  background-color: #d9bbff;
+}

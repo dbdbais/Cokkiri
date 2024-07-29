@@ -2,7 +2,7 @@
     <header>
         <nav id="header-first" class="title main-title">
             <div id="quick-start" class="box-main-con box-in nav-btn">바로가기</div>
-            <div id="create-room" class="box-main-con box-in nav-btn">방만들기</div>
+            <div id="create-room" class="box-main-con box-in nav-btn" @click="openModal">방만들기</div>
             <RouterLink id="router-regular" class="header-router" :to="{ name: 'studyBoard' }">스터디 모집 게시판</RouterLink>
             <RouterLink id="router-problem" class="header-router" :to="{}">문제 목록</RouterLink>
         </nav>
@@ -23,10 +23,16 @@
                 </div>
             </div>
         </div>
+        <CreateRoom v-if="isModalOpen" @close="closeModal" />
     </header>
 </template>
 
 <script setup>
+import CreateRoom from '@/components/home/modal/CreateRoom.vue';
+import { useModal } from '@/composables/useModal';
+
+const { isModalOpen, openModal, closeModal } = useModal();
+
 </script>
 
 <style scoped>

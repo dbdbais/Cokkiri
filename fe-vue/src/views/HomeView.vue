@@ -1,7 +1,7 @@
 <template>
+  <Logo class="logo" />
   <div id="main-container" class="box-row">
     <div id="main-left" class="box-col">
-      <Logo class="logo" />
       <div id="profile-btn" class="title main-title">개인 프로필</div>
       <Profile id="profile" />
       <FriendsList id="friends-list" />

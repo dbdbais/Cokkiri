@@ -1,6 +1,6 @@
 <template>
+  <Logo class="logo" />
   <div class="header">
-    <Logo class="logo" />
     <div class="title main-title top-title">스터디 모집 게시판</div>
   </div>
   <div class="board-home">

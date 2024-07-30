@@ -64,7 +64,7 @@ const closeBtn = function () {
         </div>
       </div>
       <div class="bottom">
-        <div class="box-psb text-p intro">{{ detailData.groupData.intro }}</div>
+        <div class="box-psb text-p intro">{{ detailData.intro }}</div>
       </div>
       <button class="nomal-text board-btn">가입신청</button>
     </div>

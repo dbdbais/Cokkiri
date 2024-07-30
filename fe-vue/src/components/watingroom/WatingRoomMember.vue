@@ -1,10 +1,14 @@
 <script setup>
+import { useLodingStore } from "@/stores/loading";
 import "animate.css";
+import { ref } from "vue";
 defineProps({
-  member: Array,
+  users: Array,
 });
 
 const imgUrl = "/src/assets/rank/";
+
+const roomUsers = ref(false);
 
 const animateDelay = "animate__delay-";
 const animamteSpeed = [
@@ -18,9 +22,9 @@ const animamteSpeed = [
 
 <template>
   <div class="member-container box">
-    <div class="member box md-col" v-for="user in member" :key="user.index">
+    <div class="member box md-col" v-for="user in users" :key="user.index">
       <div class="bold-text name" :class="user.rank">
-        {{ user.name }}
+        {{ user.nickname }}
       </div>
       <img
         :src="imgUrl + user.rank + '.svg'"

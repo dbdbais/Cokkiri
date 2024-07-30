@@ -14,6 +14,6 @@ public class StudyRequestDto {
     private String userName;
     private String roomComment;
     private List<String> rules;
-    private boolean isOpen;
-    private boolean isGame;
+    private Boolean isOpen;
+    private Boolean isGame;
 }

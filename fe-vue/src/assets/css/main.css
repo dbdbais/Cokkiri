@@ -212,6 +212,10 @@ a {
   font-family: "yg-jalnan";
   /* background-color: transparent; */
 }
+.flex-align {
+  display: flex;
+  align-items: center;
+}
 .rank {
   background-color: transparent;
 }

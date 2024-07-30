@@ -7,6 +7,7 @@ import StudyCreate from "./StudyCreate.vue";
 import { getStudyList } from "@/api/board";
 
 import { onMounted, ref } from "vue";
+import { useLodingStore } from "@/stores/loading";
 const studyDetail = ref(false);
 const studyCreate = ref(false);
 
@@ -14,9 +15,13 @@ const studyGroup = ref(false);
 const detailData = ref("");
 const preventCilck = ref("");
 
+const loadingStore = useLodingStore();
+
 onMounted(() => {
+  loadingStore.loading();
   const success = (res) => {
     studyGroup.value = res.data;
+    loadingStore.loadingSuccess();
     console.log(res.data);
   };
   const fail = (err) => {

@@ -65,7 +65,7 @@ const studyCreate = function () {
 </script>
 
 <template>
-  <div class="board-modal">
+  <div class="board-modal slideExpandUp">
     <div class="bold-text" style="margin: 10px 0 0 30px">스터디 만들기</div>
     <img
       src="@/assets/exit.svg"
@@ -161,25 +161,6 @@ const studyCreate = function () {
   border-radius: 10px;
   border: 3px solid #3b72ff;
   overflow-y: scroll;
-}
-/* 시간 스크롤바 */
-.selected-time::-webkit-scrollbar {
-  width: 20px;
-}
-.selected-time::-webkit-scrollbar-track {
-  background-color: #dbe7ff;
-}
-.selected-time::-webkit-scrollbar-thumb {
-  background-color: #3b72ff;
-}
-.selected-time::-webkit-scrollbar-button {
-  display: none;
-}
-
-/* 코너에 라운드 효과 */
-.selected-time::-webkit-scrollbar-track,
-.selected-time::-webkit-scrollbar-thumb {
-  border-radius: 5px;
 }
 
 /* 선택된 스터디 시간 1개 스타일 */

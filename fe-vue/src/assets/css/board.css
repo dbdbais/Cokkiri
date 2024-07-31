@@ -39,17 +39,6 @@
   border-radius: 10px;
 }
 
-.flex-align {
-  display: flex;
-  align-items: center;
-}
-/* 세로 가운데 정렬 */
-.md-col {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
 .exit {
   position: absolute;
   right: 15px;

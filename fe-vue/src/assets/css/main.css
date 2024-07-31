@@ -5,8 +5,7 @@
 :root {
   --primary-fill-color: #c191ff;
   --secondary-fill-color: #dbe7ff;
-  --third-fill-color: #CADCFF;
-  
+  --third-fill-color: #cadcff;
 }
 
 /* =============================
@@ -19,7 +18,9 @@
   cursor: url(@/assets/cursor.svg) 4 5, auto;
   box-sizing: border-box;
 }
-
+.btn {
+  cursor: url(/src/assets/pointer.svg) 2 2, pointer;
+}
 body {
   background-color: #cadcff;
 }
@@ -220,9 +221,28 @@ a {
   font-family: "yg-jalnan";
   /* background-color: transparent; */
 }
+.flex-align {
+  display: flex;
+  align-items: center;
+}
+/* 세로 가운데 정렬 */
+.md-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
 .rank {
   background-color: transparent;
 }
+
+.category {
+  background-color: #e5ffad;
+  border: 7px solid #87aa3d;
+  border-radius: 20px;
+  color: #beff33;
+  -webkit-text-stroke: 1px #87aa3d;
+}
+
 @font-face {
   font-family: "RixInooAriDuriR";
   src: url("https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2207-01@1.0/RixInooAriDuriR.woff2")
@@ -265,4 +285,25 @@ a {
   justify-content: center;
   align-items: center;
   z-index: 1000;
+}
+/* =============================
+            scroll bar
+   ============================= */
+::-webkit-scrollbar {
+  width: 20px;
+}
+::-webkit-scrollbar-track {
+  background-color: #dbe7ff;
+  border-radius: 5px;
+}
+::-webkit-scrollbar-thumb {
+  background-color: #3b72ff;
+}
+::-webkit-scrollbar-button {
+  display: none;
+}
+
+/* 코너에 라운드 효과 */
+::-webkit-scrollbar-thumb {
+  border-radius: 5px;
 }

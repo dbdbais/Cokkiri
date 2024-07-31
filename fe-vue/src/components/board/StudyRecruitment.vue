@@ -4,14 +4,31 @@ import StudySearch from "@/components/board/StudySearch.vue";
 import StudyRecruitmentGroup from "@/components/board/StudyRecruitmentGroup.vue";
 import StudyDetail from "@/components/board/StudyDetail.vue";
 import StudyCreate from "./StudyCreate.vue";
-import studyGroupJson from "@/assets/data/studyGroup.json";
-import { ref } from "vue";
+import { getStudyList } from "@/api/board";
+
+import { onMounted, ref } from "vue";
+import { useLodingStore } from "@/stores/loading";
 const studyDetail = ref(false);
 const studyCreate = ref(false);
 
-const studyGroup = ref(studyGroupJson);
+const studyGroup = ref(false);
 const detailData = ref("");
 const preventCilck = ref("");
+
+const loadingStore = useLodingStore();
+
+onMounted(() => {
+  loadingStore.loading();
+  const success = (res) => {
+    studyGroup.value = res.data;
+    loadingStore.loadingSuccess();
+    console.log(res.data);
+  };
+  const fail = (err) => {
+    console.log(err);
+  };
+  getStudyList(success, fail);
+});
 
 const goDetail = function (group) {
   studyDetail.value = true;

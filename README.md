@@ -7,8 +7,7 @@
 ### git flow example
 - master(main)
     - develop
-        - infra
         - be
-            - feature/compiler
+            - feature-be/compiler
         - fe
-            - feature/main-page
+            - feature-fe/main-page

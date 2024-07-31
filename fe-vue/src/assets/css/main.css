@@ -216,9 +216,24 @@ a {
   display: flex;
   align-items: center;
 }
+/* 세로 가운데 정렬 */
+.md-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
 .rank {
   background-color: transparent;
 }
+
+.category {
+  background-color: #e5ffad;
+  border: 7px solid #87aa3d;
+  border-radius: 20px;
+  color: #beff33;
+  -webkit-text-stroke: 1px #87aa3d;
+}
+
 @font-face {
   font-family: "RixInooAriDuriR";
   src: url("https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2207-01@1.0/RixInooAriDuriR.woff2")

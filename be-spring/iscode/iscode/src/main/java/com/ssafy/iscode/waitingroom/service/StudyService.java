@@ -141,6 +141,19 @@ public class StudyService {
         for (StudyUser studyUser: studyDto.getUsers()) {
             if (studyUser.getUser().equals(user)) {
                 studyUserRepository.remove(studyUser.getId());
+
+                // host change
+                if (studyDto.getHostUser().equals(user)) {
+                    User nextHost = studyDto.getUsers().get(0).getUser();
+                    studyDto.setHostUser(nextHost);
+
+                    try {
+                        studyRepository.save(studyDto);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        return 0;
+                    }
+                }
                 return 1;
             }
         }

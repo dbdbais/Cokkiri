@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -138,13 +139,16 @@ public class StudyService {
         User user = userRepository.findByName(studyRequestDto.getUserName())
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
-        for (StudyUser studyUser: studyDto.getUsers()) {
+        List<StudyUser> users = studyDto.getUsers();
+
+        for (StudyUser studyUser: users) {
             if (studyUser.getUser().equals(user)) {
                 studyUserRepository.remove(studyUser.getId());
 
-                // host change
-                if (studyDto.getHostUser().equals(user)) {
-                    User nextHost = studyDto.getUsers().get(0).getUser();
+                if(users.isEmpty()) { // nobody here
+                    closeStudy(studyDto.getId());
+                } else if (studyDto.getHostUser().equals(user)) { // host change
+                    User nextHost = users.get(0).getUser();
                     studyDto.setHostUser(nextHost);
 
                     try {
@@ -209,5 +213,25 @@ public class StudyService {
         }
 
         return list;
+    }
+
+    public int closeStudy(Long sessionId) {
+        StudyDto studyDto = studyRepository.findById(sessionId);
+
+        Date now = new Date();
+
+        studyDto.setEnd(now);
+
+        // prevent search
+        studyDto.setIsOpen(false);
+
+        try {
+            studyRepository.save(studyDto);
+
+            return 1;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return 0;
+        }
     }
 }

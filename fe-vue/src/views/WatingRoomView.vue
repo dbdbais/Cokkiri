@@ -1,5 +1,5 @@
 <script setup>
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import { getWatingRoom } from "@/api/watingroom";
 import { getUser } from "@/api/user";
 import "@/assets/css/watingroom.css";
@@ -10,7 +10,7 @@ import { ref, onMounted } from "vue";
 import { useLodingStore } from "@/stores/loading";
 
 const loadingStore = useLodingStore();
-
+const router = useRouter();
 const route = useRoute();
 const roomData = ref([]);
 const roomUsers = ref([]);
@@ -18,10 +18,10 @@ const roomUsers = ref([]);
 onMounted(async () => {
   loadingStore.loading();
   setTimeout(() => {
-    console.log(roomData.value);
+    // console.log(roomData.value);
     loadingStore.loadingSuccess();
     roomData.value.users.forEach((user) => {
-      console.log(user);
+      // console.log(user);
       getUser(user, getUserData, fail);
     });
   }, 1000);
@@ -31,7 +31,7 @@ onMounted(async () => {
   };
   const getUserData = (res) => {
     roomUsers.value.push(res.data);
-    console.log(roomUsers.value);
+    // console.log(roomUsers.value);
   };
 
   const fail = (err) => {
@@ -49,6 +49,10 @@ const isOpen = ref(null);
 const rules = ref(null);
 const users = ref(null);
 const roomComent = ref(null);
+
+const goMeetingRoom = function () {
+  router.push({ name: "meeting", params: { roomId: route.params.roomId } });
+};
 </script>
 
 <template>
@@ -74,7 +78,9 @@ const roomComent = ref(null);
             </div>
             <WatingRoomMember :users="roomUsers" />
           </div>
-          <div class="btn"></div>
+          <div class="btn">
+            <button class="bold-text" @click="goMeetingRoom">시작하기</button>
+          </div>
         </div>
       </div>
     </div>
@@ -101,6 +107,14 @@ const roomComent = ref(null);
   width: 700px;
   height: 300px;
   background-color: yellow;
+}
+.btn button {
+  width: 200px;
+  height: 200px;
+  background-color: gold;
+  color: white;
+  border-width: 10px;
+  border-radius: 10px;
 }
 
 .room-exit {

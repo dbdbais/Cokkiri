@@ -2,7 +2,7 @@
 
 <template>
   <div>
-    <div class="chat-box box-sb"></div>
+    <div class="chat-box box-sb slideLeft"></div>
   </div>
 </template>
 
@@ -12,6 +12,8 @@
   height: 800px;
   position: absolute;
   z-index: 1;
-  right: 10px;
+  right: 100px;
+
+  visibility: hidden;
 }
 </style>

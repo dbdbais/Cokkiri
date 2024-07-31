@@ -65,7 +65,7 @@ const studyCreate = function () {
 </script>
 
 <template>
-  <div class="board-modal">
+  <div class="board-modal slideExpandUp">
     <div class="bold-text" style="margin: 10px 0 0 30px">스터디 만들기</div>
     <img
       src="@/assets/exit.svg"

@@ -16,7 +16,7 @@ const closeBtn = function () {
 </script>
 
 <template>
-  <div class="study-detail board-modal box-main-con">
+  <div class="study-detail board-modal box-main-con slideDown">
     <img
       src="/src/assets/exit.svg"
       alt="나가기"

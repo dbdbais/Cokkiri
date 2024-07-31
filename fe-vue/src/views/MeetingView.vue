@@ -49,6 +49,7 @@ const chatOnOff = ref(false);
 <style scoped>
 .meeting-room {
   position: relative;
+  overflow: hidden;
 }
 
 #myAudio,

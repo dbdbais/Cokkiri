@@ -446,7 +446,7 @@ const problem2 = ref(`<div id="problem-body" class="">
  </div>
 </div>`);
 
-const currentProblem = ref(2);
+const currentProblem = ref(1);
 const showProblem1 = () => {
   currentProblem.value = 1;
 };

@@ -1,40 +1,29 @@
 <script setup>
 import "@/assets/css/meeting.css";
+import { joinSession } from "@/api/webRTC"
 import Member from "@/components/meeting/Member.vue";
 import Meom from "@/components/meeting/Meom.vue";
 import Main from "@/components/meeting/Main.vue";
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
 
 const members = ref([
-  { nickname: "user_1231" },
-  { nickname: "user_1235" },
-  { nickname: "user_1331" },
-  { nickname: "user_1251" },
-  { nickname: "user_2231" },
+  { num: "member_1" },
+  { num: "member_2" },
+  { num: "member_3" },
+  { num: "member_4" },
+  { num: "member_5" },
+  { num: "member_6" }
 ]);
 
-const sizeInfo = ref({
-  x: 0,
-  y: 0,
-  width: 0,
-  height: 0,
-});
+onMounted(() => {
+  joinSession();
+})
 
-const mousePoint = function (e) {
-  sizeInfo.value.x = e.clientX;
-  sizeInfo.value.y = e.clientY;
-  sizeInfo.value.width = parseInt(styles.width);
-  sizeInfo.value.height = parseInt(styles.height);
-};
 </script>
 <template>
   <div class="meeting-room">
-    <div class="members box-main-con flex-align">
-      <Member
-        v-for="member in members"
-        :key="member.nickname"
-        :member="member"
-      />
+    <div class="members box-main-con flex-align" id="members">
+     
     </div>
     <div class="main box-main-con">
       <Main />
@@ -62,5 +51,8 @@ button {
   position: absolute;
   right: 0px;
   cursor: move;
+}
+video {
+  border-radius: 20%;
 }
 </style>

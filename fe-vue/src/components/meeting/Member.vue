@@ -4,8 +4,8 @@ defineProps({
 });
 </script>
 <template>
-  <div class="member md bold-text">
-    {{ member.nickname }}
+  <div class="member md bold-text" :id="member.num">
+    {{ member.num }}
   </div>
 </template>
 

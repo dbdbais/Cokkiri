@@ -15,6 +15,11 @@ const router = createRouter({
       name: "studyBoard",
       component: StudyBoardView,
     },
+    {
+      path: "/game/:gameId",
+      name: "gameProgress",
+      component: () => import("@/views/GameProgressView.vue"),
+    },
   ],
 });
 

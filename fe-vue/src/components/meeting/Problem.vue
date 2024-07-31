@@ -558,6 +558,7 @@ const problemActive = (problem) => {
 .problem-box td {
   width: 100%;
   text-align: center;
+  font-size: 20px;
   border: 1px solid black;
 }
 </style>

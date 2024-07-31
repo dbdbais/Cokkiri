@@ -1,10 +1,17 @@
 <script setup>
 import "@/assets/css/meeting.css";
-import { joinSession } from "@/api/webRTC"
+import { changeAudio, changeVideo, joinSession } from "@/api/webRTC";
 import Member from "@/components/meeting/Member.vue";
-import Meom from "@/components/meeting/Meom.vue";
 import Main from "@/components/meeting/Main.vue";
+import Chat from "@/components/meeting/Chat.vue";
 import { ref, onMounted } from "vue";
+import { useRoute } from "vue-router";
+
+onMounted(() => {
+  joinSession(route.params.roomId);
+});
+
+const route = useRoute();
 
 const members = ref([
   { num: "member_1" },
@@ -12,19 +19,27 @@ const members = ref([
   { num: "member_3" },
   { num: "member_4" },
   { num: "member_5" },
-  { num: "member_6" }
+  { num: "member_6" },
 ]);
 
-onMounted(() => {
-  joinSession();
-})
-
+const chatOnOff = ref(false);
 </script>
 <template>
   <div class="meeting-room">
-    <div class="members box-main-con flex-align" id="members">
-     
-    </div>
+    <Chat v-if="chatOnOff" />
+    <div class="members box-main-con flex-align" id="members"></div>
+    <button
+      class="chat-btn"
+      @click="
+        () => {
+          chatOnOff = true;
+        }
+      "
+    >
+      chat
+    </button>
+    <button id="myVideo" data-flag="true" @click="changeVideo">video</button>
+    <button id="myAudio" data-flag="true" @click="changeAudio">audio</button>
     <div class="main box-main-con">
       <Main />
     </div>
@@ -32,6 +47,22 @@ onMounted(() => {
 </template>
 
 <style scoped>
+.meeting-room {
+  position: relative;
+}
+
+#myAudio,
+#myVideo,
+.chat-btn {
+  position: absolute;
+  top: 0;
+}
+#myAudio {
+  right: 40px;
+}
+.chat-btn {
+  right: 80px;
+}
 .members {
   width: 1500px;
   height: 180px;

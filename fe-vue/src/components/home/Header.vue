@@ -2,7 +2,7 @@
     <header>
         <nav id="header-first" class="title main-title">
             <div id="quick-start" class="box-main-con box-in nav-btn">바로가기</div>
-            <div id="create-room" class="box-main-con box-in nav-btn">방만들기</div>
+            <div id="create-room" class="box-main-con box-in nav-btn" @click="openCreateModal">방만들기</div>
             <RouterLink id="router-regular" class="header-router" :to="{ name: 'studyBoard' }">스터디 모집 게시판</RouterLink>
             <RouterLink id="router-problem" class="header-router" :to="{}">문제 목록</RouterLink>
         </nav>
@@ -17,16 +17,35 @@
                     <img id="mission-icon" src="@/assets/elephant-circus.svg">
                     일일미션
                 </div>
-                <div class="box-main-noti noti-btn">
+                <div class="box-main-noti noti-btn" @click="openNotiModal">
                     <img id="mail-icon" src="@/assets/mail.svg">
                     우편함
                 </div>
             </div>
         </div>
+        <CreateRoom v-if="isCreateModalOpen" @close="closeCreateModal" />
+        <Notification v-if="isNotiModalOpen" @close="closeNotiModal" />
     </header>
 </template>
 
 <script setup>
+import CreateRoom from '@/components/home/modal/CreateRoom.vue';
+import Notification from '@/components/home/modal/Notification.vue';
+import { useModal } from '@/composables/useModal';
+
+
+const {
+    isModalOpen: isCreateModalOpen,
+    openModal: openCreateModal,
+    closeModal: closeCreateModal
+} = useModal();
+
+const {
+    isModalOpen: isNotiModalOpen,
+    openModal: openNotiModal,
+    closeModal: closeNotiModal
+} = useModal();
+
 </script>
 
 <style scoped>

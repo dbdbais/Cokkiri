@@ -5,6 +5,8 @@
 :root {
   --primary-fill-color: #c191ff;
   --secondary-fill-color: #dbe7ff;
+  --third-fill-color: #CADCFF;
+  
 }
 
 /* =============================
@@ -145,6 +147,12 @@ a {
   border: 5px solid #3b72ff;
   border-radius: 10px;
   background-color: #81c3ff;
+}
+
+.box-main-create-room {
+  border: 5px solid #3b72ff;
+  border-radius: 10px;
+  background-color: #8cb3ff;
 }
 
 /* 메인 페이지 룸 번호 박스 */

@@ -162,25 +162,6 @@ const studyCreate = function () {
   border: 3px solid #3b72ff;
   overflow-y: scroll;
 }
-/* 시간 스크롤바 */
-.selected-time::-webkit-scrollbar {
-  width: 20px;
-}
-.selected-time::-webkit-scrollbar-track {
-  background-color: #dbe7ff;
-}
-.selected-time::-webkit-scrollbar-thumb {
-  background-color: #3b72ff;
-}
-.selected-time::-webkit-scrollbar-button {
-  display: none;
-}
-
-/* 코너에 라운드 효과 */
-.selected-time::-webkit-scrollbar-track,
-.selected-time::-webkit-scrollbar-thumb {
-  border-radius: 5px;
-}
 
 /* 선택된 스터디 시간 1개 스타일 */
 .time-item {

@@ -78,8 +78,10 @@ const goMeetingRoom = function () {
             </div>
             <WatingRoomMember :users="roomUsers" />
           </div>
-          <div class="btn">
-            <button class="bold-text" @click="goMeetingRoom">시작하기</button>
+          <div>
+            <button class="bold-text btn" @click="goMeetingRoom">
+              시작하기
+            </button>
           </div>
         </div>
       </div>
@@ -104,9 +106,10 @@ const goMeetingRoom = function () {
   -webkit-text-stroke: 2px black;
 }
 .btn {
-  width: 700px;
-  height: 300px;
+  width: 200px;
+  height: 200px;
   background-color: yellow;
+  border-width: 20px;
 }
 .btn button {
   width: 200px;

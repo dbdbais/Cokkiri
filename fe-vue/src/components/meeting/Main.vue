@@ -1,30 +1,25 @@
-<template>
-  <div ref="main" class="flex-align">
-    <div
-      :style="{
-        width: problemWidth + 'px',
-      }"
-      class="problem"
-    ></div>
-    <button ref="resizer" class="resizer" @mousedown="initResize"></button>
-    <div
-      class="compiler"
-      :style="{
-        flex: 1,
-      }"
-    >
-      <div class="editor"></div>
-      <div class="input"></div>
-    </div>
-  </div>
-</template>
-
 <script setup>
+import Problem from "@/components/meeting/Problem.vue";
+import Compiler from "@/components/meeting/Compiler.vue";
+import SubmitList from "@/components/meeting/SubmitList.vue";
+
 import { ref } from "vue";
+import { RouterView } from "vue-router";
 
 const main = ref(null);
 const resizer = ref(null);
 const problemWidth = ref(1300);
+const compiler = ref(0);
+
+const compilerText = ["에디터", "제출 목록"];
+
+const changCompilerView = function () {
+  if (compiler.value === 0) {
+    compiler.value = 1;
+  } else {
+    compiler.value = 0;
+  }
+};
 
 const initResize = (e) => {
   window.addEventListener("mousemove", startResize);
@@ -34,6 +29,11 @@ const initResize = (e) => {
 const startResize = (e) => {
   const mainRect = main.value.getBoundingClientRect();
   problemWidth.value = e.clientX - mainRect.left;
+  if (problemWidth.value < 500) {
+    problemWidth.value = 500;
+  } else if (problemWidth.value > 1500) {
+    problemWidth.value = 1500;
+  }
 };
 
 const stopResize = () => {
@@ -42,31 +42,59 @@ const stopResize = () => {
 };
 </script>
 
+<template>
+  <div ref="main" class="flex-align main-content">
+    <div
+      :style="{
+        width: problemWidth + 'px',
+      }"
+      class="problem box-sb"
+    >
+      <Problem />
+    </div>
+    <button ref="resizer" class="resizer" @mousedown="initResize"></button>
+    <div
+      class="compiler box-sb"
+      :style="{
+        flex: 1,
+      }"
+    >
+      <button class="btn bold-text change" @click="changCompilerView">
+        {{ compilerText[compiler] }}
+      </button>
+      <Compiler v-if="compiler === 0" />
+      <SubmitList v-else />
+    </div>
+  </div>
+</template>
+
 <style scoped>
+.main-content {
+  margin: 15px;
+}
 .problem {
   height: 800px;
-
-  background-color: red;
+}
+.change {
+  border-width: 5px;
+  border-radius: 10px;
+  border-color: #3b72ff;
+  background-color: #c191ff;
+  position: absolute;
+  top: 10px;
+  right: 20px;
 }
 .compiler {
   height: 800px;
-  background-color: blue;
+  padding: 70px 20px 20px 20px;
+  position: relative;
 }
-.input {
-  width: 100%;
-  background-color: gold;
-  height: 200px;
-}
-.editor {
-  width: 100%;
-  background-color: aqua;
-  height: 500px;
-}
+
 .resizer {
-  width: 10px;
+  width: 20px;
   height: 800px;
   background-color: skyblue;
   border-color: white;
-  cursor: pointer;
+  cursor: url(/src/assets/drag.svg) 20 20, pointer;
 }
 </style>

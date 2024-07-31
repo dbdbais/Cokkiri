@@ -99,6 +99,7 @@ public class CompilerController {
                 }
                 
                 result = readProcessOutput(process); // Read the process output
+                System.out.println(result);
                 process.waitFor(); // Wait for the process to finish
                 sourceFile.delete(); // Delete the source file
                 new File(processBuilder.directory(), "temp").delete(); // Delete the generated executable file

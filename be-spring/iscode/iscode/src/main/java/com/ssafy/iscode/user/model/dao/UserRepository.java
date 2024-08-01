@@ -11,7 +11,6 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-@Transactional
 public class UserRepository {
 
     private final EntityManager em;
@@ -20,6 +19,7 @@ public class UserRepository {
         this.em = em;
     }
 
+    @Transactional
     public int save(User user) {
         try {
 
@@ -37,6 +37,8 @@ public class UserRepository {
             return 0; // failed
         }
     }
+
+    @Transactional
     public int saveFriend(String userId, String friendUserId, Status status) {
         try {
             User user = findById(userId);
@@ -89,6 +91,7 @@ public class UserRepository {
         return em.find(User.class,id);
     }
 
+    @Transactional
     public int remove(String id){
 
         User delUser = findById(id);

@@ -1,6 +1,7 @@
 package com.ssafy.iscode.user.model.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.ssafy.iscode.reguler.model.dto.RegularUser;
 import jakarta.persistence.*;
 
 import java.util.List;
@@ -24,6 +25,9 @@ public class User {
 
     @Column(name ="user_percent")
     private double percent;
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    private List<RegularUser> regulars;
 
     @JsonIgnore
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -84,6 +88,14 @@ public class User {
 
     public void setPercent(double percent) {
         this.percent = percent;
+    }
+
+    public List<RegularUser> getRegulars() {
+        return regulars;
+    }
+
+    public void setRegulars(List<RegularUser> regulars) {
+        this.regulars = regulars;
     }
 
     public List<UserFriend> getFriends() {

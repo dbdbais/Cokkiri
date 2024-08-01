@@ -1,12 +1,15 @@
 package com.ssafy.iscode.user.service;
 
+import com.ssafy.iscode.reguler.model.dto.RegularUser;
 import com.ssafy.iscode.user.model.dao.UserRepository;
 import com.ssafy.iscode.user.model.dto.Status;
 import com.ssafy.iscode.user.model.dto.User;
 import com.ssafy.iscode.user.model.dto.UserFriend;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserService {
@@ -51,4 +54,18 @@ public class UserService {
         return userRepository.remove(id);
     }
 
+    public List<Long> getRegular(String userName) {
+        User user = userRepository.findByName(userName)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        List<Long> list = new ArrayList<>();
+
+        for(RegularUser regular: user.getRegulars()) {
+            if(regular.getIsAccept()) {
+                list.add(regular.getRegular().getId());
+            }
+        }
+
+        return list;
+    }
 }

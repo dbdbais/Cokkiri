@@ -5,6 +5,9 @@ import com.ssafy.iscode.user.model.dto.User;
 import com.ssafy.iscode.user.model.dto.UserFriend;
 import com.ssafy.iscode.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -56,4 +59,14 @@ public class UserRestController {
         return userService.deleteUser(id);
     }
 
+    @GetMapping("/regular/{userName}")
+    public ResponseEntity<List<Long>> getRegulaer(@PathVariable("userName") String userName) {
+        try {
+            List<Long> list = userService.getRegular(userName);
+            return new ResponseEntity<>(list, HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }

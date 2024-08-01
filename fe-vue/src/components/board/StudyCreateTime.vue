@@ -40,7 +40,9 @@ const selected = function () {
             name="week"
             :value="day.weekName"
             v-model="selectedWeek"
-          /><label :for="day.weekName" class="nomal-text">{{ day.ko }}</label>
+          /><label :for="day.weekName" class="nomal-text day">{{
+            day.ko
+          }}</label>
         </div>
         <div>
           <div class="start">
@@ -117,6 +119,10 @@ input[type="time"] {
 .select input[type="radio"] + label {
   background-color: #fff;
   color: #3b72ff;
+}
+.select input[type="radio"] + label:hover {
+  background-color: #3b72ff;
+  color: #fff;
 }
 .select input[type="radio"]:checked + label {
   background-color: #3b72ff;

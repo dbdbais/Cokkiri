@@ -16,9 +16,9 @@
 .rank {
   /* 크기 */
   width: 500px;
-  height: 810px;
+  height: 800px;
   background-color: yellowgreen;
-
+  margin-top: 20px;
   /* 색깔, 테두리 */
   background-color: #dbe7ff;
   border: 5px solid #3b72ff;

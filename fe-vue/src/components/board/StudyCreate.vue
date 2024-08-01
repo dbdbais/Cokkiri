@@ -65,7 +65,7 @@ const studyCreate = function () {
 </script>
 
 <template>
-  <div class="board-modal slideExpandUp">
+  <div class="board-modal slideDown">
     <div class="bold-text" style="margin: 10px 0 0 30px">스터디 만들기</div>
     <img
       src="@/assets/exit.svg"
@@ -183,6 +183,7 @@ const studyCreate = function () {
   border-width: 3px;
   border-color: #ff8888;
   background-color: #ff0000;
+  font-size: 15px;
   color: white;
 
   position: absolute;

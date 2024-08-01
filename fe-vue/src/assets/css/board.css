@@ -1,7 +1,8 @@
 /* 스터디 만들기 버튼 스타일 */
 .create-btn {
-  background-color: #eadcfc;
-  border: solid #1c59f6;
+  background-color: #cfdbfb;
+  border-color: #a5baf3;
+  border-width: 5px;
   border-radius: 10px;
 }
 /* 두꺼운 글씨 */
@@ -13,8 +14,9 @@
 }
 /* 버튼 사이즈 */
 .btn {
-  width: 150px;
-  height: 50px;
+  width: 180px;
+  height: 60px;
+  font-size: 25px;
 }
 
 /* 스터디 만들기 안에 박스 */

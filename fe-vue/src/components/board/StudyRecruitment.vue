@@ -69,9 +69,9 @@ const closeBtn = function () {
         :class="preventCilck"
         @click="goDetail(group)"
       />
-    </div>
-    <div class="create-btn btn bold-text md" @click="goCreate">
-      스터디 만들기
+      <button class="create-btn btn bold-text md" @click="goCreate">
+        스터디 만들기
+      </button>
     </div>
   </div>
 </template>
@@ -90,15 +90,22 @@ const closeBtn = function () {
 .recruitment {
   /* 크기 */
   width: 1250px;
-  height: 810px;
+  height: 800px;
   /* 배치 */
   display: flex;
   flex-direction: column;
   align-items: center;
 
+  position: relative;
+  margin-top: 20px;
   /* 색깔, 테두리 */
   background-color: #dbe7ff;
   border: 5px solid #3b72ff;
   border-radius: 10px;
+}
+.create-btn {
+  position: absolute;
+  top: -75px;
+  right: 0;
 }
 </style>

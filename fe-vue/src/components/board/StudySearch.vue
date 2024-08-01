@@ -22,7 +22,7 @@
   top: 3px;
   right: 3px;
 
-  font-size: 20px;
+  font-size: 40px;
 
   border-width: 5px;
   border-radius: 10px;

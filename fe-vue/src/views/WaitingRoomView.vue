@@ -1,12 +1,12 @@
 <script setup>
 import { useRoute, useRouter } from "vue-router";
-import { getWatingRoom } from "@/api/watingroom";
+import { getWaitingRoom } from "@/api/waitingroom";
 import { getUser } from "@/api/user";
-import "@/assets/css/watingroom.css";
+import "@/assets/css/waitingroom.css";
 
-import WatingRoomRule from "@/components/watingroom/WatingRoomRule.vue";
-import WatingRoomMember from "@/components/watingroom/WatingRoomMember.vue";
-import WatingRoomChat from "@/components/watingroom/WatingRoomChat.vue";
+import WaitingRoomRule from "@/components/waitingroom/WaitingRoomRule.vue";
+import WaitingRoomMember from "@/components/waitingroom/WaitingRoomMember.vue";
+import WaitingRoomChat from "@/components/waitingroom/WaitingRoomChat.vue";
 import { ref, onMounted } from "vue";
 import { useLodingStore } from "@/stores/loading";
 
@@ -39,7 +39,7 @@ onMounted(async () => {
     console.log(err);
   };
 
-  getWatingRoom(route.params.roomId, success, fail);
+  getWaitingRoom(route.params.roomId, success, fail);
   getUser();
 });
 
@@ -62,7 +62,7 @@ const exitRoom = function () {
 
 <template>
   <div>
-    <div class="wating-room">
+    <div class="waiting-room">
       <div class="box-row">
         <div class="box-col">
           <div class="rule-data">
@@ -70,7 +70,7 @@ const exitRoom = function () {
               <img src="/src/assets/exit_room.svg" alt="방나가기" />
               나가기
             </div>
-            <WatingRoomRule :rules="roomData.rules" />
+            <WaitingRoomRule :rules="roomData.rules" />
           </div>
         </div>
         <div class="box-col">
@@ -83,12 +83,12 @@ const exitRoom = function () {
                 {{ roomData.roomName }}
               </p>
             </div>
-            <WatingRoomMember :users="roomUsers" />
+            <WaitingRoomMember :users="roomUsers" />
           </div>
         </div>
       </div>
       <div class="bottom flex-align">
-        <WatingRoomChat />
+        <WaitingRoomChat />
         <div class="box-col button-con">
           <button class="bold-text btn friend">
             <img
@@ -111,7 +111,7 @@ const exitRoom = function () {
 </template>
 
 <style scoped>
-.wating-room {
+.waiting-room {
   padding: 30px 30px 0px 30px;
 }
 .room-exit,

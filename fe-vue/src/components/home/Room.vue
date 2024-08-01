@@ -3,15 +3,18 @@
     <img src="@/assets/default2.svg" alt="room thumbnail" class="room-img" />
     <div id="info-container" class="box-col">
       <div id="room-info" class="box-row box-main-title">
-        <div class="box-main-num font-main-pagi">{{ room.id }}</div>
-        <div class="title room-title">{{ room.title }}</div>
+        <!-- <div class="box-main-num font-main-pagi">{{ room.id }}</div> -->
+        <div class="box-main-num font-main-pagi">{{ room.sessionId }}</div>
+        <!-- <div class="title room-title">{{ room.title }}</div> -->
+        <div class="title room-title">{{ room.roomName }}</div>
       </div>
       <div class="room-extra-info">
         <div class="item-cate box-main-group font-main-pagi">
-          {{ room.category }}
+          {{ room.isGame ? "게임방" : "공부방" }}
         </div>
         <div class="item-parti box-main-group font-main-pagi">
-          {{ room.people }} / {{ room.maxPeople }}
+          <!-- {{ room.people }} / {{ room.maxPeople }} -->
+          {{ room.users.length }} / 6
         </div>
         <div class="item-join box-main-group">
           <img src="@/assets/study-member.svg" />

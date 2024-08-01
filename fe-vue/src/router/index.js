@@ -2,7 +2,7 @@ import { createRouter, createWebHistory } from "vue-router";
 import HomeView from "@/views/HomeView.vue";
 import StudyBoardView from "@/views/StudyBoardView.vue";
 import MeetingView from "@/views/MeetingView.vue";
-import WatingRoomView from "@/views/WatingRoomView.vue";
+import WaitingRoomView from "@/views/WaitingRoomView.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -23,9 +23,9 @@ const router = createRouter({
       component: MeetingView,
     },
     {
-      path: "/wating_room/:roomId",
-      name: "watingRoom",
-      component: WatingRoomView,
+      path: "/waiting_room/:roomId",
+      name: "waitingRoom",
+      component: WaitingRoomView,
     },
     {
       path: "/game/:gameId",

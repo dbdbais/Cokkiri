@@ -16,7 +16,7 @@
         v-for="room in rooms"
         :key="room.id"
         :room="room"
-        @click="goRoom(room.id)"
+        @click="goRoom(room.sessionId)"
       />
     </div>
     <Pagination id="pagi-container" />
@@ -24,16 +24,31 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { onMounted, ref } from "vue";
 import { useRouter } from "vue-router";
-import { goWatingRoom } from "@/api/watingroom";
+import { goWaitingRoom, getWaitingRoomList } from "@/api/waitingroom";
 import Room from "./Room.vue";
 import Pagination from "@/components/common/Pagination.vue";
 import roomList from "@/assets/data/roomList.json";
 
+onMounted(() => {
+  const success = (res) => {
+    console.log(res.data.waitingRoomList);
+    rooms.value = res.data.waitingRoomList;
+  };
+  const fail = (err) => {
+    console.log(err);
+  };
+
+  getWaitingRoomList(success, fail);
+});
+
 const router = useRouter();
 const user = ref("어지민");
-const rooms = ref(roomList.roomList.room);
+
+// const rooms = ref(roomList.roomList.room);
+const rooms = ref("");
+
 rooms: [
   { id: 1, name: "알고리즘 고수들방", members: 116 },
   { id: 2, name: "초보. 매너방요", members: 206 },
@@ -43,12 +58,12 @@ rooms: [
 const goRoom = function (id) {
   const success = (res) => {
     console.log(res.data);
-    router.push({ name: "watingRoom", params: { roomId: id } });
+    router.push({ name: "waitingRoom", params: { roomId: id } });
   };
   const fail = (err) => {
     console.log(err);
   };
-  goWatingRoom({ sessionId: id, userName: user.value }, success, fail);
+  goWaitingRoom({ sessionId: id, userName: user.value }, success, fail);
 };
 </script>
 

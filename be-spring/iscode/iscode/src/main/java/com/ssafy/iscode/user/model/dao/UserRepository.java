@@ -8,6 +8,7 @@ import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 @Transactional
@@ -107,4 +108,14 @@ public class UserRepository {
                 .getResultList();
     }
 
+    public Optional<User> findByName(String nickname) {
+        try {
+            User user = em.createQuery("SELECT u FROM User u WHERE u.nickname = :nickname", User.class)
+                    .setParameter("nickname", nickname)
+                    .getSingleResult();
+            return Optional.of(user);
+        } catch (Exception e) {
+            return Optional.empty(); // Return an empty Optional if no result is found
+        }
+    }
 }

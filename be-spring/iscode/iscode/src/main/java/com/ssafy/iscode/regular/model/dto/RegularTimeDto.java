@@ -1,4 +1,4 @@
-package com.ssafy.iscode.reguler.model.dto;
+package com.ssafy.iscode.regular.model.dto;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

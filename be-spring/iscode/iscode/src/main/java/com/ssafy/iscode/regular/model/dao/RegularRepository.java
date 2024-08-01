@@ -1,6 +1,7 @@
-package com.ssafy.iscode.reguler.model.dao;
+package com.ssafy.iscode.regular.model.dao;
 
-import com.ssafy.iscode.reguler.model.dto.RegularDto;
+import com.ssafy.iscode.regular.model.dto.RegularDto;
+import com.ssafy.iscode.user.model.dto.User;
 import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Repository;
@@ -34,6 +35,16 @@ public class RegularRepository {
 
     public RegularDto findById(Long id){
         return em.find(RegularDto.class,id);
+    }
+
+    public List<RegularDto> findByHost(User host) {
+        String query = "SELECT r FROM RegularDto r JOIN r.hostUser u" +
+                "WHERE u.nickname = :hostName " +
+                "WHERE r.end IS NULL";
+
+        return em.createQuery(query, RegularDto.class)
+                .setParameter("hostName", host.getNickname())
+                .getResultList();
     }
 
     public List<RegularDto> findAll(int offset){

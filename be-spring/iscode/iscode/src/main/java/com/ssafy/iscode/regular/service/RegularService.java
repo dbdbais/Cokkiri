@@ -1,9 +1,9 @@
-package com.ssafy.iscode.reguler.service;
+package com.ssafy.iscode.regular.service;
 
-import com.ssafy.iscode.reguler.model.dao.RegularRepository;
-import com.ssafy.iscode.reguler.model.dao.RegularTimeRepository;
-import com.ssafy.iscode.reguler.model.dao.RegularUserRepository;
-import com.ssafy.iscode.reguler.model.dto.*;
+import com.ssafy.iscode.regular.model.dao.RegularRepository;
+import com.ssafy.iscode.regular.model.dao.RegularTimeRepository;
+import com.ssafy.iscode.regular.model.dao.RegularUserRepository;
+import com.ssafy.iscode.regular.model.dto.*;
 import com.ssafy.iscode.user.model.dao.UserRepository;
 import com.ssafy.iscode.user.model.dto.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -112,7 +113,33 @@ public class RegularService {
         }
     }
 
-    private int joinReqular(RegularRequestDto regularRequestDto) {
+    public List<RegularResponseDto> getRequest(RegularRequestDto regularRequestDto) {
+        User host = userRepository.findByName(regularRequestDto.getUserName())
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        List<RegularResponseDto> list = new ArrayList<>();
+        List<RegularDto> regulars = regularRepository.findByHost(host);
+
+        for(RegularDto regular: regulars) {
+            for(RegularUser regularUser: regular.getUsers()) {
+                RegularResponseDto rr = new RegularResponseDto();
+                rr.setSessionId(regular.getId());
+
+                List<String> users = new ArrayList<>();
+                if(!regularUser.getIsAccept()) {
+                    users.add(regularUser.getUser().getNickname());
+                }
+
+                rr.setUsers(users);
+
+                list.add(rr);
+            }
+        }
+
+        return list;
+    }
+
+    public int joinRegular(RegularRequestDto regularRequestDto) {
         User user = userRepository.findByName(regularRequestDto.getUserName())
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
@@ -128,6 +155,8 @@ public class RegularService {
             regularUser.setUser(user);
             regularUser.setIsAccept(false);
             regularUserRepository.save(regularUser);
+
+            return 1;
         } catch (Exception e) {
             e.printStackTrace();
             return 0;
@@ -150,9 +179,17 @@ public class RegularService {
                 if(regularUser.getUser().equals(user)) {
                     regularUserRepository.remove(regularUser.getId());
 
-                    if(regularDto.getHostUser().equals(user)) {
+                    if(users.isEmpty()) {
+                        closeRegular(regularRequestDto.getSessionId());
+                    } else if(regularDto.getHostUser().equals(user)) {
                         regularDto.setHostUser(users.get(0).getUser());
-                        regularRepository.save(regularDto);
+
+                        try {
+                            regularRepository.save(regularDto);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            return 0;
+                        }
                     }
                     return 1;
                 }
@@ -165,8 +202,8 @@ public class RegularService {
         }
     }
 
-    private RegularResponseDto getRegular(RegularRequestDto regularRequestDto) {
-        RegularDto regularDto = regularRepository.findById(regularRequestDto.getSessionId());
+    public RegularResponseDto getRegular(Long sessionId) {
+        RegularDto regularDto = regularRepository.findById(sessionId);
 
         if(regularDto == null) {
             throw new RuntimeException("Regular not found");
@@ -192,6 +229,116 @@ public class RegularService {
         for(RegularUser user: regularDto.getUsers()) {
             users.add(user.getUser().getNickname());
         }
+        regularResponseDto.setUsers(users);
+
+        return regularResponseDto;
+    }
+
+    public List<RegularResponseDto> getRegulars(String regularName, String weekday, Integer start, Integer end, int page) {
+        int weekdayNum = 0;
+        if (weekday != null) {
+            weekdayNum = Arrays.asList(WEEKDAY).indexOf(weekday);
+        }
+
+        int offset = 6 * (page - 1);
+
+        List<RegularResponseDto> list = new ArrayList<>();
+        List<RegularDto> regulars;
+
+        if(end == null) {
+            if(start == null) {
+                if(weekday == null) {
+                    if(regularName == null) {
+                        regulars = regularRepository.findAll(offset);
+                    } else {
+                        regulars = regularRepository.findByName(regularName, offset);
+                    }
+                } else {
+                    if(regularName == null) {
+                        regulars = regularRepository.findByNameWeekday(regularName, weekdayNum, offset);
+                    } else {
+                        regulars = regularRepository.findByWeekday(weekdayNum, offset);
+                    }
+                }
+            } else {
+                if(weekday == null) {
+                    if(regularName == null) {
+                        regulars = regularRepository.findByStart(start, offset);
+                    } else {
+                        regulars = regularRepository.findByNameStart(regularName, start, offset);
+                    }
+                } else {
+                    if(regularName == null) {
+                        regulars = regularRepository.findByWeekdayStart(weekdayNum, start, offset);
+                    } else {
+                        regulars = regularRepository.findByNameWeekdayStart(regularName, weekdayNum, start, offset);
+                    }
+                }
+            }
+        } else {
+            if(start == null) {
+                if(weekday == null) {
+                    if(regularName == null) {
+                        regulars = regularRepository.findByEnd(end, offset);
+                    } else {
+                        regulars = regularRepository.findByNameEnd(regularName, end, offset);
+                    }
+                } else {
+                    if(regularName == null) {
+                        regulars = regularRepository.findByWeekdayEnd(weekdayNum, end, offset);
+                    } else {
+                        regulars = regularRepository.findByNameWeekdayEnd(regularName, weekdayNum, end, offset);
+                    }
+                }
+            } else {
+                if(weekday == null) {
+                    if(regularName == null) {
+                        regulars = regularRepository.findByTime(start, end, offset);
+                    } else {
+                        regulars = regularRepository.findByNameTime(regularName, start, end, offset);
+                    }
+                } else {
+                    if(regularName == null) {
+                        regulars = regularRepository.findByWeekdayTime(weekdayNum, start, end, offset);
+                    } else {
+                        regulars = regularRepository.findByNameWeekdayTime(regularName, weekdayNum, start, end, offset);
+                    }
+                }
+            }
+        }
+
+        if (regulars == null) {
+            regulars = new ArrayList<>();
+        }
+
+        for(RegularDto regular: regulars) {
+            if(regular.getUsers().size() < regular.getMaxNum()) {
+                List<String> users = new ArrayList<>();
+
+                for(RegularUser regularUser: regular.getUsers()) {
+                    users.add(regularUser.getUser().getNickname());
+                }
+
+                RegularResponseDto rr = new RegularResponseDto(
+                        regular.getId(),
+                        regular.getName(),
+                        regular.getComment(),
+                        List.of(regular.getRule().split("\\" + SEPARATOR)),
+                        regular.getLanguage(),
+                        regular.getMaxNum(),
+                        regular.getHostUser().getNickname(),
+                        (regular.getEnd()==null && regular.getMaxNum()==regular.getUsers().size()),
+                        regular.getTimes().stream()
+                                .map(RegularTimeDto::toString)
+                                .collect(Collectors.toList()),
+                        users
+                );
+
+                list.add(rr);
+            }
+        }
+
+        return list;
     }
 
     private void saveTime(RegularDto regularDto, List<String> times) {
@@ -210,6 +357,23 @@ public class RegularService {
             }
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    public int closeRegular(Long sessionId) {
+        RegularDto regularDto = regularRepository.findById(sessionId);
+
+        Date now = new Date();
+
+        regularDto.setEnd(now);
+
+        try {
+            regularRepository.save(regularDto);
+
+            return 1;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return 0;
         }
     }
 }

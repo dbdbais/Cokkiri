@@ -1,7 +1,6 @@
-package com.ssafy.iscode.reguler.model.dao;
+package com.ssafy.iscode.regular.model.dao;
 
-import com.ssafy.iscode.reguler.model.dto.RegularTimeDto;
-import com.ssafy.iscode.reguler.model.dto.RegularUser;
+import com.ssafy.iscode.regular.model.dto.RegularUser;
 import jakarta.persistence.EntityManager;
 import org.springframework.stereotype.Repository;
 

@@ -1,4 +1,4 @@
-package com.ssafy.iscode.reguler.model.dto;
+package com.ssafy.iscode.regular.model.dto;
 
 import com.ssafy.iscode.user.model.dto.User;
 import jakarta.persistence.*;

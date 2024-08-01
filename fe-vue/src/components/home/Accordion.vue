@@ -1,4 +1,4 @@
-div<template>
+<template>
     <div class="accordion">
         <div v-for="(item, index) in items" :key="index" class="accordion-item">
             <div class="accordion-header box-main-group" @click="toggle(index)">

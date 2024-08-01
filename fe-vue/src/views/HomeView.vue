@@ -23,6 +23,11 @@ import '@/assets/css/home.css';
 </script>
 
 <style scoped>
+* {
+  font-family: "RixInooAriDuriR";
+  color: white;
+}
+
 /* 왼쪽 영역 */
 #main-left {
   width: 350px;

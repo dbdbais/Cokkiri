@@ -1,14 +1,13 @@
 package com.ssafy.iscode.waitingroom.model.dto;
 
+import com.ssafy.iscode.message.model.dto.MessageRoomUser;
 import com.ssafy.iscode.user.model.dto.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.apache.ibatis.annotations.One;
 import org.hibernate.annotations.CreationTimestamp;
-import org.springframework.data.annotation.CreatedDate;
 
 import java.util.Date;
 import java.util.List;
@@ -42,23 +41,18 @@ public class StudyDto {
     @Temporal(TemporalType.TIMESTAMP)
     private Date end;
 
-    @Column(name = "is_open")
-    private boolean isOpen;
+    @Column(name = "is_open", columnDefinition = "TINYINT(1)")
+    private Boolean isOpen;
 
-    @Column(name = "is_game")
-    private boolean isGame;
+    @Column(name = "is_game", columnDefinition = "TINYINT(1)")
+    private Boolean isGame;
 
-    @OneToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User hostUser;
 
-    @ManyToMany
-    @JoinTable(
-            name = "study_user",
-            joinColumns = @JoinColumn(name = "study_id"),
-            inverseJoinColumns = @JoinColumn(name = "user_id")
-    )
-    private List<User> users;
+    @OneToMany(mappedBy = "study", fetch = FetchType.LAZY)
+    private List<StudyUser> users;
 
 //    @ManyToMany
 //    @JoinTable(

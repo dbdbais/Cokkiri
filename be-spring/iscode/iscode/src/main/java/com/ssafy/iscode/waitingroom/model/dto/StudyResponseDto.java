@@ -16,9 +16,9 @@ public class StudyResponseDto {
     private Long sessionId;
     private String roomName;
     private String hostName;
-    private List<User> users;
+    private List<String> users;
     private String roomComment;
     private List<String> rules;
-    private boolean isOpen;
-    private boolean isGame;
+    private Boolean isOpen;
+    private Boolean isGame;
 }

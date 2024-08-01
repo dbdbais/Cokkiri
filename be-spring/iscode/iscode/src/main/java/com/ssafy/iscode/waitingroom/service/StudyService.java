@@ -1,19 +1,27 @@
 package com.ssafy.iscode.waitingroom.service;
 
+import com.ssafy.iscode.user.model.dao.UserRepository;
 import com.ssafy.iscode.user.model.dto.User;
 import com.ssafy.iscode.waitingroom.model.dao.StudyRepository;
+import com.ssafy.iscode.waitingroom.model.dao.StudyUserRepository;
 import com.ssafy.iscode.waitingroom.model.dto.StudyDto;
 import com.ssafy.iscode.waitingroom.model.dto.StudyRequestDto;
 import com.ssafy.iscode.waitingroom.model.dto.StudyResponseDto;
+import com.ssafy.iscode.waitingroom.model.dto.StudyUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Service
 public class StudyService {
     @Autowired
     private StudyRepository studyRepository;
+
+    @Autowired
+    private StudyUserRepository studyUserRepository;
 
     @Autowired
     private UserRepository userRepository;
@@ -26,30 +34,49 @@ public class StudyService {
         studyDto.setName(studyRequestDto.getRoomName());
         studyDto.setComment(studyRequestDto.getRoomComment());
         studyDto.setRule(String.join(SEPARATOR, studyRequestDto.getRules()));
-        studyDto.setOpen(studyRequestDto.isOpen());
-        studyDto.setGame(studyRequestDto.isGame());
-u
+        studyDto.setIsOpen(studyRequestDto.getIsOpen());
+        studyDto.setIsGame(studyRequestDto.getIsGame());
+
         User hostUser = userRepository.findByName(studyRequestDto.getUserName())
                 .orElseThrow(() -> new RuntimeException("Host user not found"));
 
-        studyDto.setHostUser(hostUser);
-        studyDto.getUsers().add(hostUser);
+        try {
+            studyDto.setHostUser(hostUser);
+            studyRepository.save(studyDto);
 
-        StudyDto resultStudy = studyRepository.save(studyDto);
-        return resultStudy.getId();
+            StudyUser users = new StudyUser();
+            users.setStudy(studyDto);
+            users.setUser(hostUser);
+            studyUserRepository.save(users);
+
+            return studyDto.getId();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     public void enterStudy(StudyRequestDto studyRequestDto) {
-        StudyDto studyDto = studyRepository.findById(studyRequestDto.getSessionId())
-                .orElseThrow(() -> new RuntimeException("Study not found"));
+        StudyDto studyDto = studyRepository.findById(studyRequestDto.getSessionId());
+
+        if (studyDto == null) {
+            throw new RuntimeException("Study not found");
+        }
 
         User user = userRepository.findByName(studyRequestDto.getUserName())
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
-        List<User> users = studyDto.getUsers();
+        List<StudyUser> users = studyDto.getUsers();
         if (users.size() < 6) {
-            studyDto.getUsers().add(user);
-            studyRepository.save(studyDto);
+            try {
+                StudyUser studyUser = new StudyUser();
+                studyUser.setStudy(studyDto);
+                studyUser.setUser(user);
+                studyUserRepository.save(studyUser);
+            } catch (Exception e) {
+                e.printStackTrace();
+                throw new RuntimeException("Fail to save");
+            }
         } else {
             throw new RuntimeException("Users List is full");
         }
@@ -58,46 +85,153 @@ u
     }
 
     public StudyResponseDto getStudy(Long sessionId) {
-        StudyDto studyDto = studyRepository.findById(sessionId)
-                .orElseThrow(() -> new RuntimeException("Study not found"));
+        StudyDto studyDto = studyRepository.findById(sessionId);
+
+        if(studyDto == null) {
+            throw new RuntimeException("Study not found");
+        }
 
         StudyResponseDto studyResponseDto = new StudyResponseDto();
         studyResponseDto.setRoomName(studyDto.getName());
-        studyResponseDto.setHostName(studyDto.getHostUser().getName());
+        studyResponseDto.setHostName(studyDto.getHostUser().getNickname());
         studyResponseDto.setRoomComment(studyDto.getComment());
-        studyResponseDto.setRules(List.of(studyDto.getRule().split(SEPARATOR)));
-        studyResponseDto.setOpen(studyDto.isOpen());
-        studyResponseDto.setGame(studyDto.isGame()
-        studyResponseDto.setUsers(studyDto.getUsers());
+        studyResponseDto.setRules(List.of(studyDto.getRule().split("\\" + SEPARATOR)));
+        studyResponseDto.setIsOpen(studyDto.getIsOpen());
+        studyResponseDto.setIsGame(studyDto.getIsGame());
+
+        studyResponseDto.setUsers(new ArrayList<>());
+        for(StudyUser user: studyDto.getUsers()) {
+            studyResponseDto.getUsers().add(user.getUser().getNickname());
+        }
 
         return studyResponseDto;
     }
 
-    public void updateStudy(StudyRequestDto studyRequestDto) {
-        StudyDto studyDto = studyRepository.findById(studyRequestDto.getSessionId())
-                .orElseThrow(() -> new RuntimeException("Study not found"));
+    public int updateStudy(StudyRequestDto studyRequestDto) {
+        StudyDto studyDto = studyRepository.findById(studyRequestDto.getSessionId());
 
-        studyDto.setName(studyRequestDto.getRoomName());
-        studyDto.setComment(studyRequestDto.getRoomComment());
-        studyDto.setRule(String.join(SEPARATOR, studyRequestDto.getRules()));
-        studyDto.setOpen(studyRequestDto.isOpen());
+        if (studyDto == null) {
+            throw new RuntimeException("Study not found");
+        }
 
-        return;
+        try {
+            studyDto.setName(studyRequestDto.getRoomName());
+            studyDto.setComment(studyRequestDto.getRoomComment());
+            studyDto.setRule(String.join(SEPARATOR, studyRequestDto.getRules()));
+            studyDto.setIsOpen(studyRequestDto.getIsOpen());
+
+            studyRepository.save(studyDto);
+
+            return 1;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return 0;
+        }
     }
 
-    public void quitStudy(StudyRequestDto studyRequestDto) {
-        StudyDto studyDto = studyRepository.findById(studyRequestDto.getSessionId())
-                .orElseThrow(() -> new RuntimeException("Study not found"));
+    public int quitStudy(StudyRequestDto studyRequestDto) {
+        StudyDto studyDto = studyRepository.findById(studyRequestDto.getSessionId());
+
+        if (studyDto == null) {
+            throw new RuntimeException("Study not found");
+        }
 
         User user = userRepository.findByName(studyRequestDto.getUserName())
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
-        if(studyDto.getUsers().remove(user)) {
-            studyRepository.save(studyDto);
-        } else {
-            throw new RuntimeException("User not found");
+        List<StudyUser> users = studyDto.getUsers();
+
+        for (StudyUser studyUser: users) {
+            if (studyUser.getUser().equals(user)) {
+                studyUserRepository.remove(studyUser.getId());
+
+                if(users.isEmpty()) { // nobody here
+                    closeStudy(studyDto.getId());
+                } else if (studyDto.getHostUser().equals(user)) { // host change
+                    User nextHost = users.get(0).getUser();
+                    studyDto.setHostUser(nextHost);
+
+                    try {
+                        studyRepository.save(studyDto);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        return 0;
+                    }
+                }
+                return 1;
+            }
         }
 
-        return;
+        return 0;
+    }
+
+    public List<StudyResponseDto> getStudys(String roomName, Boolean isGame, int page) {
+        int offset = 6 * (page - 1);
+
+        List<StudyResponseDto> list = new ArrayList<>();
+        List<StudyDto> studys;
+
+        if(isGame == null) {
+            if(roomName == null) {
+                studys = studyRepository.findAll(offset);
+            } else {
+                studys = studyRepository.findByName(roomName, offset);
+            }
+        } else {
+            if(roomName == null) {
+                studys = studyRepository.findSelectedAll(isGame, offset);
+            } else {
+                studys = studyRepository.findSelectedByName(roomName, isGame, offset);
+            }
+        }
+
+        if (studys == null) {
+            studys = new ArrayList<>();
+        }
+
+        for(StudyDto study: studys) {
+            if(study.getUsers().size() < 6) {
+                List<String> users = new ArrayList<>();
+
+                for(StudyUser user: study.getUsers()) {
+                    users.add(user.getUser().getNickname());
+                }
+
+                StudyResponseDto sr = new StudyResponseDto(
+                        study.getId(),
+                        study.getName(),
+                        study.getHostUser().getNickname(),
+                        users,
+                        study.getComment(),
+                        List.of(study.getRule().split("\\" + SEPARATOR)),
+                        study.getIsOpen(),
+                        study.getIsGame()
+                );
+
+                list.add(sr);
+            }
+        }
+
+        return list;
+    }
+
+    public int closeStudy(Long sessionId) {
+        StudyDto studyDto = studyRepository.findById(sessionId);
+
+        Date now = new Date();
+
+        studyDto.setEnd(now);
+
+        // prevent search
+        studyDto.setIsOpen(false);
+
+        try {
+            studyRepository.save(studyDto);
+
+            return 1;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return 0;
+        }
     }
 }

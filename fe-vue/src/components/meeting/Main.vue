@@ -44,21 +44,15 @@ const stopResize = () => {
 
 <template>
   <div ref="main" class="flex-align main-content">
-    <div
-      :style="{
-        width: problemWidth + 'px',
-      }"
-      class="problem box-sb"
-    >
+    <div :style="{
+      width: problemWidth + 'px',
+    }" class="problem box-sb">
       <Problem />
     </div>
     <button ref="resizer" class="resizer" @mousedown="initResize"></button>
-    <div
-      class="compiler box-sb"
-      :style="{
-        flex: 1,
-      }"
-    >
+    <div class="compiler box-sb" :style="{
+      flex: 1,
+    }">
       <button class="btn bold-text change" @click="changCompilerView">
         {{ compilerText[compiler] }}
       </button>
@@ -72,9 +66,11 @@ const stopResize = () => {
 .main-content {
   margin: 15px;
 }
+
 .problem {
   height: 800px;
 }
+
 .change {
   border-width: 5px;
   border-radius: 10px;
@@ -84,6 +80,7 @@ const stopResize = () => {
   top: 10px;
   right: 20px;
 }
+
 .compiler {
   height: 800px;
   padding: 70px 20px 20px 20px;

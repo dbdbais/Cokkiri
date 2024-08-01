@@ -13,9 +13,9 @@
   height: 180px;
   margin-top: 20px;
 }
+
 .editor-con {
   width: 100%;
-
   height: 500px;
 }
 </style>

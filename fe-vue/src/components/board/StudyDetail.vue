@@ -2,6 +2,8 @@
 import RecruitmentBadge from "./RecruitmentBadge.vue";
 import StudyDetailTime from "@/components/board/StudyDetailTime.vue";
 import StudyDetailRule from "@/components/board/StudyDetailRule.vue";
+import { joinStudy } from "@/api/board";
+
 defineProps({
   detailData: Object,
 });
@@ -12,6 +14,20 @@ const rankImgUrl = "/src/assets/rank/";
 
 const closeBtn = function () {
   emit("close");
+};
+
+const sendJoin = function (sessionId) {
+  const success = (res) => {
+    console.log(res.data);
+  };
+  const fail = (err) => {
+    console.log(err);
+  };
+  const joinData = {
+    userName: "김종덕",
+    sessionId: sessionId,
+  };
+  joinStudy(joinData, success, fail);
 };
 </script>
 
@@ -66,7 +82,9 @@ const closeBtn = function () {
       <div class="bottom">
         <div class="box-psb text-p intro">{{ detailData.intro }}</div>
       </div>
-      <button class="nomal-text board-btn">가입신청</button>
+      <button class="nomal-text board-btn" @click="sendJoin(detailData.id)">
+        가입신청
+      </button>
     </div>
   </div>
 </template>

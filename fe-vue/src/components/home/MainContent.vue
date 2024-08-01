@@ -29,25 +29,29 @@ import { useRouter } from "vue-router";
 import { goWaitingRoom, getWaitingRoomList } from "@/api/waitingroom";
 import Room from "./Room.vue";
 import Pagination from "@/components/common/Pagination.vue";
-import roomList from "@/assets/data/roomList.json";
+// import roomList from "@/assets/data/roomList.json";
+import roomList from "@/assets/data/roomListAxios.json";
 
-onMounted(() => {
-  const success = (res) => {
-    console.log(res.data.waitingRoomList);
-    rooms.value = res.data.waitingRoomList;
-  };
-  const fail = (err) => {
-    console.log(err);
-  };
+// onMounted(() => {
+//   const success = (res) => {
+//     console.log(res.data.waitingRoomList);
+//     rooms.value = res.data.waitingRoomList;
+//   };
+//   const fail = (err) => {
+//     console.log(err);
+//   };
 
-  getWaitingRoomList(success, fail);
-});
+//   getWaitingRoomList(success, fail);
+// });
 
 const router = useRouter();
 const user = ref("어지민");
-
+// 더미 데이터
 // const rooms = ref(roomList.roomList.room);
-const rooms = ref("");
+// 더미 데이터 (Axios 용)
+const rooms = ref(roomList.waitingRoomList);
+// Axios 용
+// const rooms = ref("");
 
 rooms: [
   { id: 1, name: "알고리즘 고수들방", members: 116 },
@@ -55,15 +59,19 @@ rooms: [
   // Add more rooms here
 ];
 
+// const goRoom = function (id) {
+//   const success = (res) => {
+//     console.log(res.data);
+//     router.push({ name: "waitingRoom", params: { roomId: id } });
+//   };
+//   const fail = (err) => {
+//     console.log(err);
+//   };
+//   goWaitingRoom({ sessionId: id, userName: user.value }, success, fail);
+// };
+
 const goRoom = function (id) {
-  const success = (res) => {
-    console.log(res.data);
-    router.push({ name: "waitingRoom", params: { roomId: id } });
-  };
-  const fail = (err) => {
-    console.log(err);
-  };
-  goWaitingRoom({ sessionId: id, userName: user.value }, success, fail);
+  router.push({ name: "waitingRoom", params: { roomId: id } });
 };
 </script>
 

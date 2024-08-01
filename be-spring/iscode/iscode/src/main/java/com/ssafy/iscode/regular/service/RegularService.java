@@ -98,19 +98,32 @@ public class RegularService {
                 throw new RuntimeException("Regular not found");
             }
 
-            for(RegularUser regularUser: regularDto.getUsers()) {
-                if(regularUser.getUser().equals(user)) {
-                    regularUser.setIsAccept(true);
-                    regularUserRepository.save(regularUser);
-                    return 1;
+            List<RegularUser> regularUsers = regularDto.getUsers();
+            int count = 0;
+
+            for(RegularUser regularUser: regularUsers) {
+                if(regularUser.getIsAccept()) {
+                    count++;
                 }
             }
 
-            throw new RuntimeException("User not found in list");
+            if(count < regularDto.getMaxNum()) {
+
+                for (RegularUser regularUser : regularUsers) {
+                    if (regularUser.getUser().equals(user)) {
+                        regularUser.setIsAccept(true);
+                        regularUserRepository.save(regularUser);
+                        return 1;
+                    }
+                }
+
+                throw new RuntimeException("User not found in list");
+            }
         } catch (Exception e) {
             e.printStackTrace();
-            return 0;
         }
+
+        return 0;
     }
 
     public List<RegularResponseDto> getRequest(RegularRequestDto regularRequestDto) {
@@ -124,6 +137,7 @@ public class RegularService {
             for(RegularUser regularUser: regular.getUsers()) {
                 RegularResponseDto rr = new RegularResponseDto();
                 rr.setSessionId(regular.getId());
+                rr.setRegularName(regular.getName());
 
                 List<String> users = new ArrayList<>();
                 if(!regularUser.getIsAccept()) {
@@ -209,6 +223,14 @@ public class RegularService {
             throw new RuntimeException("Regular not found");
         }
 
+        List<RegularUser> regularUsers = regularDto.getUsers();
+        int count = 0;
+        for(RegularUser regularUser: regularUsers) {
+            if(regularUser.getIsAccept()) {
+                count++;
+            }
+        }
+
         RegularResponseDto regularResponseDto = new RegularResponseDto(
                 regularDto.getId(),
                 regularDto.getName(),
@@ -217,7 +239,7 @@ public class RegularService {
                 regularDto.getLanguage(),
                 regularDto.getMaxNum(),
                 regularDto.getHostUser().getNickname(),
-                (regularDto.getEnd()==null && regularDto.getMaxNum()==regularDto.getUsers().size()),
+                (regularDto.getEnd()==null && regularDto.getMaxNum()>count),
                 regularDto.getTimes().stream()
                         .map(RegularTimeDto::toString)
                         .collect(Collectors.toList()),
@@ -312,30 +334,30 @@ public class RegularService {
         }
 
         for(RegularDto regular: regulars) {
-            if(regular.getUsers().size() < regular.getMaxNum()) {
-                List<String> users = new ArrayList<>();
+            List<String> users = new ArrayList<>();
 
-                for(RegularUser regularUser: regular.getUsers()) {
+            for(RegularUser regularUser: regular.getUsers()) {
+                if(regularUser.getIsAccept()) {
                     users.add(regularUser.getUser().getNickname());
                 }
-
-                RegularResponseDto rr = new RegularResponseDto(
-                        regular.getId(),
-                        regular.getName(),
-                        regular.getComment(),
-                        List.of(regular.getRule().split("\\" + SEPARATOR)),
-                        regular.getLanguage(),
-                        regular.getMaxNum(),
-                        regular.getHostUser().getNickname(),
-                        (regular.getEnd()==null && regular.getMaxNum()==regular.getUsers().size()),
-                        regular.getTimes().stream()
-                                .map(RegularTimeDto::toString)
-                                .collect(Collectors.toList()),
-                        users
-                );
-
-                list.add(rr);
             }
+
+            RegularResponseDto rr = new RegularResponseDto(
+                    regular.getId(),
+                    regular.getName(),
+                    regular.getComment(),
+                    List.of(regular.getRule().split("\\" + SEPARATOR)),
+                    regular.getLanguage(),
+                    regular.getMaxNum(),
+                    regular.getHostUser().getNickname(),
+                    (regular.getEnd()==null && regular.getMaxNum()>users.size()),
+                    regular.getTimes().stream()
+                            .map(RegularTimeDto::toString)
+                            .collect(Collectors.toList()),
+                    users
+            );
+
+            list.add(rr);
         }
 
         return list;

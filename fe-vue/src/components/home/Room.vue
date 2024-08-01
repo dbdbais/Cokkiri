@@ -32,7 +32,9 @@ const props = defineProps({
   height: 175px;
   padding: 20px 40px;
 }
-
+#box-room:hover {
+  background-color: #b3c7fb;
+}
 .room-img {
   width: 130px;
   height: 130px;

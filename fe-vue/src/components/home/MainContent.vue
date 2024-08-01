@@ -26,13 +26,13 @@
 <script setup>
 import { ref } from "vue";
 import { useRouter } from "vue-router";
-
+import { goWatingRoom } from "@/api/watingroom";
 import Room from "./Room.vue";
 import Pagination from "@/components/common/Pagination.vue";
 import roomList from "@/assets/data/roomList.json";
 
 const router = useRouter();
-
+const user = ref("어지민");
 const rooms = ref(roomList.roomList.room);
 rooms: [
   { id: 1, name: "알고리즘 고수들방", members: 116 },
@@ -41,7 +41,14 @@ rooms: [
 ];
 
 const goRoom = function (id) {
-  router.push({ name: "watingRoom", params: { roomId: id } });
+  const success = (res) => {
+    console.log(res.data);
+    router.push({ name: "watingRoom", params: { roomId: id } });
+  };
+  const fail = (err) => {
+    console.log(err);
+  };
+  goWatingRoom({ sessionId: id, userName: user.value }, success, fail);
 };
 </script>
 

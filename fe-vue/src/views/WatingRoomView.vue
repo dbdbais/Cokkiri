@@ -6,6 +6,7 @@ import "@/assets/css/watingroom.css";
 
 import WatingRoomRule from "@/components/watingroom/WatingRoomRule.vue";
 import WatingRoomMember from "@/components/watingroom/WatingRoomMember.vue";
+import WatingRoomChat from "@/components/watingroom/WatingRoomChat.vue";
 import { ref, onMounted } from "vue";
 import { useLodingStore } from "@/stores/loading";
 
@@ -64,11 +65,13 @@ const exitRoom = function () {
     <div class="wating-room">
       <div class="box-row">
         <div class="box-col">
-          <div class="room-exit bold-text md" @click="exitRoom">
-            <img src="/src/assets/exit_room.svg" alt="방나가기" />
-            나가기
+          <div class="rule-data">
+            <div class="room-exit bold-text md" @click="exitRoom">
+              <img src="/src/assets/exit_room.svg" alt="방나가기" />
+              나가기
+            </div>
+            <WatingRoomRule :rules="roomData.rules" />
           </div>
-          <WatingRoomRule :rules="roomData.rules" />
         </div>
         <div class="box-col">
           <div class="member-data">
@@ -82,22 +85,25 @@ const exitRoom = function () {
             </div>
             <WatingRoomMember :users="roomUsers" />
           </div>
-          <div class="box-col">
-            <button class="bold-text btn friend" @click="goMeetingRoom">
-              <img
-                src="/src/assets/friend.svg"
-                alt="친구초대"
-                style="margin-right: 20px; width: 90px"
-              />친구초대
-            </button>
-            <button class="bold-text btn start" @click="goMeetingRoom">
-              <img
-                src="/src/assets/start.svg"
-                alt="시작하기"
-                style="margin-right: 20px; width: 90px"
-              />시작하기
-            </button>
-          </div>
+        </div>
+      </div>
+      <div class="bottom flex-align">
+        <WatingRoomChat />
+        <div class="box-col button-con">
+          <button class="bold-text btn friend">
+            <img
+              src="/src/assets/friend.svg"
+              alt="친구초대"
+              style="margin-right: 20px; width: 90px"
+            />친구초대
+          </button>
+          <button class="bold-text btn start" @click="goMeetingRoom">
+            <img
+              src="/src/assets/start.svg"
+              alt="시작하기"
+              style="margin-right: 20px; width: 90px"
+            />시작하기
+          </button>
         </div>
       </div>
     </div>
@@ -106,7 +112,7 @@ const exitRoom = function () {
 
 <style scoped>
 .wating-room {
-  padding: 30px;
+  padding: 30px 30px 0px 30px;
 }
 .room-exit,
 .category {
@@ -120,7 +126,14 @@ const exitRoom = function () {
   margin-left: 40px;
   -webkit-text-stroke: 2px black;
 }
-
+.bottom {
+  justify-content: space-between;
+}
+.button-con {
+  justify-content: space-between;
+  align-items: center;
+  height: 320px;
+}
 .start {
   background-color: #00f6ac;
   border-color: #2ec5a1;
@@ -152,7 +165,6 @@ const exitRoom = function () {
   height: 140px;
   border-width: 10px;
   border-radius: 10px;
-  margin-bottom: 20px;
   display: flex;
   align-items: center;
   justify-content: center;

@@ -27,6 +27,11 @@ const router = createRouter({
       name: "watingRoom",
       component: WatingRoomView,
     },
+    {
+      path: "/game/:gameId",
+      name: "gameProgress",
+      component: () => import("@/views/GameProgressView.vue"),
+    },
   ],
 });
 

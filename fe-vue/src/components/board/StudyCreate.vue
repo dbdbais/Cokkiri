@@ -1,5 +1,6 @@
 <script setup>
 import StudyTime from "@/components/board/StudyTime.vue";
+import { createStudy } from "@/api/board";
 import { ref } from "vue";
 
 const emit = defineEmits(["create-exit"]);
@@ -52,13 +53,27 @@ const introEnter = function (value) {
 };
 // 스터디 만들기
 const studyCreate = function () {
-  studyCreateDate.value = {
-    name: studyName.value,
-    member: studyMember.value,
+  const success = (res) => {
+    console.log(res.data);
+  };
+  const fail = (err) => {
+    console.log(err);
+  };
+  // studyCreateDate.value = {
+  //   name: studyName.value,
+  //   member: studyMember.value,
+  //   times: selectedTime,
+  //   intro: studyIntro.value,
+  // };
+  const studyData = {
+    regularName: studyName.value,
+    maxNum: studyMember.value,
     times: selectedTime,
-    intro: studyIntro.value,
+    userName: "김종덕",
+    regularComment: studyIntro.value,
   };
 
+  createStudy(studyData, success, fail);
   emit("create-exit");
   console.log(studyCreateDate.value);
 };

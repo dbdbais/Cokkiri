@@ -11,3 +11,11 @@ export const getStudy = (success, fail) => {
   console.log("get Study");
   axios.get("/board/1").then(success).catch(fail);
 };
+
+export const createStudy = (regularData, success, fail) => {
+  console.log("create Study");
+  axios
+    .post("/regular/create-regular", JSON.stringify(regularData))
+    .then(success)
+    .catch(fail);
+};

@@ -34,6 +34,7 @@ public class StudyService {
         studyDto.setName(studyRequestDto.getRoomName());
         studyDto.setComment(studyRequestDto.getRoomComment());
         studyDto.setRule(String.join(SEPARATOR, studyRequestDto.getRules()));
+        studyDto.setMaxNum(studyRequestDto.getMaxNum());
         studyDto.setIsOpen(studyRequestDto.getIsOpen());
         studyDto.setIsGame(studyRequestDto.getIsGame());
 
@@ -67,7 +68,7 @@ public class StudyService {
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
         List<StudyUser> users = studyDto.getUsers();
-        if (users.size() < 6) {
+        if (users.size() < studyDto.getMaxNum()) {
             try {
                 StudyUser studyUser = new StudyUser();
                 studyUser.setStudy(studyDto);
@@ -96,6 +97,7 @@ public class StudyService {
         studyResponseDto.setHostName(studyDto.getHostUser().getNickname());
         studyResponseDto.setRoomComment(studyDto.getComment());
         studyResponseDto.setRules(List.of(studyDto.getRule().split("\\" + SEPARATOR)));
+        studyResponseDto.setMaxNum(studyDto.getMaxNum());
         studyResponseDto.setIsOpen(studyDto.getIsOpen());
         studyResponseDto.setIsGame(studyDto.getIsGame());
 
@@ -118,6 +120,7 @@ public class StudyService {
             studyDto.setName(studyRequestDto.getRoomName());
             studyDto.setComment(studyRequestDto.getRoomComment());
             studyDto.setRule(String.join(SEPARATOR, studyRequestDto.getRules()));
+            studyDto.setMaxNum(studyRequestDto.getMaxNum());
             studyDto.setIsOpen(studyRequestDto.getIsOpen());
 
             studyRepository.save(studyDto);
@@ -190,26 +193,25 @@ public class StudyService {
         }
 
         for(StudyDto study: studys) {
-            if(study.getUsers().size() < 6) {
-                List<String> users = new ArrayList<>();
+            List<String> users = new ArrayList<>();
 
-                for(StudyUser user: study.getUsers()) {
-                    users.add(user.getUser().getNickname());
-                }
-
-                StudyResponseDto sr = new StudyResponseDto(
-                        study.getId(),
-                        study.getName(),
-                        study.getHostUser().getNickname(),
-                        users,
-                        study.getComment(),
-                        List.of(study.getRule().split("\\" + SEPARATOR)),
-                        study.getIsOpen(),
-                        study.getIsGame()
-                );
-
-                list.add(sr);
+            for(StudyUser user: study.getUsers()) {
+                users.add(user.getUser().getNickname());
             }
+
+            StudyResponseDto sr = new StudyResponseDto(
+                    study.getId(),
+                    study.getName(),
+                    study.getHostUser().getNickname(),
+                    users,
+                    study.getComment(),
+                    List.of(study.getRule().split("\\" + SEPARATOR)),
+                    study.getMaxNum(),
+                    study.getIsOpen(),
+                    study.getIsGame()
+            );
+
+            list.add(sr);
         }
 
         return list;

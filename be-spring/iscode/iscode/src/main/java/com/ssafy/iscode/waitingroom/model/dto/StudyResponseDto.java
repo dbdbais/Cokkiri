@@ -19,6 +19,7 @@ public class StudyResponseDto {
     private List<String> users;
     private String roomComment;
     private List<String> rules;
+    private int maxNum;
     private Boolean isOpen;
     private Boolean isGame;
 }

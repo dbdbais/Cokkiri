@@ -63,7 +63,7 @@ public class LobbyWebSocketHandler extends TextWebSocketHandler {
 
     // send event
     // server -> client
-    private void sendEvent(String userName, String event) throws Exception {
+    public void sendEvent(String userName, String event) throws Exception {
         WebSocketSession session = userSessions.get(userName);
         if (session != null) {
             session.sendMessage(new TextMessage(event));

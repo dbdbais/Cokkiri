@@ -1,5 +1,5 @@
 <script setup>
-import StudyCreateTime from "@/components/board/StudyCreateTime.vue";
+import StudyTime from "@/components/board/StudyTime.vue";
 import { ref } from "vue";
 
 const emit = defineEmits(["create-exit"]);
@@ -102,7 +102,7 @@ const studyCreate = function () {
         </div>
         <!--스터디 요일 및 시간 선택  -->
         <div class="bold-text study-time">스터디 시간</div>
-        <StudyCreateTime @selectedTime="selected" />
+        <StudyTime @selectedTime="selected" time-type="시간추가" />
         <div class="selected-time md-col">
           <div
             class="time-item bold-text"
@@ -183,9 +183,8 @@ const studyCreate = function () {
   border-width: 3px;
   border-color: #ff8888;
   background-color: #ff0000;
-  font-size: 15px;
   color: white;
-
+  font-size: 15px;
   position: absolute;
   right: 10px;
 }

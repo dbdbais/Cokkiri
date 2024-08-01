@@ -10,7 +10,7 @@
   color: white;
   font-family: "RixInooAriDuriR";
   font-size: 20px;
-  -webkit-text-stroke: 1px black;
+  -webkit-text-stroke: 1.5px black;
 }
 /* 버튼 사이즈 */
 .btn {

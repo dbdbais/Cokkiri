@@ -6,6 +6,11 @@ onMounted(() => {
   startTime.value = "09:00";
   endTime.value = "09:00";
 });
+
+defineProps({
+  timeType: String,
+});
+
 const emit = defineEmits(["selected-time"]);
 const week = ref([
   { id: 1, weekName: "mon", ko: "월" },
@@ -40,9 +45,7 @@ const selected = function () {
             name="week"
             :value="day.weekName"
             v-model="selectedWeek"
-          /><label :for="day.weekName" class="nomal-text day">{{
-            day.ko
-          }}</label>
+          /><label :for="day.weekName" class="nomal-text">{{ day.ko }}</label>
         </div>
         <div>
           <div class="start">
@@ -63,7 +66,9 @@ const selected = function () {
           </div>
         </div>
       </div>
-      <button class="time-plus bold-text" @click="selected">시간추가</button>
+      <button class="time-plus bold-text" @click="selected">
+        {{ timeType }}
+      </button>
     </div>
   </div>
 </template>

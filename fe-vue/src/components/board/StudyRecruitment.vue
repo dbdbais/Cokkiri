@@ -48,6 +48,9 @@ const closeBtn = function () {
   <div class="container">
     <div class="bold-text sub-title">정기 스터디 모집</div>
     <div class="recruitment">
+      <button class="create-btn btn bold-text md" @click="goCreate">
+        스터디 만들기
+      </button>
       <StudyDetail
         v-if="studyDetail"
         :detail-data="detailData"
@@ -69,9 +72,6 @@ const closeBtn = function () {
         :class="preventCilck"
         @click="goDetail(group)"
       />
-      <button class="create-btn btn bold-text md" @click="goCreate">
-        스터디 만들기
-      </button>
     </div>
   </div>
 </template>

@@ -43,7 +43,7 @@ const closeBtn = function () {
       </div>
       <div class="middle">
         <div class="box-psb box-col times">
-          <div class="text-p nomal-text-title">시간</div>
+          <div class="text-p nomal-text time-label">시간</div>
           <div class="time-list">
             <StudyDetailTime
               v-for="time in detailData.groupData.times"
@@ -53,7 +53,7 @@ const closeBtn = function () {
           </div>
         </div>
         <div class="box-psb box-col rules">
-          <div class="text-p nomal-text-title">규칙</div>
+          <div class="text-p nomal-text rule-label">규칙</div>
           <div class="rule-list">
             <StudyDetailRule
               v-for="rule in detailData.groupData.rules"
@@ -82,7 +82,7 @@ const closeBtn = function () {
 }
 
 .top {
-  height: 70px;
+  height: 60px;
   background-color: transparent;
 }
 
@@ -93,7 +93,9 @@ const closeBtn = function () {
 .bottom {
   height: 150px;
 }
-
+.group-name {
+  margin-top: 5px;
+}
 .lang {
   width: 20%;
 
@@ -108,7 +110,11 @@ const closeBtn = function () {
   justify-content: space-around;
   align-items: center;
 }
-
+.time-label,
+.rule-label {
+  font-size: 25px;
+  padding-left: 10px;
+}
 .rank img,
 span {
   background-color: transparent;
@@ -135,6 +141,8 @@ span {
 
   padding-top: 5px;
   padding-left: 15px;
+  font-size: 25px;
+  overflow-y: scroll;
 }
 
 .study-detail {

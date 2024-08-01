@@ -3,7 +3,7 @@ import "@/assets/css/board.css";
 import StudySearch from "@/components/board/StudySearch.vue";
 import StudyRecruitmentGroup from "@/components/board/StudyRecruitmentGroup.vue";
 import StudyDetail from "@/components/board/StudyDetail.vue";
-import StudyCreate from "./StudyCreate.vue";
+import StudyCreate from "@/components/board/StudyCreate.vue";
 import { getStudyList } from "@/api/board";
 
 import { onMounted, ref } from "vue";
@@ -46,7 +46,7 @@ const closeBtn = function () {
 
 <template>
   <div class="container">
-    <div class="title sub-title">정기 스터디 모집</div>
+    <div class="bold-text sub-title">정기 스터디 모집</div>
     <div class="recruitment">
       <StudyDetail
         v-if="studyDetail"
@@ -89,8 +89,8 @@ const closeBtn = function () {
 /* 정기 스터디 모집 */
 .recruitment {
   /* 크기 */
-  width: 950px;
-  height: 680px;
+  width: 1250px;
+  height: 810px;
   /* 배치 */
   display: flex;
   flex-direction: column;
@@ -100,13 +100,5 @@ const closeBtn = function () {
   background-color: #dbe7ff;
   border: 5px solid #3b72ff;
   border-radius: 10px;
-}
-
-@keyframes downModal {
-  from {
-  }
-
-  to {
-  }
 }
 </style>

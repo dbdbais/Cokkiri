@@ -15,8 +15,8 @@
 /* 이달의 랭킹 */
 .rank {
   /* 크기 */
-  width: 400px;
-  height: 680px;
+  width: 500px;
+  height: 810px;
   background-color: yellowgreen;
 
   /* 색깔, 테두리 */

@@ -10,8 +10,8 @@
 /* 검색창 */
 .search {
   /* 크기, 위치 */
-  width: 880px;
-  height: 70px;
+  width: 1180px;
+  height: 120px;
   margin-top: 20px;
   position: relative;
 }

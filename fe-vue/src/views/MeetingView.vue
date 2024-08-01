@@ -28,14 +28,10 @@ const chatOnOff = ref(false);
   <div class="meeting-room">
     <Chat v-if="chatOnOff" />
     <div class="members box-main-con flex-align" id="members"></div>
-    <button
-      class="chat-btn"
-      @click="
-        () => {
-          chatOnOff = true;
-        }
-      "
-    >
+    <button class="chat-btn" @click="() => {
+      chatOnOff = true;
+    }
+      ">
       chat
     </button>
     <button id="myVideo" data-flag="true" @click="changeVideo">video</button>
@@ -58,12 +54,15 @@ const chatOnOff = ref(false);
   position: absolute;
   top: 0;
 }
+
 #myAudio {
   right: 40px;
 }
+
 .chat-btn {
   right: 80px;
 }
+
 .members {
   width: 1500px;
   height: 180px;
@@ -71,6 +70,7 @@ const chatOnOff = ref(false);
   margin: 20px;
   justify-content: space-around;
 }
+
 .main {
   width: 1880px;
   height: 840px;
@@ -84,6 +84,7 @@ button {
   right: 0px;
   cursor: move;
 }
+
 video {
   border-radius: 20%;
 }

@@ -21,6 +21,7 @@
 .btn {
   cursor: url(/src/assets/pointer.svg) 2 2, pointer;
 }
+
 body {
   background-color: #cadcff;
 }

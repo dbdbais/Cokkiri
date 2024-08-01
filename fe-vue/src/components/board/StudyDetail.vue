@@ -1,7 +1,5 @@
 <script setup>
 import RecruitmentBadge from "./RecruitmentBadge.vue";
-import StudyDetailTime from "@/components/board/StudyDetailTime.vue";
-import StudyDetailRule from "@/components/board/StudyDetailRule.vue";
 import { joinStudy } from "@/api/board";
 
 defineProps({
@@ -40,20 +38,20 @@ const sendJoin = function (sessionId) {
       @click="closeBtn"
     />
     <div class="detail-content">
-      <RecruitmentBadge class="badge" />
-      <div class="title sub-title group-name">{{ detailData.groupName }}</div>
+      <RecruitmentBadge class="badge" :group-badge="detailData.isRecruiment" />
+      <div class="title sub-title group-name">{{ detailData.regularName }}</div>
       <div class="top">
         <div class="box-psb text-p md lang">
-          {{ detailData.groupData.lang }}
+          {{ detailData.language }}
         </div>
         <div class="box-psb text-p md member">
           <div
-            v-for="member in detailData.groupData.member"
-            :key="member.id"
+            v-for="user in detailData.users"
+            :key="user.index"
             class="rank md"
           >
-            <img :src="member.img" alt="등급" />
-            <span style="margin-left: 8px">{{ member.cnt }}명</span>
+            <img :src="user.img" alt="등급" />
+            <span style="margin-left: 8px">{{ user.cnt }}명</span>
           </div>
         </div>
       </div>
@@ -61,28 +59,35 @@ const sendJoin = function (sessionId) {
         <div class="box-psb box-col times">
           <div class="text-p nomal-text time-label">시간</div>
           <div class="time-list">
-            <StudyDetailTime
-              v-for="time in detailData.groupData.times"
-              :key="time.week"
-              :study-time="time"
-            />
+            <div
+              v-for="time in detailData.times"
+              :key="time.index"
+              class="time bold-text box-main-group md"
+            >
+              {{ time }}
+            </div>
           </div>
         </div>
         <div class="box-psb box-col rules">
           <div class="text-p nomal-text rule-label">규칙</div>
           <div class="rule-list">
-            <StudyDetailRule
-              v-for="rule in detailData.groupData.rules"
+            <div
+              v-for="rule in detailData.rules"
               :key="rule.id"
-              :study-rule="rule"
-            />
+              class="rule bold-text box-main-group md"
+            >
+              {{ rule }}
+            </div>
           </div>
         </div>
       </div>
       <div class="bottom">
-        <div class="box-psb text-p intro">{{ detailData.intro }}</div>
+        <div class="box-psb text-p intro">{{ detailData.regularComment }}</div>
       </div>
-      <button class="nomal-text board-btn" @click="sendJoin(detailData.id)">
+      <button
+        class="nomal-text board-btn"
+        @click="sendJoin(detailData.sessionId)"
+      >
         가입신청
       </button>
     </div>
@@ -128,6 +133,18 @@ const sendJoin = function (sessionId) {
   justify-content: space-around;
   align-items: center;
 }
+
+.time,
+.rule {
+  width: 90%;
+  height: 50px;
+
+  margin-top: 5px;
+  font-size: 20px;
+  color: white;
+  -webkit-text-stroke: 1.5px black;
+}
+
 .time-label,
 .rule-label {
   font-size: 25px;

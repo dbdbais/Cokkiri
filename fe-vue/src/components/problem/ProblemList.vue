@@ -7,72 +7,25 @@ import problem from "@/api/problem";
 const problemList = ref([]);
 
 function extractProblems(text) {
-  const problemRegex = /Problem\{.*?\}/gs;
   const problems = [];
-  let match;
-
-  while ((match = problemRegex.exec(text)) !== null) {
-    console.log(match)
-    const problemBlock = match[0];
-
-    const noMatch = /no=(.*?),/.exec(problemBlock);
-    const algoTypeMatch = /algoType=\[(.*?)\]/.exec(problemBlock);
-    const titleMatch = /title='(.*?)'/.exec(problemBlock);
-    const levelMatch = /level=(.*?),/.exec(problemBlock);
-    const infoMatch = /info='(.*?)'/.exec(problemBlock);
-    const algoPercentMatch = /algoPercent=(.*?),/.exec(problemBlock);
-    const algoInputMatch = /algoInput=\{(.*?)\}/.exec(problemBlock);
-    const algoOutputMatch = /algoOutput=\{(.*?)\}/.exec(problemBlock);
-
-    // console.log(noMatch)
-    // console.log(algoTypeMatch)
-    // console.log(titleMatch)
-    // console.log(levelMatch)
-    console.log(infoMatch);
-    // console.log(algoPercentMatch)
-    // console.log(algoInputMatch)
-    // console.log(algoOutputMatch)
-
-    // 추출한 값들을 객체에 저장
-    const problem = {
-      no: noMatch ? noMatch[1].trim() : null,
-      algoType: algoTypeMatch ? algoTypeMatch[1].trim() : null,
-      title: titleMatch ? titleMatch[1].trim() : null,
-      level: levelMatch ? levelMatch[1].trim() : null,
-      info: infoMatch ? infoMatch[1].trim() : null,
-      algoPercent: algoPercentMatch ? algoPercentMatch[1].trim() : null,
-      algoInput: algoInputMatch ? algoInputMatch[1].trim() : null,
-      algoOutput: algoOutputMatch ? algoOutputMatch[1].trim() : null
-    };
-
-    // 문제 객체를 문제 배열에 추가
-    problems.push(problem);
-  }
-
-  return problems;
-}
-
-
-function test(text) {
-  const problems = [];
-  const pattern = /Problem\{(.*?)\}/gs;
+  const pattern = /(.*?)\}\}/gs;
   const matches = [...text.matchAll(pattern)];
 
   matches.map(match => {
-    const noMatch = /no=(.*?),/.exec(match);
-    const algoTypeMatch = /algoType=\[(.*?)\]/.exec(match);
-    const titleMatch = /title='(.*?)'/.exec(match);
-    const levelMatch = /level=(.*?),/.exec(match);
-    const infoMatch = /info='(.*?)'/.exec(match);
-    const algoPercentMatch = /algoPercent=(.*?),/.exec(match);
-    const algoInputMatch = /algoInput=\{(.*?)\}/.exec(match);
-    const algoOutputMatch = /algoOutput=\{(.*?)\}/.exec(match);
+    const noMatch = /no=(.*?),/s.exec(match[0]);
+    const algoTypeMatch = /algoType=\[(.*?)\],/s.exec(match[0]);
+    const titleMatch = /title='(.*?)',/s.exec(match[0]);
+    const levelMatch = /level=(.*?),/s.exec(match[0]);
+    const infoMatch = /info='(.*?)',/s.exec(match[0]);
+    const algoPercentMatch = /algoPercent=(.*?),/s.exec(match[0]);
+    const algoInputMatch = /algoInput=\{(.*?)\},/s.exec(match[0]);
+    const algoOutputMatch = /algoOutput=\{(.*?)\}\}/s.exec(match[0]);
 
     const problem = {
       no: noMatch ? noMatch[1].trim() : null,
       algoType: algoTypeMatch ? algoTypeMatch[1].trim() : null,
       title: titleMatch ? titleMatch[1].trim() : null,
-      level: levelMatch ? levelMatch[1].trim() : null,
+      level: levelMatch ? parseInt(levelMatch[1].trim()) : null,
       info: infoMatch ? infoMatch[1].trim() : null,
       algoPercent: algoPercentMatch ? algoPercentMatch[1].trim() : null,
       algoInput: algoInputMatch ? algoInputMatch[1].trim() : null,
@@ -86,15 +39,13 @@ function test(text) {
 
 async function getProblems(id) {
   const response = await problem.getProblems(id);
-  problemList.value = response.data;
+  problemList.value = extractProblems(response.data);
   return response;
 }
 
 onMounted(() => {
   getProblems().then((response) => {
-    // console.log(response);
-    // console.log(extractProblems(response.data));
-    console.log(test(response.data));
+    console.log(response);
   }).catch((error) => {
     console.log(error);
   });

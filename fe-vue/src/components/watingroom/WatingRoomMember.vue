@@ -41,14 +41,15 @@ const animamteSpeed = [
 
 <style scoped>
 .member-container {
-  width: 1200px;
+  width: 1160px;
   height: 600px;
-  margin-left: 30px;
+  margin-left: 40px;
 
   display: grid;
-  grid-template-columns: 250px 250px 250px;
+  padding: 30px 45px;
+  grid-template-columns: 340px 340px 340px;
   grid-template-rows: 250px 250px;
-  grid-gap: 20px;
+  grid-gap: 22px;
 }
 
 .member {
@@ -61,7 +62,7 @@ const animamteSpeed = [
 }
 .rank {
   margin-top: 50px;
-  width: 50%;
+  width: 40%;
 }
 
 .seed {

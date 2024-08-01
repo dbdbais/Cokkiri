@@ -53,6 +53,10 @@ const roomComent = ref(null);
 const goMeetingRoom = function () {
   router.push({ name: "meeting", params: { roomId: route.params.roomId } });
 };
+
+const exitRoom = function () {
+  router.replace({ name: "home" });
+};
 </script>
 
 <template>
@@ -60,7 +64,7 @@ const goMeetingRoom = function () {
     <div class="wating-room">
       <div class="box-row">
         <div class="box-col">
-          <div class="room-exit bold-text md">
+          <div class="room-exit bold-text md" @click="exitRoom">
             <img src="/src/assets/exit_room.svg" alt="방나가기" />
             나가기
           </div>
@@ -78,9 +82,20 @@ const goMeetingRoom = function () {
             </div>
             <WatingRoomMember :users="roomUsers" />
           </div>
-          <div>
-            <button class="bold-text btn" @click="goMeetingRoom">
-              시작하기
+          <div class="box-col">
+            <button class="bold-text btn friend" @click="goMeetingRoom">
+              <img
+                src="/src/assets/friend.svg"
+                alt="친구초대"
+                style="margin-right: 20px; width: 90px"
+              />친구초대
+            </button>
+            <button class="bold-text btn start" @click="goMeetingRoom">
+              <img
+                src="/src/assets/start.svg"
+                alt="시작하기"
+                style="margin-right: 20px; width: 90px"
+              />시작하기
             </button>
           </div>
         </div>
@@ -99,17 +114,20 @@ const goMeetingRoom = function () {
   height: 60px;
 }
 .category {
-  margin-left: 30px;
+  margin-left: 40px;
 }
 .title {
-  margin-left: 30px;
+  margin-left: 40px;
   -webkit-text-stroke: 2px black;
 }
-.btn {
-  width: 200px;
-  height: 200px;
-  background-color: yellow;
-  border-width: 20px;
+
+.start {
+  background-color: #00f6ac;
+  border-color: #2ec5a1;
+}
+.friend {
+  background-color: #c191ff;
+  border-color: #3b72ff;
 }
 .btn button {
   width: 200px;
@@ -128,5 +146,17 @@ const goMeetingRoom = function () {
 }
 .bold-text {
   font-size: 35px;
+}
+.btn {
+  width: 400px;
+  height: 140px;
+  border-width: 10px;
+  border-radius: 10px;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 55px;
+  -webkit-text-stroke: 2px black;
 }
 </style>

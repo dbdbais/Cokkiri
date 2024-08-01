@@ -31,6 +31,8 @@ public class RegularTimeDto implements Comparable<RegularTimeDto> {
     @Column(name = "rt_end")
     private int end;
 
+    private final String[] WEEKDAY = {"월요일", "화요일", "수요일", "목요일", "금요일", "토요일", "일요일"};
+
     @Override
     public int compareTo(RegularTimeDto o) {
         int result = Integer.compare(this.weekday, o.weekday);
@@ -44,5 +46,13 @@ public class RegularTimeDto implements Comparable<RegularTimeDto> {
         }
 
         return result;
+    }
+
+    @Override
+    public String toString() {
+        return WEEKDAY[weekday] + " "
+                + String.format("%02d", start/100) + ":" + String.format("%02d", start%100)
+                + " ~ "
+                + String.format("%02d", end/100) + ":" + String.format("%02d", end%100);
     }
 }

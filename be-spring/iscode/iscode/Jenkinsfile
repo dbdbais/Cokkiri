@@ -18,7 +18,7 @@ pipeline {
             steps {
                 dir('be-spring/iscode/iscode') {
                     script {
-                        def gradleHome = tool name: 'gradle', type: 'gradle'
+                        def gradleHome = tool name: 'Cokkiri-gradle', type: 'gradle'
                             sh 'chmod 777 gradlew'
                             sh './gradlew bootJar'
                     }

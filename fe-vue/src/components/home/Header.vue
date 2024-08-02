@@ -4,7 +4,7 @@
             <div id="quick-start" class="box-main-con box-in nav-btn">바로가기</div>
             <div id="create-room" class="box-main-con box-in nav-btn" @click="openCreateModal">방만들기</div>
             <RouterLink id="router-regular" class="header-router" :to="{ name: 'studyBoard' }">스터디 모집 게시판</RouterLink>
-            <RouterLink id="router-problem" class="header-router" :to="{}">문제 목록</RouterLink>
+            <RouterLink id="router-problem" class="header-router" :to="{ name: 'problem' }">문제 목록</RouterLink>
         </nav>
         <div id="header-second" class="box-row">
             <div id="search-container" class="box-row box-main-con">

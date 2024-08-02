@@ -47,6 +47,11 @@ const router = createRouter({
       name: "gameProgress",
       component: () => import("@/views/GameProgressView.vue"),
     },
+    {
+      path: "/problem",
+      name: "problem",
+      component: () => import("@/views/ProblemView.vue"),
+    },
   ],
 });
 

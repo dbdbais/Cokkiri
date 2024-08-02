@@ -46,6 +46,7 @@ public class ReviewRestController {
 
         return reviewService.insertReview(review);
     }
+
     @GetMapping("/{pid}")
     public List<Review> getAllReviews(@PathVariable Long pid){
         return reviewService.getReviews(pid);

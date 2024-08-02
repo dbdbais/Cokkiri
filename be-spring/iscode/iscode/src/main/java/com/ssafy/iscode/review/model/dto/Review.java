@@ -14,22 +14,20 @@ public class Review {
     @Column(name="review_code",columnDefinition = "LONGTEXT")
     private String content;
 
-    @OneToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="algo_num")
     private Problem problem;
 
-    @OneToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="user_id")
     private User user;
 
     public Review() {
     }
 
-    public Review(Long rid, String content, Problem problem, User user) {
+    public Review(Long rid, String content) {
         this.rid = rid;
         this.content = content;
-        this.problem = problem;
-        this.user = user;
     }
 
     public Long getRid() {

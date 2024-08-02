@@ -27,6 +27,4 @@ public class ReviewService {
         return reviewRepository.remove(rid);
     }
 
-
-
 }

@@ -1,6 +1,6 @@
-package com.ssafy.iscode.waitingroom.model.dao;
+package com.ssafy.iscode.study.model.dao;
 
-import com.ssafy.iscode.waitingroom.model.dto.StudyDto;
+import com.ssafy.iscode.study.model.dto.StudyDto;
 import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Repository;

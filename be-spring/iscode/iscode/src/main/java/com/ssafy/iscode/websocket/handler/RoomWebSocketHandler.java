@@ -2,8 +2,8 @@ package com.ssafy.iscode.websocket.handler;
 
 import com.ssafy.iscode.user.model.dao.UserRepository;
 import com.ssafy.iscode.user.model.dto.User;
-import com.ssafy.iscode.waitingroom.model.dao.StudyRepository;
-import com.ssafy.iscode.waitingroom.model.dto.StudyDto;
+import com.ssafy.iscode.study.model.dao.StudyRepository;
+import com.ssafy.iscode.study.model.dto.StudyDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.TextMessage;

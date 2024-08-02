@@ -1,51 +1,16 @@
 <script setup>
 import ProblemItem from "@/components/problem/ProblemItem.vue";
-import { ref, onMounted } from "vue";
-import problem from "@/api/problem";
+import { onMounted } from "vue";
+import { getProblems } from "@/api/problem";
+import { problemStore } from "@/stores/problem";
+import { extractProblems } from "@/utils/parse-problem";
 
-
-const problemList = ref([]);
-
-function extractProblems(text) {
-  const problems = [];
-  const pattern = /(.*?)\}\}/gs;
-  const matches = [...text.matchAll(pattern)];
-
-  matches.map(match => {
-    const noMatch = /no=(.*?),/s.exec(match[0]);
-    const algoTypeMatch = /algoType=\[(.*?)\],/s.exec(match[0]);
-    const titleMatch = /title='(.*?)',/s.exec(match[0]);
-    const levelMatch = /level=(.*?),/s.exec(match[0]);
-    const infoMatch = /info='(.*?)',/s.exec(match[0]);
-    const algoPercentMatch = /algoPercent=(.*?),/s.exec(match[0]);
-    const algoInputMatch = /algoInput=\{(.*?)\},/s.exec(match[0]);
-    const algoOutputMatch = /algoOutput=\{(.*?)\}\}/s.exec(match[0]);
-
-    const problem = {
-      no: noMatch ? noMatch[1].trim() : null,
-      algoType: algoTypeMatch ? algoTypeMatch[1].trim() : null,
-      title: titleMatch ? titleMatch[1].trim() : null,
-      level: levelMatch ? parseInt(levelMatch[1].trim()) : null,
-      info: infoMatch ? infoMatch[1].trim() : null,
-      algoPercent: algoPercentMatch ? algoPercentMatch[1].trim() : null,
-      algoInput: algoInputMatch ? algoInputMatch[1].trim() : null,
-      algoOutput: algoOutputMatch ? algoOutputMatch[1].trim() : null
-    };
-
-    problems.push(problem);
-  });
-  return problems;
-}
-
-async function getProblems(id) {
-  const response = await problem.getProblems(id);
-  problemList.value = extractProblems(response.data);
-  return response;
-}
+const store = problemStore();
 
 onMounted(() => {
   getProblems().then((response) => {
     console.log(response);
+    store.setProblems(response.data);
   }).catch((error) => {
     console.log(error);
   });
@@ -65,7 +30,7 @@ onMounted(() => {
         </tr>
       </thead>
       <tbody>
-        <ProblemItem v-for="problem in problemList" :key="problem.id" :problem-data="problem" />
+        <ProblemItem v-for="problem in store.problems" :key="problem.id" :problem-data="problem" />
       </tbody>
     </table>
   </div>

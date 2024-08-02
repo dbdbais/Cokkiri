@@ -33,6 +33,9 @@ public class StudyDto {
     @Column(name = "study_rule", length = 900)
     private String rule;
 
+    @Column(name = "study_max")
+    private int maxNum;
+
     @Column(name = "study_start")
     @CreationTimestamp
     private Date start;

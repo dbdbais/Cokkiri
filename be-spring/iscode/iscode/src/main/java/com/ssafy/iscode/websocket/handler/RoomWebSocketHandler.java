@@ -2,6 +2,8 @@ package com.ssafy.iscode.websocket.handler;
 
 import com.ssafy.iscode.user.model.dao.UserRepository;
 import com.ssafy.iscode.user.model.dto.User;
+import com.ssafy.iscode.waitingroom.model.dao.StudyRepository;
+import com.ssafy.iscode.waitingroom.model.dto.StudyDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.TextMessage;
@@ -17,6 +19,9 @@ public class RoomWebSocketHandler extends TextWebSocketHandler {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private StudyRepository studyRepository;
 
     // connected
     // room id, user name manage
@@ -46,6 +51,17 @@ public class RoomWebSocketHandler extends TextWebSocketHandler {
         // press start button
         if ("|@|".equals(m)) {
             String event = ".|!|.|!|START|!|.";
+
+            // prevent search
+            try {
+                StudyDto study = studyRepository.findById(Long.parseLong(roomId));
+                study.setIsOpen(false);
+                studyRepository.save(study);
+            } catch (Exception e) {
+                e.printStackTrace();
+                throw new RuntimeException("Update study failed");
+            }
+
             sendEvent(roomId, event);
         } else if ("|#|".equals(m)) { // press ready button
             String event = ".|!|.|!|.READY|!|" + userName;

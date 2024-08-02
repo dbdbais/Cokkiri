@@ -1,6 +1,6 @@
 package com.ssafy.iscode.user.service;
 
-import com.ssafy.iscode.reguler.model.dto.RegularUser;
+import com.ssafy.iscode.regular.model.dto.RegularUser;
 import com.ssafy.iscode.user.model.dao.UserRepository;
 import com.ssafy.iscode.user.model.dto.Status;
 import com.ssafy.iscode.user.model.dto.User;

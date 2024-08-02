@@ -1,10 +1,28 @@
-<script setup></script>
+<script setup>
+import { ref } from "vue";
+import { getProblems } from "@/api/problem";
+import { problemStore } from "@/stores/problem";
+import { extractProblems } from "@/utils/parse-problem";
+
+const store = problemStore();
+
+const keyword = ref("");
+
+const search = () => {
+  getProblems(parseInt(keyword.value)).then((response) => {
+    console.log(response);
+    store.setProblems(response.data);
+  }).catch((error) => {
+    console.log(error);
+  });
+};
+</script>
 
 <template>
   <div class="search-con box-row">
     <div class="input-con box-row">
       <span class="title">문제</span>
-      <input type="text" />
+      <input type="text" v-model="keyword" />
     </div>
     <div class="filter-con box-row">
       <span class="title">필터</span>
@@ -19,7 +37,7 @@
       <input id="diamond" type="radio" name="tier" />
       <label class="title" for="diamond">다이아몬드</label>
     </div>
-    <span class="btn-search title">검색</span>
+    <span class="btn-search title" @click="search">검색</span>
   </div>
 </template>
 
@@ -38,8 +56,8 @@
 
 /* Font */
 
-.input-con > span,
-.filter-con > span {
+.input-con>span,
+.filter-con>span {
   font-size: 35px;
 }
 

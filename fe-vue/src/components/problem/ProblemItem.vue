@@ -1,4 +1,9 @@
 <script setup>
+import { useModal } from "@/composables/useModal";
+import ProblemDetail from "@/components/problem/modal/ProblemDetail.vue";
+
+const { isModalOpen, openModal, closeModal } = useModal();
+
 const props = defineProps({
   problemData: Object,
 });
@@ -30,7 +35,7 @@ const tierImg = () => {
 <template>
   <tr class="bold-text">
     <td>{{ problemData.no }}</td>
-    <td>
+    <td @click="openModal">
       {{ problemData.title }}
     </td>
     <td>
@@ -42,6 +47,7 @@ const tierImg = () => {
     <td v-else-if="problemData.review.try >= 3">리뷰보기</td>
     <td v-else>{{ problemData.review.try }} / 3 회 도전</td> -->
   </tr>
+  <ProblemDetail v-if="isModalOpen" @close="closeModal" :problemData="problemData" />
 </template>
 
 <style scoped>

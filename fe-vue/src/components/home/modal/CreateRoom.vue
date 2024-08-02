@@ -1,8 +1,12 @@
 <script setup>
 import { ref } from 'vue';
-
+import { createWaitingRoom } from '@/api/waitingroom';
 const people = ref(1);
 const placeholder = ref('규칙을 입력해주세요.');
+const roomName = ref("")
+const isGame = ref(false)
+const isOpen = ref(true)
+const roomComment = ref("")
 const ruleValue = ref('');
 const ruleList = ref([
     "상호간에 예의를 지킵시다"
@@ -44,6 +48,27 @@ const deleterule = (index) => {
     ruleList.value.splice(index, 1);
 };
 
+const createRoom = function () {
+    const success = (res) => {
+        console.log(res.data)
+    }
+    const fail = (err) => {
+        console.log(err)
+    }
+    
+    const roomData = {
+        roomName: roomName.value,
+        userName: 'user_1231',
+        roomComment: roomComment.value,
+        rules: ruleList.value,
+        maxNum: people.value,
+        isGame: isGame.value,
+        isOpen: isOpen.value
+    }
+    console.log(roomData)
+    createWaitingRoom(roomData, success, fail)
+}
+
 </script>
 
 <template>
@@ -52,22 +77,25 @@ const deleterule = (index) => {
             <div class="left-con box-col">
                 <div class="title-con box-row">
                     <span class="title main-title">제목</span>
-                    <input type="text" />
+                    <input type="text" v-model="roomName"/>
                 </div>
                 <div class="description-con box-col">
                     <span class="title main-title">소개 문구</span>
-                    <textarea></textarea>
+                    <textarea v-model="roomComment"></textarea>
                 </div>
                 <div class="type-con box-row">
                     <div class="box-col type">
                         <span class="title main-title">유형
                         </span>
-                        <div class="box-row">
+                        <div class="box-row radio-box">
                             <input id="study" type="radio" name="type" class="study-radio" /><label for="study"
-                                class="normal-text">공부</label>
+                                class="normal-text" @click="() => isGame = false">공부</label>
                             <input id="game" type="radio" name="type" class="game-radio" /><label for="game"
-                                class="normal-text">게임</label>
+                                class="normal-text" @click="() => isGame = true">게임</label>
+                            <span>공개</span>
+                            <input type="checkbox" class="open" v-model="isOpen">
                         </div>
+                        
                     </div>
                     <div class="box-row people">
                         <span class="title main-title">인원</span>
@@ -79,7 +107,7 @@ const deleterule = (index) => {
                     </div>
                 </div>
                 <div class="box-main-con box-row create-room">
-                    <span class="title main-title">방 만들기</span>
+                    <span class="title main-title" @click="createRoom">방 만들기</span>
                 </div>
             </div>
             <div class="right-con box-col">
@@ -293,7 +321,6 @@ const deleterule = (index) => {
     font-size: 30px;
     color: #3a5eff;
 }
-
 /* rule Container */
 .rule-list-con {
     margin-top: 15px;

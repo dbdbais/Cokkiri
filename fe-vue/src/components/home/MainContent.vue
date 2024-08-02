@@ -32,26 +32,26 @@ import Pagination from "@/components/common/Pagination.vue";
 // import roomList from "@/assets/data/roomList.json";
 import roomList from "@/assets/data/roomListAxios.json";
 
-// onMounted(() => {
-//   const success = (res) => {
-//     console.log(res.data.waitingRoomList);
-//     rooms.value = res.data.waitingRoomList;
-//   };
-//   const fail = (err) => {
-//     console.log(err);
-//   };
+onMounted(() => {
+  const success = (res) => {
+    console.log(res.data);
+    rooms.value = res.data;
+  };
+  const fail = (err) => {
+    console.log(err);
+  };
 
-//   getWaitingRoomList(success, fail);
-// });
+  getWaitingRoomList(success, fail);
+});
 
 const router = useRouter();
 const user = ref("어지민");
 // 더미 데이터
 // const rooms = ref(roomList.roomList.room);
 // 더미 데이터 (Axios 용)
-const rooms = ref(roomList.waitingRoomList);
+// const rooms = ref(roomList.waitingRoomList);
 // Axios 용
-// const rooms = ref("");
+const rooms = ref("");
 
 rooms: [
   { id: 1, name: "알고리즘 고수들방", members: 116 },

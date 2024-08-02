@@ -9,7 +9,7 @@ export const getWaitingRoom = (roomId, success, fail) => {
 
 export const getWaitingRoomList = (success, fail) => {
   console.log("get Study Room List");
-  axios.get("/waitingroom").then(success).catch(fail);
+  axios.get("/waitingroom?").then(success).catch(fail);
 };
 
 export const goWaitingRoom = (user, success, fail) => {
@@ -19,3 +19,12 @@ export const goWaitingRoom = (user, success, fail) => {
     .then(success)
     .catch(fail);
 };
+
+
+export const createWaitingRoom = (roomData, success, fail) => {
+  console.log("create Waiting Room")
+  axios
+    .post("/waitingroom/create-room", JSON.stringify(roomData))
+    .then(success)
+    .catch(fail);
+}

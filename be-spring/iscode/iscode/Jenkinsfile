@@ -35,8 +35,10 @@ pipeline {
         }
         stage('Build Docker Image') {
             steps {
-                script {
-                    docker.build("${DOCKER_IMAGE}")
+                dir('be-spring/iscode/iscode'){
+                    script {
+                        docker.build("${DOCKER_IMAGE}")
+                    }
                 }
             }
         }

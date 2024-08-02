@@ -1,0 +1,36 @@
+services:
+  db:
+    image: mysql:8
+    environment:
+      MYSQL_ROOT_PASSWORD: took5678%^&*
+      MYSQL_DATABASE: took
+      MYSQL_USER: turtle
+      MYSQL_PASSWORD: took5678%^&*
+    ports:
+      - "3307:3306"
+    networks:
+      - took_network
+      -
+  springboot:
+    build:
+      context: ./backend
+    expose:
+      - 8080
+    depends_on:
+      - db
+      - redis
+    networks:
+      - took_network
+    services:
+      web:
+        build:
+          context: ./took_web
+        expose:
+          - 5173
+        restart: always
+        networks:
+          - took_network
+
+networks:
+  took_network:
+    external: true

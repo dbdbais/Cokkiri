@@ -2,13 +2,13 @@
   <div class="main-content box-main-con">
     <div class="box-row">
       <div class="filter-btn box-main-noti">
-        <span class="title filter-title">전체</span>
+        전체
       </div>
       <div class="filter-btn box-main-noti">
-        <span class="title filter-title">공부방</span>
+        공부방
       </div>
       <div class="filter-btn box-main-noti">
-        <span class="title filter-title">게임방</span>
+        게임방
       </div>
     </div>
     <div id="room-container" class="rooms">
@@ -71,14 +71,17 @@ const goRoom = function (id) {
 .filter-btn {
   padding: 10px 30px;
   margin-right: 15px;
-}
-
-.filter-title {
-  font-size: 20px;
+  font-size: 30px;
   color: #5bb5d9;
-  -webkit-text-stroke: #f6f6f6;
+  -webkit-text-stroke: #089eda;
+  
 }
 
+.filter-btn:hover {
+  color: #eaf3f7; 
+  border-color: #eaf3f7;
+  background-color: #5bb5d9;
+}
 #room-container {
   display: grid;
   grid-template-columns: 1fr 1fr;

@@ -9,7 +9,7 @@
         <div id="header-second" class="box-row">
             <div id="search-container" class="box-row box-main-con">
                 <span class="title main-title">검색</span>
-                <input type="text" />
+                <input type="text" class="nomal-text"/>
                 <button id="search-btn">🔍</button>
             </div>
             <div class="notifications box-row">
@@ -49,6 +49,7 @@ const {
 </script>
 
 <style scoped>
+
 /* header 첫 번째 영역 */
 #header {
     justify-content: space-between;
@@ -59,7 +60,10 @@ const {
     padding: 8px 20px;
     border-radius: 20px;
 }
-
+.nav-btn:hover {
+    background-color: #3B72FF;
+    border-color: #C191FF;
+}
 #quick-start {
     margin-right: 20px;
 }
@@ -94,29 +98,37 @@ const {
             transparent 4px);
 }
 
+.header-router:hover {
+    color: #85aaf4;
+    /* cursor: url(@/assets/pointer.svg) 2 2, pointer; */
+}
+
 /* header 두 번째 영역 */
 
 #search-container {
     position: relative;
     align-items: center;
     width: 500px;
-    height: 52px;
+    height: 72px;
     padding: 6px 20px;
     padding-right: 0;
+    margin-top: 30px;
     margin-right: 20px;
 }
 
 #search-container input {
-    width: 400px;
-    height: 28px;
+    width: 380px;
+    height: 40px;
     margin-right: 5px;
+    padding-left: 10px;
     border: 1px solid #ffffff;
     border-radius: 4px;
+    font-size: 30px;
 }
 
 #search-container span {
-    font-size: 26px;
-    margin-right: 10px;
+    font-size: 32px;
+    margin-right: 20px;
 }
 
 #search-btn {
@@ -135,12 +147,17 @@ const {
     justify-content: center;
     align-items: center;
     width: 150px;
+    height: 70px;
+    margin-top: 30px;
     border-radius: 25px;
     color: #5BB5D9;
     font-size: 20px;
     font-family: yg-jalnan;
 }
-
+.noti-btn:hover {
+    background-color: #61adcc;
+    color: #f6f6f6;
+}
 #mission-icon {
     width: 30px;
     height: 30px;

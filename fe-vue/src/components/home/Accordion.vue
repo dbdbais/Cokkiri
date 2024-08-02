@@ -5,7 +5,8 @@
                 <span class="title header-title">{{ item.title }}</span>
             </div>
             <div v-if="isOpen(index)" class="accordion-content">
-                <div v-for="(member, index2) in item.member" :key="index2" class="box-main-exp box-content">
+                <div v-for="(member, index2) in item.member" :key="index2" class="box-main-exp box-content animate__animated animate__bounce"
+                :class="isOpen(index)? 'animate__fadeInDown':'slideUp'">
                     <img class="friend-profile" src="@/assets/elephant-profile2.svg">
                     <slot :name="`content-${index2}`" class="title-member">
                         <span class="title friend-name">{{ member.name }}</span>
@@ -76,7 +77,7 @@ const { isModalOpen, selectedMember, openModal, closeModal } = useModal();
 
 .header-title {
     margin-left: 5px;
-    font-size: 18px;
+    font-size: 25px;
 }
 
 .box-main-exp {
@@ -99,4 +100,22 @@ const { isModalOpen, selectedMember, openModal, closeModal } = useModal();
     width: 40px;
     right: 15px;
 }
+
+.open {
+  animation-name: open;
+  animation-duration: 0.8s;
+  animation-timing-function: ease;
+
+  visibility: visible !important;
+}
+
+@keyframes open {
+  0% {
+    transform: translateY(0%);
+  }
+  100% {
+    transform: translateY(100%);
+  }
+}
+
 </style>

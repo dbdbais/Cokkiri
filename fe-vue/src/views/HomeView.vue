@@ -36,12 +36,13 @@ import '@/assets/css/home.css';
 }
 
 #profile-btn {
-  margin-top: 60px;
+  margin-top: 150px;
+  font-size: 40px;
 }
 
 #profile {
   width: 340px;
-  height: 130px;
+  height: 150px;
   margin-top: 20px;
   padding: 15px;
 }
@@ -69,7 +70,7 @@ import '@/assets/css/home.css';
 #main-content {
   width: 1400px;
   height: 800px;
-  margin-top: 20px;
+  margin-top: 60px;
   padding: 15px 50px;
 }
 </style>

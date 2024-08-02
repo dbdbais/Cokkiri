@@ -32,5 +32,12 @@ pipeline {
                 }
             }
         }
+        stage('Build Docker Image') {
+            steps {
+                script {
+                    docker.build("$be-test")
+                }
+            }
+        }
     }
 }

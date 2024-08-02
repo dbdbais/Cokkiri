@@ -1,4 +1,6 @@
-import request from "@/utils/request";
+import { localAxios } from "@/utils/request";
+
+const axios = localAxios();
 
 function getProblems(id) {
   const config = {
@@ -10,7 +12,7 @@ function getProblems(id) {
     config.params = { id };
   }
 
-  return request(config);
+  return axios(config);
 }
 
 export default {

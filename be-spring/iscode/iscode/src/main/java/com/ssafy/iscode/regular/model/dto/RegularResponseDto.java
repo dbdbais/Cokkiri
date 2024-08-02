@@ -22,4 +22,5 @@ public class RegularResponseDto {
     private Boolean isRecruitment;
     private List<String> times;
     private List<String> users;
+    private List<String> tiers;
 }

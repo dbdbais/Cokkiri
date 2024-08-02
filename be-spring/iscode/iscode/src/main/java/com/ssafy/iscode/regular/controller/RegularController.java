@@ -143,8 +143,8 @@ public class RegularController {
     public ResponseEntity<List<RegularResponseDto>> getRegulars(@RequestParam Map<String, String> params) {
         String regularName = params.get("regularName");
         String weekday = params.get("weekday");
-        Integer start = Integer.parseInt(params.get("start"));
-        Integer end = Integer.parseInt(params.get("end"));
+        Integer start = params.get("start") == null ? null : Integer.parseInt(params.get("start"));
+        Integer end = params.get("end") == null ? null : Integer.parseInt(params.get("end"));
         int page = params.get("page") == null ? 1 : Integer.parseInt(params.get("page"));
 
         return new ResponseEntity<>(regularService.getRegulars(regularName, weekday, start, end, page), HttpStatus.OK);

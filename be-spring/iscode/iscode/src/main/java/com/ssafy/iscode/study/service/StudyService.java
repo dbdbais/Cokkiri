@@ -1,13 +1,13 @@
-package com.ssafy.iscode.waitingroom.service;
+package com.ssafy.iscode.study.service;
 
 import com.ssafy.iscode.user.model.dao.UserRepository;
 import com.ssafy.iscode.user.model.dto.User;
-import com.ssafy.iscode.waitingroom.model.dao.StudyRepository;
-import com.ssafy.iscode.waitingroom.model.dao.StudyUserRepository;
-import com.ssafy.iscode.waitingroom.model.dto.StudyDto;
-import com.ssafy.iscode.waitingroom.model.dto.StudyRequestDto;
-import com.ssafy.iscode.waitingroom.model.dto.StudyResponseDto;
-import com.ssafy.iscode.waitingroom.model.dto.StudyUser;
+import com.ssafy.iscode.study.model.dao.StudyRepository;
+import com.ssafy.iscode.study.model.dao.StudyUserRepository;
+import com.ssafy.iscode.study.model.dto.StudyDto;
+import com.ssafy.iscode.study.model.dto.StudyRequestDto;
+import com.ssafy.iscode.study.model.dto.StudyResponseDto;
+import com.ssafy.iscode.study.model.dto.StudyUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -234,5 +234,9 @@ public class StudyService {
             e.printStackTrace();
             return 0;
         }
+    }
+
+    public StudyDto getStudyDto(Long sessionId) {
+        return studyRepository.findById(sessionId);
     }
 }

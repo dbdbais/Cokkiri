@@ -1,6 +1,5 @@
-package com.ssafy.iscode.waitingroom.model.dto;
+package com.ssafy.iscode.study.model.dto;
 
-import com.ssafy.iscode.message.model.dto.MessageRoomDto;
 import com.ssafy.iscode.user.model.dto.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

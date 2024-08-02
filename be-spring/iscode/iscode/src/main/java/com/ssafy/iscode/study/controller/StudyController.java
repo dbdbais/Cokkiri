@@ -1,8 +1,8 @@
-package com.ssafy.iscode.waitingroom.controller;
+package com.ssafy.iscode.study.controller;
 
-import com.ssafy.iscode.waitingroom.model.dto.StudyRequestDto;
-import com.ssafy.iscode.waitingroom.model.dto.StudyResponseDto;
-import com.ssafy.iscode.waitingroom.service.StudyService;
+import com.ssafy.iscode.study.model.dto.StudyRequestDto;
+import com.ssafy.iscode.study.model.dto.StudyResponseDto;
+import com.ssafy.iscode.study.service.StudyService;
 import com.ssafy.iscode.websocket.handler.LobbyWebSocketHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

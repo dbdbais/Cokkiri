@@ -1,6 +1,5 @@
-package com.ssafy.iscode.waitingroom.model.dto;
+package com.ssafy.iscode.study.model.dto;
 
-import com.ssafy.iscode.user.model.dto.User;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

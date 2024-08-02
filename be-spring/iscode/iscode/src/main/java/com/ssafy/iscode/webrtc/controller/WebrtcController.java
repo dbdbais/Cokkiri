@@ -1,7 +1,7 @@
 package com.ssafy.iscode.webrtc.controller;
 
 import com.google.gson.JsonObject;
-import com.ssafy.iscode.waitingroom.service.StudyService;
+import com.ssafy.iscode.study.service.StudyService;
 import io.openvidu.java.client.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;

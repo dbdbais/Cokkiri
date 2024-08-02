@@ -1,4 +1,4 @@
-package com.ssafy.iscode.waitingroom.model.dto;
+package com.ssafy.iscode.study.model.dto;
 
 import lombok.*;
 

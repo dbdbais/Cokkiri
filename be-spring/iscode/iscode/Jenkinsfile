@@ -2,7 +2,8 @@ pipeline {
     agent any
 
     environment {
-        DOCKER_IMAGE = 'my-app:latest'
+//         DOCKER_IMAGE = 'my-app:latest'
+        DOCKER_IMAGE = 'Ohuggy/BE_TEST'
     }
 
     stages {
@@ -35,7 +36,7 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 script {
-                    docker.build("${BE-TEST}")
+                    docker.build("${DOCKER_IMAGE}")
                 }
             }
         }

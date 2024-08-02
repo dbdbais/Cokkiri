@@ -1,4 +1,4 @@
-package com.ssafy.iscode.reguler.model.dto;
+package com.ssafy.iscode.regular.model.dto;
 
 import com.ssafy.iscode.user.model.dto.User;
 import jakarta.persistence.*;
@@ -30,7 +30,7 @@ public class RegularDto {
     private String comment;
 
     @Column(name = "regular_rule")
-    private String rules;
+    private String rule;
 
     @Column(name = "regular_lang")
     private String language;

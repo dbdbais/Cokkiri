@@ -31,6 +31,7 @@ const selected = function (timeData) {
 
   // 만약 종료시간이 시작시간보다 이르다면 다시 고르게 해야함
   if (timeData.start < timeData.end) {
+    
     selectedTime.value.push(timeData);
   } else {
     alert("종료시간이 시작시간보다 더 길게 해주세요!");
@@ -59,16 +60,16 @@ const studyCreate = function () {
   const fail = (err) => {
     console.log(err);
   };
-  // studyCreateDate.value = {
-  //   name: studyName.value,
-  //   member: studyMember.value,
-  //   times: selectedTime,
-  //   intro: studyIntro.value,
-  // };
+
+  const times = selectedTime.value.map((time) => { 
+    return `${time.week}|${time.start[0]+time.start[1]+time.start[3]+time.start[4]}|${time.end[0]+time.end[1]+time.end[3]+time.end[4]}`
+  })
+  // console.log(times)
+
   const studyData = {
     regularName: studyName.value,
     maxNum: studyMember.value,
-    times: selectedTime,
+    times: times,
     userName: "김종덕",
     regularComment: studyIntro.value,
   };

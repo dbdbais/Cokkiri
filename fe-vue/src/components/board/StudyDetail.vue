@@ -38,20 +38,20 @@ const sendJoin = function (sessionId) {
       @click="closeBtn"
     />
     <div class="detail-content">
-      <RecruitmentBadge class="badge" :group-badge="detailData.isRecruiment" />
+      <RecruitmentBadge class="badge" :group-badge="detailData.isRecruitment" />
       <div class="title sub-title group-name">{{ detailData.regularName }}</div>
       <div class="top">
         <div class="box-psb text-p md lang">
-          {{ detailData.language }}
+          {{ detailData.language? detailData.language : "상관없음"}}
         </div>
         <div class="box-psb text-p md member">
           <div
-            v-for="user in detailData.users"
-            :key="user.index"
+            v-for="(cnt, tier) in detailData.tiers"
+            :key="tier.index"
             class="rank md"
           >
-            <img :src="user.img" alt="등급" />
-            <span style="margin-left: 8px">{{ user.cnt }}명</span>
+            <img :src="rankImgUrl+tier+'.svg'" alt="등급" />
+            <span style="margin-left: 8px">{{ cnt }}명</span>
           </div>
         </div>
       </div>

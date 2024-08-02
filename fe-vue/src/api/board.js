@@ -4,7 +4,7 @@ const axios = localAxios();
 
 export const getStudyList = (success, fail) => {
   console.log("get Study List");
-  axios.get("/regular").then(success).catch(fail);
+  axios.get("/regular?").then(success).catch(fail);
 };
 export const getStudyDetail = (sessionId, success, fail) => {
   console.log("get Study Detail");

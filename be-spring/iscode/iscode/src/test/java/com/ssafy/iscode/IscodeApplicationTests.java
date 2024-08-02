@@ -8,6 +8,7 @@ class IscodeApplicationTests {
 
 	@Test
 	void contextLoads() {
+		System.out.println("JenkinsTest");
 	}
 
 }

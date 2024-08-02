@@ -1,7 +1,7 @@
 package com.ssafy.iscode.user.model.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.ssafy.iscode.reguler.model.dto.RegularUser;
+import com.ssafy.iscode.regular.model.dto.RegularUser;
 import jakarta.persistence.*;
 
 import java.util.List;
@@ -29,6 +29,7 @@ public class User {
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     private List<RegularUser> regulars;
 
+    /*
     @JsonIgnore
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<UserFriend> friends;
@@ -37,17 +38,18 @@ public class User {
     @OneToMany(mappedBy = "friendUser", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<UserFriend> friendOf;
 
+
+     */
     public User() {
     }
 
 
-    public User(String id, String nickname, String password, Tier tier, double percent, List<UserFriend> friends) {
+    public User(String id, String nickname, String password, Tier tier, double percent) {
         this.id = id;
         this.nickname = nickname;
         this.password = password;
         this.tier = tier;
         this.percent = percent;
-        this.friends = friends;
     }
 
     public String getId() {
@@ -98,13 +100,13 @@ public class User {
         this.regulars = regulars;
     }
 
-    public List<UserFriend> getFriends() {
-        return friends;
-    }
-
-    public void setFriends(List<UserFriend> friends) {
-        this.friends = friends;
-    }
+//    public List<UserFriend> getFriends() {
+//        return friends;
+//    }
+//
+//    public void setFriends(List<UserFriend> friends) {
+//        this.friends = friends;
+//    }
 
     @Override
     public boolean equals(Object o) {

@@ -34,13 +34,12 @@ pipeline {
             }
         }
         stage('Build Docker Image') {
-            steps {
-                dir('be-spring/iscode/iscode'){
-                    script {
-                        docker.build("${DOCKER_IMAGE}")
+                    steps {
+                        script {
+                            // Docker 이미지 빌드
+                            sh 'docker build -t ${DOCKER_IMAGE} .'
+                        }
                     }
-                }
-            }
         }
     }
 }

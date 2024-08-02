@@ -188,15 +188,12 @@ public class RegularService {
                 throw new RuntimeException("Regular not found");
             }
 
-            List<RegularUser> users = regularDto.getUsers();
-            for(RegularUser regularUser: users) {
+            for(RegularUser regularUser: regularDto.getUsers()) {
                 if(regularUser.getUser().equals(user)) {
-                    regularUserRepository.remove(regularUser.getId());
-
-                    if(users.isEmpty()) {
+                    if(regularDto.getUsers().size() == 1) {
                         closeRegular(regularRequestDto.getSessionId());
                     } else if(regularDto.getHostUser().equals(user)) {
-                        regularDto.setHostUser(users.get(0).getUser());
+                        regularDto.setHostUser(regularDto.getUsers().get(1).getUser());
 
                         try {
                             regularRepository.save(regularDto);
@@ -205,6 +202,8 @@ public class RegularService {
                             return 0;
                         }
                     }
+                    regularUserRepository.remove(regularUser.getId());
+
                     return 1;
                 }
             }
@@ -241,17 +240,22 @@ public class RegularService {
                 regularDto.getHostUser().getNickname(),
                 (regularDto.getEnd()==null && regularDto.getMaxNum()>count),
                 regularDto.getTimes().stream()
+                        .sorted()
                         .map(RegularTimeDto::toString)
                         .collect(Collectors.toList()),
+                null,
                 null
         );
 
         List<String> users = new ArrayList<>();
+        List<String> tiers = new ArrayList<>();
 
         for(RegularUser user: regularDto.getUsers()) {
             users.add(user.getUser().getNickname());
+            tiers.add(user.getUser().getTier().toString());
         }
         regularResponseDto.setUsers(users);
+        regularResponseDto.setTiers(tiers);
 
         return regularResponseDto;
     }
@@ -277,9 +281,9 @@ public class RegularService {
                     }
                 } else {
                     if(regularName == null) {
-                        regulars = regularRepository.findByNameWeekday(regularName, weekdayNum, offset);
-                    } else {
                         regulars = regularRepository.findByWeekday(weekdayNum, offset);
+                    } else {
+                        regulars = regularRepository.findByNameWeekday(regularName, weekdayNum, offset);
                     }
                 }
             } else {
@@ -335,10 +339,12 @@ public class RegularService {
 
         for(RegularDto regular: regulars) {
             List<String> users = new ArrayList<>();
+            List<String> tiers = new ArrayList<>();
 
             for(RegularUser regularUser: regular.getUsers()) {
                 if(regularUser.getIsAccept()) {
                     users.add(regularUser.getUser().getNickname());
+                    tiers.add(regularUser.getUser().getTier().toString());
                 }
             }
 
@@ -352,9 +358,11 @@ public class RegularService {
                     regular.getHostUser().getNickname(),
                     (regular.getEnd()==null && regular.getMaxNum()>users.size()),
                     regular.getTimes().stream()
+                            .sorted()
                             .map(RegularTimeDto::toString)
                             .collect(Collectors.toList()),
-                    users
+                    users,
+                    tiers
             );
 
             list.add(rr);

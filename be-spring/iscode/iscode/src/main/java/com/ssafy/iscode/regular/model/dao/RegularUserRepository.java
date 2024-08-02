@@ -2,9 +2,11 @@ package com.ssafy.iscode.regular.model.dao;
 
 import com.ssafy.iscode.regular.model.dto.RegularUser;
 import jakarta.persistence.EntityManager;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Repository;
 
 @Repository
+@Transactional
 public class RegularUserRepository {
 
     private final EntityManager em;

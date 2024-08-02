@@ -29,20 +29,8 @@ public class User {
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     private List<RegularUser> regulars;
 
-    /*
-    @JsonIgnore
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<UserFriend> friends;
-
-    @JsonIgnore
-    @OneToMany(mappedBy = "friendUser", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<UserFriend> friendOf;
-
-
-     */
     public User() {
     }
-
 
     public User(String id, String nickname, String password, Tier tier, double percent) {
         this.id = id;
@@ -100,13 +88,6 @@ public class User {
         this.regulars = regulars;
     }
 
-//    public List<UserFriend> getFriends() {
-//        return friends;
-//    }
-//
-//    public void setFriends(List<UserFriend> friends) {
-//        this.friends = friends;
-//    }
 
     @Override
     public boolean equals(Object o) {

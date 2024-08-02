@@ -45,7 +45,7 @@ public class UserRestController {
                               @RequestParam Status status){
         return userService.insertFriend(userId,friendUserId,status);
     }
-    @GetMapping("/login")
+    @PostMapping("/login")
     public int login(@RequestBody User user){
         return userService.login(user);
     }

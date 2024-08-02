@@ -12,19 +12,14 @@ defineProps({
 <template>
   <div class="study-group">
     <RecruitmentBadge :group-badge="groupData.isRecruitment" />
-    <h3 class="group-name nomal-text">{{ groupData.groupName }}</h3>
-
-    <div class="created nomal-text">
-      {{ groupData.createdAt }}
-    </div>
+    <h3 class="group-name nomal-text">{{ groupData.regularName }}</h3>
 
     <div class="group-intro nomal-text">
-      {{ groupData.intro }}
+      {{ groupData.regularComment }}
     </div>
     <div class="member nomal-text">
-      {{ groupData.currentMember }} / {{ groupData.limitMember }}
+      {{ groupData.users.length }} / {{ groupData.maxNum }}
     </div>
-    <span class="nomal-text intro-plus">...</span>
   </div>
 </template>
 

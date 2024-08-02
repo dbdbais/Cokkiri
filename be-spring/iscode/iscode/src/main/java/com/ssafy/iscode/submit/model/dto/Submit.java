@@ -1,8 +1,8 @@
 package com.ssafy.iscode.submit.model.dto;
 
 import com.ssafy.iscode.problem.model.dto.Problem;
+import com.ssafy.iscode.study.model.dto.StudyDto;
 import com.ssafy.iscode.user.model.dto.User;
-import com.ssafy.iscode.waitingroom.model.dto.StudyDto;
 import jakarta.persistence.*;
 
 @Entity
@@ -101,4 +101,5 @@ public class Submit {
                 ", correct=" + correct +
                 '}';
     }
+
 }

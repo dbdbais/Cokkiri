@@ -18,8 +18,8 @@ const preventCilck = ref("");
 
 const loadingStore = useLodingStore();
 
-onMounted(() => {
-  loadingStore.loading();
+const getRegularList = function () {
+  studyCreate.value = false
   const success = (res) => {
     studyGroup.value = res.data;
     loadingStore.loadingSuccess();
@@ -29,19 +29,31 @@ onMounted(() => {
     console.log(err);
   };
   getStudyList(success, fail);
+}
+
+onMounted(() => {
+  loadingStore.loading();
+  getRegularList()
 });
 
 const goDetail = function (group) {
+  // console.log(group)
   const success = (res) => {
     console.log(res.data);
+    const tiers = { SEED: 0, ORANGE:0, APPLE:0, KOREAMELON:0, DURIAN:0, KIWI:0}
     studyDetail.value = true;
     detailData.value = res.data;
+    detailData.value.tiers.forEach(element => {
+      tiers[element]++
+    });
+    detailData.value.tiers = tiers
+    // console.log(detailData.value)
   };
   const fail = (err) => {
     console.log(err);
   };
 
-  getStudyDetail(group.id, success, fail);
+  getStudyDetail(group.sessionId, success, fail);
 };
 
 const goCreate = function () {
@@ -67,11 +79,8 @@ const closeBtn = function () {
       />
       <StudyCreate
         v-if="studyCreate"
-        @createExit="
-          () => {
-            studyCreate = false;
-          }
-        "
+       
+        @getRegularList="getRegularList"
       />
       <StudySearch />
       <StudyRecruitmentGroup

@@ -3,7 +3,7 @@ import StudyTime from "@/components/board/StudyTime.vue";
 import { createStudy } from "@/api/board";
 import { ref } from "vue";
 
-const emit = defineEmits(["create-exit"]);
+const emit = defineEmits(["get-regular-list"]);
 
 // 영어로 받은 요일을 한글로 바꿔줄 객체
 const weekKorea = {
@@ -53,9 +53,10 @@ const introEnter = function (value) {
   }
 };
 // 스터디 만들기
-const studyCreate = function () {
+const studyCreate =  function () {
   const success = (res) => {
     console.log(res.data);
+    emit("get-regular-list");
   };
   const fail = (err) => {
     console.log(err);
@@ -75,8 +76,6 @@ const studyCreate = function () {
   };
 
   createStudy(studyData, success, fail);
-  emit("create-exit");
-  console.log(studyCreateDate.value);
 };
 </script>
 
@@ -87,7 +86,7 @@ const studyCreate = function () {
       src="@/assets/exit.svg"
       alt="나가기"
       class="exit"
-      @click="emit('create-exit')"
+      @click="emit('get-regular-list')"
     />
     <div class="md-col">
       <div class="create-box">

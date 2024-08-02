@@ -45,12 +45,7 @@ onMounted(() => {
 });
 
 const router = useRouter();
-const user = ref("어지민");
-// 더미 데이터
-// const rooms = ref(roomList.roomList.room);
-// 더미 데이터 (Axios 용)
-// const rooms = ref(roomList.waitingRoomList);
-// Axios 용
+const user = ref("김종덕");
 const rooms = ref("");
 
 rooms: [
@@ -59,19 +54,16 @@ rooms: [
   // Add more rooms here
 ];
 
-// const goRoom = function (id) {
-//   const success = (res) => {
-//     console.log(res.data);
-//     router.push({ name: "waitingRoom", params: { roomId: id } });
-//   };
-//   const fail = (err) => {
-//     console.log(err);
-//   };
-//   goWaitingRoom({ sessionId: id, userName: user.value }, success, fail);
-// };
-
 const goRoom = function (id) {
-  router.push({ name: "waitingRoom", params: { roomId: id } });
+  console.log(id)
+  const success = (res) => {
+    console.log(res.data);
+    router.push({ name: "waitingRoom", params: { roomId: id } });
+  };
+  const fail = (err) => {
+    console.log(err);
+  };
+  goWaitingRoom({ sessionId: id, userName: user.value }, success, fail);
 };
 </script>
 

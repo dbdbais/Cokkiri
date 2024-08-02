@@ -4,5 +4,5 @@ const axios = localAxios();
 
 export const getUser = (nickname, success, fail) => {
   console.log("getUser");
-  axios.get(`/user/${nickname}`).then(success).catch(fail);
+  axios.get(`/userapi/1`).then(success).catch(fail);
 };

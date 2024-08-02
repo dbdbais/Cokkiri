@@ -27,7 +27,7 @@ const animamteSpeed = [
         {{ user.nickname }}
       </div>
       <img
-        :src="imgUrl + user.rank + '.svg'"
+        :src="imgUrl + user.tier + '.svg'"
         alt="티어"
         class="rank animate__animated animate__bounce animate__infinite"
         :class="[

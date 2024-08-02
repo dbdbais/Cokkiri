@@ -15,7 +15,7 @@ const router = useRouter();
 const route = useRoute();
 const roomData = ref([]);
 const roomUsers = ref([]);
-
+// const ws = new WebSocket(`ws://localhost:8080/chat/${route.params.roomId}/user_1231`)
 onMounted(async () => {
   loadingStore.loading();
   setTimeout(() => {
@@ -28,9 +28,11 @@ onMounted(async () => {
   }, 1000);
   const route = useRoute();
   const success = (res) => {
+    // console.log(res.data)
     roomData.value = res.data;
   };
   const getUserData = (res) => {
+    // console.log(res.data)
     roomUsers.value.push(res.data);
     // console.log(roomUsers.value);
   };
@@ -40,16 +42,8 @@ onMounted(async () => {
   };
 
   getWaitingRoom(route.params.roomId, success, fail);
-  getUser();
+  // getUser();
 });
-
-const roomName = ref(null);
-const hostName = ref(null);
-const isGame = ref(null);
-const isOpen = ref(null);
-const rules = ref(null);
-const users = ref(null);
-const roomComent = ref(null);
 
 const goMeetingRoom = function () {
   router.push({ name: "meeting", params: { roomId: route.params.roomId } });

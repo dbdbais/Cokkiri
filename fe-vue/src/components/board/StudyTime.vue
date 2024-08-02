@@ -6,6 +6,11 @@ onMounted(() => {
   startTime.value = "09:00";
   endTime.value = "09:00";
 });
+
+defineProps({
+  timeType: String,
+});
+
 const emit = defineEmits(["selected-time"]);
 const week = ref([
   { id: 1, weekName: "mon", ko: "월" },
@@ -61,7 +66,9 @@ const selected = function () {
           </div>
         </div>
       </div>
-      <button class="time-plus bold-text" @click="selected">시간추가</button>
+      <button class="time-plus bold-text" @click="selected">
+        {{ timeType }}
+      </button>
     </div>
   </div>
 </template>
@@ -117,6 +124,10 @@ input[type="time"] {
 .select input[type="radio"] + label {
   background-color: #fff;
   color: #3b72ff;
+}
+.select input[type="radio"] + label:hover {
+  background-color: #3b72ff;
+  color: #fff;
 }
 .select input[type="radio"]:checked + label {
   background-color: #3b72ff;

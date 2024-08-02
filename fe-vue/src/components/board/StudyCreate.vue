@@ -1,8 +1,9 @@
 <script setup>
-import StudyCreateTime from "@/components/board/StudyCreateTime.vue";
+import StudyTime from "@/components/board/StudyTime.vue";
+import { createStudy } from "@/api/board";
 import { ref } from "vue";
 
-const emit = defineEmits(["create-exit"]);
+const emit = defineEmits(["get-regular-list"]);
 
 // 영어로 받은 요일을 한글로 바꿔줄 객체
 const weekKorea = {
@@ -30,6 +31,7 @@ const selected = function (timeData) {
 
   // 만약 종료시간이 시작시간보다 이르다면 다시 고르게 해야함
   if (timeData.start < timeData.end) {
+    
     selectedTime.value.push(timeData);
   } else {
     alert("종료시간이 시작시간보다 더 길게 해주세요!");
@@ -51,27 +53,40 @@ const introEnter = function (value) {
   }
 };
 // 스터디 만들기
-const studyCreate = function () {
-  studyCreateDate.value = {
-    name: studyName.value,
-    member: studyMember.value,
-    times: selectedTime,
-    intro: studyIntro.value,
+const studyCreate =  function () {
+  const success = (res) => {
+    console.log(res.data);
+    emit("get-regular-list");
+  };
+  const fail = (err) => {
+    console.log(err);
   };
 
-  emit("create-exit");
-  console.log(studyCreateDate.value);
+  const times = selectedTime.value.map((time) => { 
+    return `${time.week}|${time.start[0]+time.start[1]+time.start[3]+time.start[4]}|${time.end[0]+time.end[1]+time.end[3]+time.end[4]}`
+  })
+  // console.log(times)
+
+  const studyData = {
+    regularName: studyName.value,
+    maxNum: studyMember.value,
+    times: times,
+    userName: "김종덕",
+    regularComment: studyIntro.value,
+  };
+
+  createStudy(studyData, success, fail);
 };
 </script>
 
 <template>
-  <div class="board-modal slideExpandUp">
+  <div class="board-modal slideDown">
     <div class="bold-text" style="margin: 10px 0 0 30px">스터디 만들기</div>
     <img
       src="@/assets/exit.svg"
       alt="나가기"
       class="exit"
-      @click="emit('create-exit')"
+      @click="emit('get-regular-list')"
     />
     <div class="md-col">
       <div class="create-box">
@@ -102,7 +117,7 @@ const studyCreate = function () {
         </div>
         <!--스터디 요일 및 시간 선택  -->
         <div class="bold-text study-time">스터디 시간</div>
-        <StudyCreateTime @selectedTime="selected" />
+        <StudyTime @selectedTime="selected" time-type="시간추가" />
         <div class="selected-time md-col">
           <div
             class="time-item bold-text"
@@ -184,7 +199,7 @@ const studyCreate = function () {
   border-color: #ff8888;
   background-color: #ff0000;
   color: white;
-
+  font-size: 15px;
   position: absolute;
   right: 10px;
 }

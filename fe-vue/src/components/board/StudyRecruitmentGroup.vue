@@ -12,25 +12,20 @@ defineProps({
 <template>
   <div class="study-group">
     <RecruitmentBadge :group-badge="groupData.isRecruitment" />
-    <h3 class="group-name nomal-text">{{ groupData.groupName }}</h3>
-
-    <div class="created nomal-text">
-      {{ groupData.createdAt }}
-    </div>
+    <h3 class="group-name nomal-text">{{ groupData.regularName }}</h3>
 
     <div class="group-intro nomal-text">
-      {{ groupData.intro }}
+      {{ groupData.regularComment }}
     </div>
     <div class="member nomal-text">
-      {{ groupData.currentMember }} / {{ groupData.limitMember }}
+      {{ groupData.users.length }} / {{ groupData.maxNum }}
     </div>
-    <span class="nomal-text intro-plus">...</span>
   </div>
 </template>
 
 <style scoped>
 .member {
-  font-size: 25px;
+  font-size: 35px;
   color: #dbe7ff;
 
   position: absolute;
@@ -54,8 +49,8 @@ defineProps({
 /* 전체 */
 .study-group {
   /* 크기, 위치 */
-  width: 880px;
-  height: 100px;
+  width: 1180px;
+  height: 120px;
   margin-top: 20px;
   /* 색깔, 테두리 */
   background-color: #c191ff;
@@ -74,8 +69,8 @@ defineProps({
   background-color: transparent;
   /* 위치 */
   position: absolute;
-  top: 48px;
-  left: 610px;
+  bottom: 1px;
+  left: 590px;
 }
 /* 스터디 소개글 */
 .group-intro {
@@ -86,22 +81,22 @@ defineProps({
   /* 색깔, 폰트 */
   color: #dbe7ff;
   background-color: transparent;
-  font-size: 25px;
+  font-size: 30px;
   /* 위치 */
   position: absolute;
-  top: 50px;
+  bottom: 0px;
   left: 20px;
 }
 .group-name {
   /* 위치 */
   position: absolute;
   top: 2px;
-  left: 100px;
+  left: 130px;
   /* 색깔 */
   color: #dbe7ff;
   background-color: transparent;
 
-  font-size: 25px;
+  font-size: 35px;
 }
 
 /* 광택 효과 */
@@ -112,7 +107,7 @@ defineProps({
   content: "";
   display: block;
   width: 65px;
-  height: 100px;
+  height: 120px;
   transform: skewX(-20deg);
   background-color: #ddc3ff;
 }
@@ -123,7 +118,7 @@ defineProps({
 }
 
 .study-group:hover::before {
-  left: 900px;
+  left: 1250px;
   transition: all 1s ease-in;
 }
 </style>

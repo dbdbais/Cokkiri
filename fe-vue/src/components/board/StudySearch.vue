@@ -1,8 +1,28 @@
-<script setup></script>
+<script setup>
+import StudyTime from "@/components/board/StudyTime.vue";
+import { ref } from "vue";
+
+const studyName = ref("");
+
+const selected = function (timeData) {
+  console.log(studyName.value, timeData);
+};
+</script>
 
 <template>
-  <div class="box-pdb search">
-    <button class="title search-btn">검색</button>
+  <div class="search flex-align">
+    <div class="name-con flex-align">
+      <label for="study-name" class="bold-text">이름</label>
+      <input
+        type="text"
+        id="study-name"
+        class="nomal-text"
+        v-model="studyName"
+      />
+    </div>
+    <div class="time">
+      <StudyTime timeType="검색" @selectedTime="selected" />
+    </div>
   </div>
 </template>
 
@@ -10,23 +30,35 @@
 /* 검색창 */
 .search {
   /* 크기, 위치 */
-  width: 880px;
-  height: 70px;
+  width: 1180px;
+  height: 120px;
   margin-top: 20px;
   position: relative;
-}
-
-.search-btn {
-  padding: 10px 20px;
-  position: absolute;
-  top: 3px;
-  right: 3px;
-
-  font-size: 20px;
-
-  border-width: 5px;
+  background-color: white;
+  border: 5px solid #3b72ff;
   border-radius: 10px;
-  border-color: #8aabff;
-  background-color: #cfdbfb;
+}
+.time {
+  width: 580px;
+  margin-left: 20px;
+}
+.bold-text {
+  font-size: 55px;
+  -webkit-text-stroke: 1.5px #3b72ff;
+}
+.nomal-text {
+  font-size: 40px;
+}
+.name-con {
+  margin: 10px 20px;
+}
+#study-name {
+  width: 400px;
+  height: 80px;
+  margin-left: 20px;
+  padding-left: 10px;
+  border: 3px solid #3b72ff;
+  color: #3b72ff;
+  border-radius: 5px;
 }
 </style>

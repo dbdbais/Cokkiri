@@ -1,8 +1,42 @@
 import { localAxios } from "@/utils/request";
 
 const axios = localAxios();
+const baseURL = "userapi"
 
-export const getUser = (nickname, success, fail) => {
-  console.log("getUser");
-  axios.get(`/user/${nickname}`).then(success).catch(fail);
-};
+export function register(data) {
+  return axios({
+    url: `${baseURL}/register`,
+    method: "post",
+    data
+  });
+}
+
+export function login(data) {
+  return axios({
+    url: `${baseURL}/login`,
+    method: "post",
+    data
+  });
+}
+
+export function getUser(id) {
+  return axios({
+    url: `${baseURL}/${id}`,
+    method: "get"
+  });
+}
+
+export function modifyUser(data) {
+  return axios({
+    url: `${baseURL}`,
+    method: "put",
+    data
+  });
+}
+
+export function deleteUser(id) {
+  return axios({
+    url: `${baseURL}/${id}`,
+    method: "delete"
+  });
+}

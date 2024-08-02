@@ -146,9 +146,7 @@ public class StudyService {
 
         for (StudyUser studyUser: users) {
             if (studyUser.getUser().equals(user)) {
-                studyUserRepository.remove(studyUser.getId());
-
-                if(users.isEmpty()) { // nobody here
+                if(users.size() == 1) { // nobody here
                     closeStudy(studyDto.getId());
                 } else if (studyDto.getHostUser().equals(user)) { // host change
                     User nextHost = users.get(0).getUser();
@@ -161,6 +159,7 @@ public class StudyService {
                         return 0;
                     }
                 }
+                studyUserRepository.remove(studyUser.getId());
                 return 1;
             }
         }

@@ -19,7 +19,7 @@
   box-sizing: border-box;
 }
 .btn {
-  cursor: url(/src/assets/pointer.svg) 2 2, pointer;
+  cursor: url(@/assets/pointer.svg) 2 2, pointer;
 }
 
 body {

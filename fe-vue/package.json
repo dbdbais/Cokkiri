@@ -9,10 +9,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
-<<<<<<< Updated upstream
     "animate.css": "^4.1.1",
-=======
->>>>>>> Stashed changes
     "axios": "^1.7.2",
     "pinia": "^2.1.7",
     "pinia-plugin-persistedstate": "^3.2.1",

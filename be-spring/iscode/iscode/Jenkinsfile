@@ -2,9 +2,8 @@ pipeline {
     agent any
 
     environment {
-//         DOCKER_IMAGE = 'my-app:latest'
         DOCKER_IMAGE = 'ohuggy/be_test'
-        DOCKER_HUB = 'dockerhub'
+        DOCKER_HUB = 'dockerhub' // Jenkins 자격 증명 ID
     }
 
     stages {
@@ -21,12 +20,13 @@ pipeline {
                 dir('be-spring/iscode/iscode') {
                     script {
                         def gradleHome = tool name: 'Cokkiri-gradle', type: 'gradle'
-                            sh 'chmod 777 gradlew'
-                            sh './gradlew bootJar'
+                        sh 'chmod 777 gradlew'
+                        sh './gradlew bootJar'
                     }
                 }
             }
         }
+
         stage('Archive') {
             steps {
                 dir('be-spring/iscode/iscode') {
@@ -34,6 +34,7 @@ pipeline {
                 }
             }
         }
+
         stage('Build Docker Image') {
             steps {
                 script {
@@ -41,16 +42,19 @@ pipeline {
                 }
             }
         }
-        stage('push docker image to docker hub'){
-            steps{
-                script{
-                 docker.withRegistry('https://index.docker.io/v1/', env.DOCKER_HUB) {
-                    // Docker 이미지 빌드
-                     sh 'docker push ${DOCKER_IMAGE}'
+
+        stage('Push Docker Image to Docker Hub') {
+            steps {
+                script {
+                    docker.withRegistry('https://index.docker.io/v1/', env.DOCKER_HUB) {
+                        // Docker 이미지 푸시
+                        sh 'docker push ${DOCKER_IMAGE}'
+                    }
                 }
             }
         }
-       stage('Deploy Docker Container') {
+
+        stage('Deploy Docker Container') {
             steps {
                 script {
                     // 기존 컨테이너가 존재하면 삭제
@@ -61,12 +65,13 @@ pipeline {
                 }
             }
         }
-        post {
-            always {
-                script {
-                    // Cleanup: Docker Hub에서 로그아웃
-                    sh 'docker logout'
-                }
+    }
+
+    post {
+        always {
+            script {
+                // Cleanup: Docker Hub에서 로그아웃
+                sh 'docker logout'
             }
         }
     }

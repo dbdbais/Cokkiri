@@ -61,11 +61,12 @@ pipeline {
                 }
             }
         }
-    post {
-        always {
-            script {
-                // Cleanup: Docker Hub에서 로그아웃
-                sh 'docker logout'
+        post {
+            always {
+                script {
+                    // Cleanup: Docker Hub에서 로그아웃
+                    sh 'docker logout'
+                }
             }
         }
     }

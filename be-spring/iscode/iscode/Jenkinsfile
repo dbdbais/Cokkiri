@@ -3,7 +3,7 @@ pipeline {
 
     environment {
 //         DOCKER_IMAGE = 'my-app:latest'
-        DOCKER_IMAGE = 'Ohuggy/be_test'
+        DOCKER_IMAGE = 'ohuggy/be_test'
     }
 
     stages {

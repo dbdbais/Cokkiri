@@ -1,5 +1,6 @@
 # 베이스 이미지 설정
-FROM openjdk:17-jre-slim
+FROM openjdk:17-jdk-slim
+
 
 # JAR 파일을 컨테이너에 복사
 COPY build/libs/*.jar /app/app.jar

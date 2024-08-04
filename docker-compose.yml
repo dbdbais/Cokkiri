@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   db:
     image: mysql:8.0
@@ -35,6 +33,9 @@ services:
 #      - backend
 #    networks:
 #      - Cokkiri-Network
+
+volumes:
+  mysql_data:
 
 networks:
   Cokkiri-Network:

@@ -4,8 +4,10 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.ssafy.iscode.regular.model.dto.RegularUser;
 import jakarta.persistence.*;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
 @Table(name="user")
@@ -28,6 +30,32 @@ public class User {
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     private List<RegularUser> regulars;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore // Avoid serialization of the full list of friends
+    private Set<UserFriend> friends = new HashSet<>();
+
+    // Getters and setters
+
+    // Add a friend with status
+    public void addFriend(User friend, Status status) {
+        UserFriend userFriend = new UserFriend(this.id, friend.getId(), status);
+        this.friends.add(userFriend);
+        UserFriend reverseRealtion = new UserFriend(friend.getId(),this.id,status);
+        friend.getFriends().add(reverseRealtion);
+    }
+
+    // Remove a friend
+    public void removeFriend(User friend) {
+
+        // Remove the friend relationship from the other user
+        friend.getFriends().removeIf(userFriend -> userFriend.getFriendUserId().equals(this.id));
+
+        // Remove the friend relationship from this user
+        friends.removeIf(userFriend -> userFriend.getFriendUserId().equals(friend.getId()));
+
+
+    }
 
     public User() {
     }
@@ -89,6 +117,14 @@ public class User {
     }
 
 
+    public Set<UserFriend> getFriends() {
+        return friends;
+    }
+
+    public void setFriends(Set<UserFriend> friends) {
+        this.friends = friends;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -100,5 +136,18 @@ public class User {
     @Override
     public int hashCode() {
         return Objects.hash(id, password);
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id='" + id + '\'' +
+                ", nickname='" + nickname + '\'' +
+                ", password='" + password + '\'' +
+                ", tier=" + tier +
+                ", percent=" + percent +
+                ", regulars=" + regulars +
+                ", friends=" + friends +
+                '}';
     }
 }

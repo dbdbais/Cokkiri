@@ -45,6 +45,11 @@ public class UserRestController {
                               @RequestParam Status status){
         return userService.insertFriend(userId,friendUserId,status);
     }
+    @DeleteMapping("/friends")
+    public int insertRelation(@RequestParam String userId,
+                              @RequestParam String friendUserId){
+        return userService.deleteFriend(userId,friendUserId);
+    }
     @PostMapping("/login")
     public int login(@RequestBody User user){
         return userService.login(user);

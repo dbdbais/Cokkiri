@@ -41,6 +41,67 @@ public class UserRepository {
     @Transactional
     public int saveFriend(String userId, String friendUserId, Status status) {
         try {
+            // Find both users
+            User user = findById(userId);
+            User friendUser = findById(friendUserId);
+
+            if (user == null || friendUser == null) {
+                return 0; // User or Friend not found
+            }
+            System.out.println(user);
+            System.out.println(friendUser);
+
+            // Add friend relationships
+            user.addFriend(friendUser, status);
+
+            // Save changes to the database
+            em.merge(user); // Save the user with updated friends list
+            em.merge(friendUser); // Save the friend with updated friends list
+
+
+
+            return 1; // Successfully saved
+        } catch (Exception e) {
+            e.printStackTrace();
+            return 0; // Failed
+        }
+    }
+
+    @Transactional
+    public int removeFriendRelationship(String userId, String friendUserId) {
+        try {
+            int deletedCount = em.createQuery(
+                            "DELETE FROM UserFriend uf WHERE uf.user.id = :userId AND uf.friendUserId = :friendUserId")
+                    .setParameter("userId", userId)
+                    .setParameter("friendUserId", friendUserId)
+                    .executeUpdate();
+
+            return deletedCount; // Return the number of deleted relationships
+        } catch (Exception e) {
+            e.printStackTrace();
+            return 0; // Failed
+        }
+    }
+
+    @Transactional
+    public int removeAllFriendRelationship(String userId) {
+        try {
+            int deletedCount = em.createQuery(
+                            "DELETE FROM UserFriend uf WHERE uf.user.id = :userId OR uf.friendUserId = :userId")
+                    .setParameter("userId", userId)
+                    .executeUpdate();
+
+            return deletedCount; // Return the number of deleted relationships
+        } catch (Exception e) {
+            e.printStackTrace();
+            return 0; // Failed
+        }
+    }
+
+    @Transactional
+    public int removeFriend(String userId, String friendUserId) {
+        try {
+            // Find both users
             User user = findById(userId);
             User friendUser = findById(friendUserId);
 
@@ -48,37 +109,21 @@ public class UserRepository {
                 return 0; // User or Friend not found
             }
 
-            // Check if the friendship already exists
-            UserFriend existingFriend = em.createQuery(
-                            "SELECT uf FROM UserFriend uf WHERE uf.user.id = :userId AND uf.friendUser.id = :friendUserId",
-                            UserFriend.class)
-                    .setParameter("userId", userId)
-                    .setParameter("friendUserId", friendUserId)
-                    .getResultStream()
-                    .findFirst()
-                    .orElse(null);
+            // Remove friend relationships
+            removeFriendRelationship(userId, friendUserId);
+            removeFriendRelationship(friendUserId, userId);
 
-            if (existingFriend == null) {
-                // Create a new UserFriend entity
-                UserFriend userFriend = new UserFriend();
-                userFriend.setUser(user);
-                userFriend.setUserId(userId); // 본인의 ID
-                userFriend.setFriendUser(friendUser);
-                userFriend.setFriendUserId(friendUserId); // 친구의 ID
-                userFriend.setStatus(status);
-                em.persist(userFriend);
-            } else {
-                // Update the existing UserFriend entity
-                existingFriend.setStatus(status);
-                em.merge(existingFriend);
-            }
+            // Save changes to the database
+            em.merge(user); // Save the user with updated friends list
+            em.merge(friendUser); // Save the friend with updated friends list
 
-            return 1; // successfully saved
+            return 1; // Successfully removed
         } catch (Exception e) {
             e.printStackTrace();
-            return 0; // failed
+            return 0; // Failed
         }
     }
+
     //get All FriendList
     public List<UserFriend> getFriendList(String id){
         return em.createQuery(
@@ -96,6 +141,10 @@ public class UserRepository {
 
         User delUser = findById(id);
         if(delUser != null){
+
+            removeAllFriendRelationship(delUser.getId());
+            //delete FreindShip
+
             em.remove(delUser);
             return 1;
             // successfully deleted

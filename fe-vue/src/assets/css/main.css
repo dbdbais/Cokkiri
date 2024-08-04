@@ -24,6 +24,7 @@
 
 body {
   background-color: #cadcff;
+  overflow-x: hidden;
 }
 
 /* =============================

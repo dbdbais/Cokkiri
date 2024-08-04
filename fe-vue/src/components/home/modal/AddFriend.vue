@@ -17,7 +17,7 @@ const friendList = ref(addFriend.friends);
             <div class="modal-body">
                 <div class="search-con box-row box-main-con">
                     <span class="title main-title">검색</span>
-                    <input type="text" value="jong" />
+                    <input type="text" value="jong" class="nomal-text"/>
                     <button class="search-btn">🔍</button>
                 </div>
                 <div class="box-main-con friend-list">
@@ -54,7 +54,7 @@ const friendList = ref(addFriend.friends);
     position: absolute;
     width: 550px;
     bottom: 30px;
-    left: calc(1920/2)px;
+    left: 400px;
     padding: 15px 20px;
 }
 
@@ -138,7 +138,9 @@ const friendList = ref(addFriend.friends);
     padding-top: 3px;
     padding-left: 15px;
 }
-
+.friend-item:hover {
+    background-color: #CADCFF;
+}
 .friend-plus {
     position: absolute;
     right: 8px;

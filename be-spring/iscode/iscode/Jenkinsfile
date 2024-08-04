@@ -37,6 +37,7 @@ pipeline {
 
         stage('Build Docker Image') {
             steps {
+//                 dir()
                 script {
                     sh 'docker build -t ${DOCKER_IMAGE} .'
                 }
@@ -54,17 +55,27 @@ pipeline {
             }
         }
 
-        stage('Deploy Docker Container') {
-            steps {
-                script {
-                    // 기존 컨테이너가 존재하면 삭제
-                    sh 'docker rm -f be_test_container || true'
-
-                    // 새로운 컨테이너 생성 및 실행
-                    sh 'docker run -d --name be_test_container ${DOCKER_IMAGE}'
+        stage('Deploy Docker Container with docker compose'){
+            steps{
+                script{
+                    // Docker Compose 실행 전에 기존 컨테이너를 종료 및 제거
+                    sh 'docker-compose down'
+                    // Docker Compose를 사용하여 서비스 빌드 및 실행
+                    sh 'docker-compose up --build -d'
                 }
             }
         }
+//         stage('Deploy Docker Container') {
+//             steps {
+//                 script {
+//                     // 기존 컨테이너가 존재하면 삭제
+//                     sh 'docker rm -f be_test_container || true'
+//
+//                     // 새로운 컨테이너 생성 및 실행
+//                     sh 'docker run -d --name be_test_container ${DOCKER_IMAGE}'
+//                 }
+//             }
+//         }
     }
 
     post {

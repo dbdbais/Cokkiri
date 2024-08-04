@@ -29,7 +29,7 @@ const selectTime = () => {
 };
 
 const selectProblem = () => {
-    ruleValue.value = '약속한 문제를 꼭 풀어옵시다!';
+    ruleValue.value = '약속한 문제를 꼭 풀어오자!';
 };
 
 const selectManner = () => {
@@ -72,16 +72,17 @@ const createRoom = function () {
 </script>
 
 <template>
-    <div class="modal-overlay" @click.self="$emit('close')">
+    <div class="modal-overlay slideDown" @click.self="$emit('close')">
         <div class="modal-content box-main-create-room box-row">
+            <img src="/src/assets/exit.svg" alt="나가기" class="exit" @click.self="$emit('close')">
             <div class="left-con box-col">
                 <div class="title-con box-row">
                     <span class="title main-title">제목</span>
-                    <input type="text" v-model="roomName"/>
+                    <input type="text" class="nomal-text" v-model="roomName" required/>
                 </div>
                 <div class="description-con box-col">
                     <span class="title main-title">소개 문구</span>
-                    <textarea v-model="roomComment"></textarea>
+                    <textarea class="nomal-text" v-model="roomComment"></textarea>
                 </div>
                 <div class="type-con box-row">
                     <div class="box-col type">
@@ -89,26 +90,28 @@ const createRoom = function () {
                         </span>
                         <div class="box-row radio-box">
                             <input id="study" type="radio" name="type" class="study-radio" /><label for="study"
-                                class="normal-text" @click="() => isGame = false">공부</label>
+                                class="normal-text md" @click="() => isGame = false">공부</label>
                             <input id="game" type="radio" name="type" class="game-radio" /><label for="game"
-                                class="normal-text" @click="() => isGame = true">게임</label>
-                            <span>공개</span>
-                            <input type="checkbox" class="open" v-model="isOpen">
-                        </div>
+                                class="normal-text md" @click="() => isGame = true">게임</label>
+                            </div>
+                    <div class="open-box title box-row">
+                        공개
+                        <input type="checkbox" class="open" v-model="isOpen">
+                    </div>
                         
                     </div>
-                    <div class="box-row people">
+                    <div class="box-row people" style="height: 50px;">
                         <span class="title main-title">인원</span>
                         <div>
                             <span @click="plus">-</span>
-                            <input type="text" disabled :value="people" />
+                            <input type="text" class="nomal-text" disabled :value="people" />
                             <span @click="minus">+</span>
                         </div>
                     </div>
                 </div>
-                <div class="box-main-con box-row create-room">
-                    <span class="title main-title" @click="createRoom">방 만들기</span>
-                </div>
+            
+                <button class="title main-title create-btn" @click="createRoom">방 만들기</button>
+                
             </div>
             <div class="right-con box-col">
                 <span class="title main-title">규칙</span>
@@ -121,8 +124,8 @@ const createRoom = function () {
                         <div class="box-main-con"><span class="title" @click="selectManner">예의</span></div>
                     </div>
                     <div class="input-con">
-                        <input type="text" :placeholder="placeholder" v-model="ruleValue" />
-                        <span @click="addrule">+</span>
+                        <input type="text" class="nomal-text" maxlength="12" :placeholder="placeholder" v-model="ruleValue" />
+                        <button @click="addrule" class="rule-plus nomal-text md">+</button>
                     </div>
                     <div class="rule-list-con box-col">
                         <span class="title main-title">규칙 목록</span>
@@ -192,6 +195,7 @@ const createRoom = function () {
 
 .type {
     width: 50%;
+    position: relative;
 }
 
 .type div {
@@ -203,20 +207,40 @@ const createRoom = function () {
 }
 
 .type input[type="radio"]+label {
+    width: 150px;
+    height: 50px;    
     background-color: #fff;
     border: 5px solid #CADCFF;
     border-radius: 10px;
-    padding: 5px 10px;
+    /* padding: 5px 10px; */
     color: #2d87ef;
     font-size: 25px;
 }
-
+.type input[type="radio"] +label:hover {
+    background-color: #2d87ef;
+    color: #CADCFF;
+}
 .type input[type="radio"]:checked+label {
     background-color: #3B72FF;
     border: 5px solid #7498f3;
     color: rgb(255, 255, 255);
 }
+.open-box {
+    width: 130px;
+    align-items: center;
+    
+    font-size: 30px;
+    position: absolute;
+    bottom: 5px;
+    right: -145px;
+}
+.open-box > input {
+    width: 30px;
+    height: 30px;
+    margin-left: 10px;
+    border: 3px solid black;
 
+}
 .game-radio {
     margin-left: 10px;
 }
@@ -224,6 +248,7 @@ const createRoom = function () {
 .people {
     position: relative;
     width: 50%;
+    margin-left: 15px;
 }
 
 .people input {
@@ -286,7 +311,22 @@ const createRoom = function () {
     margin-top: 10px;
     padding: 10px 15px;
 }
+.rule-plus {
+    width: 25px;
+    height: 25px;
+    font-size: 25px;
 
+    background-color: #CADCFF;
+    color: #3a5eff;
+
+    border-radius: 5px;
+    border-width: 3px;
+    border-color: #3a5eff;
+
+    position: absolute;
+    right: 10px;
+    top: 10px;
+}
 /* Template Container */
 .template-con {
     justify-content: space-between;
@@ -302,32 +342,46 @@ const createRoom = function () {
 }
 
 /* Input Container */
+.nomal-text {
+    font-size: 20px;
+}
 .input-con {
     position: relative;
     margin-top: 15px;
 }
 
+.title-con > input, .input-con input,  textarea {
+    border: 3px solid black;
+    border-radius: 5px;
+    padding-left: 5px;
+}
+.people input {
+    border: 3px solid #3a5eff;
+    border-radius: 5px;
+
+}
+
 .input-con input {
     width: 100%;
-    border: 3px solid black;
     padding: 5px 0 5px 10px;
-    font-size: 25px;
 }
 
 .input-con span {
     position: absolute;
-    top: 6px;
-    right: 7px;
-    font-size: 30px;
+    top: 2px;
+    right: 9px;
+    font-size: 40px;
     color: #3a5eff;
 }
 /* rule Container */
 .rule-list-con {
     margin-top: 15px;
+    width: 315px;
+    height: 200px;
 }
 
 .rule-list-con span {
-    font-size: 23px;
+    font-size: 20px;
 }
 
 .rule {
@@ -339,11 +393,18 @@ const createRoom = function () {
 .rule img {
     position: absolute;
     right: 5px;
-    top: 7px;
+    top: 4px;
     width: 25px;
     height: 25px;
 }
 
+.create-btn {
+    margin-top: 20px;
+    padding: 5px 0;
+    background-color: #627fff;
+    border-color: #3a5eff;
+    font-size: 35px;
+}
 .scrollable-box {
     height: 200px;
     padding: 10px;

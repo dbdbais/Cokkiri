@@ -43,15 +43,16 @@ import '@/assets/css/home.css';
 #profile {
   width: 340px;
   height: 150px;
-  margin-top: 20px;
+  margin-top: 15px;
   padding: 15px;
 }
 
 #friends-list {
   width: 340px;
   height: 635px;
-  margin-top: 20px;
+  margin-top: 15px;
   padding: 15px;
+  overflow-y: auto;
 }
 
 /* 오른쪽 영역 */

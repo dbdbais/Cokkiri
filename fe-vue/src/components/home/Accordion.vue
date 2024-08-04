@@ -1,12 +1,15 @@
 <template>
     <div class="accordion">
-        <div v-for="(item, index) in items" :key="index" class="accordion-item">
-            <div class="accordion-header box-main-group" @click="toggle(index)">
-                <span class="title header-title">{{ item.title }}</span>
+        <div v-for="(item, index) in items" :key="index" class="accordion-category">
+            <div class="accordion-header box-main-group" >
+                <span class="title header-title">{{ item.title }}</span> 
+                <button class="open-btn nomal-text md" @click="toggle(index)">
+                    {{ openIndex[index] === null ? '+' : '-'}}
+                </button>
             </div>
-            <div v-if="isOpen(index)" class="accordion-content">
-                <div v-for="(member, index2) in item.member" :key="index2" class="box-main-exp box-content animate__animated animate__bounce"
-                :class="isOpen(index)? 'animate__fadeInDown':'slideUp'">
+            <div class="accordion-item" :class="isOpen(index)? 'open':''">
+                <div v-for="(member, index2) in item.member" :key="index2" class="box-main-exp box-content"
+                >
                     <img class="friend-profile" src="@/assets/elephant-profile2.svg">
                     <slot :name="`content-${index2}`" class="title-member">
                         <span class="title friend-name">{{ member.name }}</span>
@@ -14,6 +17,7 @@
                     <img src="@/assets/message.svg" class="message-icon" @click="openModal(member)">
                 </div>
             </div>
+           
         </div>
         <Chat v-if="isModalOpen" @close="closeModal" :selectedMember="selectedMember" />
     </div>
@@ -39,27 +43,55 @@ friendList.studyList.forEach(study => {
     })
 });
 
-const openIndex = ref(null);
+const openIndex = ref([]);
+
+for (let i=0; i<items.value.length; i++) {
+    openIndex.value.push(null)
+}
 
 const toggle = (index) => {
-    openIndex.value = openIndex.value === index ? null : index;
+    openIndex.value[index] = openIndex.value[index] === index ? null : index;
 };
 
 const isOpen = (index) => {
-    return openIndex.value === index;
+    return openIndex.value[index] === index;
 };
 
 const { isModalOpen, selectedMember, openModal, closeModal } = useModal();
 </script>
 
 <style scoped>
-.accordion-item {
+.accordion-category {
     margin-top: 1px;
+    
+}
+.accordion-item {
+    transition: max-height 0.3s ease-in-out;
+    max-height: 0;
+    overflow-y: scroll;
+}
+.open {
+  max-height: 180px;
+  transition: max-height 0.3s ease-in-out;
 }
 
+.open-btn {
+    width: 20px;
+    height: 20px;
+    font-size: 15px;
+    
+    background-color: #DBE7FF;
+    color: #3b72ff;
+    border-width: 3px;
+    border-radius: 5px;
+    border-color: #3b72ff;
+}
 .accordion-header {
     height: 35px;
-    padding: 3px 5px;
+    padding: 2px 5px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
 .box-main-group {
@@ -101,21 +133,5 @@ const { isModalOpen, selectedMember, openModal, closeModal } = useModal();
     right: 15px;
 }
 
-.open {
-  animation-name: open;
-  animation-duration: 0.8s;
-  animation-timing-function: ease;
-
-  visibility: visible !important;
-}
-
-@keyframes open {
-  0% {
-    transform: translateY(0%);
-  }
-  100% {
-    transform: translateY(100%);
-  }
-}
 
 </style>

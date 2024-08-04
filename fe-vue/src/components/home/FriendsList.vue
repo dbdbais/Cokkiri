@@ -43,6 +43,7 @@ const { isModalOpen, openModal, closeModal } = useModal();
     height: 40px;
 }
 #friend-list {
+    width: 280px;
     margin-top: 15px;
 }
 </style>

@@ -4,7 +4,7 @@ pipeline {
     environment {
         DOCKER_IMAGE = 'ohuggy/be_test'
         DOCKER_HUB = 'dockerhub' // Jenkins 자격 증명 ID
-        PATH = "/usr/local/bin"
+//         PATH = "/usr/local/bin"
     }
 
     stages {

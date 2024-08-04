@@ -59,9 +59,9 @@ pipeline {
             steps{
                 script{
                     // Docker Compose 실행 전에 기존 컨테이너를 종료 및 제거
-                    sh 'docker-compose down'
+                    sh 'Docker-Compose down'
                     // Docker Compose를 사용하여 서비스 빌드 및 실행
-                    sh 'docker-compose up --build -d'
+                    sh 'Docker-Compose up --build -d'
                 }
             }
         }

@@ -2,9 +2,9 @@ import { localAxios } from "@/utils/request";
 
 const axios = localAxios();
 
-export const getStudyList = (success, fail) => {
+export const getStudyList = (params, success, fail) => {
   console.log("get Study List");
-  axios.get("/regular?").then(success).catch(fail);
+  axios.get("/regular?", { params: params }).then(success).catch(fail);
 };
 export const getStudyDetail = (sessionId, success, fail) => {
   console.log("get Study Detail");

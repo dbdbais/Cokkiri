@@ -4,8 +4,28 @@ import { ref } from "vue";
 
 const studyName = ref("");
 
+const emit = defineEmits(["search"]);
+
 const selected = function (timeData) {
-  console.log(studyName.value, timeData);
+  const params = ref({});
+  const searchData = {
+    regularName: studyName.value,
+    weekday: timeData.week,
+    start:
+      timeData.start[0] +
+      timeData.start[1] +
+      timeData.start[3] +
+      timeData.start[4],
+    end: timeData.end[0] + timeData.end[1] + timeData.end[3] + timeData.end[4],
+  };
+  for (const key in searchData) {
+    if (searchData[key]) {
+      params.value[key] = searchData[key];
+    }
+  }
+  console.log(params.value);
+
+  emit("search", params.value);
 };
 </script>
 

@@ -24,15 +24,14 @@
 #     networks:
 #       - Cokkiri-Network
 
-#  frontend:
-#    build: ./frontend
-#    container_name: vuejs
-#    ports:
-#      - "8086:8081"
-#    depends_on:
-#      - backend
-#    networks:
-#      - Cokkiri-Network
+ frontend:
+   container_name: vuejs
+   ports:
+     - "8086:80"
+   depends_on:
+     - backend
+   networks:
+     - Cokkiri-Network
 
 # volumes:
 #   mysql_data:

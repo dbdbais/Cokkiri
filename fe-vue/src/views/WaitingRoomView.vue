@@ -1,6 +1,6 @@
 <script setup>
 import { useRoute, useRouter } from "vue-router";
-import { getWaitingRoom } from "@/api/waitingroom";
+import { getWaitingRoom, exitWaitingRoom } from "@/api/waitingroom";
 import { getUser } from "@/api/user";
 import "@/assets/css/waitingroom.css";
 
@@ -39,6 +39,14 @@ ws.onmessage = function (event) {
         break;
       case "QUIT":
         chatList.value.push(`${param}님이 퇴장하였습니다.`);
+        break;
+      case "START":
+        ws.close();
+        console.log("입장!");
+        router.push({
+          name: "meeting",
+          params: { roomId: route.params.roomId },
+        });
     }
   }
 };
@@ -73,12 +81,21 @@ onMounted(async () => {
   // getUser();
 });
 
-const goMeetingRoom = function () {
-  router.push({ name: "meeting", params: { roomId: route.params.roomId } });
+const startStudy = function () {
+  ws.send("|@|");
 };
 
 const exitRoom = function () {
   ws.close();
+
+  const success = (res) => {
+    console.log(res.data);
+  };
+  const fail = (err) => {
+    console.log(err);
+  };
+
+  exitWaitingRoom({ sessionId: route.params.roomId, userName: "김종덕" });
   router.replace({ name: "home" });
 };
 </script>
@@ -133,7 +150,7 @@ const exitRoom = function () {
               style="margin-right: 20px; width: 90px"
             />친구초대
           </button>
-          <button class="bold-text btn start" @click="goMeetingRoom">
+          <button class="bold-text btn start" @click="startStudy">
             <img
               src="/src/assets/start.svg"
               alt="시작하기"

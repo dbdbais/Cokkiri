@@ -23,10 +23,10 @@ public class User {
 
     @Enumerated(value = EnumType.STRING)
     @Column(name = "tier")
-    private Tier tier;
+    private Tier tier = Tier.SEED;
 
     @Column(name ="user_percent")
-    private double percent;
+    private double percent= 0.0;
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     private List<RegularUser> regulars;
@@ -58,6 +58,13 @@ public class User {
     }
 
     public User() {
+
+    }
+
+    public User(String id, String nickname, String password) {
+        this.id = id;
+        this.nickname = nickname;
+        this.password = password;
     }
 
     public User(String id, String nickname, String password, Tier tier, double percent) {

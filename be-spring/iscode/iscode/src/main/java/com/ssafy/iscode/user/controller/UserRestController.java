@@ -56,7 +56,7 @@ public class UserRestController {
     }
     @PutMapping("/modify")
     public int modify(@RequestBody User user){
-        return userService.insertUser(user);
+        return userService.modifyUser(user);
     }
 
     @DeleteMapping("/delete/{id}")

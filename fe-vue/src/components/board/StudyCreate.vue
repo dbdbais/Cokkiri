@@ -16,6 +16,12 @@ const weekKorea = {
   sun: "일",
 };
 
+const dataText = {
+  regularName: "스터디 명",
+  times: "시간",
+  regularComment: "스터디 소개",
+};
+
 // 생성할 스터디 정보들 (이름, 인원, 고른 시간들, 소개)
 const studyName = ref("");
 const studyMember = ref(1);
@@ -31,7 +37,6 @@ const selected = function (timeData) {
 
   // 만약 종료시간이 시작시간보다 이르다면 다시 고르게 해야함
   if (timeData.start < timeData.end) {
-    
     selectedTime.value.push(timeData);
   } else {
     alert("종료시간이 시작시간보다 더 길게 해주세요!");
@@ -53,7 +58,7 @@ const introEnter = function (value) {
   }
 };
 // 스터디 만들기
-const studyCreate =  function () {
+const studyCreate = function () {
   const success = (res) => {
     console.log(res.data);
     emit("get-regular-list");
@@ -62,10 +67,11 @@ const studyCreate =  function () {
     console.log(err);
   };
 
-  const times = selectedTime.value.map((time) => { 
-    return `${time.week}|${time.start[0]+time.start[1]+time.start[3]+time.start[4]}|${time.end[0]+time.end[1]+time.end[3]+time.end[4]}`
-  })
-  // console.log(times)
+  const times = selectedTime.value.map((time) => {
+    return `${time.week}|${
+      time.start[0] + time.start[1] + time.start[3] + time.start[4]
+    }|${time.end[0] + time.end[1] + time.end[3] + time.end[4]}`;
+  });
 
   const studyData = {
     regularName: studyName.value,
@@ -75,7 +81,28 @@ const studyCreate =  function () {
     regularComment: studyIntro.value,
   };
 
-  createStudy(studyData, success, fail);
+  const nullData = ref({});
+
+  for (const key in studyData) {
+    if (studyData[key].length === 0) {
+      nullData.value[key] = key;
+    }
+  }
+  let text = "";
+
+  Object.keys(nullData.value).forEach((key) => {
+    text += dataText[key] + ", ";
+  });
+
+  if (Object.keys(nullData.value).length > 0) {
+    Swal.fire({
+      icon: "error",
+      title: "데이터를 입력해주세요!",
+      text: text.slice(0, -2) + "칸이 비어있습니다",
+    });
+  } else {
+    createStudy(studyData, success, fail);
+  }
 };
 </script>
 

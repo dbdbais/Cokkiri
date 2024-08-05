@@ -24,6 +24,7 @@ const selected = function (timeData) {
     }
   }
   console.log(params.value);
+
   emit("search", params.value);
 };
 </script>

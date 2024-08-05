@@ -1,20 +1,63 @@
 <script setup>
-import { ref } from "vue";
+import { onMounted, ref } from "vue";
 import announcement from "@/assets/data/announcement.json";
 import notification from "@/assets/data/notification.json";
 import AnnounceDetail from "@/components/home/modal/AnnounceDetail.vue";
+import { getWaitingRoom, goWaitingRoom } from "@/api/waitingroom";
+import { receiveRegular } from "@/api/board";
 import { useModal } from "@/composables/useModal";
+import { useMessageStore } from "@/stores/message";
+import { useRouter } from "vue-router";
 
 const { isModalOpen, openModal, closeModal } = useModal();
 
+const messageStore = useMessageStore();
+
+onMounted(() => {
+  noti.value = messageStore.noti;
+
+  noti.value.room.forEach((element) => {
+    const success = (res) => {
+      console.log(res.data);
+      roomInvite.value.push({
+        roomId: element,
+        hostName: res.data.hostName,
+      });
+      getWaitingRoom(element, success, fail);
+    };
+  });
+  const fail = (err) => {
+    console.log(err);
+  };
+  const getReceiveRegular = (res) => {
+    console.log(res.data);
+  };
+
+  receiveRegular({ userName: "김종덕" }, getReceiveRegular, fail);
+  console.log(noti.value);
+});
+const router = useRouter();
 const isSelected = ref("announ");
 const announ = ref(announcement);
-const noti = ref(notification);
+const noti = ref([]);
+const roomInvite = ref([]);
 const selectedAnnoun = ref(null);
 
 const openAnnounceModal = (content) => {
   selectedAnnoun.value = content;
   openModal();
+};
+
+const goRoom = function (roomId) {
+  const success = (res) => {
+    console.log(res.data);
+    router.push({ name: "waitingRoom", params: { roomId: roomId } });
+  };
+  const fail = (err) => {
+    console.log(err);
+  };
+
+  goWaitingRoom({ userName: "김종덕", sessionId: roomId }, success, fail);
 };
 </script>
 
@@ -66,18 +109,19 @@ const openAnnounceModal = (content) => {
           <div v-if="'room' in noti" class="room-con">
             <span>방 초대</span>
             <div
-              v-for="(item, index) in noti.room"
+              v-for="(item, index) in roomInvite"
               :key="index"
               class="box-row announ-con"
             >
-              <span>{{ item.info }}</span>
+              <span>{{ item.hostName }}님이 초대하였습니다.</span>
               <div class="box-row">
-                <div class="btn-accept">
-                  <span>수락</span>
-                </div>
-                <div class="btn-reject">
-                  <span>거절</span>
-                </div>
+                <button
+                  class="btn-accept bold-text"
+                  @click="goRoom(item.roomId)"
+                >
+                  수락
+                </button>
+                <button class="btn-reject bold-text">거절</button>
               </div>
             </div>
           </div>
@@ -214,19 +258,23 @@ div {
   font-size: 25px;
 }
 
-.btn-accept {
-  border: 4px solid #81c3ff;
-  background-color: #3b72ff;
+.btn-accept,
+.btn-reject {
+  color: white;
   border-radius: 8px;
   padding: 3px;
   font-size: 22px;
+  border-width: 4px;
+}
+
+.btn-accept {
+  border-color: #81c3ff;
+  background-color: #3b72ff;
+  margin-right: 10px;
 }
 
 .btn-reject {
-  border: 4px solid #fe9d9d;
+  border-color: #fe9d9d;
   background-color: #ff0000;
-  border-radius: 8px;
-  padding: 3px;
-  font-size: 22px;
 }
 </style>

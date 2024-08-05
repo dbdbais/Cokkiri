@@ -25,14 +25,14 @@ services:
 #       - Cokkiri-Network
 
  frontend:
-  image: ohuggy/fe_test
-   container_name: vuejs
-   ports:
-     - "8086:80"
-   depends_on:
-     - backend
-   networks:
-     - Cokkiri-Network
+    image: ohuggy/fe_test
+    container_name: vuejs
+    ports:
+      - "8086:80"
+    depends_on:
+      - backend
+    networks:
+      - Cokkiri-Network
 
 # volumes:
 #   mysql_data:

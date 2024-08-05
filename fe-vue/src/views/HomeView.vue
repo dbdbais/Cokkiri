@@ -1,14 +1,16 @@
 <template>
-  <Logo class="logo" />
   <div id="main-container" class="box-row">
     <div id="main-left" class="box-col">
+      <Logo class="logo" />
       <div id="profile-btn" class="title main-title">개인 프로필</div>
       <Profile id="profile" />
       <FriendsList id="friends-list" />
     </div>
-    <div id="main-right" class="box-col">
-      <Header id="header" class="box-col" @create="getRoomList" />
-      <MainContent id="main-content" :rooms="rooms" />
+    <div id="main-right" class="box-col right">
+      <Header />
+      <div class="main-container">
+        <MainContent />
+      </div>
     </div>
   </div>
 </template>
@@ -19,36 +21,9 @@ import Header from "@/components/home/Header.vue";
 import Profile from "@/components/home/Profile.vue";
 import FriendsList from "@/components/home/FriendsList.vue";
 import MainContent from "@/components/home/MainContent.vue";
-import { getWaitingRoomList } from "@/api/waitingroom";
-import { ref, onMounted } from "vue";
-import "@/assets/css/home.css";
-
-const rooms = ref("");
-
-const getRoomList = function () {
-  const success = (res) => {
-    console.log(res.data);
-    rooms.value = res.data;
-  };
-  const fail = (err) => {
-    console.log(err);
-  };
-
-  getWaitingRoomList(success, fail);
-};
-
-onMounted(() => {
-  getRoomList();
-});
 </script>
 
-<style scoped>
-* {
-  font-family: "RixInooAriDuriR";
-  color: white;
-}
-
-/* 왼쪽 영역 */
+<style>
 #main-left {
   width: 350px;
   margin-left: 35px;
@@ -56,42 +31,38 @@ onMounted(() => {
 }
 
 #profile-btn {
-  margin-top: 150px;
-  font-size: 40px;
+  margin-top: 60px;
 }
 
 #profile {
   width: 340px;
-  height: 150px;
-  margin-top: 15px;
+  height: 130px;
+  margin-top: 20px;
   padding: 15px;
 }
 
 #friends-list {
   width: 340px;
-  height: 635px;
-  margin-top: 15px;
-  padding: 15px;
-  overflow-y: auto;
-}
-
-/* 오른쪽 영역 */
-#main-right {
-  width: 1400px;
-  margin-left: 35px;
-  margin-right: 35px;
-}
-
-#header {
-  width: 1400px;
-  height: 130px;
+  height: 500px;
   margin-top: 20px;
+  padding: 15px;
 }
 
-#main-content {
-  width: 1400px;
-  height: 800px;
-  margin-top: 60px;
-  padding: 15px 50px;
+
+#main {
+  width: 100vw;
+  height: 100vh;
+}
+
+.left {
+  width: 300px;
+  margin-left: 20px;
+  margin-right: 20px;
+}
+
+.right {
+  width: 1500px;
+  margin-left: 20px;
+  margin-right: 20px;
 }
 </style>

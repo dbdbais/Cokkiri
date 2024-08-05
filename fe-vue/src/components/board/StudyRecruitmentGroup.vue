@@ -12,20 +12,25 @@ defineProps({
 <template>
   <div class="study-group">
     <RecruitmentBadge :group-badge="groupData.isRecruitment" />
-    <h3 class="group-name nomal-text">{{ groupData.regularName }}</h3>
+    <h3 class="group-name content">{{ groupData.groupName }}</h3>
 
-    <div class="group-intro nomal-text">
-      {{ groupData.regularComment }}
+    <div class="created content">
+      {{ groupData.createdAt }}
     </div>
-    <div class="member nomal-text">
-      {{ groupData.users.length }} / {{ groupData.maxNum }}
+
+    <div class="group-intro content">
+      {{ groupData.intro }}
     </div>
+    <div class="member content">
+      {{ groupData.currentMember }} / {{ groupData.limitMember }}
+    </div>
+    <span class="content intro-plus">...</span>
   </div>
 </template>
 
 <style scoped>
 .member {
-  font-size: 35px;
+  font-size: 25px;
   color: #dbe7ff;
 
   position: absolute;
@@ -49,8 +54,8 @@ defineProps({
 /* 전체 */
 .study-group {
   /* 크기, 위치 */
-  width: 1180px;
-  height: 120px;
+  width: 880px;
+  height: 100px;
   margin-top: 20px;
   /* 색깔, 테두리 */
   background-color: #c191ff;
@@ -69,8 +74,8 @@ defineProps({
   background-color: transparent;
   /* 위치 */
   position: absolute;
-  bottom: 1px;
-  left: 590px;
+  top: 48px;
+  left: 610px;
 }
 /* 스터디 소개글 */
 .group-intro {
@@ -81,22 +86,22 @@ defineProps({
   /* 색깔, 폰트 */
   color: #dbe7ff;
   background-color: transparent;
-  font-size: 30px;
+  font-size: 25px;
   /* 위치 */
   position: absolute;
-  bottom: 0px;
+  top: 50px;
   left: 20px;
 }
 .group-name {
   /* 위치 */
   position: absolute;
   top: 2px;
-  left: 130px;
+  left: 100px;
   /* 색깔 */
   color: #dbe7ff;
   background-color: transparent;
 
-  font-size: 35px;
+  font-size: 25px;
 }
 
 /* 광택 효과 */
@@ -107,7 +112,7 @@ defineProps({
   content: "";
   display: block;
   width: 65px;
-  height: 120px;
+  height: 100px;
   transform: skewX(-20deg);
   background-color: #ddc3ff;
 }
@@ -118,7 +123,7 @@ defineProps({
 }
 
 .study-group:hover::before {
-  left: 1250px;
+  left: 900px;
   transition: all 1s ease-in;
 }
 </style>

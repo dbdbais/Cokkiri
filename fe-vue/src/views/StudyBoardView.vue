@@ -1,7 +1,7 @@
 <template>
-  <Logo class="logo" />
   <div class="header">
-    <div class="bold-text top-title">스터디 모집 게시판</div>
+    <Logo class="logo" />
+    <div class="title main-title top-title">스터디 모집 게시판</div>
   </div>
   <div class="board-home">
     <div class="board-container">
@@ -24,9 +24,8 @@ import Logo from "@/components/common/Logo.vue";
 }
 
 .top-title {
-  margin-left: 330px;
-  margin-top: 15px;
-  font-size: 50px;
+  margin-left: 30px;
+  margin-top: 20px;
 }
 
 .board-home {
@@ -38,8 +37,8 @@ import Logo from "@/components/common/Logo.vue";
 /* 정기 스터디 모집 게시판 전체 */
 .board-container {
   /* 크기 */
-  width: 1850px;
-  height: 900px;
+  width: 1450px;
+  height: 740px;
   /* 위치 */
   margin-top: 10px;
   padding-top: 10px;

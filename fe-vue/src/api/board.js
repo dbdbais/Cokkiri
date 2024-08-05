@@ -26,3 +26,11 @@ export const joinStudy = (joinData, success, fail) => {
     .then(success)
     .catch(fail);
 };
+
+export const receiveRegular = (userName, success, fail) => {
+  console.log("receive regular");
+  axios
+    .post("/regular/get-request", JSON.stringify(userName))
+    .then(success)
+    .catch(fail);
+};

@@ -20,6 +20,7 @@ export const useMessageStore = defineStore("message", () => {
     noti.value.room.push(message);
   };
 
+  const receiveFriend = function (message) {};
   return {
     noti,
     receiveInvite,

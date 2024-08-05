@@ -4,6 +4,7 @@ import announcement from "@/assets/data/announcement.json";
 import notification from "@/assets/data/notification.json";
 import AnnounceDetail from "@/components/home/modal/AnnounceDetail.vue";
 import { getWaitingRoom, goWaitingRoom } from "@/api/waitingroom";
+import { receiveRegular } from "@/api/board";
 import { useModal } from "@/composables/useModal";
 import { useMessageStore } from "@/stores/message";
 import { useRouter } from "vue-router";
@@ -22,13 +23,17 @@ onMounted(() => {
         roomId: element,
         hostName: res.data.hostName,
       });
+      getWaitingRoom(element, success, fail);
     };
-    const fail = (err) => {
-      console.log(err);
-    };
-    getWaitingRoom(element, success, fail);
   });
+  const fail = (err) => {
+    console.log(err);
+  };
+  const getReceiveRegular = (res) => {
+    console.log(res.data);
+  };
 
+  receiveRegular({ userName: "김종덕" }, getReceiveRegular, fail);
   console.log(noti.value);
 });
 const router = useRouter();

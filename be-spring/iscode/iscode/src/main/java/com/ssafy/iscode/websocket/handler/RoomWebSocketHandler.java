@@ -92,11 +92,11 @@ public class RoomWebSocketHandler extends TextWebSocketHandler {
             sessions.remove(session);
             if (sessions.isEmpty()) {
                 roomSessions.remove(roomId);
-
-                // send user quit event
-                String event = ".|!|.|!|QUIT|!|" + userName;
-                sendEvent(roomId, event);
             }
+
+            // send user quit event
+            String event = ".|!|.|!|QUIT|!|" + userName;
+            sendEvent(roomId, event);
         }
     }
 

@@ -40,8 +40,6 @@ public class LobbyWebSocketHandler extends TextWebSocketHandler {
     @Override
     public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
         String userName = getUserName(session);
-
-        session.close();
         userSessions.remove(userName);
 
         if (!lobbySessions.isEmpty()) {

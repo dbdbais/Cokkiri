@@ -18,7 +18,7 @@ pipeline {
             }
         }
 
-        stag("Install Dependencies"){
+        stage("Install Dependencies"){
             steps{
                 dir("fe-vue"){
                     script{

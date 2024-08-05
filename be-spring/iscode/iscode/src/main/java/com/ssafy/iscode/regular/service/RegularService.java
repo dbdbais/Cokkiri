@@ -266,7 +266,7 @@ public class RegularService {
             weekdayNum = Arrays.asList(WEEKDAY).indexOf(weekday);
         }
 
-        int offset = 6 * (page - 1);
+        int offset = 4 * (page - 1);
 
         List<RegularResponseDto> list = new ArrayList<>();
         List<RegularDto> regulars;

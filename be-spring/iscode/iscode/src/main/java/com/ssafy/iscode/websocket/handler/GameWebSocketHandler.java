@@ -13,18 +13,17 @@ import org.springframework.web.util.UriTemplate;
 
 import java.util.*;
 
-public class RoomWebSocketHandler extends TextWebSocketHandler {
+public class GameWebSocketHandler extends TextWebSocketHandler {
     private final Map<String, Set<WebSocketSession>> roomSessions = Collections.synchronizedMap(new HashMap<>());
     private final Map<WebSocketSession, String> userSessions = Collections.synchronizedMap(new HashMap<>());
+    private final Map<String, Long> roomEnterTimes = Collections.synchronizedMap(new HashMap<>());
+    private final Map<String, List<Map<String, Long>>> roomPrices = Collections.synchronizedMap(new HashMap<>());
 
     @Autowired
     private UserRepository userRepository;
 
-    @Autowired
-    private StudyRepository studyRepository;
-
     // connected
-    // room id, user name manage
+    // room id, user name, start time manage
     @Override
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {
         String roomId = getRoomId(session);
@@ -33,9 +32,16 @@ public class RoomWebSocketHandler extends TextWebSocketHandler {
         roomSessions.computeIfAbsent(roomId, k -> Collections.synchronizedSet(new HashSet<>())).add(session);
         userSessions.put(session, userName);
 
-        // send user enter event
-        String event = ".|!|.|!|ENTER|!|" + userName;
-        sendEvent(roomId, event);
+        if(!roomEnterTimes.containsKey(roomId)) {
+            Date now = new Date();
+            long millis = now.getTime();
+            roomEnterTimes.put(roomId, millis);
+        }
+
+        if(!roomPrices.containsKey(roomId)) {
+            List<Map<String, Long>> list = new ArrayList<>();
+            roomPrices.put(roomId, list);
+        }
     }
 
     // send message to all user in room
@@ -46,45 +52,37 @@ public class RoomWebSocketHandler extends TextWebSocketHandler {
         String roomId = getRoomId(session);
         String userName = userSessions.get(session);
         String m = message.getPayload();
-        String content = userName + "|!|" + m;
+        long startTime = roomEnterTimes.get(roomId);
 
-        // press start button
+        // code success
         if ("|@|".equals(m)) {
-            String event = ".|!|.|!|START|!|.";
+            if(roomPrices.get(roomId).size() < 3) {
+                Date now = new Date();
+                long nowMillis = now.getTime();
 
-            // prevent search
-            try {
-                StudyDto study = studyRepository.findById(Long.parseLong(roomId));
-                study.setIsOpen(false);
-                studyRepository.save(study);
-            } catch (Exception e) {
-                e.printStackTrace();
-                throw new RuntimeException("Update study failed");
-            }
+                long diff = nowMillis - startTime;
 
-            sendEvent(roomId, event);
-        } else if ("|#|".equals(m)) { // press ready button
-            String event = ".|!|.|!|.READY|!|" + userName;
-            sendEvent(roomId, event);
-        } else if ("|$|".equals(m)) { // press not ready button
-            String event = ".|!|.|!|NREADY|!|" + userName;
-            sendEvent(roomId, event);
-        } else { // just chatting
-            Set<WebSocketSession> sessions = roomSessions.get(roomId);
-            if (sessions != null) {
-                for (WebSocketSession webSocketSession : sessions) {
-                    webSocketSession.sendMessage(new TextMessage(content));
+                Map<String, Long> input = new HashMap<>();
+                input.put(userName, diff);
+
+                roomPrices.get(roomId).add(input);
+                String content = roomPrices.get(roomId).size() + "|!|" + userName + "|!|" + diff;
+
+                Set<WebSocketSession> sessions = roomSessions.get(roomId);
+                if (sessions != null) {
+                    for (WebSocketSession webSocketSession : sessions) {
+                        webSocketSession.sendMessage(new TextMessage(content));
+                    }
                 }
             }
         }
     }
 
     // disconnected
-    // room id, user name manage
+    // room id, user name, start time, price manage
     @Override
     public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
         String roomId = getRoomId(session);
-        String userName = getUserName(session);
         userSessions.remove(session);
 
         Set<WebSocketSession> sessions = roomSessions.get(roomId);
@@ -92,22 +90,20 @@ public class RoomWebSocketHandler extends TextWebSocketHandler {
             sessions.remove(session);
             if (sessions.isEmpty()) {
                 roomSessions.remove(roomId);
+                roomEnterTimes.remove(roomId);
+                roomPrices.remove(roomId);
             }
-
-            // send user quit event
-            String event = ".|!|.|!|QUIT|!|" + userName;
-            sendEvent(roomId, event);
         }
     }
 
     private String getRoomId(WebSocketSession session) {
-        UriTemplate template = new UriTemplate("/room/{roomId}/{userName}");
+        UriTemplate template = new UriTemplate("/game/{roomId}/{userName}");
         Map<String, String> variables = template.match(session.getUri().getPath());
         return variables.get("roomId");
     }
 
     private String getUserName(WebSocketSession session) {
-        UriTemplate template = new UriTemplate("/room/{roomId}/{userName}");
+        UriTemplate template = new UriTemplate("/game/{roomId}/{userName}");
         Map<String, String> variables = template.match(session.getUri().getPath());
         Optional<User> user = userRepository.findByName(variables.get("userName"));
 
@@ -116,16 +112,5 @@ public class RoomWebSocketHandler extends TextWebSocketHandler {
         }
 
         throw new RuntimeException("Unknown user");
-    }
-
-    // send event
-    // server -> client
-    private void sendEvent(String roomId, String event) throws Exception {
-        Set<WebSocketSession> sessions = roomSessions.get(roomId);
-        if (sessions != null) {
-            for (WebSocketSession webSocketSession : sessions) {
-                webSocketSession.sendMessage(new TextMessage(event));
-            }
-        }
     }
 }

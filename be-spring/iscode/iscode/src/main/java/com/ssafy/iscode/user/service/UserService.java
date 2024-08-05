@@ -1,10 +1,12 @@
 package com.ssafy.iscode.user.service;
 
 import com.ssafy.iscode.regular.model.dto.RegularUser;
+import com.ssafy.iscode.review.model.dao.ReviewRepository;
 import com.ssafy.iscode.user.model.dao.UserRepository;
 import com.ssafy.iscode.user.model.dto.Status;
 import com.ssafy.iscode.user.model.dto.User;
 import com.ssafy.iscode.user.model.dto.UserFriend;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -16,8 +18,12 @@ public class UserService {
 
     private final UserRepository userRepository;
 
-    public UserService(UserRepository userRepository) {
+    private final ReviewRepository reviewRepository;
+
+    @Autowired
+    public UserService(UserRepository userRepository, ReviewRepository reviewRepository) {
         this.userRepository = userRepository;
+        this.reviewRepository = reviewRepository;
     }
 
     public List<User> getUsers(){
@@ -34,8 +40,20 @@ public class UserService {
         //insert or modify
         return userRepository.save(user);
     }
+    public int modifyUser(User user){
+        return userRepository.modify(user);
+    }
+    public int deleteUser(String id){
+        reviewRepository.makeUserNull(id);
+        //make all review by user NULL
+        return userRepository.remove(id);
+    }
     public int insertFriend(String userId, String friendUserId, Status status){
         return userRepository.saveFriend(userId,friendUserId,status);
+    }
+
+    public int deleteFriend(String userId, String friendUserId){
+        return userRepository.removeFriend(userId,friendUserId);
     }
     public int login(User user){
         User gUser = userRepository.findById(user.getId());
@@ -50,9 +68,7 @@ public class UserService {
             return 0;
         }
     }
-    public int deleteUser(String id){
-        return userRepository.remove(id);
-    }
+
 
     public List<Long> getRegular(String userName) {
         User user = userRepository.findByName(userName)

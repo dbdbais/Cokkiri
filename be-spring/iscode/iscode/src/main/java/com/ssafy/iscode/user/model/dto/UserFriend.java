@@ -1,5 +1,6 @@
 package com.ssafy.iscode.user.model.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 @Entity
@@ -20,24 +21,24 @@ public class UserFriend {
     @Column(name="status")
     private Status status;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", insertable = false, updatable = false)
+    @JsonIgnore
     private User user;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "friend_user_id", insertable = false, updatable = false)
+    @JsonIgnore
     private User friendUser;
+
 
     public UserFriend() {
     }
 
-    public UserFriend(Long id, String userId, String friendUserId, Status status, User user, User friendUser) {
-        this.id = id;
+    public UserFriend(String userId, String friendUserId, Status status) {
         this.userId = userId;
         this.friendUserId = friendUserId;
         this.status = status;
-        this.user = user;
-        this.friendUser = friendUser;
     }
 
     public Long getId() {

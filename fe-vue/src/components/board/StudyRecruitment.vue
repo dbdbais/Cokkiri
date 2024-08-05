@@ -4,10 +4,14 @@ import StudySearch from "@/components/board/StudySearch.vue";
 import StudyRecruitmentGroup from "@/components/board/StudyRecruitmentGroup.vue";
 import StudyDetail from "@/components/board/StudyDetail.vue";
 import StudyCreate from "@/components/board/StudyCreate.vue";
+import Page from "@/components/common/Page.vue";
 import { getStudyList, getStudyDetail } from "@/api/board";
 
 import { onMounted, ref } from "vue";
 import { useLodingStore } from "@/stores/loading";
+
+const currentPage = ref(1);
+
 const studyDetail = ref(false);
 const studyCreate = ref(false);
 
@@ -20,6 +24,9 @@ const loadingStore = useLodingStore();
 const getRegularList = function (params) {
   studyCreate.value = false;
   const success = (res) => {
+    if (res.data.length === 0) {
+      pageChange(0);
+    }
     studyGroup.value = res.data;
     loadingStore.loadingSuccess();
     console.log(res.data);
@@ -66,6 +73,18 @@ const goCreate = function () {
   studyCreate.value = true;
 };
 
+const pageChange = function (motion) {
+  if (motion === 1) {
+    currentPage.value += 1;
+  } else if (motion === 0) {
+    currentPage.value -= 1;
+    if (currentPage.value === 0) {
+      currentPage.value = 1;
+    }
+  }
+  getRegularList({ page: currentPage.value });
+};
+
 const closeBtn = function () {
   studyDetail.value = false;
 };
@@ -92,6 +111,7 @@ const closeBtn = function () {
         :class="preventCilck"
         @click="goDetail(group)"
       />
+      <Page :current-page="currentPage" @changePage="pageChange" />
     </div>
   </div>
 </template>

@@ -40,6 +40,9 @@ public class UserService {
         //insert or modify
         return userRepository.save(user);
     }
+    public int modifyUser(User user){
+        return userRepository.modify(user);
+    }
     public int deleteUser(String id){
         reviewRepository.makeUserNull(id);
         //make all review by user NULL

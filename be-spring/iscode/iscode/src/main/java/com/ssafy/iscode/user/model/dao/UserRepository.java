@@ -28,8 +28,25 @@ public class UserRepository {
                 em.persist(user);
             }
             else{
+                return 0;
+            }
+            return 1; // successfully saved
+        } catch (Exception e) {
+            e.printStackTrace();
+            return 0; // failed
+        }
+    }
+
+    @Transactional
+    public int modify(User user) {
+        try {
+
+            if(findById(user.getId()) != null){
                 //Modify
                 em.merge(user);
+            }
+            else{
+                return 0;
             }
             return 1; // successfully saved
         } catch (Exception e) {

@@ -51,9 +51,15 @@ public class ReviewRepository {
     }
 
     public List<Review> findAllReviewByPID(Long pid){
-        return em.createQuery("SELECT r FROM Review r WHERE r.problem.id = :pid", Review.class)
+        return em.createQuery("SELECT r FROM Review r WHERE r.problem.no = :pid", Review.class)
                 .setParameter("pid", pid)
                 .getResultList();
+    }
+
+    public void makeUserNull(String userId){
+        em.createQuery("UPDATE Review r SET r.user = NULL WHERE r.user.id = :userId")
+                .setParameter("userId", userId)
+                .executeUpdate();
     }
 
 

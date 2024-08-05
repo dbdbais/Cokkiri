@@ -5,21 +5,23 @@ import com.ssafy.iscode.user.model.dto.User;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name="review")
+@Table(name = "review")
 public class Review {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long rid;
 
-    @Column(name="review_code",columnDefinition = "LONGTEXT")
+    @Column(name = "review_code", columnDefinition = "LONGTEXT")
     private String content;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="algo_num")
+    //Eager for serializable
+    @ManyToOne(fetch = FetchType.EAGER, optional = true)
+    @JoinColumn(name = "algo_num", nullable = true)
     private Problem problem;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="user_id")
+    //Eager for serializable
+    @ManyToOne(fetch = FetchType.EAGER, optional = true)
+    @JoinColumn(name = "user_id", nullable = true)
     private User user;
 
     public Review() {

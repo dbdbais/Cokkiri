@@ -1,6 +1,9 @@
 <script setup>
 import { ref } from 'vue';
 import { createWaitingRoom } from '@/api/waitingroom';
+
+
+const emit = defineEmits('create')
 const people = ref(1);
 const placeholder = ref('규칙을 입력해주세요.');
 const roomName = ref("")
@@ -51,6 +54,8 @@ const deleterule = (index) => {
 const createRoom = function () {
     const success = (res) => {
         console.log(res.data)
+        emit('create')
+        emit('close')
     }
     const fail = (err) => {
         console.log(err)
@@ -58,7 +63,7 @@ const createRoom = function () {
     
     const roomData = {
         roomName: roomName.value,
-        userName: 'user_1231',
+        userName: '김종덕',
         roomComment: roomComment.value,
         rules: ruleList.value,
         maxNum: people.value,

@@ -1,15 +1,9 @@
 <template>
   <div class="main-content box-main-con">
     <div class="box-row">
-      <div class="filter-btn box-main-noti">
-        전체
-      </div>
-      <div class="filter-btn box-main-noti">
-        공부방
-      </div>
-      <div class="filter-btn box-main-noti">
-        게임방
-      </div>
+      <div class="filter-btn box-main-noti">전체</div>
+      <div class="filter-btn box-main-noti">공부방</div>
+      <div class="filter-btn box-main-noti">게임방</div>
     </div>
     <div id="room-container" class="rooms">
       <Room
@@ -24,29 +18,20 @@
 </template>
 
 <script setup>
-import { onMounted, ref } from "vue";
+import { ref } from "vue";
 import { useRouter } from "vue-router";
-import { goWaitingRoom, getWaitingRoomList } from "@/api/waitingroom";
+import { goWaitingRoom } from "@/api/waitingroom";
 import Room from "./Room.vue";
 import Pagination from "@/components/common/Pagination.vue";
 // import roomList from "@/assets/data/roomList.json";
 import roomList from "@/assets/data/roomListAxios.json";
 
-onMounted(() => {
-  const success = (res) => {
-    console.log(res.data);
-    rooms.value = res.data;
-  };
-  const fail = (err) => {
-    console.log(err);
-  };
-
-  getWaitingRoomList(success, fail);
+defineProps({
+  rooms: Object,
 });
 
 const router = useRouter();
 const user = ref("김종덕");
-const rooms = ref("");
 
 rooms: [
   { id: 1, name: "알고리즘 고수들방", members: 116 },
@@ -55,7 +40,7 @@ rooms: [
 ];
 
 const goRoom = function (id) {
-  console.log(id)
+  console.log(id);
   const success = (res) => {
     console.log(res.data);
     router.push({ name: "waitingRoom", params: { roomId: id } });
@@ -74,11 +59,10 @@ const goRoom = function (id) {
   font-size: 30px;
   color: #5bb5d9;
   -webkit-text-stroke: #089eda;
-  
 }
 
 .filter-btn:hover {
-  color: #eaf3f7; 
+  color: #eaf3f7;
   border-color: #eaf3f7;
   background-color: #5bb5d9;
 }

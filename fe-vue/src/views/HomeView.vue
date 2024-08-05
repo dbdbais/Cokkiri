@@ -7,8 +7,8 @@
       <FriendsList id="friends-list" />
     </div>
     <div id="main-right" class="box-col">
-      <Header id="header" class="box-col" />
-      <MainContent id="main-content" />
+      <Header id="header" class="box-col" @create="getRoomList" />
+      <MainContent id="main-content" :rooms="rooms" />
     </div>
   </div>
 </template>
@@ -19,7 +19,27 @@ import Header from "@/components/home/Header.vue";
 import Profile from "@/components/home/Profile.vue";
 import FriendsList from "@/components/home/FriendsList.vue";
 import MainContent from "@/components/home/MainContent.vue";
-import '@/assets/css/home.css';
+import { getWaitingRoomList } from "@/api/waitingroom";
+import { ref, onMounted } from "vue";
+import "@/assets/css/home.css";
+
+const rooms = ref("");
+
+const getRoomList = function () {
+  const success = (res) => {
+    console.log(res.data);
+    rooms.value = res.data;
+  };
+  const fail = (err) => {
+    console.log(err);
+  };
+
+  getWaitingRoomList(success, fail);
+};
+
+onMounted(() => {
+  getRoomList();
+});
 </script>
 
 <style scoped>

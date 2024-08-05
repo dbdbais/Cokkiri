@@ -46,8 +46,11 @@ pipeline {
     
         stage('Build Docker Image') {
             steps {
-                script {
-                    sh 'docker build -t ${DOCKER_IMAGE} -f fe-vue/Dockerfile .'
+                dir("fe-vue"){
+                    script {
+                        sh 'docker build -t ${DOCKER_IMAGE}'
+                    }
+
                 }
             }
         }

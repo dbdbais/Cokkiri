@@ -21,6 +21,7 @@ export function login(data) {
 }
 
 export function getUser(id) {
+  console.log("get User");
   return axios({
     url: `${baseURL}/${id}`,
     method: "get",

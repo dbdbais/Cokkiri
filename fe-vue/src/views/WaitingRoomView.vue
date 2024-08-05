@@ -7,6 +7,8 @@ import "@/assets/css/waitingroom.css";
 import WaitingRoomRule from "@/components/waitingroom/WaitingRoomRule.vue";
 import WaitingRoomMember from "@/components/waitingroom/WaitingRoomMember.vue";
 import WaitingRoomChat from "@/components/waitingroom/WaitingRoomChat.vue";
+import WaitingRoomFriend from "@/components/waitingroom/WaitingRoomFriend.vue";
+
 import { ref, onMounted } from "vue";
 import { useLodingStore } from "@/stores/loading";
 
@@ -44,22 +46,23 @@ ws.onmessage = function (event) {
 onMounted(async () => {
   loadingStore.loading();
   setTimeout(() => {
-    // console.log(roomData.value);
+    console.log(roomData.value);
     loadingStore.loadingSuccess();
     roomData.value.users.forEach((user) => {
-      // console.log(user);
-      getUser(user, getUserData, fail);
+      getUser(user)
+        .then((res) => {
+          console.log(res.data);
+          // roomUsers.value.push(res.data);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     });
   }, 1000);
   const route = useRoute();
   const success = (res) => {
     // console.log(res.data)
     roomData.value = res.data;
-  };
-  const getUserData = (res) => {
-    // console.log(res.data)
-    roomUsers.value.push(res.data);
-    // console.log(roomUsers.value);
   };
 
   const fail = (err) => {
@@ -83,6 +86,11 @@ const exitRoom = function () {
 <template>
   <div>
     <div class="waiting-room">
+      <WaitingRoomFriend
+        id="test"
+        v-if="friendInvite"
+        :room-id="route.params.roomId"
+      />
       <div class="box-row">
         <div class="box-col">
           <div class="rule-data">
@@ -117,7 +125,7 @@ const exitRoom = function () {
           :chat-list="chatList"
         />
         <div class="box-col button-con">
-          <button class="bold-text btn friend">
+          <button class="bold-text btn friend" @click="friendInvite = true">
             <img
               src="/src/assets/friend.svg"
               alt="친구초대"

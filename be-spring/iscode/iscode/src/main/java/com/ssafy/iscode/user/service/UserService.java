@@ -7,6 +7,7 @@ import com.ssafy.iscode.user.model.dto.Status;
 import com.ssafy.iscode.user.model.dto.User;
 import com.ssafy.iscode.user.model.dto.UserFriend;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -16,12 +17,16 @@ import java.util.Optional;
 @Service
 public class UserService {
 
+
+    private final PasswordEncoder passwordEncoder;
+
     private final UserRepository userRepository;
 
     private final ReviewRepository reviewRepository;
 
     @Autowired
-    public UserService(UserRepository userRepository, ReviewRepository reviewRepository) {
+    public UserService(PasswordEncoder passwordEncoder, UserRepository userRepository, ReviewRepository reviewRepository) {
+        this.passwordEncoder = passwordEncoder;
         this.userRepository = userRepository;
         this.reviewRepository = reviewRepository;
     }
@@ -37,10 +42,13 @@ public class UserService {
     }
 
     public int insertUser(User user){
-        //insert or modify
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        //ENCRYPT PW
         return userRepository.save(user);
     }
     public int modifyUser(User user){
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        //ENCRYPT PW
         return userRepository.modify(user);
     }
     public int deleteUser(String id){
@@ -55,12 +63,12 @@ public class UserService {
     public int deleteFriend(String userId, String friendUserId){
         return userRepository.removeFriend(userId,friendUserId);
     }
-    public int login(User user){
-        User gUser = userRepository.findById(user.getId());
+    public int login(String user_id, String password){
+        User gUser = userRepository.findById(user_id);
 
         if(gUser == null) return 0;
 
-        if(gUser.equals(user)){
+        if(passwordEncoder.matches(password, gUser.getPassword())){
             return 1;
             //if password correct
         }

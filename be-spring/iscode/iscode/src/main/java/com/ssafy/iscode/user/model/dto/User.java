@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.ssafy.iscode.regular.model.dto.RegularUser;
 import jakarta.persistence.*;
 
+
 import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
@@ -35,7 +36,6 @@ public class User {
     @JsonIgnore // Avoid serialization of the full list of friends
     private Set<UserFriend> friends = new HashSet<>();
 
-    // Getters and setters
 
     // Add a friend with status
     public void addFriend(User friend, Status status) {

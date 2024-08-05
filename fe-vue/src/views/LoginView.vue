@@ -1,56 +1,68 @@
+<script setup>
+import "@/assets/css/home.css";
+import { ref } from "vue";
+import { login } from "@/api/user";
+import { RouterLink } from "vue-router";
+
+const userData = ref({
+  id: "",
+  password: "",
+});
+
+const submitForm = async () => {
+  try {
+    const response = await login(userData.value);
+    console.log(response);
+  } catch (e) {
+    console.log(e);
+  }
+};
+</script>
+
 <template>
   <div class="login-container">
     <div class="login-box">
-      <form @submit.prevent="handleSubmit">
+      <form @submit.prevent="submitForm">
         <img id="elephant" src="@/assets/login_elephant.svg" alt="" />
         <div class="form-group">
-          <label for="username">아이디 :</label>
-          <input type="text" id="username" v-model="username" />
+          <label for="username" class="title" id="id">아이디 </label>
+          <input type="text" id="username" v-model="userData.id" />
         </div>
 
         <div class="form-group">
-          <label for="password">비밀번호 :</label>
-          <input type="password" id="password" v-model="password" />
+          <label for="password" class="title">비밀번호 </label>
+          <input type="password" id="password" v-model="userData.password" />
         </div>
 
-        <button id="submit" type="submit">로그인</button>
+        <button id="submit" type="submit" class="title">로그인</button>
       </form>
-      <a href="#" class="register-link">처음이신가요? 회원가입</a>
+      <RouterLink :to="{ name: 'registry' }">
+        <a href="#" class="register-link">처음이신가요? 회원가입</a>
+      </RouterLink>
+
       <button class="google-login">
         <img
           src="https://developers.google.com/identity/images/g-logo.png"
           alt="Google Logo"
         />
-        Continue with Google
+        <span class="title">Continue with Google</span>
       </button>
     </div>
   </div>
 </template>
 
-<script>
-import "@/assets/css/home.css";
-export default {
-  data() {
-    return {
-      username: "",
-      password: "",
-    };
-  },
-  methods: {
-    handleSubmit() {
-      // Handle login logic here
-      console.log("Username:", this.username);
-      console.log("Password:", this.password);
-    },
-  },
-};
-</script>
-
 <style scoped>
+#id {
+  letter-spacing: 2.7vh;
+}
+
+span {
+  color: black;
+}
 #elephant {
   position: relative;
-  top: -130px;
-  height: 200px;
+  top: -12vh;
+  height: 20vh;
 }
 
 .login-container {
@@ -58,19 +70,20 @@ export default {
   justify-content: center;
   align-items: center;
   height: 100vh;
+  /* background-image: url("@/assets/login_bg_elephant.svg"); */
   background-color: #d1e7ff;
-  background-repeat: no-repeat;
-  background-size: cover;
+  background-repeat: space;
 }
 
 .login-box {
   background-color: #a6c9ff;
-  padding: 20px;
-  border-radius: 10px;
+  padding: 3vh;
+  border-radius: 20px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   text-align: center;
   height: 60vh;
   width: 90vh;
+  border: 10px solid #0073e6;
 }
 
 form {
@@ -82,43 +95,46 @@ form {
   display: flex;
   position: relative;
   align-items: center;
-  margin-bottom: 30px;
-  font-size: 60px;
-  top: -100px;
+  margin-bottom: 3vh;
+  font-size: 6vh;
+  top: -10vh;
   -webkit-text-stroke: 1px black;
 }
 
 label {
   flex: 1;
   font-weight: bold;
-  text-align: center;
+  text-align: left;
   margin-right: 10px;
+  flex-direction: row;
 }
 
 input {
   flex: 2;
   padding: 8px;
-  border: 1px solid #ccc;
+  border: 5px solid black;
   border-radius: 5px;
+  font-size: 30px;
+  border-radius: 10px;
 }
 
 button {
-  padding: 10px;
   background-color: #a6a6ff;
   color: white;
   border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: 40px;
+  border-radius: 20px;
+  font-size: 4vh;
   width: 50%;
-  height: 60px;
+  height: 7vh;
   position: relative;
-  top: -100px;
+  top: -10vh;
   margin: 0 auto;
-  margin-bottom: 50px;
+  margin-bottom: 4vh;
+  border: 5px solid #0073e6;
 }
 
 #submit {
+  font-weight: bold;
   -webkit-text-stroke: 1px black;
 }
 
@@ -127,13 +143,18 @@ button:hover {
 }
 
 .register-link {
+  /* font-weight: bold; */
   display: block;
   position: relative;
   /* margin-top: 10px; */
-  color: #0073e6;
   text-decoration: none;
   font-size: 30px;
   top: -120px;
+  color: white;
+}
+
+.register-link:hover {
+  color: #0073e6;
 }
 
 .google-login {
@@ -141,23 +162,22 @@ button:hover {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 10px;
+  padding: 2vh;
   background-color: white;
-  border: 1px solid #ccc;
-  border-radius: 5px;
+  border: 5px solid #000;
   cursor: pointer;
-  margin-top: 10px;
+  /* margin-top: 10px; */
   width: 70%;
 }
 
 .google-login img {
-  width: 40px;
-  height: 40px;
+  width: 5vh;
+  height: 5vh;
   margin-right: 10px;
 }
 
 #username,
 #password {
-  height: 60px;
+  height: 6vh;
 }
 </style>

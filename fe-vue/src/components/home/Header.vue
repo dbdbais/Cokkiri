@@ -9,7 +9,7 @@
         <div id="header-second" class="box-row">
             <div id="search-container" class="box-row box-main-con">
                 <span class="title main-title">검색</span>
-                <input type="text" class="nomal-text"/>
+                <input type="text" class="nomal-text" />
                 <button id="search-btn">🔍</button>
             </div>
             <div class="notifications box-row">
@@ -49,7 +49,6 @@ const {
 </script>
 
 <style scoped>
-
 /* header 첫 번째 영역 */
 #header {
     justify-content: space-between;
@@ -60,10 +59,13 @@ const {
     padding: 8px 20px;
     border-radius: 20px;
 }
+
 .nav-btn:hover {
-    background-color: #3B72FF;
+    /* background-color: #3B72FF; */
+    background-color: #B4CBFF;
     border-color: #C191FF;
 }
+
 #quick-start {
     margin-right: 20px;
 }
@@ -154,10 +156,12 @@ const {
     font-size: 20px;
     font-family: yg-jalnan;
 }
+
 .noti-btn:hover {
     background-color: #61adcc;
     color: #f6f6f6;
 }
+
 #mission-icon {
     width: 30px;
     height: 30px;

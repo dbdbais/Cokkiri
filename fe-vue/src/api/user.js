@@ -68,3 +68,21 @@ export function addFriend(myId, friendId) {
     method: "post",
   });
 }
+
+export function getFriends(id) {
+  return axios({
+    url: `${baseURL}/friends/${id}`,
+    method: "get",
+  });
+}
+
+export function deleteFriend(myId, friendId) {
+  return axios({
+    url: `${baseURL}/friends`,
+    params: {
+      userId: myId,
+      friendUserId: friendId,
+    },
+    method: "delete",
+  });
+}

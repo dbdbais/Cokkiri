@@ -1,51 +1,72 @@
 <template>
     <div class="accordion">
         <div v-for="(item, index) in items" :key="index" class="accordion-category">
-            <div class="accordion-header box-main-group" >
-                <span class="title header-title">{{ item.title }}</span> 
+            <div class="accordion-header box-main-group">
+                <span class="title header-title">{{ item.title }}</span>
                 <button class="open-btn nomal-text md" @click="toggle(index)">
-                    {{ openIndex[index] === null ? '+' : '-'}}
+                    {{ openIndex[index] === null ? '+' : '-' }}
                 </button>
             </div>
-            <div class="accordion-item" :class="isOpen(index)? 'open':''">
-                <div v-for="(member, index2) in item.member" :key="index2" class="box-main-exp box-content"
-                >
+            <div class="accordion-item" :class="isOpen(index) ? 'open' : ''">
+                <div v-for="(member, index2) in item.member" :key="index2" class="box-main-exp box-content">
                     <img class="friend-profile" src="@/assets/elephant-profile2.svg">
                     <slot :name="`content-${index2}`" class="title-member">
-                        <span class="title friend-name">{{ member.name }}</span>
+                        <span class="title friend-name">{{ member.friendUserId }}</span>
                     </slot>
                     <img src="@/assets/message.svg" class="message-icon" @click="openModal(member)">
                 </div>
             </div>
-           
+
         </div>
         <Chat v-if="isModalOpen" @close="closeModal" :selectedMember="selectedMember" />
     </div>
 </template>
 
 <script setup>
-import { ref } from 'vue';
-import friendList from "@/assets/data/friendList.json";
+import { ref, onMounted } from 'vue';
+// import friendList from "@/assets/data/friendList.json";
 import { useModal } from "@/composables/useModal";
+import { getFriends } from "@/api/user";
+import { userStore } from "@/stores/user";
 import Chat from "@/components/home/modal/Chat.vue";
 
 const items = ref([]);
+const store = userStore();
 
-items.value.push({
-    title: "친구",
-    member: friendList.friendList.member
+onMounted(async () => {
+    const response = await getFriends(store.tUser.id);
+    console.log(response);
+    if (response.data.length > 0) {
+        items.value.push({
+            title: "친구",
+            member: response.data
+        });
+    }
+
+
+    // response.data.studyList.forEach(study => {
+    //     items.value.push({
+    //         title: study.title,
+    //         member: study.member
+    //     })
+    // });
 });
 
-friendList.studyList.forEach(study => {
-    items.value.push({
-        title: study.title,
-        member: study.member
-    })
-});
+// items.value.push({
+//     title: "친구",
+//     member: friendList.friendList.member
+// });
+
+// friendList.studyList.forEach(study => {
+//     items.value.push({
+//         title: study.title,
+//         member: study.member
+//     })
+// });
 
 const openIndex = ref([]);
 
-for (let i=0; i<items.value.length; i++) {
+for (let i = 0; i < items.value.length; i++) {
     openIndex.value.push(null)
 }
 
@@ -63,29 +84,32 @@ const { isModalOpen, selectedMember, openModal, closeModal } = useModal();
 <style scoped>
 .accordion-category {
     margin-top: 1px;
-    
+
 }
+
 .accordion-item {
     transition: max-height 0.3s ease-in-out;
     max-height: 0;
     overflow-y: scroll;
 }
+
 .open {
-  max-height: 180px;
-  transition: max-height 0.3s ease-in-out;
+    max-height: 180px;
+    transition: max-height 0.3s ease-in-out;
 }
 
 .open-btn {
     width: 20px;
     height: 20px;
     font-size: 15px;
-    
+
     background-color: #DBE7FF;
     color: #3b72ff;
     border-width: 3px;
     border-radius: 5px;
     border-color: #3b72ff;
 }
+
 .accordion-header {
     height: 35px;
     padding: 2px 5px;
@@ -132,6 +156,4 @@ const { isModalOpen, selectedMember, openModal, closeModal } = useModal();
     width: 40px;
     right: 15px;
 }
-
-
 </style>

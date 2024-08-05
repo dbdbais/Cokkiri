@@ -8,12 +8,14 @@ import { extractProblems } from "@/utils/parse-problem";
 const store = problemStore();
 
 onMounted(() => {
-  getProblems().then((response) => {
-    console.log(response);
-    store.setProblems(response.data);
-  }).catch((error) => {
-    console.log(error);
-  });
+  getProblems()
+    .then((response) => {
+      console.log(response);
+      store.setProblems(response.data);
+    })
+    .catch((error) => {
+      console.log(error);
+    });
 });
 </script>
 
@@ -30,7 +32,11 @@ onMounted(() => {
         </tr>
       </thead>
       <tbody>
-        <ProblemItem v-for="problem in store.problems" :key="problem.id" :problem-data="problem" />
+        <ProblemItem
+          v-for="problem in store.problems"
+          :key="problem.id"
+          :problem-data="problem"
+        />
       </tbody>
     </table>
   </div>
@@ -48,13 +54,13 @@ table {
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.25);
   width: 100%;
   border-collapse: collapse;
-  border-radius: 5px;
+  border-radius: 10px;
   overflow: hidden;
-
   margin-top: 20px;
 }
 
 th {
+  font-size: 3vh;
   padding: 1em 0.5em;
   vertical-align: middle;
   text-align: center;

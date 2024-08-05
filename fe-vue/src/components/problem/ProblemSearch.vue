@@ -9,12 +9,14 @@ const store = problemStore();
 const keyword = ref("");
 
 const search = () => {
-  getProblems(parseInt(keyword.value)).then((response) => {
-    console.log(response);
-    store.setProblems(response.data);
-  }).catch((error) => {
-    console.log(error);
-  });
+  getProblems(parseInt(keyword.value))
+    .then((response) => {
+      console.log(response);
+      store.setProblems(response.data);
+    })
+    .catch((error) => {
+      console.log(error);
+    });
 };
 </script>
 
@@ -22,7 +24,7 @@ const search = () => {
   <div class="search-con box-row">
     <div class="input-con box-row">
       <span class="title">문제</span>
-      <input type="text" v-model="keyword" />
+      <input type="text" class="input" v-model="keyword" />
     </div>
     <div class="filter-con box-row">
       <span class="title">필터</span>
@@ -47,8 +49,8 @@ const search = () => {
   width: 1495px;
   height: 94px;
   justify-content: space-between;
-  border: 2px solid #84a5f8;
-  border-radius: 6px;
+  border: 5px solid #84a5f8;
+  border-radius: 10px;
   background-color: #8220ff;
   padding: 25px 30px;
   -webkit-text-stroke: 3px black;
@@ -56,8 +58,8 @@ const search = () => {
 
 /* Font */
 
-.input-con>span,
-.filter-con>span {
+.input-con > span,
+.filter-con > span {
   font-size: 35px;
 }
 
@@ -128,5 +130,25 @@ const search = () => {
   text-align: center;
   border-radius: 4px;
   padding: 4px;
+}
+
+label {
+  height: 40px;
+}
+
+.input {
+  border: 3px solid black;
+  border-radius: 10px;
+  height: 40px;
+  font-size: 30px;
+  font-weight: lighter;
+}
+
+#app > div > div.problem-con > div.search-con.box-row > span {
+  height: 40px;
+}
+
+.btn-search title {
+  height: 40px;
 }
 </style>

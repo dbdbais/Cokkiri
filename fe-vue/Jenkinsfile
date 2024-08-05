@@ -36,6 +36,7 @@ pipeline {
             steps {
                 dir('fe-vue') {
                     script {
+                      sh 'npm install @rollup/rollup-linux-x64-gnu --save-optional'
                       sh 'npm run build'
                     }
                 }

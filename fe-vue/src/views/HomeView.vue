@@ -20,8 +20,25 @@ import Profile from "@/components/home/Profile.vue";
 import FriendsList from "@/components/home/FriendsList.vue";
 import MainContent from "@/components/home/MainContent.vue";
 import { getWaitingRoomList } from "@/api/waitingroom";
-import { ref, onMounted } from "vue";
+import { ref, onMounted, onUnmounted } from "vue";
 import "@/assets/css/home.css";
+import { useMessageStore } from "@/stores/message";
+
+const lobby = new WebSocket(`ws://localhost:8080/lobby/abc`);
+const messageStore = useMessageStore();
+
+lobby.onmessage = function (event) {
+  let data = event.data.split("|!|");
+  console.log(data);
+  if (data.length === 4) {
+    let event = data[2];
+    let param = data[3];
+    if (event === "ROOM") {
+      console.log(event, param);
+      messageStore.receiveInvite(param);
+    }
+  }
+};
 
 const rooms = ref("");
 
@@ -39,6 +56,11 @@ const getRoomList = function () {
 
 onMounted(() => {
   getRoomList();
+  messageStore.resetNoti();
+});
+
+onUnmounted(() => {
+  lobby.close();
 });
 </script>
 

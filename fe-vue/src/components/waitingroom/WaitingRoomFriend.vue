@@ -19,7 +19,7 @@ const friendInvite = function (user, roomId) {
     .then((res) => {
       console.log(res.data);
       inviteFriend(
-        { sessionId: roomId, userName: res.data.nickName },
+        { sessionId: roomId, userName: res.data.nickname },
         success,
         fail
       );
@@ -45,7 +45,10 @@ const friendList = ref([]);
 
 <template>
   <div class="friend-invite box box-col slideDown">
-    <span class="title">친구 초대</span>
+    <div class="top box-row">
+      <span class="title">친구 초대</span>
+      <img src="/src/assets/exit.svg" alt="나가기" @click="$emit('close')" />
+    </div>
     <div class="friend-content box">
       <div
         class="friend-item box box-row md nomal-text"
@@ -72,6 +75,11 @@ const friendList = ref([]);
   left: 700px;
   top: 200px;
   background-color: #c191ff;
+}
+.top {
+  width: 96%;
+  align-items: center;
+  justify-content: space-between;
 }
 .title {
   font-size: 30px;

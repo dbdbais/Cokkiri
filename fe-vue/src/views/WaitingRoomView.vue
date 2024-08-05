@@ -90,6 +90,7 @@ const exitRoom = function () {
         id="test"
         v-if="friendInvite"
         :room-id="route.params.roomId"
+        @close="friendInvite = false"
       />
       <div class="box-row">
         <div class="box-col">

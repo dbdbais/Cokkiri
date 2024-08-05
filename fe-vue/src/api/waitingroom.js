@@ -20,11 +20,10 @@ export const goWaitingRoom = (user, success, fail) => {
     .catch(fail);
 };
 
-
 export const createWaitingRoom = (roomData, success, fail) => {
-  console.log("create Waiting Room")
+  console.log("create Waiting Room");
   axios
     .post("/waitingroom/create-room", JSON.stringify(roomData))
     .then(success)
     .catch(fail);
-}
+};

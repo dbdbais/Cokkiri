@@ -51,8 +51,9 @@ public class UserRestController {
         return userService.deleteFriend(userId,friendUserId);
     }
     @PostMapping("/login")
-    public int login(@RequestBody User user){
-        return userService.login(user);
+    public int login(@RequestParam String user_id,
+                     @RequestParam String password){
+        return userService.login(user_id,password);
     }
     @PutMapping("/modify")
     public int modify(@RequestBody User user){

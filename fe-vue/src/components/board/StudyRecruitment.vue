@@ -5,7 +5,6 @@ import StudyRecruitmentGroup from "@/components/board/StudyRecruitmentGroup.vue"
 import StudyDetail from "@/components/board/StudyDetail.vue";
 import StudyCreate from "@/components/board/StudyCreate.vue";
 import { getStudyList, getStudyDetail } from "@/api/board";
-import studyList from "@/assets/data/studyGroup.json";
 
 import { onMounted, ref } from "vue";
 import { useLodingStore } from "@/stores/loading";
@@ -18,8 +17,8 @@ const preventCilck = ref("");
 
 const loadingStore = useLodingStore();
 
-const getRegularList = function () {
-  studyCreate.value = false
+const getRegularList = function (params) {
+  studyCreate.value = false;
   const success = (res) => {
     studyGroup.value = res.data;
     loadingStore.loadingSuccess();
@@ -28,25 +27,32 @@ const getRegularList = function () {
   const fail = (err) => {
     console.log(err);
   };
-  getStudyList(success, fail);
-}
+  getStudyList(params, success, fail);
+};
 
 onMounted(() => {
   loadingStore.loading();
-  getRegularList()
+  getRegularList();
 });
 
 const goDetail = function (group) {
   // console.log(group)
   const success = (res) => {
     console.log(res.data);
-    const tiers = { SEED: 0, ORANGE:0, APPLE:0, KOREAMELON:0, DURIAN:0, KIWI:0}
+    const tiers = {
+      SEED: 0,
+      ORANGE: 0,
+      APPLE: 0,
+      KOREAMELON: 0,
+      DURIAN: 0,
+      KIWI: 0,
+    };
     studyDetail.value = true;
     detailData.value = res.data;
-    detailData.value.tiers.forEach(element => {
-      tiers[element]++
+    detailData.value.tiers.forEach((element) => {
+      tiers[element]++;
     });
-    detailData.value.tiers = tiers
+    detailData.value.tiers = tiers;
     // console.log(detailData.value)
   };
   const fail = (err) => {
@@ -77,12 +83,8 @@ const closeBtn = function () {
         :detail-data="detailData"
         @close="closeBtn"
       />
-      <StudyCreate
-        v-if="studyCreate"
-       
-        @getRegularList="getRegularList"
-      />
-      <StudySearch />
+      <StudyCreate v-if="studyCreate" @getRegularList="getRegularList" />
+      <StudySearch @search="getRegularList" />
       <StudyRecruitmentGroup
         v-for="group in studyGroup"
         :key="group.id"

@@ -1,11 +1,11 @@
 <script setup>
 import { ref, onMounted } from "vue";
 
-onMounted(() => {
-  selectedWeek.value = "mon";
-  startTime.value = "09:00";
-  endTime.value = "09:00";
-});
+// onMounted(() => {
+//   selectedWeek.value = "mon";
+//   startTime.value = "09:00";
+//   endTime.value = "09:00";
+// });
 
 defineProps({
   timeType: String,

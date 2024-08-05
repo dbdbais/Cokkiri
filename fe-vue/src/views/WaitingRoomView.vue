@@ -15,7 +15,32 @@ const router = useRouter();
 const route = useRoute();
 const roomData = ref([]);
 const roomUsers = ref([]);
-// const ws = new WebSocket(`ws://localhost:8080/chat/${route.params.roomId}/user_1231`)
+const chatList = ref([]);
+const friendInvite = ref(false);
+
+const ws = new WebSocket(`ws://localhost:8080/room/${route.params.roomId}/abc`);
+
+ws.onmessage = function (event) {
+  let data = event.data.split("|!|");
+  console.log(data);
+  if (data.length === 2) {
+    let username = data[0];
+    let message = data[1];
+    chatList.value.push(`${username} : ${message}`);
+    console.log(chatList.value);
+  } else {
+    let event = data[2];
+    let param = data[3];
+    switch (event) {
+      case "ENTER":
+        chatList.value.push(`${param}님이 입장하였습니다.`);
+        break;
+      case "QUIT":
+        chatList.value.push(`${param}님이 퇴장하였습니다.`);
+    }
+  }
+};
+
 onMounted(async () => {
   loadingStore.loading();
   setTimeout(() => {
@@ -50,6 +75,7 @@ const goMeetingRoom = function () {
 };
 
 const exitRoom = function () {
+  ws.close();
   router.replace({ name: "home" });
 };
 </script>
@@ -82,7 +108,14 @@ const exitRoom = function () {
         </div>
       </div>
       <div class="bottom flex-align">
-        <WaitingRoomChat />
+        <WaitingRoomChat
+          @chat="
+            (chatData) => {
+              ws.send(chatData);
+            }
+          "
+          :chat-list="chatList"
+        />
         <div class="box-col button-con">
           <button class="bold-text btn friend">
             <img

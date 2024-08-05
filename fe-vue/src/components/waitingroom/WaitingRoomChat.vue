@@ -1,15 +1,17 @@
 <script setup>
 import { ref } from "vue";
 
+defineProps({
+  chatList: Array,
+});
+
+const emit = defineEmits(["chat"]);
+
 const user = ref("어지민");
 const chatText = ref("");
-const chatList = ref([
-  "어지민: 하하하하ㅏ하하하ㅏ하하",
-  "김종덕: ㅇㄴㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁ",
-]);
-
 const chatSubmit = function () {
-  chatList.value.push(user.value + ": " + chatText.value);
+  console.log(chatText.value);
+  emit("chat", chatText.value);
   chatText.value = "";
 };
 </script>
@@ -25,9 +27,14 @@ const chatSubmit = function () {
         {{ chat }}
       </p>
     </div>
-    <form action="" class="chat-input" @submit.prevent="chatSubmit">
-      <input type="text" class="nomal-text" v-model="chatText" />
-    </form>
+    <div class="chat-input">
+      <input
+        type="text"
+        class="nomal-text"
+        v-model="chatText"
+        @keyup.enter="chatSubmit"
+      />
+    </div>
   </div>
 </template>
 

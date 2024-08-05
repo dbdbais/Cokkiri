@@ -2,6 +2,7 @@ import { userStore } from "@/stores/user";
 import "@/api/openvidu-browser-2.30.0";
 
 // 유저 개인의 화면 객체를 저장할 변수
+var publisher;
 var OVCamera; // 카메라
 var OVScreen; // 화면
 var sessionCamera; // 카메라 정보를 담을 세션
@@ -80,7 +81,7 @@ function joinSession(roomId) {
         // document.getElementById('session').style.display = 'block';
 
         // 미디어 서버로 보낼 카메라 영상 설정
-        var publisher = OVCamera.initPublisher("members", {
+        publisher = OVCamera.initPublisher("members", {
           audioSource: undefined, // 오디오 설정
           videoSource: undefined, // 비디오 설정 - 기본값 카메라
           publishAudio: true, // 오디오 on / off
@@ -412,28 +413,12 @@ function getScreenToken(callback) {
   );
 }
 
-function changeVideo() {
-  let button = document.querySelector("#myVideo");
-
-  if (button.dataset.flag == "true") {
-    publisher.publishVideo(false);
-    button.dataset.flag = false;
-  } else {
-    publisher.publishVideo(true);
-
-    button.dataset.flag = true;
-  }
+function changeVideo(video) {
+  publisher.publishVideo(video);
 }
 
-function changeAudio() {
-  let button = document.querySelector("#myAudio");
-  if (button.dataset.flag == "true") {
-    publisher.publishAudio(false);
-    button.dataset.flag = false;
-  } else {
-    publisher.publishAudio(true);
-    button.dataset.flag = true;
-  }
+function changeAudio(audio) {
+  publisher.publishAudio(audio);
 }
 
 function sendChat() {

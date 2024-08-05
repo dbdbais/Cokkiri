@@ -1,4 +1,4 @@
-package com.ssafy.iscode.config;
+package com.ssafy.iscode.websocket.config;
 
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.context.annotation.Configuration;

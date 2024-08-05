@@ -2,7 +2,7 @@
   <div class="login-container">
     <div class="login-box">
       <form @submit.prevent="handleSubmit">
-        <img src="@/assets/login_elephant.svg" alt="">
+        <img id="elephant" src="@/assets/login_elephant.svg" alt="" />
         <div class="form-group">
           <label for="username">아이디 :</label>
           <input type="text" id="username" v-model="username" />
@@ -13,42 +13,44 @@
           <input type="password" id="password" v-model="password" />
         </div>
 
-        <button type="submit">로그인</button>
+        <button id="submit" type="submit">로그인</button>
       </form>
       <a href="#" class="register-link">처음이신가요? 회원가입</a>
       <button class="google-login">
-        <img src="https://developers.google.com/identity/images/g-logo.png" alt="Google Logo" />
+        <img
+          src="https://developers.google.com/identity/images/g-logo.png"
+          alt="Google Logo"
+        />
         Continue with Google
       </button>
     </div>
   </div>
 </template>
 
-
 <script>
-import '@/assets/css/home.css'
+import "@/assets/css/home.css";
 export default {
   data() {
     return {
-      username: '',
-      password: ''
+      username: "",
+      password: "",
     };
   },
   methods: {
     handleSubmit() {
       // Handle login logic here
-      console.log('Username:', this.username);
-      console.log('Password:', this.password);
-    }
-  }
+      console.log("Username:", this.username);
+      console.log("Password:", this.password);
+    },
+  },
 };
 </script>
 
 <style scoped>
-img {
+#elephant {
   position: relative;
-
-  height: 50px;
+  top: -130px;
+  height: 200px;
 }
 
 .login-container {
@@ -67,6 +69,8 @@ img {
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   text-align: center;
+  height: 60vh;
+  width: 90vh;
 }
 
 form {
@@ -76,14 +80,18 @@ form {
 
 .form-group {
   display: flex;
+  position: relative;
   align-items: center;
-  margin-bottom: 10px;
+  margin-bottom: 30px;
+  font-size: 60px;
+  top: -100px;
+  -webkit-text-stroke: 1px black;
 }
 
 label {
   flex: 1;
   font-weight: bold;
-  text-align: right;
+  text-align: center;
   margin-right: 10px;
 }
 
@@ -101,8 +109,17 @@ button {
   border: none;
   border-radius: 5px;
   cursor: pointer;
-  width: 100%;
-  margin-top: 10px;
+  font-size: 40px;
+  width: 50%;
+  height: 60px;
+  position: relative;
+  top: -100px;
+  margin: 0 auto;
+  margin-bottom: 50px;
+}
+
+#submit {
+  -webkit-text-stroke: 1px black;
 }
 
 button:hover {
@@ -111,10 +128,12 @@ button:hover {
 
 .register-link {
   display: block;
-  margin-top: 10px;
+  position: relative;
+  /* margin-top: 10px; */
   color: #0073e6;
   text-decoration: none;
-  font-size: 0.8em;
+  font-size: 30px;
+  top: -120px;
 }
 
 .google-login {
@@ -127,13 +146,18 @@ button:hover {
   border: 1px solid #ccc;
   border-radius: 5px;
   cursor: pointer;
-  width: 100%;
   margin-top: 10px;
+  width: 70%;
 }
 
 .google-login img {
-  width: 20px;
-  height: 20px;
+  width: 40px;
+  height: 40px;
   margin-right: 10px;
+}
+
+#username,
+#password {
+  height: 60px;
 }
 </style>

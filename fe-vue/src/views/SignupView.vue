@@ -2,6 +2,7 @@
   <div class="signup-container">
     <div class="signup-box">
       <form @submit.prevent="handleSubmit">
+        <img id="elephant" src="@/assets/login_elephant.svg" alt="" />
         <div class="form-group">
           <label for="username">아이디 :</label>
           <input type="text" id="username" v-model="username" />
@@ -14,8 +15,12 @@
         </div>
 
         <div class="form-group">
-          <label for="passwordConfirm">비밀번호 확인 :</label>
-          <input type="password" id="passwordConfirm" v-model="passwordConfirm" />
+          <label for="passwordConfirm">비밀번호<br />확인 :</label>
+          <input
+            type="password"
+            id="passwordConfirm"
+            v-model="passwordConfirm"
+          />
         </div>
 
         <div class="form-group">
@@ -34,32 +39,37 @@
 export default {
   data() {
     return {
-      username: '',
-      password: '',
-      passwordConfirm: '',
-      email: ''
+      username: "",
+      password: "",
+      passwordConfirm: "",
+      email: "",
     };
   },
   methods: {
     handleSubmit() {
       // Handle signup logic here
-      console.log('Username:', this.username);
-      console.log('Password:', this.password);
-      console.log('Password Confirm:', this.passwordConfirm);
-      console.log('Email:', this.email);
-    }
-  }
+      console.log("Username:", this.username);
+      console.log("Password:", this.password);
+      console.log("Password Confirm:", this.passwordConfirm);
+      console.log("Email:", this.email);
+    },
+  },
 };
 </script>
 
 <style scoped>
+#elephant {
+  position: relative;
+  top: -130px;
+  height: 200px;
+}
+
 .signup-container {
   display: flex;
   justify-content: center;
   align-items: center;
   height: 100vh;
   background-color: #d1e7ff;
-  background-image: url('path-to-your-koala-background-image.png');
   background-repeat: no-repeat;
   background-size: cover;
 }
@@ -70,6 +80,8 @@ export default {
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   text-align: center;
+  height: 60vh;
+  width: 90vh;
 }
 
 form {
@@ -79,13 +91,19 @@ form {
 
 .form-group {
   display: flex;
+  position: relative;
   align-items: center;
-  margin-bottom: 10px;
+  margin-bottom: 20px;
+  font-size: 50px;
+  top: -100px;
+  -webkit-text-stroke: 1px black;
 }
 
 label {
   flex: 1;
   font-weight: bold;
+  text-align: left;
+  margin-right: 10px;
 }
 
 input {
@@ -93,6 +111,7 @@ input {
   padding: 8px;
   border: 1px solid #ccc;
   border-radius: 5px;
+  height: 50px;
 }
 
 .check-btn,
@@ -104,6 +123,8 @@ input {
   border: none;
   border-radius: 5px;
   cursor: pointer;
+  height: 50px;
+  font-size: 35px;
 }
 
 .check-btn:hover,
@@ -118,6 +139,10 @@ input {
   border: none;
   border-radius: 5px;
   cursor: pointer;
+  height: 50px;
+  font-size: 35px;
+  position: relative;
+  top: -100px;
 }
 
 .signup-btn:hover {

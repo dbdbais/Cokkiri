@@ -1,4 +1,4 @@
-FROM compiler
+FROM compiler_image
 
 COPY be-spring/iscode/iscode/build/libs/*.jar app/app.jar
 

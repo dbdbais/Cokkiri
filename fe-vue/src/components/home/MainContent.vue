@@ -1,9 +1,9 @@
 <template>
   <div class="main-content box-main-con">
     <div class="box-row">
-      <div class="filter-btn box-main-noti" @click="$emit('is-game')">전체</div>
-      <div class="filter-btn box-main-noti" @click="$emit('is-game', false)">공부방</div>
-      <div class="filter-btn box-main-noti" @click="$emit('is-game', true)">게임방</div>
+      <div class="filter-btn box-main-noti" :class="{ 'active': categoryObj.all }" @click="$emit('is-game')">전체</div>
+      <div class="filter-btn box-main-noti" :class="{ 'active': categoryObj.study }" @click="$emit('is-game', false)">공부방</div>
+      <div class="filter-btn box-main-noti" :class="{ 'active': categoryObj.game }" @click="$emit('is-game', true)">게임방</div>
     </div>
     <div id="room-container" class="rooms">
       <Room
@@ -31,6 +31,7 @@ import roomList from "@/assets/data/roomListAxios.json";
 defineProps({
   rooms: Object,
   currentPage: Number,
+  categoryObj: Object
 });
 
 
@@ -46,6 +47,7 @@ rooms: [
 </script>
 
 <style scoped>
+
 .filter-btn {
   padding: 10px 30px;
   margin-right: 15px;
@@ -69,5 +71,11 @@ rooms: [
 .page {
   bottom: -110px;
   left: 1040px;
+}
+
+.active {
+  color: #eaf3f7;
+  border-color: #eaf3f7;
+  background-color: #5bb5d9;
 }
 </style>

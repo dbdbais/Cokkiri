@@ -12,6 +12,7 @@
         id="main-content"
         :rooms="rooms"
         :current-page="currentPage"
+        :category-obj="categoryObj"
         @go-room="goRoom"
         @change-page="pageChange"
         @is-game="categoryList"
@@ -37,6 +38,11 @@ const messageStore = useMessageStore();
 const router = useRouter();
 const currentPage = ref(1);
 const category = ref(undefined)
+const categoryObj = ref({
+  all: true,
+  game: false,
+  study: false
+})
 
 const searchList = function (roomName) {
   getRoomList({roomName: roomName})
@@ -44,6 +50,18 @@ const searchList = function (roomName) {
 
 const categoryList = function (isGame) {
   category.value = isGame
+  Object.keys(categoryObj.value).forEach((key) => {
+    categoryObj.value[key] = false
+  })
+  if (isGame === undefined) {
+    categoryObj.value.all = true
+  } else if (isGame === true) {
+    categoryObj.value.game = true
+  } else if (isGame === false) {
+    categoryObj.value.study = true
+  }
+
+
   getRoomList({isGame: isGame})
 }
 

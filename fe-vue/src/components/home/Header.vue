@@ -1,7 +1,7 @@
 <template>
   <header>
     <nav id="header-first" class="title main-title">
-      <div id="quick-start" class="box-main-con box-in nav-btn">바로가기</div>
+      <div id="quick-start" class="box-main-con box-in nav-btn" @click="$emit('go-room')">바로가기</div>
       <div
         id="create-room"
         class="box-main-con box-in nav-btn"

@@ -10,7 +10,7 @@
         v-for="room in rooms"
         :key="room.id"
         :room="room"
-        @click="goRoom(room.sessionId)"
+        @click="$emit('go-room',room.sessionId)"
       />
     </div>
     <Page
@@ -23,8 +23,6 @@
 
 <script setup>
 import { ref } from "vue";
-import { useRouter } from "vue-router";
-import { goWaitingRoom } from "@/api/waitingroom";
 import Room from "./Room.vue";
 import Page from "@/components/common/Page.vue";
 // import roomList from "@/assets/data/roomList.json";
@@ -35,8 +33,8 @@ defineProps({
   currentPage: Number,
 });
 
-const router = useRouter();
-const user = ref("김종덕");
+
+
 
 rooms: [
   { id: 1, name: "알고리즘 고수들방", members: 116 },
@@ -44,17 +42,7 @@ rooms: [
   // Add more rooms here
 ];
 
-const goRoom = function (id) {
-  console.log(id);
-  const success = (res) => {
-    console.log(res.data);
-    router.push({ name: "waitingRoom", params: { roomId: id } });
-  };
-  const fail = (err) => {
-    console.log(err);
-  };
-  goWaitingRoom({ sessionId: id, userName: user.value }, success, fail);
-};
+
 </script>
 
 <style scoped>

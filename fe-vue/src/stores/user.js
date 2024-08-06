@@ -2,17 +2,10 @@ import { ref } from "vue";
 import { defineStore } from "pinia";
 
 export const userStore = defineStore("user", () => {
-  const tUser = ref({
+  const user = ref({
     id: "ssafy",
     nickname: "ssafy",
     tier: "SEED",
-    percent: 0,
-  });
-
-  const user = ref({
-    id: "",
-    nickname: "",
-    tier: "",
     percent: 0,
   });
 
@@ -20,7 +13,6 @@ export const userStore = defineStore("user", () => {
     user.value = newUser;
   }
   return {
-    tUser,
     user,
     setUser,
   };

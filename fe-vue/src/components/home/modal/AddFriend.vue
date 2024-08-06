@@ -24,7 +24,7 @@ function filterUsersById(keyword) {
 
 const add = async (friendId) => {
     try {
-        const response = await addFriend(store.tUser.id, friendId);
+        const response = await addFriend(store.user.id, friendId);
         console.log(response);
     } catch (e) {
         console.log(e);

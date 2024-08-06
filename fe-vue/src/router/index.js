@@ -52,6 +52,11 @@ const router = createRouter({
       name: "problem",
       component: () => import("@/views/ProblemView.vue"),
     },
+    {
+      path: "/loading",
+      name: "loading",
+      component: () => import("@/components/common/MainLoading.vue"),
+    },
   ],
 });
 

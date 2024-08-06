@@ -1,9 +1,9 @@
 <template>
     <div class="box-main-con box-col">
-        <div id="name" class="title main-title">{{ store.tUser.nickname }}</div>
+        <div id="name" class="title main-title">{{ store.user.nickname }}</div>
         <div id="rank-container" class="box-row box-main-exp" style="align-items: center;">
             <img id="rank-img" :src="imageSrc" alt="rank" class="rank" />
-            <Exp id="rank-exp" :grade="grade" :percentage="store.tUser.percent"></Exp>
+            <Exp id="rank-exp" :grade="grade" :percentage="store.user.percent"></Exp>
         </div>
     </div>
 </template>
@@ -14,7 +14,7 @@ import Exp from "@/components/home/Exp.vue";
 import { userStore } from "@/stores/user";
 
 const store = userStore();
-const grade = store.tUser.tier;
+const grade = store.user.tier;
 
 const imageSrc = computed(() => {
     switch (grade) {

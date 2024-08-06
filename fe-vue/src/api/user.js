@@ -8,7 +8,6 @@ const baseURL = "userapi";
   ******************* */
 
 export function register(data) {
-  console.log(data);
   return axios({
     url: `${baseURL}/register`,
     method: "post",
@@ -26,8 +25,11 @@ export function getAllUser() {
 export function login(data) {
   return axios({
     url: `${baseURL}/login`,
+    params: {
+      user_id: data.id,
+      password: data.password,
+    },
     method: "post",
-    data,
   });
 }
 
@@ -73,6 +75,29 @@ export function getFriends(id) {
   return axios({
     url: `${baseURL}/friends/${id}`,
     method: "get",
+  });
+}
+
+export function acceptFriend(myId, friendId) {
+  return axios({
+    url: `${baseURL}/friends`,
+    params: {
+      userId: myId,
+      friendUserId: friendId,
+      status: "ACCEPT",
+    },
+    method: "put",
+  });
+}
+
+export function rejectFriend(myId, friendId) {
+  return axios({
+    url: `${baseURL}/friends`,
+    params: {
+      userId: myId,
+      friendUserId: friendId,
+    },
+    method: "delete",
   });
 }
 

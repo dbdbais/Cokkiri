@@ -24,7 +24,6 @@
 
 <script setup>
 import { ref, onMounted } from 'vue';
-// import friendList from "@/assets/data/friendList.json";
 import { useModal } from "@/composables/useModal";
 import { getFriends } from "@/api/user";
 import { userStore } from "@/stores/user";
@@ -34,7 +33,7 @@ const items = ref([]);
 const store = userStore();
 
 onMounted(async () => {
-    const response = await getFriends(store.tUser.id);
+    const response = await getFriends(store.user.id);
     console.log(response);
     if (response.data.length > 0) {
         items.value.push({

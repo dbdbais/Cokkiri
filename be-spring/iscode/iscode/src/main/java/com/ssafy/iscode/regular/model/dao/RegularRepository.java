@@ -38,7 +38,7 @@ public class RegularRepository {
     }
 
     public List<RegularDto> findByHost(User host) {
-        String query = "SELECT r FROM RegularDto r JOIN r.hostUser u" +
+        String query = "SELECT r FROM RegularDto r JOIN r.hostUser u " +
                 "WHERE u.nickname = :hostName " +
                 "AND r.end IS NULL";
 

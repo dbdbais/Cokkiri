@@ -25,7 +25,6 @@ const pageChange = function (motion) {
   align-items: center;
 
   position: absolute;
-  bottom: 15px;
 }
 .page-num {
   margin: 0px 20px;

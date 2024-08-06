@@ -8,7 +8,12 @@
     </div>
     <div id="main-right" class="box-col">
       <Header id="header" class="box-col" @create="getRoomList" />
-      <MainContent id="main-content" :rooms="rooms" />
+      <MainContent
+        id="main-content"
+        :rooms="rooms"
+        :current-page="currentPage"
+        @change-page="pageChange"
+      />
     </div>
   </div>
 </template>
@@ -26,6 +31,7 @@ import { useMessageStore } from "@/stores/message";
 
 const lobby = new WebSocket(`ws://localhost:8080/lobby/abc`);
 const messageStore = useMessageStore();
+const currentPage = ref(1);
 
 lobby.onmessage = function (event) {
   let data = event.data.split("|!|");
@@ -42,16 +48,20 @@ lobby.onmessage = function (event) {
 
 const rooms = ref("");
 
-const getRoomList = function () {
+const getRoomList = function (params) {
   const success = (res) => {
     console.log(res.data);
     rooms.value = res.data;
+    if (rooms.value.length === 0) {
+      pageChange(0);
+    }
   };
   const fail = (err) => {
     console.log(err);
   };
 
-  getWaitingRoomList(success, fail);
+  console.log(params);
+  getWaitingRoomList(params, success, fail);
 };
 
 onMounted(() => {
@@ -62,6 +72,20 @@ onMounted(() => {
 onUnmounted(() => {
   lobby.close();
 });
+
+const pageChange = function (motion) {
+  if (motion === 1) {
+    currentPage.value += 1;
+  } else if (motion === 0) {
+    currentPage.value -= 1;
+    if (currentPage.value === 0) {
+      currentPage.value = 1;
+    }
+  }
+  console.log("motion: ", motion);
+  console.log(currentPage.value);
+  getRoomList({ page: currentPage.value });
+};
 </script>
 
 <style scoped>

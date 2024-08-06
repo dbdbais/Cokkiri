@@ -39,24 +39,34 @@ public class UserRestController {
     public List<UserFriend> getFriends(@PathVariable String id){
         return userService.getUserFriends(id);
     }
+
+    //get friend request to friendUserId
     @PostMapping("/friends")
     public int insertRelation(@RequestParam String userId,
-                              @RequestParam String friendUserId,
-                              @RequestParam Status status){
-        return userService.insertFriend(userId,friendUserId,status);
+                              @RequestParam String friendUserId){
+        return userService.insertFriend(userId,friendUserId);
     }
+
+    //accept friend
+    @PutMapping("/friends/accept")
+    public int acceptFriends(@RequestParam String userId,
+                            @RequestParam String friendUserId){
+        return userService.acceptFriend(friendUserId,userId);
+    }
+    //delete friend request to friendUserId
     @DeleteMapping("/friends")
-    public int insertRelation(@RequestParam String userId,
+    public int deleteRelation(@RequestParam String userId,
                               @RequestParam String friendUserId){
         return userService.deleteFriend(userId,friendUserId);
     }
     @PostMapping("/login")
-    public int login(@RequestBody User user){
-        return userService.login(user);
+    public int login(@RequestParam String user_id,
+                     @RequestParam String password){
+        return userService.login(user_id,password);
     }
     @PutMapping("/modify")
     public int modify(@RequestBody User user){
-        return userService.insertUser(user);
+        return userService.modifyUser(user);
     }
 
     @DeleteMapping("/delete/{id}")

@@ -19,7 +19,7 @@ public class UserFriend {
 
     @Enumerated(value = EnumType.STRING)
     @Column(name="status")
-    private Status status;
+    private Status status = Status.REQUEST;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", insertable = false, updatable = false)
@@ -34,6 +34,7 @@ public class UserFriend {
 
     public UserFriend() {
     }
+
 
     public UserFriend(String userId, String friendUserId, Status status) {
         this.userId = userId;

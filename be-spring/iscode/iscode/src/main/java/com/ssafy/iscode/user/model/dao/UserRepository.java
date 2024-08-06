@@ -28,8 +28,7 @@ public class UserRepository {
                 em.persist(user);
             }
             else{
-                //Modify
-                em.merge(user);
+                return 0;
             }
             return 1; // successfully saved
         } catch (Exception e) {
@@ -39,7 +38,25 @@ public class UserRepository {
     }
 
     @Transactional
-    public int saveFriend(String userId, String friendUserId, Status status) {
+    public int modify(User user) {
+        try {
+
+            if(findById(user.getId()) != null){
+                //Modify
+                em.merge(user);
+            }
+            else{
+                return 0;
+            }
+            return 1; // successfully saved
+        } catch (Exception e) {
+            e.printStackTrace();
+            return 0; // failed
+        }
+    }
+
+    @Transactional
+    public int saveFriend(String userId, String friendUserId) {
         try {
             // Find both users
             User user = findById(userId);
@@ -52,15 +69,36 @@ public class UserRepository {
             System.out.println(friendUser);
 
             // Add friend relationships
-            user.addFriend(friendUser, status);
+            user.addFriend(friendUser);
 
             // Save changes to the database
             em.merge(user); // Save the user with updated friends list
             em.merge(friendUser); // Save the friend with updated friends list
 
-
-
             return 1; // Successfully saved
+        } catch (Exception e) {
+            e.printStackTrace();
+            return 0; // Failed
+        }
+    }
+
+    @Transactional
+    public int accept(String userId, String friendUserId){
+        try {
+            // Find both users
+            User user = findById(userId);
+            User friendUser = findById(friendUserId);
+
+            if ( user.acceptFriend(friendUser)) {
+                // Save changes to the database
+                em.merge(user); // Save the user with updated friends list
+                em.merge(friendUser); // Save the friend with updated friends list
+
+                return 1; // Successfully saved
+            }
+            else{
+                return 0;
+            }
         } catch (Exception e) {
             e.printStackTrace();
             return 0; // Failed

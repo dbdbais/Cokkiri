@@ -29,7 +29,7 @@ import { useMessageStore } from "@/stores/message";
 
 
 const store = userStore();
-const lobby = new WebSocket(`ws://i11e108.p.ssafy.io/lobby/abc`);
+const lobby = new WebSocket(`ws://localhost:8080/lobby/abc`);
 const messageStore = useMessageStore();
 const router = useRouter();
 const currentPage = ref(1);

@@ -30,7 +30,7 @@ import { ref, onMounted, onUnmounted } from "vue";
 import "@/assets/css/home.css";
 import { useMessageStore } from "@/stores/message";
 
-const lobby = new WebSocket(`ws://localhost:8080/lobby/abc`);
+const lobby = new WebSocket(`ws://i11e108.p.ssafy.io/lobby/abc`);
 const messageStore = useMessageStore();
 const currentPage = ref(1);
 const searchList = function (roomName) {

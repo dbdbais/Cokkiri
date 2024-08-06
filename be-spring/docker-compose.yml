@@ -2,4 +2,5 @@ services:
   complier:
     image: be-compiler
     container_name: compiler_server_test
-    ports: "8981:8080"
+    ports: 
+      - "8981:8080"

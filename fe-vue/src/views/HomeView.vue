@@ -13,6 +13,7 @@
         :rooms="rooms"
         :current-page="currentPage"
         @change-page="pageChange"
+        @is-game="categoryList"
       />
     </div>
   </div>
@@ -35,6 +36,11 @@ const currentPage = ref(1);
 const searchList = function (roomName) {
   getRoomList({roomName: roomName})
 }
+
+const categoryList = function (isGame) {
+  getRoomList({isGame: isGame})
+}
+
 lobby.onmessage = function (event) {
   let data = event.data.split("|!|");
   console.log(data);

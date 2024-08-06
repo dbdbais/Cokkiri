@@ -1,9 +1,9 @@
 <template>
   <div class="main-content box-main-con">
     <div class="box-row">
-      <div class="filter-btn box-main-noti">전체</div>
-      <div class="filter-btn box-main-noti">공부방</div>
-      <div class="filter-btn box-main-noti">게임방</div>
+      <div class="filter-btn box-main-noti" @click="$emit('is-game')">전체</div>
+      <div class="filter-btn box-main-noti" @click="$emit('is-game', false)">공부방</div>
+      <div class="filter-btn box-main-noti" @click="$emit('is-game', true)">게임방</div>
     </div>
     <div id="room-container" class="rooms">
       <Room

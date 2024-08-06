@@ -7,9 +7,9 @@ export const getWaitingRoom = (roomId, success, fail) => {
   axios.get(`/waitingroom/${roomId}`).then(success).catch(fail);
 };
 
-export const getWaitingRoomList = (success, fail) => {
+export const getWaitingRoomList = (params, success, fail) => {
   console.log("get Study Room List");
-  axios.get("/waitingroom?").then(success).catch(fail);
+  axios.get("/waitingroom?", { params: params }).then(success).catch(fail);
 };
 
 export const goWaitingRoom = (user, success, fail) => {

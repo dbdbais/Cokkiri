@@ -1,9 +1,9 @@
 <template>
   <div class="main-content box-main-con">
     <div class="box-row">
-      <div class="filter-btn box-main-noti">전체</div>
-      <div class="filter-btn box-main-noti">공부방</div>
-      <div class="filter-btn box-main-noti">게임방</div>
+      <div class="filter-btn box-main-noti" @click="$emit('is-game')">전체</div>
+      <div class="filter-btn box-main-noti" @click="$emit('is-game', false)">공부방</div>
+      <div class="filter-btn box-main-noti" @click="$emit('is-game', true)">게임방</div>
     </div>
     <div id="room-container" class="rooms">
       <Room
@@ -13,7 +13,11 @@
         @click="goRoom(room.sessionId)"
       />
     </div>
-    <Pagination id="pagi-container" />
+    <Page
+      class="page"
+      :current-page="currentPage"
+      @change-page="(motion) => $emit('change-page', motion)"
+    />
   </div>
 </template>
 
@@ -22,12 +26,13 @@ import { ref } from "vue";
 import { useRouter } from "vue-router";
 import { goWaitingRoom } from "@/api/waitingroom";
 import Room from "./Room.vue";
-import Pagination from "@/components/common/Pagination.vue";
+import Page from "@/components/common/Page.vue";
 // import roomList from "@/assets/data/roomList.json";
 import roomList from "@/assets/data/roomListAxios.json";
 
 defineProps({
   rooms: Object,
+  currentPage: Number,
 });
 
 const router = useRouter();
@@ -72,5 +77,9 @@ const goRoom = function (id) {
   grid-template-rows: 1fr 1fr 1fr;
   margin-top: 20px;
   gap: 35px;
+}
+.page {
+  bottom: -110px;
+  left: 1040px;
 }
 </style>

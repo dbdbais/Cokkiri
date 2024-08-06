@@ -105,7 +105,7 @@ pipeline {
                     // Docker Compose 실행 전에 기존 컨테이너를 종료 및 제거
                     sh 'docker rm -f mysql'
                     sh 'docker rm -f vuejs'
-
+                    sh 'docker rm -f Cokkiri-springboot'
                     sh 'docker-compose down'
                     // Docker Compose를 사용하여 서비스 빌드 및 실행
                     sh 'docker-compose up --build -d'

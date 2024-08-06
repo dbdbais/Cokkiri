@@ -75,7 +75,7 @@ public class RegularController {
 
             if(result == 1) {
                 try {
-                    String event = ".|!|.|!|REGULAR|!|.";
+                    String event = ".|!|.|!|NOTI|!|.";
                     String hostName = regularService.getRegular(regularRequestDto.getSessionId()).getHostName();
                     lobbyWebSocketHandler.sendEvent(hostName, event);
 

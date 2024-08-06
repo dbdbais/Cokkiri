@@ -1,3 +1,4 @@
+version: '3'
 services:
   db:
     image: mysql:8.0
@@ -6,7 +7,7 @@ services:
       MYSQL_ROOT_PASSWORD: 1sC0de!
       MYSQL_DATABASE: ssafy
     volumes:
-#      - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql
+      # - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql
       - mysql_develop_data:/var/lib/mysql
     ports:
       - "3306:3306"
@@ -23,15 +24,15 @@ services:
     networks:
       - Cokkiri-develop-Network
 
- frontend:
-  image: ohuggy/Cokkiri_develop_FE
-   container_name: vuejs
-   ports:
-     - "8086:8081"
-   depends_on:
-     - backend
-   networks:
-     - Cokkiri-develop-Network
+  frontend:   # 'frontend' 서비스 들여쓰기 수정
+    image: ohuggy/Cokkiri_develop_FE
+    container_name: vuejs
+    ports:
+      - "8086:8081"
+    depends_on:
+      - backend
+    networks:
+      - Cokkiri-develop-Network
 
 volumes:
   mysql_develop_data:

@@ -7,11 +7,13 @@
       <FriendsList id="friends-list" />
     </div>
     <div id="main-right" class="box-col">
-      <Header id="header" class="box-col" @create="getRoomList" @search="searchList"/>
+      <Header id="header" class="box-col" @create="getRoomList" @search="searchList" @go-room="goRightNow"/>
       <MainContent
         id="main-content"
         :rooms="rooms"
         :current-page="currentPage"
+        :category-obj="categoryObj"
+        @go-room="goRoom"
         @change-page="pageChange"
         @is-game="categoryList"
       />
@@ -25,21 +27,87 @@ import Header from "@/components/home/Header.vue";
 import Profile from "@/components/home/Profile.vue";
 import FriendsList from "@/components/home/FriendsList.vue";
 import MainContent from "@/components/home/MainContent.vue";
-import { getWaitingRoomList } from "@/api/waitingroom";
+import { getWaitingRoomList, goWaitingRoom } from "@/api/waitingroom";
 import { ref, onMounted, onUnmounted } from "vue";
 import "@/assets/css/home.css";
 import { useMessageStore } from "@/stores/message";
+import { useRouter } from "vue-router";
 
 const lobby = new WebSocket(`ws://i11e108.p.ssafy.io/lobby/abc`);
 const messageStore = useMessageStore();
+const router = useRouter();
 const currentPage = ref(1);
+const category = ref(undefined)
+const categoryObj = ref({
+  all: true,
+  game: false,
+  study: false
+})
+
 const searchList = function (roomName) {
   getRoomList({roomName: roomName})
 }
 
 const categoryList = function (isGame) {
+  category.value = isGame
+  Object.keys(categoryObj.value).forEach((key) => {
+    categoryObj.value[key] = false
+  })
+  if (isGame === undefined) {
+    categoryObj.value.all = true
+  } else if (isGame === true) {
+    categoryObj.value.game = true
+  } else if (isGame === false) {
+    categoryObj.value.study = true
+  }
+
+
   getRoomList({isGame: isGame})
 }
+
+const goRightNow = function () {
+
+  const params = {
+    isGame: category.value,
+  }
+
+  const availableRoom = ref([])
+
+  const success = (res) => {
+    availableRoom.value = res.data.filter((element) => {
+      return element.maxNum > element.users.length
+    })
+
+    console.log(availableRoom.value)
+    if (availableRoom.value.length > 0) {
+      goRoom(availableRoom.value[0].sessionId)
+    } else {
+      Swal.fire({
+      icon: "error",
+      title: "방이 없습니다.",
+    });
+    }
+  }
+  const fail = (err) => {
+    console.log(err)
+  }
+  getWaitingRoomList(params, success, fail)
+  console.log('바로가기')
+}
+
+const goRoom = function (id) {
+  console.log(id);
+  const success = (res) => {
+    console.log(res.data);
+    router.push({ name: "waitingRoom", params: { roomId: id } });
+  };
+  const fail = (err) => {
+    console.log(err);
+  };
+  goWaitingRoom({ sessionId: id, userName: "김종덕" }, success, fail);
+};
+
+
 
 lobby.onmessage = function (event) {
   let data = event.data.split("|!|");

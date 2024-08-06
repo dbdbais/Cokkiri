@@ -31,7 +31,7 @@ services:
    depends_on:
      - backend
    networks:
-     - Cokkiri-Network
+     - Cokkiri-develop-Network
 
 volumes:
   mysql_develop_data:

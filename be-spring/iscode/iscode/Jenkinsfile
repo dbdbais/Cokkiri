@@ -44,8 +44,8 @@ pipeline {
         }
 
         stage('run container'){
-            dir('be-spring'){
-                steps{
+            steps{
+                dir('be-spring'){
                     sh 'docker-compose down'
                     sh 'docker-compose up --build -d'
                 }

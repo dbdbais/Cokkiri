@@ -7,21 +7,15 @@
       <FriendsList id="friends-list" />
     </div>
     <div id="main-right" class="box-col">
-      <Header id="header" class="box-col" @create="getRoomList" @search="searchList" @go-room="goRightNow"/>
-      <MainContent
-        id="main-content"
-        :rooms="rooms"
-        :current-page="currentPage"
-        :category-obj="categoryObj"
-        @go-room="goRoom"
-        @change-page="pageChange"
-        @is-game="categoryList"
-      />
+      <Header id="header" class="box-col" @create="getRoomList" @search="searchList" @go-room="goRightNow" />
+      <MainContent id="main-content" :rooms="rooms" :current-page="currentPage" :category-obj="categoryObj"
+        @go-room="goRoom" @change-page="pageChange" @is-game="categoryList" />
     </div>
   </div>
 </template>
 
 <script setup>
+import "@/assets/css/home.css";
 import Logo from "@/components/common/Logo.vue";
 import Header from "@/components/home/Header.vue";
 import Profile from "@/components/home/Profile.vue";
@@ -29,10 +23,12 @@ import FriendsList from "@/components/home/FriendsList.vue";
 import MainContent from "@/components/home/MainContent.vue";
 import { getWaitingRoomList, goWaitingRoom } from "@/api/waitingroom";
 import { ref, onMounted, onUnmounted } from "vue";
-import "@/assets/css/home.css";
-import { useMessageStore } from "@/stores/message";
 import { useRouter } from "vue-router";
+import { userStore } from "@/stores/user";
+import { useMessageStore } from "@/stores/message";
 
+
+const store = userStore();
 const lobby = new WebSocket(`ws://i11e108.p.ssafy.io/lobby/abc`);
 const messageStore = useMessageStore();
 const router = useRouter();
@@ -45,7 +41,7 @@ const categoryObj = ref({
 })
 
 const searchList = function (roomName) {
-  getRoomList({roomName: roomName})
+  getRoomList({ roomName: roomName })
 }
 
 const categoryList = function (isGame) {
@@ -62,7 +58,7 @@ const categoryList = function (isGame) {
   }
 
 
-  getRoomList({isGame: isGame})
+  getRoomList({ isGame: isGame })
 }
 
 const goRightNow = function () {
@@ -83,9 +79,9 @@ const goRightNow = function () {
       goRoom(availableRoom.value[0].sessionId)
     } else {
       Swal.fire({
-      icon: "error",
-      title: "방이 없습니다.",
-    });
+        icon: "error",
+        title: "방이 없습니다.",
+      });
     }
   }
   const fail = (err) => {

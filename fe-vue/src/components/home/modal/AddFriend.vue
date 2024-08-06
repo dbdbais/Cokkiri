@@ -1,8 +1,35 @@
 <script setup>
 import { ref } from "vue";
-import addFriend from "@/assets/data/addFriend.json";
+import { getAllUser, addFriend } from "@/api/user";
+import { userStore } from "@/stores/user";
 
-const friendList = ref(addFriend.friends);
+const store = userStore();
+const friendList = ref();
+const keyword = ref("");
+
+const search = async () => {
+    try {
+        const response = await getAllUser();
+        friendList.value = response.data;
+        friendList.value = filterUsersById(keyword.value);
+        console.log(response);
+    } catch (e) {
+        console.log(e);
+    }
+}
+
+function filterUsersById(keyword) {
+    return friendList.value.filter(user => user.id.toLowerCase().includes(keyword.toLowerCase()));
+}
+
+const add = async (friendId) => {
+    try {
+        const response = await addFriend(store.user.id, friendId);
+        console.log(response);
+    } catch (e) {
+        console.log(e);
+    }
+}
 </script>
 
 <template>
@@ -17,17 +44,19 @@ const friendList = ref(addFriend.friends);
             <div class="modal-body">
                 <div class="search-con box-row box-main-con">
                     <span class="title main-title">검색</span>
-                    <input type="text" value="jong" class="nomal-text"/>
-                    <button class="search-btn">🔍</button>
+                    <input type="text" placeholder="아이디 입력" class="nomal-text" v-model="keyword"
+                        @keyup.enter="search" />
+                    <button class="search-btn" @click="search">🔍</button>
                 </div>
                 <div class="box-main-con friend-list">
                     <div class="grid-container">
                         <div v-for="friend in friendList" :key="friend.id" class="box-row box-main-exp friend-item">
-                            <img :src="friend.img" alt="friend" class="friend-profile" />
+                            <img :src="'/src/assets/rank/' + friend.tier.toLowerCase() + '.svg'" alt="friend"
+                                class="friend-profile" />
                             <div>
-                                <span class="title main-title">{{ friend.name }}</span>
+                                <span class="title main-title">{{ friend.nickname }}</span>
                             </div>
-                            <img src="@/assets/plus-green.svg" class="friend-plus">
+                            <img src="@/assets/plus-green.svg" class="friend-plus" @click="add(friend.id)">
                         </div>
                     </div>
                     <div class="box-row pagi-con">
@@ -138,9 +167,11 @@ const friendList = ref(addFriend.friends);
     padding-top: 3px;
     padding-left: 15px;
 }
+
 .friend-item:hover {
     background-color: #CADCFF;
 }
+
 .friend-plus {
     position: absolute;
     right: 8px;

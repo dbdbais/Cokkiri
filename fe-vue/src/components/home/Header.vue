@@ -1,31 +1,17 @@
 <template>
-  <header>
+  <<<<<<< HEAD <header>
     <nav id="header-first" class="title main-title">
       <div id="quick-start" class="box-main-con box-in nav-btn" @click="$emit('go-room')">바로가기</div>
-      <div
-        id="create-room"
-        class="box-main-con box-in nav-btn"
-        @click="openCreateModal"
-      >
+      <div id="create-room" class="box-main-con box-in nav-btn" @click="openCreateModal">
         방만들기
       </div>
-      <RouterLink
-        id="router-regular"
-        class="header-router"
-        :to="{ name: 'studyBoard' }"
-        >스터디 모집 게시판</RouterLink
-      >
-      <RouterLink
-        id="router-problem"
-        class="header-router"
-        :to="{ name: 'problem' }"
-        >문제 목록</RouterLink
-      >
+      <RouterLink id="router-regular" class="header-router" :to="{ name: 'studyBoard' }">스터디 모집 게시판</RouterLink>
+      <RouterLink id="router-problem" class="header-router" :to="{ name: 'problem' }">문제 목록</RouterLink>
     </nav>
     <div id="header-second" class="box-row">
       <div id="search-container" class="box-row box-main-con">
         <span class="title main-title">방 이름</span>
-        <input type="text" class="nomal-text" v-model="searchText"/>
+        <input type="text" class="nomal-text" v-model="searchText" />
         <button id="search-btn" class="nomal-text" @click="searchList">검색</button>
       </div>
       <div class="notifications box-row">
@@ -39,13 +25,9 @@
         </div>
       </div>
     </div>
-    <CreateRoom
-      v-if="isCreateModalOpen"
-      @close="closeCreateModal"
-      @create="$emit('create')"
-    />
+    <CreateRoom v-if="isCreateModalOpen" @close="closeCreateModal" @create="$emit('create')" />
     <Notification v-if="isNotiModalOpen" @close="closeNotiModal" />
-  </header>
+    </header>
 </template>
 
 <script setup>
@@ -86,10 +68,12 @@ const {
   padding: 8px 20px;
   border-radius: 20px;
 }
+
 .nav-btn:hover {
   background-color: #3b72ff;
   border-color: #c191ff;
 }
+
 #quick-start {
   margin-right: 20px;
 }
@@ -116,13 +100,11 @@ const {
   height: 1px;
   /* background: black; */
   /* transform: skewY(-10deg); */
-  background: repeating-linear-gradient(
-    to right,
-    black,
-    black 2px,
-    transparent 2px,
-    transparent 4px
-  );
+  background: repeating-linear-gradient(to right,
+      black,
+      black 2px,
+      transparent 2px,
+      transparent 4px);
 }
 
 .header-router:hover {
@@ -187,10 +169,12 @@ const {
   font-size: 20px;
   font-family: yg-jalnan;
 }
+
 .noti-btn:hover {
   background-color: #61adcc;
   color: #f6f6f6;
 }
+
 #mission-icon {
   width: 30px;
   height: 30px;

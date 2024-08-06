@@ -22,10 +22,7 @@
         </div>
       </RouterLink>
       <button class="google-login">
-        <img
-          src="https://developers.google.com/identity/images/g-logo.png"
-          alt="Google Logo"
-        />
+        <img src="https://developers.google.com/identity/images/g-logo.png" alt="Google Logo" />
         Continue with Google
       </button>
     </div>
@@ -35,7 +32,12 @@
 <script setup>
 import "@/assets/css/main.css";
 import { ref } from "vue";
-import { login } from "@/api/user";
+import { login, getUser } from "@/api/user";
+import { userStore } from "@/stores/user";
+import { useRouter } from "vue-router";
+
+const router = useRouter();
+const store = userStore();
 
 const userData = ref({
   id: "",
@@ -45,11 +47,23 @@ const userData = ref({
 const submitForm = async () => {
   try {
     const response = await login(userData.value);
+    getUserData();
     console.log(response);
   } catch (e) {
     console.log(e);
   }
 };
+
+const getUserData = async () => {
+  try {
+    const response = await getUser(userData.value.id);
+    store.setUser(response.data);
+    console.log(response);
+    router.push({ name: "home" });
+  } catch (e) {
+    console.log(e);
+  }
+}
 // export default {
 //   data() {
 //     return {
@@ -90,9 +104,11 @@ const submitForm = async () => {
 .background {
   position: absolute;
   top: 0;
-  width: 1000px; /* 배경 이미지의 너비와 동일하게 설정 */
+  width: 1000px;
+  /* 배경 이미지의 너비와 동일하게 설정 */
   height: 100vh;
-  background-image: url("@/assets/login_bg_elephant.svg"); /* 배경 이미지 경로 */
+  background-image: url("@/assets/login_bg_elephant.svg");
+  /* 배경 이미지 경로 */
   background-size: cover;
 }
 

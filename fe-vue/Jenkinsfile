@@ -37,7 +37,6 @@ pipeline {
                 dir('fe-vue') {
                     script {
                         // .env 파일을 로드하여 환경 변수를 설정합니다.
-                        //애플리케이션 소스 코드 및 .env 파일 복사
                         sh 'npm install @rollup/rollup-linux-x64-gnu --save-optional'
                         sh 'npm run build'
                     }

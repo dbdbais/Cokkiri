@@ -42,6 +42,12 @@ public class GameDto {
     @Column(name = "user_times")
     private String times;
 
+    // 1 : item mode
+    // 2 : blind mode
+    // 3 : random language
+    @Column(name = "game_mode")
+    private int mode;
+
     // user prices => 1st, 2nd, 3rd
     // max length = 3
     private List<User> prices;

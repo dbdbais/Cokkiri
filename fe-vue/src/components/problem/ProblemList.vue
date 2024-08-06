@@ -1,21 +1,18 @@
 <script setup>
 import ProblemItem from "@/components/problem/ProblemItem.vue";
 import { onMounted } from "vue";
-import { getProblems } from "@/api/problem";
+import { getAllProblems, getProblems } from "@/api/problem";
 import { problemStore } from "@/stores/problem";
-import { extractProblems } from "@/utils/parse-problem";
 
 const store = problemStore();
 
 onMounted(() => {
-  getProblems()
-    .then((response) => {
-      console.log(response);
-      store.setProblems(response.data);
-    })
-    .catch((error) => {
-      console.log(error);
-    });
+  getAllProblems().then((response) => {
+    console.log(response);
+    store.setProblems(response.data);
+  }).catch((error) => {
+    console.log(error);
+  });
 });
 </script>
 
@@ -32,11 +29,7 @@ onMounted(() => {
         </tr>
       </thead>
       <tbody>
-        <ProblemItem
-          v-for="problem in store.problems"
-          :key="problem.id"
-          :problem-data="problem"
-        />
+        <ProblemItem v-for="problem in store.problems" :key="problem.id" :problem-data="problem" />
       </tbody>
     </table>
   </div>

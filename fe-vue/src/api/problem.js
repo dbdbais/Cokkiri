@@ -2,15 +2,23 @@ import { localAxios } from "@/utils/request";
 
 const axios = localAxios();
 
-export function getProblems(id) {
-  const config = {
-    url: "/problemapi",
+export function getAllProblems() {
+  return axios({
+    url: "/problemapi/all",
     method: "get",
-  };
+  });
+}
 
-  if (id) {
-    config.params = { id };
-  }
+export function getProblems(id) {
+  return axios({
+    url: `/problemapi/${id}`,
+    method: "get",
+  });
+}
 
-  return axios(config);
+export function getAllReviews(id) {
+  return axios({
+    url: `/reviewapi/${id}`,
+    method: "get",
+  });
 }

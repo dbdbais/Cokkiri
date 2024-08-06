@@ -2,7 +2,9 @@ pipeline {
     agent any
 
     environment {
-        DOCKER_IMAGE = 'ohuggy/be_test'
+        PATH = "${tool 'Cokirri-node'}/bin:${env.PATH}"
+        DOCKER_IMAGE_BE = 'ohuggy/Cokkiri_develop_BE'
+        DOCKER_IMAGE_FE = 'ohuggy/Cokkiri_develop_FE'
         DOCKER_HUB = 'dockerhub' // Jenkins 자격 증명 ID
 //         PATH = "/usr/local/bin"
     }
@@ -16,6 +18,21 @@ pipeline {
             }
         }
 
+        stage("Install Dependencies"){
+            steps{
+                dir("fe-vue"){
+                    script{
+                        // Node.js 설치 확인 및 종속성 설치
+                        sh 'node -v'
+                        sh 'npm -v'
+                        sh 'npm install'
+                    }
+
+                }
+            }
+        }
+
+
         stage('Build') {
             steps {
                 dir('be-spring/iscode/iscode') {
@@ -25,6 +42,16 @@ pipeline {
                         sh './gradlew bootJar'
                     }
                 }
+
+                dir('fe-vue') {
+                    script {
+                        // .env 파일을 로드하여 환경 변수를 설정합니다.
+                        sh 'npm install @rollup/rollup-linux-x64-gnu --save-optional'
+                        sh 'npm run build'
+                        sh 'cat .env'
+                    }
+                }
+
             }
         }
 
@@ -38,10 +65,22 @@ pipeline {
 
         stage('Build Docker Image') {
             steps {
-//                 dir()
-                script {
-                    sh 'docker build -t ${DOCKER_IMAGE} .'
+                dir('be-spring'){
+                    script {
+                        sh 'docker build -t ${DOCKER_IMAGE} .'
+                    }
                 }
+                
+                dir('fe-vue') {
+                    script {
+                        // .env 파일을 로드하여 환경 변수를 설정합니다.
+                        sh 'npm install @rollup/rollup-linux-x64-gnu --save-optional'
+                        sh 'npm run build'
+                        sh 'cat .env'
+                    }
+                }
+
+
             }
         }
 
@@ -50,9 +89,17 @@ pipeline {
                 script {
                     docker.withRegistry('https://index.docker.io/v1/', env.DOCKER_HUB) {
                         // Docker 이미지 푸시
-                        sh 'docker push ${DOCKER_IMAGE}'
+                        sh 'docker push ${DOCKER_IMAGE_BE}'
+                    }
+                    
+                }
+                script {
+                    docker.withRegistry('https://index.docker.io/v1/', env.DOCKER_HUB) {
+                        // Docker 이미지 푸시
+                        sh 'docker push ${DOCKER_IMAGE_FE}'
                     }
                 }
+
             }
         }
 
@@ -61,8 +108,8 @@ pipeline {
                 script{
                     // Docker Compose 실행 전에 기존 컨테이너를 종료 및 제거
                     sh 'docker rm -f mysql'
-                    sh 'docker rm -f Cokkiri-springboot'
-
+                    // sh 'docker rm -f Cokkiri-springboot'
+                    
                     sh 'docker-compose down'
                     // Docker Compose를 사용하여 서비스 빌드 및 실행
                     sh 'docker-compose up --build -d'

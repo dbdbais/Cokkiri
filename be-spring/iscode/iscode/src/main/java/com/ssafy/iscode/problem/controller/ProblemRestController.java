@@ -3,7 +3,6 @@ package com.ssafy.iscode.problem.controller;
 import com.ssafy.iscode.problem.model.dto.Problem;
 import com.ssafy.iscode.problem.service.ProblemService;
 import com.ssafy.iscode.util.APIConnection;
-import jakarta.annotation.Nullable;
 import org.jsoup.Jsoup;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;

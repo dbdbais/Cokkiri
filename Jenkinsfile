@@ -67,20 +67,15 @@ pipeline {
             steps {
                 dir('be-spring'){
                     script {
-                        sh 'docker build -t ${DOCKER_IMAGE} .'
+                        sh 'docker build -t ${DOCKER_IMAGE_BE} .'
                     }
                 }
-                
-                dir('fe-vue') {
+
+                dir('fe-vue'){
                     script {
-                        // .env 파일을 로드하여 환경 변수를 설정합니다.
-                        sh 'npm install @rollup/rollup-linux-x64-gnu --save-optional'
-                        sh 'npm run build'
-                        sh 'cat .env'
+                        sh 'docker build -t ${DOCKER_IMAGE_FE} .'
                     }
                 }
-
-
             }
         }
 

@@ -23,11 +23,11 @@ services:
 
 
 
-  volumes:
-    compiler_mysql_test_data:
+volumes:
+  compiler_mysql_test_data:
 
-  networks:
-    Compiler-test-Network:
-      driver: bridge
+networks:
+  Compiler-test-Network:
+    driver: bridge
 
 

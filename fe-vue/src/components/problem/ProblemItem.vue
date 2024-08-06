@@ -1,9 +1,14 @@
 <script setup>
+import { ref } from "vue";
 import { useModal } from "@/composables/useModal";
 import ProblemDetail from "@/components/problem/modal/ProblemDetail.vue";
+import ProblemReview from "@/components/problem/modal/ProblemReview.vue";
+import { getAllReviews } from "@/api/problem";
 
-const { isModalOpen, openModal, closeModal } = useModal();
+const { isModalOpen: isDetailModalOpen, openModal: openDetailModal, closeModal: closeDetailModal } = useModal();
+const { isModalOpen: isReviewModalOpen, openModal: openReviewModal, closeModal: closeReviewModal } = useModal();
 
+const reviewData = ref();
 const props = defineProps({
   problemData: Object,
 });
@@ -30,24 +35,40 @@ const tierImg = () => {
 
   return path + fileName + ".svg";
 };
+
+const reviews = async () => {
+  try {
+    const response = await getAllReviews(props.problemData.no);
+    console.log(response);
+    reviewData.value = response.data;
+    openReviewModal();
+  } catch (error) {
+    console.log(error);
+  }
+};
 </script>
 
 <template>
   <tr class="bold-text">
-    <td>{{ problemData.no }}</td>
-    <td @click="openModal">
-      {{ problemData.title }}
+    <td>{{ props.problemData.no }}</td>
+    <td @click="openDetailModal">
+      {{ props.problemData.title }}
     </td>
     <td>
       <img :src="tierImg()" alt="티어" />
     </td>
-    <td>{{ problemData.algoPercent }}</td>
-    <td>리뷰보기</td>
+    <td>{{ props.problemData.algoPercent }}</td>
+    <td>
+      <span class="btn-review" @click="reviews">
+        리뷰
+      </span>
+    </td>
     <!-- <td v-if="problemData.review.result === 1">리뷰보기</td>
     <td v-else-if="problemData.review.try >= 3">리뷰보기</td>
     <td v-else>{{ problemData.review.try }} / 3 회 도전</td> -->
   </tr>
-  <ProblemDetail v-if="isModalOpen" @close="closeModal" :problemData="problemData" />
+  <ProblemDetail v-if="isDetailModalOpen" @close="closeDetailModal" :problemData="problemData" />
+  <ProblemReview v-if="isReviewModalOpen" @close="closeReviewModal" :reviewData="reviewData" />
 </template>
 
 <style scoped>
@@ -66,5 +87,11 @@ td {
   text-align: center;
   border: 3px solid #3b72ff;
   background: #bed0fd;
+}
+
+.btn-review {
+  background-color: #3B72FF;
+  border-radius: 10px;
+  padding: 5px 30px;
 }
 </style>

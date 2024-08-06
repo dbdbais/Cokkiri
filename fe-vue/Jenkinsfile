@@ -38,17 +38,6 @@ pipeline {
                     script {
                         // .env 파일을 로드하여 환경 변수를 설정합니다.
                         //애플리케이션 소스 코드 및 .env 파일 복사
-                        COPY . .
-                        COPY .env .env
-
-                        //.env 파일을 읽어 환경 변수를 설정하는 스크립트 추가
-                        RUN echo '#!/bin/sh' > /entrypoint.sh \
-                        && echo 'set -a' >> /entrypoint.sh \
-                        && echo '. /app/.env' >> /entrypoint.sh \
-                        && echo 'set +a' >> /entrypoint.sh \
-                        && echo 'exec "$@"' >> /entrypoint.sh \
-                        && chmod +x /entrypoint.sh
-
                         sh 'npm install @rollup/rollup-linux-x64-gnu --save-optional'
                         sh 'npm run build'
                     }

@@ -20,10 +20,16 @@ export const useMessageStore = defineStore("message", () => {
     noti.value.room.push(message);
   };
 
-  const receiveFriend = function (message) {};
+  const receiveFriend = function (message) {
+    noti.value.friend = [];
+    message.forEach((element) => {
+      noti.value.friend.push(element);
+    });
+  };
   return {
     noti,
     receiveInvite,
+    receiveFriend,
     resetNoti,
   };
 });

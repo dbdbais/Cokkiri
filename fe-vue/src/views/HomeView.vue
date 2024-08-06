@@ -27,69 +27,66 @@ import { useRouter } from "vue-router";
 import { userStore } from "@/stores/user";
 import { useMessageStore } from "@/stores/message";
 
-
 const store = userStore();
-const lobby = new WebSocket(`ws://localhost:8080/lobby/abc`);
+const lobby = new WebSocket(`ws://localhost:8080/lobby/${store.user.nickname}`);
 const messageStore = useMessageStore();
 const router = useRouter();
 const currentPage = ref(1);
-const category = ref(undefined)
+const category = ref(undefined);
 const categoryObj = ref({
   all: true,
   game: false,
-  study: false
-})
+  study: false,
+});
 
 const searchList = function (roomName) {
-  getRoomList({ roomName: roomName })
-}
+  getRoomList({ roomName: roomName });
+};
 
 const categoryList = function (isGame) {
-  category.value = isGame
+  category.value = isGame;
   Object.keys(categoryObj.value).forEach((key) => {
-    categoryObj.value[key] = false
-  })
+    categoryObj.value[key] = false;
+  });
   if (isGame === undefined) {
-    categoryObj.value.all = true
+    categoryObj.value.all = true;
   } else if (isGame === true) {
-    categoryObj.value.game = true
+    categoryObj.value.game = true;
   } else if (isGame === false) {
-    categoryObj.value.study = true
+    categoryObj.value.study = true;
   }
 
-
-  getRoomList({ isGame: isGame })
-}
+  getRoomList({ isGame: isGame });
+};
 
 const goRightNow = function () {
-
   const params = {
     isGame: category.value,
-  }
+  };
 
-  const availableRoom = ref([])
+  const availableRoom = ref([]);
 
   const success = (res) => {
     availableRoom.value = res.data.filter((element) => {
-      return element.maxNum > element.users.length
-    })
+      return element.maxNum > element.users.length;
+    });
 
-    console.log(availableRoom.value)
+    console.log(availableRoom.value);
     if (availableRoom.value.length > 0) {
-      goRoom(availableRoom.value[0].sessionId)
+      goRoom(availableRoom.value[0].sessionId);
     } else {
       Swal.fire({
         icon: "error",
         title: "방이 없습니다.",
       });
     }
-  }
+  };
   const fail = (err) => {
-    console.log(err)
-  }
-  getWaitingRoomList(params, success, fail)
-  console.log('바로가기')
-}
+    console.log(err);
+  };
+  getWaitingRoomList(params, success, fail);
+  console.log("바로가기");
+};
 
 const goRoom = function (id) {
   console.log(id);
@@ -102,8 +99,6 @@ const goRoom = function (id) {
   };
   goWaitingRoom({ sessionId: id, userName: "김종덕" }, success, fail);
 };
-
-
 
 lobby.onmessage = function (event) {
   let data = event.data.split("|!|");
@@ -138,7 +133,6 @@ const getRoomList = function (params) {
 
 onMounted(() => {
   getRoomList();
-  messageStore.resetNoti();
 });
 
 onUnmounted(() => {

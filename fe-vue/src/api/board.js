@@ -27,10 +27,27 @@ export const joinStudy = (joinData, success, fail) => {
     .catch(fail);
 };
 
-export const receiveRegular = (userName, success, fail) => {
+export function receiveRegular(userName) {
   console.log("receive regular");
-  axios
-    .post("/regular/get-request", JSON.stringify(userName))
-    .then(success)
-    .catch(fail);
-};
+  return axios({
+    url: "/regular/get-request",
+    method: "post",
+    data: JSON.stringify(userName),
+  });
+}
+
+export function acceptRegularJoin(data) {
+  console.log("accept regular");
+  return axios({
+    url: "/regular/accept-join",
+    method: "post",
+    data: JSON.stringify(data),
+  });
+}
+
+export function getFriends(id) {
+  return axios({
+    url: `${baseURL}/friends/${id}`,
+    method: "get",
+  });
+}

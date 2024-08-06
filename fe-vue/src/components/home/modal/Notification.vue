@@ -4,37 +4,69 @@ import announcement from "@/assets/data/announcement.json";
 import notification from "@/assets/data/notification.json";
 import AnnounceDetail from "@/components/home/modal/AnnounceDetail.vue";
 import { getWaitingRoom, goWaitingRoom } from "@/api/waitingroom";
-import { receiveRegular } from "@/api/board";
+import { getFriends, getUser, acceptFriend } from "@/api/user";
+import { receiveRegular, acceptRegularJoin } from "@/api/board";
 import { useModal } from "@/composables/useModal";
+import { userStore } from "@/stores/user";
 import { useMessageStore } from "@/stores/message";
 import { useRouter } from "vue-router";
 
 const { isModalOpen, openModal, closeModal } = useModal();
-
+const store = userStore();
 const messageStore = useMessageStore();
 
-onMounted(() => {
-  noti.value = messageStore.noti;
+const notiRequest = ref({
+  friends: [],
+  room: [],
+  regular: [],
+});
 
-  noti.value.room.forEach((element) => {
-    const success = (res) => {
+function getNotiData() {
+  notiRequest.value = {
+    friends: [],
+    room: [],
+    regular: [],
+  };
+  receiveRegular({ userName: store.user.nickname })
+    .then((res) => {
       console.log(res.data);
-      roomInvite.value.push({
-        roomId: element,
-        hostName: res.data.hostName,
+      res.data.forEach((element) => {
+        notiRequest.value.regular.push(element);
       });
-      getWaitingRoom(element, success, fail);
-    };
-  });
-  const fail = (err) => {
-    console.log(err);
-  };
-  const getReceiveRegular = (res) => {
-    console.log(res.data);
-  };
+    })
+    .catch((err) => console.log(err));
+  getFriends(store.user.id)
+    .then((res) => {
+      res.data.forEach((friend) => {
+        if (friend.status === "SELECT") {
+          getUser(friend.friendUserId)
+            .then((res) => {
+              // console.log(res.data);
+              if (
+                !notiRequest.value.friends.some((element) => {
+                  // console.log(element);
+                  element.nickname === res.data.nickname;
+                  return true;
+                })
+              ) {
+                notiRequest.value.friends.push(res.data);
+              }
+              console.log(notiRequest.value.friends);
+            })
+            .catch((err) => {
+              console.log(err);
+            });
+        }
+      });
+      console.log(notiRequest.value.friends);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+}
 
-  receiveRegular({ userName: "김종덕" }, getReceiveRegular, fail);
-  console.log(noti.value);
+onMounted(() => {
+  getNotiData();
 });
 const router = useRouter();
 const isSelected = ref("announ");
@@ -42,6 +74,28 @@ const announ = ref(announcement);
 const noti = ref([]);
 const roomInvite = ref([]);
 const selectedAnnoun = ref(null);
+
+const addFriend = function (friendUserId) {
+  acceptFriend(store.user.id, friendUserId)
+    .then((res) => {
+      console.log(res.data);
+      getNotiData();
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+};
+
+const acceptRegular = function (sessionId, userName) {
+  acceptRegularJoin({ sessionId: sessionId, userName: userName })
+    .then((res) => {
+      console.log(res.data);
+      getNotiData();
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+};
 
 const openAnnounceModal = (content) => {
   selectedAnnoun.value = content;
@@ -106,7 +160,7 @@ const goRoom = function (roomId) {
           </div>
         </div>
         <div v-if="isSelected == 'noti'">
-          <div v-if="'room' in noti" class="room-con">
+          <div class="room-con">
             <span>방 초대</span>
             <div
               v-for="(item, index) in roomInvite"
@@ -125,20 +179,42 @@ const goRoom = function (roomId) {
               </div>
             </div>
           </div>
-          <div v-if="'friend' in noti" class="friend-con">
+          <div class="friend-con">
             <span>친구 신청</span>
             <div
-              v-for="(item, index) in noti.friend"
+              v-for="(item, index) in notiRequest.friends"
               :key="index"
               class="box-row announ-con"
             >
-              <span>{{ item.info }}</span>
+              <span>{{ item.nickname }}</span>
               <div class="box-row">
-                <div class="btn-accept">
-                  <span>수락</span>
-                </div>
-                <div class="btn-reject">
-                  <span>거절</span>
+                <button
+                  class="btn-accept bold-text"
+                  @click="addFriend(item.id)"
+                >
+                  수락
+                </button>
+                <button class="btn-reject bold-text">거절</button>
+              </div>
+            </div>
+          </div>
+          <div class="room-con">
+            <span>정기 스터디 (닉네임 [스터디 명])</span>
+            <div v-for="(regular, index) in notiRequest.regular" :key="index">
+              <div
+                v-for="(user, index) in regular.users"
+                :key="index"
+                class="box-row announ-con"
+              >
+                <span>{{ user }} [{{ regular.regularName }}]</span>
+                <div class="box-row">
+                  <button
+                    class="btn-accept bold-text"
+                    @click="acceptRegular(regular.sessionId, user)"
+                  >
+                    수락
+                  </button>
+                  <button class="btn-reject bold-text">거절</button>
                 </div>
               </div>
             </div>
@@ -167,7 +243,7 @@ div {
   width: 550px;
   height: 700px;
   bottom: 50px;
-  right: 30px;
+  right: 330px;
   border: 3px solid #3b72ff;
   border-radius: 10px;
   background-color: #cadcff;

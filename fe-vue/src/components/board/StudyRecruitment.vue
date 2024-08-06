@@ -24,7 +24,7 @@ const loadingStore = useLodingStore();
 const getRegularList = function (params) {
   studyCreate.value = false;
   const success = (res) => {
-    if (res.data.length === 0) {
+    if (currentPage.value > 1 && res.data.length === 0) {
       pageChange(0);
     }
     studyGroup.value = res.data;
@@ -111,7 +111,7 @@ const closeBtn = function () {
         :class="preventCilck"
         @click="goDetail(group)"
       />
-      <Page :current-page="currentPage" @changePage="pageChange" />
+      <Page class="page" :current-page="currentPage" @changePage="pageChange" />
     </div>
   </div>
 </template>
@@ -147,5 +147,9 @@ const closeBtn = function () {
   position: absolute;
   top: -75px;
   right: 0;
+}
+.page {
+  position: absolute;
+  bottom: 10px;
 }
 </style>

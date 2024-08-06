@@ -40,6 +40,7 @@ pipeline {
                         def gradleHome = tool name: 'Cokkiri-gradle', type: 'gradle'
                         sh 'chmod 777 gradlew'
                         sh './gradlew bootJar'
+                        sh 'ls build/libs'  // 추가하여 파일 존재 확인
                     }
                 }
 

@@ -12,6 +12,7 @@
         <button @click="runCode">실행</button>
         <button @click="resetCode">코드 초기화</button>
         <button>제출</button>
+        <button>힌트</button>
         <div id="editor"></div>
       </div>
     </div>

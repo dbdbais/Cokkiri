@@ -12,7 +12,7 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git branch: 'develop',
+                git branch: 'infra/develop',
                     url: 'https://lab.ssafy.com/s11-webmobile1-sub2/S11P12E108.git',
                     credentialsId: 'Be' // Jenkins 자격 증명 ID
             }
@@ -116,17 +116,6 @@ pipeline {
                 }
             }
         }
-//         stage('Deploy Docker Container') {
-//             steps {
-//                 script {
-//                     // 기존 컨테이너가 존재하면 삭제
-//                     sh 'docker rm -f be_test_container || true'
-//
-//                     // 새로운 컨테이너 생성 및 실행
-//                     sh 'docker run -d --name be_test_container ${DOCKER_IMAGE}'
-//                 }
-//             }
-//         }
     }
 
     post {

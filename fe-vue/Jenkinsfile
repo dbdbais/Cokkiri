@@ -2,7 +2,6 @@ pipeline {
     agent any
 
     environment {
-        VUE_APP_API_URL = 'http://i11e108.p.ssafy.io:8085/'
         PATH = "${tool 'Cokirri-node'}/bin:${env.PATH}"
         DOCKER_IMAGE = 'ohuggy/fe_test'
         DOCKER_HUB = 'dockerhub' // Jenkins 자격 증명 ID
@@ -13,7 +12,7 @@ pipeline {
         
         stage('Checkout') {
             steps {
-                git branch: 'infra-fe/deploy',
+                git branch: 'fe',
                     url: 'https://lab.ssafy.com/s11-webmobile1-sub2/S11P12E108.git',
                     credentialsId: 'Be' // Jenkins 자격 증명 ID
             }
@@ -37,8 +36,10 @@ pipeline {
             steps {
                 dir('fe-vue') {
                     script {
-                      sh 'npm install @rollup/rollup-linux-x64-gnu --save-optional'
-                      sh 'npm run build'
+                        // .env 파일을 로드하여 환경 변수를 설정합니다.
+                        sh 'npm install @rollup/rollup-linux-x64-gnu --save-optional'
+                        sh 'npm run build'
+                        sh 'cat .env'
                     }
                 }
             }

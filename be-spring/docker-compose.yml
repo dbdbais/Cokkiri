@@ -17,7 +17,7 @@ services:
     image: be-compiler
     container_name: compiler_server_test
     ports: 
-      - "8981:80"
+      - "8087:80"
     privileged: true
     networks:
       - Compiler-test-Network

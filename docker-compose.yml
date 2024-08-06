@@ -7,36 +7,35 @@ services:
       MYSQL_DATABASE: ssafy
     volumes:
 #      - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql
-      - mysql_data:/var/lib/mysql
+      - mysql_develop_data:/var/lib/mysql
     ports:
       - "3306:3306"
     networks:
-      - Cokkiri-Network
+      - Cokkiri-develop-Network
 
   backend:
-#    build: ./backend
-    image: ohuggy/be_test
+    image: ohuggy/Cokkiri_develop_BE
     container_name: Cokkiri-springboot
     ports:
       - "8085:8080"
     depends_on:
       - db
     networks:
-      - Cokkiri-Network
+      - Cokkiri-develop-Network
 
-#  frontend:
-#    build: ./frontend
-#    container_name: vuejs
-#    ports:
-#      - "8086:8081"
-#    depends_on:
-#      - backend
-#    networks:
-#      - Cokkiri-Network
+ frontend:
+  image: ohuggy/Cokkiri_develop_FE
+   container_name: vuejs
+   ports:
+     - "8086:8081"
+   depends_on:
+     - backend
+   networks:
+     - Cokkiri-Network
 
 volumes:
-  mysql_data:
+  mysql_develop_data:
 
 networks:
-  Cokkiri-Network:
+  Cokkiri-develop-Network:
     driver: bridge

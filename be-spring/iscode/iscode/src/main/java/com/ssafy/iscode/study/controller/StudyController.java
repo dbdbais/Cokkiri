@@ -54,7 +54,7 @@ public class StudyController {
     public ResponseEntity<List<StudyResponseDto>> getStudys(@RequestParam Map<String, String> params) {
         String roomName = params.get("roomName");
         Boolean isGame = params.get("isGame") == null ? null : Boolean.parseBoolean(params.get("isGame"));
-        int page = params.get("page") == null ? 1 : Integer.parseInt(params.get("page"));
+        Integer page = params.get("page") == null ? null : Integer.parseInt(params.get("page"));
 
         return new ResponseEntity<>(studyService.getStudys(roomName, isGame, page), HttpStatus.OK);
     }

@@ -167,23 +167,40 @@ public class StudyService {
         return 0;
     }
 
-    public List<StudyResponseDto> getStudys(String roomName, Boolean isGame, int page) {
-        int offset = 6 * (page - 1);
+    public List<StudyResponseDto> getStudys(String roomName, Boolean isGame, Integer page) {
 
         List<StudyResponseDto> list = new ArrayList<>();
         List<StudyDto> studys;
 
-        if(isGame == null) {
-            if(roomName == null) {
-                studys = studyRepository.findAll(offset);
+        if(page == null) {
+            if (isGame == null) {
+                if (roomName == null) {
+                    studys = studyRepository.findAll();
+                } else {
+                    studys = studyRepository.findByName(roomName);
+                }
             } else {
-                studys = studyRepository.findByName(roomName, offset);
+                if (roomName == null) {
+                    studys = studyRepository.findSelectedAll(isGame);
+                } else {
+                    studys = studyRepository.findSelectedByName(roomName, isGame);
+                }
             }
         } else {
-            if(roomName == null) {
-                studys = studyRepository.findSelectedAll(isGame, offset);
+            int offset = 6 * (page - 1);
+            
+            if (isGame == null) {
+                if (roomName == null) {
+                    studys = studyRepository.findAll(offset);
+                } else {
+                    studys = studyRepository.findByName(roomName, offset);
+                }
             } else {
-                studys = studyRepository.findSelectedByName(roomName, isGame, offset);
+                if (roomName == null) {
+                    studys = studyRepository.findSelectedAll(isGame, offset);
+                } else {
+                    studys = studyRepository.findSelectedByName(roomName, isGame, offset);
+                }
             }
         }
 

@@ -31,7 +31,7 @@ public class RegularService {
     private UserRepository userRepository;
 
     private final String SEPARATOR = "|";
-    private final String[] WEEKDAY = {"mon", "tue", "wed", "thu", "fir", "sat", "sun"};
+    private final String[] WEEKDAY = {"mon", "tue", "wed", "thu", "fri", "sat", "sun"};
 
     public Long createRegular(RegularRequestDto regularRequestDto) {
         User host = userRepository.findByName(regularRequestDto.getUserName())
@@ -110,7 +110,7 @@ public class RegularService {
             if(count < regularDto.getMaxNum()) {
 
                 for (RegularUser regularUser : regularUsers) {
-                    if (regularUser.getUser().equals(user)) {
+                    if (regularUser.getUser().getId().equals(user.getId())) {
                         regularUser.setIsAccept(true);
                         regularUserRepository.save(regularUser);
                         return 1;
@@ -189,10 +189,10 @@ public class RegularService {
             }
 
             for(RegularUser regularUser: regularDto.getUsers()) {
-                if(regularUser.getUser().equals(user)) {
+                if(regularUser.getUser().getId().equals(user.getId())) {
                     if(regularDto.getUsers().size() == 1) {
                         closeRegular(regularRequestDto.getSessionId());
-                    } else if(regularDto.getHostUser().equals(user)) {
+                    } else if(regularDto.getHostUser().getId().equals(user.getId())) {
                         regularDto.setHostUser(regularDto.getUsers().get(1).getUser());
 
                         try {

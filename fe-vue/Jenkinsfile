@@ -12,7 +12,7 @@ pipeline {
         
         stage('Checkout') {
             steps {
-                git branch: 'infra-fe/deploy',
+                git branch: 'fe',
                     url: 'https://lab.ssafy.com/s11-webmobile1-sub2/S11P12E108.git',
                     credentialsId: 'Be' // Jenkins 자격 증명 ID
             }

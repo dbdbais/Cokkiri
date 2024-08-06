@@ -8,8 +8,10 @@ import jakarta.persistence.*;
 @Entity
 @Table(name="submit")
 public class Submit {
+
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name="submit_id")
     private Long no;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -33,8 +35,7 @@ public class Submit {
     public Submit() {
     }
 
-    public Submit(Long no, StudyDto studyDto, Problem problem, User user, String submit_code, Boolean correct) {
-        this.no = no;
+    public Submit(StudyDto studyDto, Problem problem, User user, String submit_code, Boolean correct) {
         this.studyDto = studyDto;
         this.problem = problem;
         this.user = user;

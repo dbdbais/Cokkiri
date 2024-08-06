@@ -4,6 +4,7 @@ import com.ssafy.iscode.user.model.dto.Status;
 import com.ssafy.iscode.user.model.dto.User;
 import com.ssafy.iscode.user.model.dto.UserFriend;
 import com.ssafy.iscode.user.service.UserService;
+import com.ssafy.iscode.websocket.handler.LobbyWebSocketHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -17,6 +18,9 @@ import java.util.List;
 public class UserRestController {
 
     private UserService userService;
+
+    @Autowired
+    private LobbyWebSocketHandler lobbyWebSocketHandler;
 
     @Autowired
     public UserRestController(UserService us) {
@@ -44,7 +48,15 @@ public class UserRestController {
     @PostMapping("/friends")
     public int insertRelation(@RequestParam String userId,
                               @RequestParam String friendUserId){
-        return userService.insertFriend(userId,friendUserId);
+        try {
+            String event = ".|!|.|!|NOTI|!|.";
+            User friendUser = userService.getUser(friendUserId);
+
+            lobbyWebSocketHandler.sendEvent(friendUser.getNickname(), event);
+            return userService.insertFriend(userId,friendUserId);
+        } catch (Exception e) {
+            return 0;
+        }
     }
 
     //accept friend

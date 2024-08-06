@@ -3,8 +3,8 @@ pipeline {
 
     environment {
         PATH = "${tool 'Cokirri-node'}/bin:${env.PATH}"
-        DOCKER_IMAGE_BE = 'ohuggy/Cokkiri_develop_BE'
-        DOCKER_IMAGE_FE = 'ohuggy/Cokkiri_develop_FE'
+        DOCKER_IMAGE_BE = 'ohuggy/cokkiri_develop_be'
+        DOCKER_IMAGE_FE = 'ohuggy/cokkiri_develop_fe'
         DOCKER_HUB = 'dockerhub' // Jenkins 자격 증명 ID
 //         PATH = "/usr/local/bin"
     }

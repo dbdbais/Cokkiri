@@ -1,5 +1,5 @@
 <template>
-  <<<<<<< HEAD <header>
+  <header>
     <nav id="header-first" class="title main-title">
       <div id="quick-start" class="box-main-con box-in nav-btn" @click="$emit('go-room')">바로가기</div>
       <div id="create-room" class="box-main-con box-in nav-btn" @click="openCreateModal">
@@ -27,7 +27,7 @@
     </div>
     <CreateRoom v-if="isCreateModalOpen" @close="closeCreateModal" @create="$emit('create')" />
     <Notification v-if="isNotiModalOpen" @close="closeNotiModal" />
-    </header>
+  </header>
 </template>
 
 <script setup>

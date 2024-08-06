@@ -44,10 +44,13 @@ pipeline {
         }
 
         stage('run container'){
-            steps{
-                sh 'docker-compose down'
-                sh 'docker-compose up --build -d'
+            dir('be-spring'){
+                steps{
+                    sh 'docker-compose down'
+                    sh 'docker-compose up --build -d'
+                }
             }
+
 
         }
 

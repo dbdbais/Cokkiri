@@ -1,16 +1,34 @@
 <template>
   <div class="main-content box-main-con">
     <div class="box-row">
-      <div class="filter-btn box-main-noti" :class="{ 'active': categoryObj.all }" @click="$emit('is-game')">전체</div>
-      <div class="filter-btn box-main-noti" :class="{ 'active': categoryObj.study }" @click="$emit('is-game', false)">공부방</div>
-      <div class="filter-btn box-main-noti" :class="{ 'active': categoryObj.game }" @click="$emit('is-game', true)">게임방</div>
+      <div
+        class="filter-btn box-main-noti"
+        :class="{ active: categoryObj.all }"
+        @click="$emit('is-game')"
+      >
+        전체
+      </div>
+      <div
+        class="filter-btn box-main-noti"
+        :class="{ active: categoryObj.study }"
+        @click="$emit('is-game', false)"
+      >
+        공부방
+      </div>
+      <div
+        class="filter-btn box-main-noti"
+        :class="{ active: categoryObj.game }"
+        @click="$emit('is-game', true)"
+      >
+        게임방
+      </div>
     </div>
     <div id="room-container" class="rooms">
       <Room
         v-for="room in rooms"
         :key="room.id"
         :room="room"
-        @click="$emit('go-room',room.sessionId)"
+        @click="$emit('go-room', room.sessionId)"
       />
     </div>
     <Page
@@ -31,23 +49,20 @@ import roomList from "@/assets/data/roomListAxios.json";
 defineProps({
   rooms: Object,
   currentPage: Number,
-  categoryObj: Object
+  categoryObj: Object,
 });
-
-
-
 
 rooms: [
   { id: 1, name: "알고리즘 고수들방", members: 116 },
   { id: 2, name: "초보. 매너방요", members: 206 },
   // Add more rooms here
 ];
-
-
 </script>
 
 <style scoped>
-
+.main-content {
+  position: relative;
+}
 .filter-btn {
   padding: 10px 30px;
   margin-right: 15px;
@@ -69,8 +84,8 @@ rooms: [
   gap: 35px;
 }
 .page {
-  bottom: -110px;
-  left: 1040px;
+  bottom: 10px;
+  left: 620px;
 }
 
 .active {

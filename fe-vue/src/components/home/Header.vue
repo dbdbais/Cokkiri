@@ -1,18 +1,40 @@
 <template>
-  <<<<<<< HEAD <header>
+  <header>
     <nav id="header-first" class="title main-title">
-      <div id="quick-start" class="box-main-con box-in nav-btn" @click="$emit('go-room')">바로가기</div>
-      <div id="create-room" class="box-main-con box-in nav-btn" @click="openCreateModal">
+      <div
+        id="quick-start"
+        class="box-main-con box-in nav-btn"
+        @click="$emit('go-room')"
+      >
+        바로가기
+      </div>
+      <div
+        id="create-room"
+        class="box-main-con box-in nav-btn"
+        @click="openCreateModal"
+      >
         방만들기
       </div>
-      <RouterLink id="router-regular" class="header-router" :to="{ name: 'studyBoard' }">스터디 모집 게시판</RouterLink>
-      <RouterLink id="router-problem" class="header-router" :to="{ name: 'problem' }">문제 목록</RouterLink>
+      <RouterLink
+        id="router-regular"
+        class="header-router"
+        :to="{ name: 'studyBoard' }"
+        >스터디 모집 게시판</RouterLink
+      >
+      <RouterLink
+        id="router-problem"
+        class="header-router"
+        :to="{ name: 'problem' }"
+        >문제 목록</RouterLink
+      >
     </nav>
     <div id="header-second" class="box-row">
       <div id="search-container" class="box-row box-main-con">
         <span class="title main-title">방 이름</span>
         <input type="text" class="nomal-text" v-model="searchText" />
-        <button id="search-btn" class="nomal-text" @click="searchList">검색</button>
+        <button id="search-btn" class="nomal-text" @click="searchList">
+          검색
+        </button>
       </div>
       <div class="notifications box-row">
         <div class="box-main-noti noti-btn">
@@ -25,9 +47,13 @@
         </div>
       </div>
     </div>
-    <CreateRoom v-if="isCreateModalOpen" @close="closeCreateModal" @create="$emit('create')" />
+    <CreateRoom
+      v-if="isCreateModalOpen"
+      @close="closeCreateModal"
+      @create="$emit('create')"
+    />
     <Notification v-if="isNotiModalOpen" @close="closeNotiModal" />
-    </header>
+  </header>
 </template>
 
 <script setup>
@@ -37,12 +63,12 @@ import { useModal } from "@/composables/useModal";
 import { ref } from "vue";
 
 const emit = defineEmits(["create", "search"]);
-const searchText = ref("")
+const searchText = ref("");
 
 const searchList = function () {
-  emit('search', searchText.value)
-  searchText.value = ""
-}
+  emit("search", searchText.value);
+  searchText.value = "";
+};
 
 const {
   isModalOpen: isCreateModalOpen,
@@ -100,11 +126,13 @@ const {
   height: 1px;
   /* background: black; */
   /* transform: skewY(-10deg); */
-  background: repeating-linear-gradient(to right,
-      black,
-      black 2px,
-      transparent 2px,
-      transparent 4px);
+  background: repeating-linear-gradient(
+    to right,
+    black,
+    black 2px,
+    transparent 2px,
+    transparent 4px
+  );
 }
 
 .header-router:hover {

@@ -1,18 +1,22 @@
 package com.ssafy.iscode.websocket.config;
 
 import com.ssafy.iscode.websocket.handler.ChatWebSocketHandler;
+import com.ssafy.iscode.websocket.handler.GameWebSocketHandler;
 import com.ssafy.iscode.websocket.handler.LobbyWebSocketHandler;
 import com.ssafy.iscode.websocket.handler.RoomWebSocketHandler;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.socket.config.annotation.EnableWebSocket;
 import org.springframework.web.socket.config.annotation.WebSocketConfigurer;
 import org.springframework.web.socket.config.annotation.WebSocketHandlerRegistry;
-import org.springframework.web.socket.server.support.HttpSessionHandshakeInterceptor;
 
 @Configuration
 @EnableWebSocket
 public class WebSocketConfig implements WebSocketConfigurer {
+    @Autowired
+    private LobbyWebSocketHandler lobbyWebSocketHandler;
+
     @Override
     public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
         // message socket
@@ -20,11 +24,15 @@ public class WebSocketConfig implements WebSocketConfigurer {
                 .setAllowedOrigins("*");
 
         // lobby socket
-        registry.addHandler(LobbyWebSocketHandler(), "/lobby")
+        registry.addHandler(lobbyWebSocketHandler, "/lobby/{userName}")
                 .setAllowedOrigins("*");
 
         // room socket
         registry.addHandler(RoomWebSocketHandler(), "/room/{roomId}/{userName}")
+                .setAllowedOrigins("*");
+
+        // room socket
+        registry.addHandler(GameWebSocketHandler(), "/game/{roomId}/{userName}")
                 .setAllowedOrigins("*");
     }
 
@@ -35,12 +43,12 @@ public class WebSocketConfig implements WebSocketConfigurer {
     }
 
     @Bean
-    public LobbyWebSocketHandler LobbyWebSocketHandler() {
-        return new LobbyWebSocketHandler();
+    public RoomWebSocketHandler RoomWebSocketHandler() {
+        return new RoomWebSocketHandler();
     }
 
     @Bean
-    public RoomWebSocketHandler RoomWebSocketHandler() {
-        return new RoomWebSocketHandler();
+    public GameWebSocketHandler GameWebSocketHandler() {
+        return new GameWebSocketHandler();
     }
 }

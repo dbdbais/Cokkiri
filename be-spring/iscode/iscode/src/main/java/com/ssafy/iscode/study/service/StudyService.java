@@ -145,10 +145,10 @@ public class StudyService {
         List<StudyUser> users = studyDto.getUsers();
 
         for (StudyUser studyUser: users) {
-            if (studyUser.getUser().equals(user)) {
+            if (studyUser.getUser().getId().equals(user.getId())) {
                 if(users.size() == 1) { // nobody here
                     closeStudy(studyDto.getId());
-                } else if (studyDto.getHostUser().equals(user)) { // host change
+                } else if (studyDto.getHostUser().getId().equals(user.getId())) { // host change
                     User nextHost = users.get(0).getUser();
                     studyDto.setHostUser(nextHost);
 

@@ -15,6 +15,7 @@ import java.util.Map;
 @Entity
 @Table(name="Algo")
 public class Problem {
+
     @Id
     @Column(name = "algo_num")
     private Long no;

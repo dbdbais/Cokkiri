@@ -37,12 +37,11 @@ public class User {
     @JsonIgnore // Avoid serialization of the full list of friends
     private Set<UserFriend> friends = new HashSet<>();
 
-
     // Add a friend with status
-    public void addFriend(User friend, Status status) {
-        UserFriend userFriend = new UserFriend(this.id, friend.getId(), status);
+    public void addFriend(User friend) {
+        UserFriend userFriend = new UserFriend(this.id, friend.getId(), Status.REQUEST);
         this.friends.add(userFriend);
-        UserFriend reverseRealtion = new UserFriend(friend.getId(),this.id,status);
+        UserFriend reverseRealtion = new UserFriend(friend.getId(),this.id,Status.SELECT);
         friend.getFriends().add(reverseRealtion);
     }
 
@@ -54,10 +53,32 @@ public class User {
 
         // Remove the friend relationship from this user
         friends.removeIf(userFriend -> userFriend.getFriendUserId().equals(friend.getId()));
-
-
     }
 
+    // Accept a friend request
+    public boolean acceptFriend(User friend) {
+        UserFriend userFriend = findFriend(friend.getId(), Status.REQUEST);
+
+        UserFriend friendUserFriend = friend.findFriend(this.id, Status.SELECT);
+
+        System.out.println(userFriend);
+        System.out.println(friendUserFriend);
+        if (userFriend != null && friendUserFriend != null) {
+            userFriend.setStatus(Status.ACCEPT);
+            friendUserFriend.setStatus(Status.ACCEPT);
+
+            return true;
+        }
+        return false;
+    }
+
+    // Find a UserFriend object with a specific friend ID and status
+    private UserFriend findFriend(String friendId, Status status) {
+        return friends.stream()
+                .filter(userFriend -> userFriend.getFriendUserId().equals(friendId) && userFriend.getStatus() == status)
+                .findFirst()
+                .orElse(null);
+    }
     public User() {
 
     }
@@ -131,14 +152,6 @@ public class User {
 
     public void setFriends(Set<UserFriend> friends) {
         this.friends = friends;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        User user = (User) o;
-        return Objects.equals(id, user.id) && Objects.equals(password, user.password);
     }
 
     @Override

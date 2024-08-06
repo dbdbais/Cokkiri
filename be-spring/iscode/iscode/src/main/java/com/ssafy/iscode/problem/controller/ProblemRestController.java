@@ -3,12 +3,12 @@ package com.ssafy.iscode.problem.controller;
 import com.ssafy.iscode.problem.model.dto.Problem;
 import com.ssafy.iscode.problem.service.ProblemService;
 import com.ssafy.iscode.util.APIConnection;
-import jakarta.annotation.Nullable;
 import org.jsoup.Jsoup;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.util.List;
 
 @RestController
 @RequestMapping("/problemapi")
@@ -23,18 +23,15 @@ public class ProblemRestController {
         this.apiConnection = apiConnection;
     }
 
-    @GetMapping("")
-    public String getProblem(@RequestParam @Nullable Long id){
+    @GetMapping("/all")
+    public List<Problem> getProblems(){
         //if there is no id fetch all problem
-        if(id == null){
-            return ps.getAllProblem().toString();
-        }
-        //if there is id fetch problem that matches id
-        else{
-            return ps.getProblem(id).toString();
+        return ps.getAllProblem();
+    }
 
-        }
-
+    @GetMapping("{pid}")
+    public Problem getProblem(@PathVariable Long pid){
+        return ps.getProblem(pid);
     }
     //insert the problem
     @PostMapping("/insert")
@@ -56,4 +53,5 @@ public class ProblemRestController {
         System.out.println(plainText);
         return apiConnection.useOpenAI(plainText,"너는 알고리즘을 가르쳐주는 선생님이야, 정답을 알려주지 말고 힌트만 제공해줘");
     }
+
 }

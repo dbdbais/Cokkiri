@@ -81,11 +81,10 @@ export function getFriends(id) {
 
 export function acceptFriend(myId, friendId) {
   return axios({
-    url: `${baseURL}/friends`,
+    url: `${baseURL}/friends/accept`,
     params: {
       userId: myId,
       friendUserId: friendId,
-      status: "ACCEPT",
     },
     method: "put",
   });

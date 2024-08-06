@@ -7,7 +7,7 @@
       <FriendsList id="friends-list" />
     </div>
     <div id="main-right" class="box-col">
-      <Header id="header" class="box-col" @create="getRoomList" />
+      <Header id="header" class="box-col" @create="getRoomList" @search="searchList"/>
       <MainContent
         id="main-content"
         :rooms="rooms"
@@ -32,7 +32,9 @@ import { useMessageStore } from "@/stores/message";
 const lobby = new WebSocket(`ws://localhost:8080/lobby/abc`);
 const messageStore = useMessageStore();
 const currentPage = ref(1);
-
+const searchList = function (roomName) {
+  getRoomList({roomName: roomName})
+}
 lobby.onmessage = function (event) {
   let data = event.data.split("|!|");
   console.log(data);
@@ -52,7 +54,7 @@ const getRoomList = function (params) {
   const success = (res) => {
     console.log(res.data);
     rooms.value = res.data;
-    if (rooms.value.length === 0) {
+    if (currentPage.value > 1 && rooms.value.length === 0) {
       pageChange(0);
     }
   };

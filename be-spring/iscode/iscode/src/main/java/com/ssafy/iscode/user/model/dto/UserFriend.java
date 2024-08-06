@@ -35,6 +35,7 @@ public class UserFriend {
     public UserFriend() {
     }
 
+
     public UserFriend(String userId, String friendUserId, Status status) {
         this.userId = userId;
         this.friendUserId = friendUserId;

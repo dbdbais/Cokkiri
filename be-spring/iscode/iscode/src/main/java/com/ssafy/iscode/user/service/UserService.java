@@ -56,8 +56,13 @@ public class UserService {
         //make all review by user NULL
         return userRepository.remove(id);
     }
-    public int insertFriend(String userId, String friendUserId, Status status){
-        return userRepository.saveFriend(userId,friendUserId,status);
+
+    public int acceptFriend(String userId,String friendUserId){
+        return userRepository.accept(userId,friendUserId);
+    }
+
+    public int insertFriend(String userId, String friendUserId){
+        return userRepository.saveFriend(userId,friendUserId);
     }
 
     public int deleteFriend(String userId, String friendUserId){

@@ -1,0 +1,11 @@
+.box-sb {
+  background-color: #dbe7ff;
+  border: 5px solid #3b72ff;
+  border-radius: 10px;
+}
+
+.box-w {
+  background-color: white;
+  border: 5px solid #3b72ff;
+  border-radius: 10px;
+}

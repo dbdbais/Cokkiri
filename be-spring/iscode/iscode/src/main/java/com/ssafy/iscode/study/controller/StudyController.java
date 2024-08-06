@@ -104,7 +104,7 @@ public class StudyController {
 
     @PostMapping("/invite-room")
     public ResponseEntity<StudyResponseDto> inviteRoom(@RequestBody StudyRequestDto studyRequestDto) {
-        String event = ".|!|.|!|ROOM|!|" + studyRequestDto.getSessionId();
+        String event = ".|!|.|!|NOTI|!|" + studyRequestDto.getSessionId();
 
         try {
             lobbyWebSocketHandler.sendEvent(studyRequestDto.getUserName(), event);

@@ -24,9 +24,9 @@
     </nav>
     <div id="header-second" class="box-row">
       <div id="search-container" class="box-row box-main-con">
-        <span class="title main-title">검색</span>
-        <input type="text" class="nomal-text" />
-        <button id="search-btn">🔍</button>
+        <span class="title main-title">방 이름</span>
+        <input type="text" class="nomal-text" v-model="searchText"/>
+        <button id="search-btn" class="nomal-text" @click="searchList">검색</button>
       </div>
       <div class="notifications box-row">
         <div class="box-main-noti noti-btn">
@@ -52,8 +52,15 @@
 import CreateRoom from "@/components/home/modal/CreateRoom.vue";
 import Notification from "@/components/home/modal/Notification.vue";
 import { useModal } from "@/composables/useModal";
+import { ref } from "vue";
 
-const emit = defineEmits(["create"]);
+const emit = defineEmits(["create", "search"]);
+const searchText = ref("")
+
+const searchList = function () {
+  emit('search', searchText.value)
+  searchText.value = ""
+}
 
 const {
   isModalOpen: isCreateModalOpen,
@@ -137,7 +144,7 @@ const {
 }
 
 #search-container input {
-  width: 380px;
+  width: 270px;
   height: 40px;
   margin-right: 5px;
   padding-left: 10px;
@@ -153,9 +160,15 @@ const {
 
 #search-btn {
   position: absolute;
-  right: 20px;
-  background: none;
-  border: none;
+  right: 10px;
+
+  padding: 0 5px;
+  font-size: 23px;
+  background-color: #3b72ff;
+  color: white;
+  border-width: 3px;
+  border-radius: 5px;
+  border-color: #85aaf4;
 }
 
 .notifications div {

@@ -1,8 +1,12 @@
 <script setup>
-import "@/assets/css/home.css";
+import "@/assets/css/main.css";
 import { ref } from "vue";
-import { login } from "@/api/user";
-import { RouterLink } from "vue-router";
+import { login, getUser } from "@/api/user";
+import { userStore } from "@/stores/user";
+import { useRouter } from "vue-router";
+
+const router = useRouter();
+const store = userStore();
 
 const userData = ref({
   id: "",
@@ -12,7 +16,19 @@ const userData = ref({
 const submitForm = async () => {
   try {
     const response = await login(userData.value);
+    getUserData();
     console.log(response);
+  } catch (e) {
+    console.log(e);
+  }
+};
+
+const getUserData = async () => {
+  try {
+    const response = await getUser(userData.value.id);
+    store.setUser(response.data);
+    console.log(response);
+    router.push({ name: "home" });
   } catch (e) {
     console.log(e);
   }

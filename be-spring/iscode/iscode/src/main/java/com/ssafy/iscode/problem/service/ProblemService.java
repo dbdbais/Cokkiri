@@ -15,7 +15,8 @@ public class ProblemService {
 
     private final ProblemRepository problemRepository;
     private final APIConnection apiConnection;
-    
+
+    @Autowired
     public ProblemService(ProblemRepository problemRepository, APIConnection apiConnection) {
         this.problemRepository = problemRepository;
         this.apiConnection = apiConnection;

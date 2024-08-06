@@ -134,20 +134,20 @@ public class RegularService {
         List<RegularDto> regulars = regularRepository.findByHost(host);
 
         for(RegularDto regular: regulars) {
-            for(RegularUser regularUser: regular.getUsers()) {
-                RegularResponseDto rr = new RegularResponseDto();
-                rr.setSessionId(regular.getId());
-                rr.setRegularName(regular.getName());
+            RegularResponseDto rr = new RegularResponseDto();
+            rr.setSessionId(regular.getId());
+            rr.setRegularName(regular.getName());
 
+            for(RegularUser regularUser: regular.getUsers()) {
                 List<String> users = new ArrayList<>();
                 if(!regularUser.getIsAccept()) {
                     users.add(regularUser.getUser().getNickname());
                 }
 
                 rr.setUsers(users);
-
-                list.add(rr);
             }
+
+            list.add(rr);
         }
 
         return list;

@@ -27,7 +27,7 @@ services:
     image: ohuggy/cokkiri_develop_fe
     container_name: vuejs
     ports:
-      - "8086:8080"
+      - "8086:80"
     depends_on:
       - backend
     networks:

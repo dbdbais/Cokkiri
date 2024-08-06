@@ -5,7 +5,7 @@ import notification from "@/assets/data/notification.json";
 import AnnounceDetail from "@/components/home/modal/AnnounceDetail.vue";
 import { getWaitingRoom, goWaitingRoom } from "@/api/waitingroom";
 import { getFriends, getUser, acceptFriend } from "@/api/user";
-import { receiveRegular } from "@/api/board";
+import { receiveRegular, acceptRegularJoin } from "@/api/board";
 import { useModal } from "@/composables/useModal";
 import { userStore } from "@/stores/user";
 import { useMessageStore } from "@/stores/message";
@@ -21,13 +21,20 @@ const notiRequest = ref({
   regular: [],
 });
 
-onMounted(() => {
+function getNotiData() {
   notiRequest.value = {
     friends: [],
     room: [],
     regular: [],
   };
-
+  receiveRegular({ userName: store.user.nickname })
+    .then((res) => {
+      console.log(res.data);
+      res.data.forEach((element) => {
+        notiRequest.value.regular.push(element);
+      });
+    })
+    .catch((err) => console.log(err));
   getFriends(store.user.id)
     .then((res) => {
       res.data.forEach((friend) => {
@@ -44,6 +51,7 @@ onMounted(() => {
               ) {
                 notiRequest.value.friends.push(res.data);
               }
+              console.log(notiRequest.value.friends);
             })
             .catch((err) => {
               console.log(err);
@@ -55,6 +63,10 @@ onMounted(() => {
     .catch((err) => {
       console.log(err);
     });
+}
+
+onMounted(() => {
+  getNotiData();
 });
 const router = useRouter();
 const isSelected = ref("announ");
@@ -67,6 +79,18 @@ const addFriend = function (friendUserId) {
   acceptFriend(store.user.id, friendUserId)
     .then((res) => {
       console.log(res.data);
+      getNotiData();
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+};
+
+const acceptRegular = function (sessionId, userName) {
+  acceptRegularJoin({ sessionId: sessionId, userName: userName })
+    .then((res) => {
+      console.log(res.data);
+      getNotiData();
     })
     .catch((err) => {
       console.log(err);
@@ -171,6 +195,27 @@ const goRoom = function (roomId) {
                   수락
                 </button>
                 <button class="btn-reject bold-text">거절</button>
+              </div>
+            </div>
+          </div>
+          <div class="room-con">
+            <span>정기 스터디 (닉네임 [스터디 명])</span>
+            <div v-for="(regular, index) in notiRequest.regular" :key="index">
+              <div
+                v-for="(user, index) in regular.users"
+                :key="index"
+                class="box-row announ-con"
+              >
+                <span>{{ user }} [{{ regular.regularName }}]</span>
+                <div class="box-row">
+                  <button
+                    class="btn-accept bold-text"
+                    @click="acceptRegular(regular.sessionId, user)"
+                  >
+                    수락
+                  </button>
+                  <button class="btn-reject bold-text">거절</button>
+                </div>
               </div>
             </div>
           </div>

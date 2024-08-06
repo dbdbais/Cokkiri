@@ -1,13 +1,14 @@
 <script setup>
 import RecruitmentBadge from "./RecruitmentBadge.vue";
 import { joinStudy } from "@/api/board";
+import { userStore } from "@/stores/user";
 
 defineProps({
   detailData: Object,
 });
 
 const emit = defineEmits(["close"]);
-
+const store = userStore();
 const rankImgUrl = "/src/assets/rank/";
 
 const closeBtn = function () {
@@ -22,7 +23,7 @@ const sendJoin = function (sessionId) {
     console.log(err);
   };
   const joinData = {
-    userName: "김종덕",
+    userName: store.user.nickname,
     sessionId: sessionId,
   };
   joinStudy(joinData, success, fail);
@@ -42,7 +43,7 @@ const sendJoin = function (sessionId) {
       <div class="title sub-title group-name">{{ detailData.regularName }}</div>
       <div class="top">
         <div class="box-psb text-p md lang">
-          {{ detailData.language? detailData.language : "상관없음"}}
+          {{ detailData.language ? detailData.language : "상관없음" }}
         </div>
         <div class="box-psb text-p md member">
           <div
@@ -50,7 +51,7 @@ const sendJoin = function (sessionId) {
             :key="tier.index"
             class="rank md"
           >
-            <img :src="rankImgUrl+tier+'.svg'" alt="등급" />
+            <img :src="rankImgUrl + tier + '.svg'" alt="등급" />
             <span style="margin-left: 8px">{{ cnt }}명</span>
           </div>
         </div>

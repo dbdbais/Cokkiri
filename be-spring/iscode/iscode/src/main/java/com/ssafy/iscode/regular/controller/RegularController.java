@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/regular")
+@RequestMapping("/api/regular")
 public class RegularController {
 
     @Autowired

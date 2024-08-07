@@ -27,6 +27,11 @@ function getNotiData() {
     room: [],
     regular: [],
   };
+
+  messageStore.noti.room.forEach((room) => {
+    notiRequest.value.room.push(room);
+  });
+
   receiveRegular({ userName: store.user.nickname })
     .then((res) => {
       console.log(res.data);
@@ -68,6 +73,7 @@ function getNotiData() {
 onMounted(() => {
   getNotiData();
 });
+
 const router = useRouter();
 const isSelected = ref("announ");
 const announ = ref(announcement);
@@ -164,14 +170,14 @@ const goRoom = function (roomId) {
           </div>
         </div>
         <div v-if="isSelected == 'noti'">
-          <div class="room-con">
+          <div class="room-con box">
             <span>방 초대</span>
             <div
-              v-for="(item, index) in roomInvite"
+              v-for="(item, index) in notiRequest.room"
               :key="index"
               class="box-row announ-con"
             >
-              <span>{{ item.hostName }}님이 초대하였습니다.</span>
+              <span>{{ item.userName }}님이 초대하였습니다.</span>
               <div class="box-row">
                 <button
                   class="btn-accept bold-text"
@@ -202,7 +208,7 @@ const goRoom = function (roomId) {
               </div>
             </div>
           </div>
-          <div class="room-con">
+          <div class="regular-con">
             <span>정기 스터디 (닉네임 [스터디 명])</span>
             <div v-for="(regular, index) in notiRequest.regular" :key="index">
               <div
@@ -329,12 +335,14 @@ div {
   padding: 5px 10px;
 }
 
-.friend-con {
+.friend-con,
+.regular-con {
   margin-top: 20px;
 }
 
 .room-con > span,
-.friend-con > span {
+.friend-con > span,
+.regular-con > span {
   font-size: 25px;
 }
 

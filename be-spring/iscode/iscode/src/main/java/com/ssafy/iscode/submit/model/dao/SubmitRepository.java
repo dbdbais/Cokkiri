@@ -19,7 +19,15 @@ public class SubmitRepository {
 
     public int save(Submit submit){
         try {
-            em.persist(submit);
+
+            if(findById(submit.getNo()) == null){
+                //Insert
+                em.persist(submit);
+            }
+            else{
+                //Modify
+                em.merge(submit);
+            }
             return 1; // successfully saved
         } catch (Exception e) {
             e.printStackTrace();
@@ -29,6 +37,13 @@ public class SubmitRepository {
     public Submit findById(Long no){
         return em.find(Submit.class,no);
     }
+
+
+
+
+
+
+
 
 
 }

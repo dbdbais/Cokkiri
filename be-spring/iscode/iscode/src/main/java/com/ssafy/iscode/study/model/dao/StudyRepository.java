@@ -36,14 +36,6 @@ public class StudyRepository {
         return em.find(StudyDto.class,id);
     }
 
-    public List<StudyDto> findAll(){
-        String query = "SELECT s FROM StudyDto s " +
-                "WHERE s.isOpen";
-
-        return em.createQuery(query, StudyDto.class)
-                .getResultList();
-    }
-
     public List<StudyDto> findAll(int offset){
         String query = "SELECT s FROM StudyDto s " +
                 "WHERE s.isOpen";
@@ -51,16 +43,6 @@ public class StudyRepository {
         return em.createQuery(query, StudyDto.class)
                 .setFirstResult(offset)
                 .setMaxResults(6)
-                .getResultList();
-    }
-
-    public List<StudyDto> findByName(String roomName) {
-        String query = "SELECT s FROM StudyDto s " +
-                "WHERE s.name LIKE :roomName " +
-                "AND s.isOpen";
-
-        return em.createQuery(query, StudyDto.class)
-                .setParameter("roomName", "%" + roomName + "%")
                 .getResultList();
     }
 
@@ -76,16 +58,6 @@ public class StudyRepository {
                 .getResultList();
     }
 
-    public List<StudyDto> findSelectedAll(boolean isGame){
-        String query = "SELECT s FROM StudyDto s " +
-                "WHERE s.isOpen " +
-                "AND s.isGame = :isGame";
-
-        return em.createQuery(query, StudyDto.class)
-                .setParameter("isGame", isGame)
-                .getResultList();
-    }
-
     public List<StudyDto> findSelectedAll(boolean isGame, int offset){
         String query = "SELECT s FROM StudyDto s " +
                 "WHERE s.isOpen " +
@@ -95,17 +67,6 @@ public class StudyRepository {
                 .setParameter("isGame", isGame)
                 .setFirstResult(offset)
                 .setMaxResults(6)
-                .getResultList();
-    }
-
-    public List<StudyDto> findSelectedByName(String roomName, boolean isGame) {
-        String query = "SELECT s FROM StudyDto s " +
-                "WHERE s.name LIKE :roomName " +
-                "AND s.isOpen AND s.isGame = :isGame";
-
-        return em.createQuery(query, StudyDto.class)
-                .setParameter("roomName", "%" + roomName + "%")
-                .setParameter("isGame", isGame)
                 .getResultList();
     }
 

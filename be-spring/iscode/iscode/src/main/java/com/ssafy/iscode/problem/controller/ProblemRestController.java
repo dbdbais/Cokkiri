@@ -11,7 +11,7 @@ import java.io.IOException;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/problemapi")
+@RequestMapping("/problemapi")
 public class ProblemRestController {
 
     private final ProblemService ps;

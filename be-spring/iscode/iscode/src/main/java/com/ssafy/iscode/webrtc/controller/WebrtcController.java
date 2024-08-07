@@ -14,7 +14,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 @RestController
-@RequestMapping("/api/session")
+@RequestMapping("/session")
 @CrossOrigin("*")
 public class WebrtcController {
 

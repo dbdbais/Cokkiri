@@ -17,5 +17,4 @@ public class StudyRequestDto {
     private int maxNum;
     private Boolean isOpen;
     private Boolean isGame;
-    private List<Long> problems;
 }

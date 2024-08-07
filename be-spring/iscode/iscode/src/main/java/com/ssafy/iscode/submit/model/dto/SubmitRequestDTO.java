@@ -2,6 +2,7 @@ package com.ssafy.iscode.submit.model.dto;
 
 public class SubmitRequestDTO {
 
+    private Long no;
     private Long study_id;
     private Long algo_num;
     private String user_id;
@@ -10,11 +11,12 @@ public class SubmitRequestDTO {
 
     public SubmitRequestDTO() {}
 
-    public SubmitRequestDTO(Long study_id, Long algo_num, String user_id, String submit_code) {
-        this.study_id = study_id;
-        this.algo_num = algo_num;
-        this.user_id = user_id;
-        this.submit_code = submit_code;
+    public Long getNo() {
+        return no;
+    }
+
+    public void setNo(Long no) {
+        this.no = no;
     }
 
     public Long getStudy_id() {

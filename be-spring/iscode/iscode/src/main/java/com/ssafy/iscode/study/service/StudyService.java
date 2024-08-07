@@ -1,7 +1,5 @@
 package com.ssafy.iscode.study.service;
 
-import com.ssafy.iscode.problem.model.dao.ProblemRepository;
-import com.ssafy.iscode.problem.model.dto.Problem;
 import com.ssafy.iscode.user.model.dao.UserRepository;
 import com.ssafy.iscode.user.model.dto.User;
 import com.ssafy.iscode.study.model.dao.StudyRepository;
@@ -27,9 +25,6 @@ public class StudyService {
 
     @Autowired
     private UserRepository userRepository;
-
-    @Autowired
-    private ProblemRepository problemRepository;
 
     private final String SEPARATOR = "|";
 
@@ -172,40 +167,23 @@ public class StudyService {
         return 0;
     }
 
-    public List<StudyResponseDto> getStudys(String roomName, Boolean isGame, Integer page) {
+    public List<StudyResponseDto> getStudys(String roomName, Boolean isGame, int page) {
+        int offset = 6 * (page - 1);
 
         List<StudyResponseDto> list = new ArrayList<>();
         List<StudyDto> studys;
 
-        if(page == null) {
-            if (isGame == null) {
-                if (roomName == null) {
-                    studys = studyRepository.findAll();
-                } else {
-                    studys = studyRepository.findByName(roomName);
-                }
+        if(isGame == null) {
+            if(roomName == null) {
+                studys = studyRepository.findAll(offset);
             } else {
-                if (roomName == null) {
-                    studys = studyRepository.findSelectedAll(isGame);
-                } else {
-                    studys = studyRepository.findSelectedByName(roomName, isGame);
-                }
+                studys = studyRepository.findByName(roomName, offset);
             }
         } else {
-            int offset = 6 * (page - 1);
-            
-            if (isGame == null) {
-                if (roomName == null) {
-                    studys = studyRepository.findAll(offset);
-                } else {
-                    studys = studyRepository.findByName(roomName, offset);
-                }
+            if(roomName == null) {
+                studys = studyRepository.findSelectedAll(isGame, offset);
             } else {
-                if (roomName == null) {
-                    studys = studyRepository.findSelectedAll(isGame, offset);
-                } else {
-                    studys = studyRepository.findSelectedByName(roomName, isGame, offset);
-                }
+                studys = studyRepository.findSelectedByName(roomName, isGame, offset);
             }
         }
 
@@ -260,43 +238,5 @@ public class StudyService {
 
     public StudyDto getStudyDto(Long sessionId) {
         return studyRepository.findById(sessionId);
-    }
-
-    public int updateProblem(StudyRequestDto studyRequestDto) {
-        try {
-            StudyDto studyDto = studyRepository.findById(studyRequestDto.getSessionId());
-
-            if(studyDto == null) {
-                throw new RuntimeException("Study not found");
-            }
-
-            List<Long> problems = studyRequestDto.getProblems();
-            List<Problem> input = new ArrayList<>();
-
-            for (Long pid : problems) {
-                Problem problem = problemRepository.findById(pid);
-
-                if(problem == null) {
-                    throw new RuntimeException("Problem not found");
-                }
-                input.add(problem);
-            }
-
-            studyDto.setProblems(input);
-            return 1;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return 0;
-        }
-    }
-
-    public List<Problem> getProblems(Long sessionId) {
-        StudyDto studyDto = studyRepository.findById(sessionId);
-
-        if(studyDto == null) {
-            throw new RuntimeException("Study not found");
-        }
-
-        return studyDto.getProblems();
     }
 }

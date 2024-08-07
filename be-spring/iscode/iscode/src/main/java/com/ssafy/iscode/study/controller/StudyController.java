@@ -1,6 +1,5 @@
 package com.ssafy.iscode.study.controller;
 
-import com.ssafy.iscode.problem.model.dto.Problem;
 import com.ssafy.iscode.study.model.dto.StudyRequestDto;
 import com.ssafy.iscode.study.model.dto.StudyResponseDto;
 import com.ssafy.iscode.study.service.StudyService;
@@ -14,7 +13,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/api/waitingroom")
+@RequestMapping("/waitingroom")
 public class StudyController {
 
     @Autowired
@@ -55,7 +54,7 @@ public class StudyController {
     public ResponseEntity<List<StudyResponseDto>> getStudys(@RequestParam Map<String, String> params) {
         String roomName = params.get("roomName");
         Boolean isGame = params.get("isGame") == null ? null : Boolean.parseBoolean(params.get("isGame"));
-        Integer page = params.get("page") == null ? null : Integer.parseInt(params.get("page"));
+        int page = params.get("page") == null ? 1 : Integer.parseInt(params.get("page"));
 
         return new ResponseEntity<>(studyService.getStudys(roomName, isGame, page), HttpStatus.OK);
     }
@@ -105,7 +104,7 @@ public class StudyController {
 
     @PostMapping("/invite-room")
     public ResponseEntity<StudyResponseDto> inviteRoom(@RequestBody StudyRequestDto studyRequestDto) {
-        String event = ".|!|.|!|NOTI|!|" + studyRequestDto.getSessionId();
+        String event = ".|!|.|!|ROOM|!|" + studyRequestDto.getSessionId();
 
         try {
             lobbyWebSocketHandler.sendEvent(studyRequestDto.getUserName(), event);
@@ -114,40 +113,6 @@ public class StudyController {
         } catch (Exception e) {
             e.printStackTrace();
             
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
-
-    @PostMapping("/problem")
-    public ResponseEntity<StudyResponseDto> updateProblem(@RequestBody StudyRequestDto studyRequestDto) {
-        try {
-            studyService.updateProblem(studyRequestDto);
-
-            return new ResponseEntity<>(HttpStatus.OK);
-        } catch (RuntimeException e) {
-            e.printStackTrace();
-
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        } catch (Exception e) {
-            e.printStackTrace();
-
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
-
-    @GetMapping("/problem/{sessionId}")
-    public ResponseEntity<List<Problem>> getProblems(@PathVariable("sessionId") Long sessionId) {
-        try {
-            List<Problem> result = studyService.getProblems(sessionId);
-
-            return new ResponseEntity<>(result, HttpStatus.OK);
-        } catch (RuntimeException e) {
-            e.printStackTrace();
-
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        } catch (Exception e) {
-            e.printStackTrace();
-
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }

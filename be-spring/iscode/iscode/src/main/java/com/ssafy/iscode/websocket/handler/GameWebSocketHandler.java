@@ -15,7 +15,7 @@ import java.util.*;
 
 public class GameWebSocketHandler extends TextWebSocketHandler {
     private final Map<String, Set<WebSocketSession>> roomSessions = Collections.synchronizedMap(new HashMap<>());
-    private final Map<String, WebSocketSession> userSessions = Collections.synchronizedMap(new HashMap<>());
+    private final Map<WebSocketSession, String> userSessions = Collections.synchronizedMap(new HashMap<>());
     private final Map<String, Long> roomEnterTimes = Collections.synchronizedMap(new HashMap<>());
     private final Map<String, List<Map<String, Long>>> roomPrices = Collections.synchronizedMap(new HashMap<>());
 
@@ -30,7 +30,7 @@ public class GameWebSocketHandler extends TextWebSocketHandler {
         String userName = getUserName(session);
 
         roomSessions.computeIfAbsent(roomId, k -> Collections.synchronizedSet(new HashSet<>())).add(session);
-        userSessions.put(userName, session);
+        userSessions.put(session, userName);
 
         if(!roomEnterTimes.containsKey(roomId)) {
             Date now = new Date();
@@ -50,12 +50,12 @@ public class GameWebSocketHandler extends TextWebSocketHandler {
     @Override
     public void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
         String roomId = getRoomId(session);
-        String userName = getUserName(session);
-        String[] m = message.getPayload().split("\\|!\\|");
+        String userName = userSessions.get(session);
+        String m = message.getPayload();
         long startTime = roomEnterTimes.get(roomId);
 
         // code success
-        if ("|@|".equals(m[0])) {
+        if ("|@|".equals(m)) {
             if(roomPrices.get(roomId).size() < 3) {
                 Date now = new Date();
                 long nowMillis = now.getTime();
@@ -75,22 +75,6 @@ public class GameWebSocketHandler extends TextWebSocketHandler {
                     }
                 }
             }
-        } else {
-            String opUserName = m[1];
-            String event = "";
-
-            if ("|#|".equals(m[0])) { // used item 1 (blind problem)
-                event = "BLIND";
-            } else if ("|$|".equals(m[0])) { // used item 2 (minimum size of submit button)
-                event = "SIZE";
-            } else if ("|%|".equals(m[0])) { // used item 3 (prevent code input)
-                event = "PREVENT";
-            } else {
-                return;
-            }
-
-            WebSocketSession opSession = userSessions.get(opUserName);
-            opSession.sendMessage(new TextMessage(event));
         }
     }
 

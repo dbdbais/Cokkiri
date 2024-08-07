@@ -9,7 +9,6 @@ import jakarta.persistence.*;
 public class Review {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name="review_id")
     private Long rid;
 
     @Column(name = "review_code", columnDefinition = "LONGTEXT")
@@ -17,7 +16,7 @@ public class Review {
 
     //Eager for serializable
     @ManyToOne(fetch = FetchType.EAGER, optional = true)
-    @JoinColumn(name = "algo_num", nullable = false)
+    @JoinColumn(name = "algo_num", nullable = true)
     private Problem problem;
 
     //Eager for serializable

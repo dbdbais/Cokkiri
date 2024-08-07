@@ -11,7 +11,7 @@
 
         <div class="form-group">
           <label for="nickname" class="title" id="name">닉네임 </label>
-          <input type="text" id="nickname" v-model="userData.email" />
+          <input type="text" id="nickname" v-model="userData.nickname" />
           <button type="button" class="verify-btn">중복확인</button>
         </div>
 
@@ -49,7 +49,7 @@ export default {
       id: "",
       password: "",
       passwordConfirm: "",
-      email: "",
+      nickname: "",
     });
 
     const router = useRouter();

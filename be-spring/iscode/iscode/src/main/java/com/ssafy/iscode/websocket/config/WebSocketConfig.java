@@ -13,6 +13,7 @@ import org.springframework.web.socket.config.annotation.WebSocketHandlerRegistry
 
 @Configuration
 @EnableWebSocket
+
 public class WebSocketConfig implements WebSocketConfigurer {
     @Autowired
     private LobbyWebSocketHandler lobbyWebSocketHandler;
@@ -20,19 +21,19 @@ public class WebSocketConfig implements WebSocketConfigurer {
     @Override
     public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
         // message socket
-        registry.addHandler(ChatWebSocketHandler(), "/chat/{roomId}/{userName}")
+        registry.addHandler(ChatWebSocketHandler(), "/socket/chat/{roomId}/{userName}")
                 .setAllowedOrigins("*");
 
         // lobby socket
-        registry.addHandler(lobbyWebSocketHandler, "/lobby/{userName}")
+        registry.addHandler(lobbyWebSocketHandler, "/socket/lobby/{userName}")
                 .setAllowedOrigins("*");
 
         // room socket
-        registry.addHandler(RoomWebSocketHandler(), "/room/{roomId}/{userName}")
+        registry.addHandler(RoomWebSocketHandler(), "/socket/room/{roomId}/{userName}")
                 .setAllowedOrigins("*");
 
         // room socket
-        registry.addHandler(GameWebSocketHandler(), "/game/{roomId}/{userName}")
+        registry.addHandler(GameWebSocketHandler(), "/socket/game/{roomId}/{userName}")
                 .setAllowedOrigins("*");
     }
 

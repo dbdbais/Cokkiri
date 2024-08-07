@@ -2,7 +2,7 @@
 import Logo from "@/components/common/Logo.vue";
 import ProblemList from "@/components/problem/ProblemList.vue";
 import ProblemSearch from "@/components/problem/ProblemSearch.vue";
-import NonNumberPagination from "@/components/common/NonNumberPagination.vue";
+import Page from "@/components/common/Page.vue";
 </script>
 
 <template>
@@ -14,7 +14,7 @@ import NonNumberPagination from "@/components/common/NonNumberPagination.vue";
     <div class="problem-con">
       <ProblemSearch />
       <ProblemList />
-      <NonNumberPagination />
+      <Page />
     </div>
   </div>
 </template>

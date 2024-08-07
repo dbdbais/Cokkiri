@@ -189,7 +189,7 @@ const goRoom = function (roomId) {
               </div>
             </div>
           </div>
-          <div class="friend-con">
+          <div class="friend-con box">
             <span>친구 신청</span>
             <div
               v-for="(item, index) in notiRequest.friends"
@@ -208,7 +208,7 @@ const goRoom = function (roomId) {
               </div>
             </div>
           </div>
-          <div class="regular-con">
+          <div class="regular-con box">
             <span>정기 스터디 (닉네임 [스터디 명])</span>
             <div v-for="(regular, index) in notiRequest.regular" :key="index">
               <div
@@ -250,7 +250,7 @@ div {
 
 .modal-content {
   position: absolute;
-  width: 550px;
+  width: 600px;
   height: 700px;
   bottom: 50px;
   right: 330px;
@@ -312,6 +312,7 @@ div {
   border-radius: 0 5px 5px 5px;
   background-color: #c191ff;
   padding: 10px 20px;
+  overflow-y: auto;
 }
 
 .announ-con {
@@ -338,6 +339,14 @@ div {
 .friend-con,
 .regular-con {
   margin-top: 20px;
+}
+
+.friend-con,
+.regular-con,
+.room-con {
+  height: 200px;
+  padding: 10px;
+  overflow-y: auto;
 }
 
 .room-con > span,

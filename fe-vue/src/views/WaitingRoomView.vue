@@ -8,6 +8,7 @@ import WaitingRoomRule from "@/components/waitingroom/WaitingRoomRule.vue";
 import WaitingRoomMember from "@/components/waitingroom/WaitingRoomMember.vue";
 import WaitingRoomChat from "@/components/waitingroom/WaitingRoomChat.vue";
 import WaitingRoomFriend from "@/components/waitingroom/WaitingRoomFriend.vue";
+import WaitingRoomSetting from "@/components/waitingroom/WaitingRoomSetting.vue";
 import { userStore } from "@/stores/user";
 
 import { ref, onMounted } from "vue";
@@ -23,7 +24,7 @@ const chatList = ref([]);
 const friendInvite = ref(false);
 
 const ws = new WebSocket(
-  `ws://192.168.30.160:8080/room/${route.params.roomId}/${store.user.nickname}`
+  `ws://localhost:8080/room/${route.params.roomId}/${store.user.nickname}`
 );
 
 ws.onmessage = function (event) {
@@ -47,10 +48,19 @@ ws.onmessage = function (event) {
       case "START":
         ws.close();
         console.log("입장!");
-        router.push({
-          name: "meeting",
-          params: { roomId: route.params.roomId },
-        });
+
+        console.log(roomData.value);
+        if (roomData.value.isGame) {
+          router.push({
+            name: "gameProgress",
+            params: { gameId: route.params.roomId },
+          });
+        } else {
+          router.push({
+            name: "meeting",
+            params: { roomId: route.params.roomId },
+          });
+        }
     }
   }
 };
@@ -110,6 +120,7 @@ const exitRoom = function () {
 <template>
   <div>
     <div class="waiting-room">
+      <WaitingRoomSetting v-if="false" />
       <WaitingRoomFriend
         id="test"
         v-if="friendInvite"
@@ -128,13 +139,16 @@ const exitRoom = function () {
         </div>
         <div class="box-col">
           <div class="member-data">
-            <div class="flex-align">
-              <div class="category md bold-text">
-                {{ roomData.isGame ? "게임방" : "공부방" }}
+            <div class="flex-align" style="justify-content: space-between">
+              <div class="flex-align">
+                <div class="category md bold-text">
+                  {{ roomData.isGame ? "게임방" : "공부방" }}
+                </div>
+                <p class="bold-text title">
+                  {{ roomData.roomName }}
+                </p>
               </div>
-              <p class="bold-text title">
-                {{ roomData.roomName }}
-              </p>
+              <button class="setting bold-text">설정</button>
             </div>
             <WaitingRoomMember :users="roomUsers" />
           </div>
@@ -173,6 +187,7 @@ const exitRoom = function () {
 <style scoped>
 .waiting-room {
   padding: 30px 30px 0px 30px;
+  position: relative;
 }
 .room-exit,
 .category {
@@ -230,5 +245,16 @@ const exitRoom = function () {
   justify-content: center;
   font-size: 55px;
   -webkit-text-stroke: 2px black;
+}
+
+.setting {
+  width: 100px;
+  height: 50px;
+  font-size: 25px;
+  background-color: #c191ff;
+
+  border-radius: 10px;
+  border-width: 5px;
+  border-color: #3b72ff;
 }
 </style>

@@ -54,4 +54,5 @@ public class ProblemRestController {
         return apiConnection.useOpenAI(plainText,"너는 알고리즘을 가르쳐주는 선생님이야, 정답을 알려주지 말고 힌트만 제공해줘");
     }
 
+
 }

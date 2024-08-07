@@ -27,7 +27,7 @@ public class APIConnection {
     //WebCrawler Dependency Injection
 
     //SECRET KEY
-//    @Value("${openai.api.key}")
+    //@Value("${openai.api.key}")
     private String openaiApiKey;
 
 

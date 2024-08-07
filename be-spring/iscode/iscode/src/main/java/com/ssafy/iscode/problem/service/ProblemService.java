@@ -3,7 +3,7 @@ package com.ssafy.iscode.problem.service;
 import com.ssafy.iscode.problem.model.dao.ProblemRepository;
 import com.ssafy.iscode.problem.model.dto.Problem;
 import com.ssafy.iscode.util.APIConnection;
-import com.ssafy.iscode.util.WebCrawler;
+import org.jsoup.Jsoup;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -30,6 +30,10 @@ public class ProblemService {
             //if there is no Problem in database
             Problem newProblem = apiConnection.getProblem(id);
             //fetch problem using Crawler and API
+            String plainText = Jsoup.parse(newProblem.getInfo()).text();
+            System.out.println(plainText);
+            //apiConnection.useOpenAI(newProblem.getInfo(),"이 문제 정보를 보고");
+            //fetch hidden test case
             problemRepository.save(newProblem);
             return newProblem.getNo();
         }

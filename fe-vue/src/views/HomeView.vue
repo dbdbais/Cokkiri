@@ -41,7 +41,7 @@ import { userStore } from "@/stores/user";
 import { useMessageStore } from "@/stores/message";
 
 const store = userStore();
-const lobby = new WebSocket(`ws://localhost:8080/lobby/${store.user.nickname}`);
+const lobby = new WebSocket(`ws://backend:8080/lobby/${store.user.nickname}`);
 const messageStore = useMessageStore();
 const router = useRouter();
 const currentPage = ref(1);

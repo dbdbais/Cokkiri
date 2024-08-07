@@ -1,17 +1,10 @@
 <template>
   <div class="box-main-con box-col">
-    <div
-      class="box-row"
-      style="justify-content: space-between; align-items: center"
-    >
+    <div class="box-row" style="justify-content: space-between; align-items: center">
       <div id="name" class="title main-title">{{ store.user.nickname }}</div>
       <button class="bold-text logout" @click="logout">로그아웃</button>
     </div>
-    <div
-      id="rank-container"
-      class="box-row box-main-exp"
-      style="align-items: center"
-    >
+    <div id="rank-container" class="box-row box-main-exp" style="align-items: center">
       <img id="rank-img" :src="imageSrc" alt="rank" class="rank" />
       <Exp id="rank-exp" :grade="grade" :percentage="store.user.percent"></Exp>
     </div>
@@ -71,12 +64,14 @@ const logout = function () {
 }
 
 .logout {
-  width: 100px;
-  height: 30px;
-
+  padding: 10px 20px;
   background-color: #cadcff;
   border-radius: 5px;
   border-width: 3px;
   border-color: #c191ff;
+}
+
+.logout:hover {
+  background-color: #E69500;
 }
 </style>

@@ -2,6 +2,7 @@
 import { ref } from 'vue';
 import { createWaitingRoom } from '@/api/waitingroom';
 import { userStore } from '@/stores/user';
+import { useRouter } from 'vue-router';
 
 const store = userStore();
 const emit = defineEmits('create')
@@ -12,6 +13,8 @@ const isGame = ref(false)
 const isOpen = ref(true)
 const roomComment = ref("")
 const ruleValue = ref('');
+const router = useRouter()
+
 const ruleList = ref([
     "상호간에 예의를 지킵시다"
 ])
@@ -55,13 +58,14 @@ const deleterule = (index) => {
 const createRoom = function () {
     const success = (res) => {
         console.log(res.data)
+        router.push({ name: "waitingRoom", params: { roomId: res.data } });
         emit('create')
         emit('close')
     }
     const fail = (err) => {
         console.log(err)
     }
-
+    
     const roomData = {
         roomName: roomName.value,
         userName: store.user.nickname,

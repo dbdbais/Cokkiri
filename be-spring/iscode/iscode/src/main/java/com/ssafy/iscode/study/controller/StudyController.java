@@ -1,5 +1,6 @@
 package com.ssafy.iscode.study.controller;
 
+import com.ssafy.iscode.problem.model.dto.Problem;
 import com.ssafy.iscode.study.model.dto.StudyRequestDto;
 import com.ssafy.iscode.study.model.dto.StudyResponseDto;
 import com.ssafy.iscode.study.service.StudyService;
@@ -113,6 +114,40 @@ public class StudyController {
         } catch (Exception e) {
             e.printStackTrace();
             
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @PostMapping("/problem")
+    public ResponseEntity<StudyResponseDto> updateProblem(@RequestBody StudyRequestDto studyRequestDto) {
+        try {
+            studyService.updateProblem(studyRequestDto);
+
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } catch (Exception e) {
+            e.printStackTrace();
+
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping("/problem/{sessionId}")
+    public ResponseEntity<List<Problem>> getProblems(@PathVariable("sessionId") Long sessionId) {
+        try {
+            List<Problem> result = studyService.getProblems(sessionId);
+
+            return new ResponseEntity<>(result, HttpStatus.OK);
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } catch (Exception e) {
+            e.printStackTrace();
+
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }

@@ -1,5 +1,5 @@
 <script setup>
-import { getFriend } from "@/api/friend";
+import { getFriends } from "@/api/user";
 import { inviteFriend } from "@/api/friend";
 import { getUser } from "@/api/user";
 import { onMounted, ref } from "vue";
@@ -8,7 +8,8 @@ import { userStore } from "@/stores/user";
 const store = userStore();
 
 onMounted(() => {
-  getFriend(store.user.nickname).then((res) => {
+  getFriends(store.user.id).then((res) => {
+    console.log(res.data);
     friendList.value = res.data;
   });
 });

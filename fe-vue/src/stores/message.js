@@ -1,5 +1,6 @@
 import { ref } from "vue";
 import { defineStore } from "pinia";
+import { getWaitingRoom } from "@/api/waitingroom";
 
 export const useMessageStore = defineStore("message", () => {
   const noti = ref({
@@ -17,7 +18,14 @@ export const useMessageStore = defineStore("message", () => {
   };
 
   const receiveInvite = function (message) {
-    noti.value.room.push(message);
+    const success = (res) => {
+      noti.value.room.push({ userName: res.data.hostName, roomId: message });
+      console.log(res.data);
+    };
+    const fail = (err) => {
+      console.log(err);
+    };
+    getWaitingRoom(message, success, fail);
   };
 
   const receiveFriend = function (message) {

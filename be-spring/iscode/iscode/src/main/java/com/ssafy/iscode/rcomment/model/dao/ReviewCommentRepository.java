@@ -50,6 +50,9 @@ public class ReviewCommentRepository {
 
     public int deleteComment(ReviewComment reviewComment){
         try{
+            if(reviewComment == null){
+                return 0;
+            }
             if(reviewComment.getChildren().isEmpty()){
                em.remove(reviewComment);
             }

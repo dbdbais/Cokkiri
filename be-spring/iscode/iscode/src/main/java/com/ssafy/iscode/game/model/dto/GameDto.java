@@ -53,6 +53,11 @@ public class GameDto {
     @OneToMany(mappedBy = "game", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<GamePrize> prizes;
 
-
-    //private List<Problem> problems;
+    @ManyToMany
+    @JoinTable(
+            name = "game_problems",
+            joinColumns = @JoinColumn(name = "game_id"),
+            inverseJoinColumns = @JoinColumn(name = "problem_id")
+    )
+    private List<Problem> problems;
 }

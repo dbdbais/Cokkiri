@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>Web Compiler</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.12/ace.js"></script>
+    <style>
+        #container {
+            display: flex;
+            flex-direction: column;
+        }
+        #problem-area, #input-output-area {
+            display: flex;
+        }
+        #problem-area {
+            width: 100%;
+            margin: 10px;
+        }
+        #input-output-area {
+            width: 100%;
+            margin: 10px;
+            justify-content: space-between;
+        }
+        #problem{
+            width: 50%;
+            height : 400px;
+            margin: 10px;
+        overflow:auto;
+        }
+        #input, #output {
+            width: 45%;
+            margin: 10px;
+        }
+        #editor-container {
+            width: 50%;
+        }
+        textarea {
+            width: 100%;
+            flex-grow: 1;
+            resize: none;
+        }
+        #editor {
+            height: 300px;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+<h1>Web Compiler</h1>
+<div id="container">
+    <div id="problem-area">
+        <div id="problem">
+
+            <div class="col-md-12">
+                <section id="description" class="problem-section">
+                    <div class="headline">
+                        <h2>문제</h2>
+                    </div>
+                    <div id="problem_description" class="problem-text">
+                        <p>한수는 지금 (x, y)에 있다. 직사각형은 각 변이 좌표축에 평행하고,&nbsp;왼쪽 아래 꼭짓점은 (0, 0), 오른쪽 위 꼭짓점은 (w, h)에 있다. 직사각형의 경계선까지 가는 거리의 최솟값을 구하는 프로그램을 작성하시오.</p>
+                    </div>
+                </section>
+            </div>
+            <div class="col-md-12">
+                <section id="input2" class="problem-section">
+                    <div class="headline">
+                        <h2>입력</h2>
+                    </div>
+                    <div id="problem_input" class="problem-text">
+                        <p>첫째 줄에 x, y, w, h가 주어진다.</p>
+                    </div>
+                </section>
+            </div>
+            <div class="col-md-12">
+                <section id="output2" class="problem-section">
+                    <div class="headline">
+                        <h2>출력</h2>
+                    </div>
+                    <div id="problem_output" class="problem-text">
+                        <p>첫째 줄에 문제의 정답을 출력한다.</p>
+                    </div>
+                </section>
+            </div>
+            <div class="col-md-12">
+                <section id="limit" class="problem-section">
+                    <div class="headline">
+                        <h2>제한</h2>
+                    </div>
+                    <div id="problem_limit" class="problem-text">
+                        <ul>
+                            <li>1 ≤ w, h ≤ 1,000</li>
+                            <li>1 ≤ x ≤ w-1</li>
+                            <li>1 ≤ y ≤ h-1</li>
+                            <li>x, y, w, h는 정수</li>
+                        </ul>
+                    </div>
+                </section>
+            </div>
+            <div class="col-md-12">
+                <div class="row">
+                    <div class="col-md-6">
+                        <section id="sampleinput1">
+                            <div class="headline">
+                                <h2>예제 입력 1 </h2>
+                            </div>
+                            <pre class="sampledata" id="sample-input-1">6 2 10 3
+</pre>
+                        </section>
+                    </div>
+                    <div class="col-md-6">
+                        <section id="sampleoutput1">
+                            <div class="headline">
+                                <h2>예제 출력 1 </h2>
+                            </div>
+                            <pre class="sampledata" id="sample-output-1">1
+</pre>
+                        </section>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="row">
+                    <div class="col-md-6">
+                        <section id="sampleinput2">
+                            <div class="headline">
+                                <h2>예제 입력 2 </h2>
+                            </div>
+                            <pre class="sampledata" id="sample-input-2">1 1 5 5
+</pre>
+                        </section>
+                    </div>
+                    <div class="col-md-6">
+                        <section id="sampleoutput2">
+                            <div class="headline">
+                                <h2>예제 출력 2 </h2>
+                            </div>
+                            <pre class="sampledata" id="sample-output-2">1
+</pre>
+                        </section>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="row">
+                    <div class="col-md-6">
+                        <section id="sampleinput3">
+                            <div class="headline">
+                                <h2>예제 입력 3 </h2>
+                            </div>
+                            <pre class="sampledata" id="sample-input-3">653 375 1000 1000
+</pre>
+                        </section>
+                    </div>
+                    <div class="col-md-6">
+                        <section id="sampleoutput3">
+                            <div class="headline">
+                                <h2>예제 출력 3 </h2>
+                            </div>
+                            <pre class="sampledata" id="sample-output-3">347
+</pre>
+                        </section>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="row">
+                    <div class="col-md-6">
+                        <section id="sampleinput4">
+                            <div class="headline">
+                                <h2>예제 입력 4 </h2>
+                            </div>
+                            <pre class="sampledata" id="sample-input-4">161 181 762 375
+</pre>
+                        </section>
+                    </div>
+                    <div class="col-md-6">
+                        <section id="sampleoutput4">
+                            <div class="headline">
+                                <h2>예제 출력 4 </h2>
+                            </div>
+                            <pre class="sampledata" id="sample-output-4">161
+</pre>
+                        </section>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div id="editor-container">
+            <h3>Code Editor</h3>
+            <select id="language">
+                <option value="python">Python</option>
+                <option value="java">Java</option>
+                <option value="cpp">C++</option>
+<!--                <option value="c">C</option>-->
+            </select>
+            <button id="runButton">실행</button>
+            <button id="resetCode">코드 초기화</button>
+            <div id="editor"></div>
+        </div>
+    </div>
+    <div id="input-output-area">
+        <div id="input">
+            <h3>Input</h3>
+            <textarea id="inputText" rows="10" cols="30"></textarea>
+            <button id="clearInput">Clear Input</button>
+        </div>
+        <div id="output">
+            <h3>Output</h3>
+            <pre id="outputText"></pre>
+        </div>
+    </div>
+</div>
+
+<script>
+    const editor = ace.edit("editor");
+    editor.setTheme("ace/theme/monokai");
+    editor.session.setMode("ace/mode/python");
+
+    const defaultCode = {
+        "python": 'print("Hello, World!")',
+        "java": 'public class Temp {\n    public static void main(String[] args) {\n        System.out.println("Hello, World!");\n    }\n}',
+        "c": '#include <stdio.h>\nint main() {\n    printf("Hello, World!");\n    return 0;\n}',
+        "cpp": '#include <iostream>\nint main() {\n    std::cout << "Hello, World!" << std::endl;\n    return 0;\n}'
+    };
+
+    const userCode = {
+        "python": '',
+        "java": '',
+<!--        "c": '',-->
+        "cpp": ''
+    };
+
+    window.onload = function() {
+        editor.setValue(defaultCode.python);
+    };
+
+    document.getElementById('language').addEventListener('change', function() {
+        const language = document.getElementById('language').value;
+
+        let currentLanguage = 'python';
+        const mode = editor.session.getMode().$id;
+        if (mode.includes('python')) {
+            currentLanguage = 'python';
+        } else if (mode.includes('java')) {
+            currentLanguage = 'java';
+        } else if (mode.includes('c_cpp')) {
+            currentLanguage = 'cpp';
+<!--            currentLanguage = editor.getValue().includes('#include <stdio.h>') ? 'c' : 'cpp';-->
+        }
+
+        userCode[currentLanguage] = editor.getValue();
+        editor.session.setMode("ace/mode/" + language);
+<!--        editor.session.setMode("ace/mode/" + (language === 'cpp' || language === 'c' ? 'c_cpp' : language));-->
+        editor.setValue(userCode[language] || defaultCode[language]);
+    });
+
+    document.getElementById('runButton').addEventListener('click', async function(event) {
+        event.preventDefault();
+        const language = document.getElementById('language').value;
+        const code = editor.getValue();
+        const input = document.getElementById('inputText').value;
+        userCode[language] = code;
+
+        const response = await fetch('/compile', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+            },
+            body: `language=${language}&code=${encodeURIComponent(code)}&input=${encodeURIComponent(input)}`
+        });
+
+        const result = await response.text();
+        document.getElementById('outputText').textContent = result;
+    });
+
+    document.getElementById('resetCode').addEventListener('click', function() {
+        const language = document.getElementById('language').value;
+        editor.setValue(defaultCode[language]);
+    });
+
+    document.getElementById('clearInput').addEventListener('click', function() {
+        document.getElementById('inputText').value = '';
+    });
+
+    document.getElementById('language').dispatchEvent(new Event('change'));
+</script>
+</body>
+</html>

@@ -32,7 +32,6 @@ public class ProblemService {
             //fetch problem using Crawler and API
             String plainText = Jsoup.parse(newProblem.getInfo()).text();
             System.out.println(plainText);
-            //apiConnection.useOpenAI(newProblem.getInfo(),"이 문제 정보를 보고");
             //fetch hidden test case
             problemRepository.save(newProblem);
             return newProblem.getNo();

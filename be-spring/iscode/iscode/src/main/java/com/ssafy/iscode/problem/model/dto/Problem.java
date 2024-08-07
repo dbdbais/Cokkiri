@@ -53,10 +53,20 @@ public class Problem {
     @Column(name = "algo_output_value")
     private Map<Integer, String> algoOutput;
 
+    @ElementCollection(fetch = FetchType.LAZY)
+    @CollectionTable(name = "algo_hidden_input", joinColumns = @JoinColumn(name = "algo_num"))
+    @Column(name = "hidden_input_value")
+    private Map<Integer, String> algoHiddenInput;
+
+    @ElementCollection(fetch = FetchType.LAZY)
+    @CollectionTable(name = "algo_hidden_output", joinColumns = @JoinColumn(name = "algo_num"))
+    @Column(name = "hidden_output_value")
+    private Map<Integer, String> algoHiddenOutput;
+
     public Problem() {
     }
 
-    public Problem(Long no, List<String> algoType, String title, int level, int time, int memory, String text, String info, double algoPercent, Map<Integer, String> algoInput, Map<Integer, String> algoOutput) {
+    public Problem(Long no, List<String> algoType, String title, int level, int time, int memory, String text, String info, double algoPercent, Map<Integer, String> algoInput, Map<Integer, String> algoOutput, Map<Integer, String> algoHiddenInput, Map<Integer, String> algoHiddenOutput) {
         this.no = no;
         this.algoType = algoType;
         this.title = title;
@@ -68,6 +78,8 @@ public class Problem {
         this.algoPercent = algoPercent;
         this.algoInput = algoInput;
         this.algoOutput = algoOutput;
+        this.algoHiddenInput = algoHiddenInput;
+        this.algoHiddenOutput = algoHiddenOutput;
     }
 
     public String getText() {
@@ -156,5 +168,40 @@ public class Problem {
 
     public void setAlgoOutput(Map<Integer, String> algoOutput) {
         this.algoOutput = algoOutput;
+    }
+
+    public Map<Integer, String> getAlgoHiddenInput() {
+        return algoHiddenInput;
+    }
+
+    public void setAlgoHiddenInput(Map<Integer, String> algoHiddenInput) {
+        this.algoHiddenInput = algoHiddenInput;
+    }
+
+    public Map<Integer, String> getAlgoHiddenOutput() {
+        return algoHiddenOutput;
+    }
+
+    public void setAlgoHiddenOutput(Map<Integer, String> algoHiddenOutput) {
+        this.algoHiddenOutput = algoHiddenOutput;
+    }
+
+    @Override
+    public String toString() {
+        return "Problem{" +
+                "no=" + no +
+                ", algoType=" + algoType +
+                ", title='" + title + '\'' +
+                ", level=" + level +
+                ", time=" + time +
+                ", memory=" + memory +
+                ", text='" + text + '\'' +
+                ", info='" + info + '\'' +
+                ", algoPercent=" + algoPercent +
+                ", algoInput=" + algoInput +
+                ", algoOutput=" + algoOutput +
+                ", algoHiddenInput=" + algoHiddenInput +
+                ", algoHiddenOutput=" + algoHiddenOutput +
+                '}';
     }
 }

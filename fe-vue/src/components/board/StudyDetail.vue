@@ -1,22 +1,37 @@
 <script setup>
 import RecruitmentBadge from "./RecruitmentBadge.vue";
-import StudyDetailTime from "@/components/board/StudyDetailTime.vue";
-import StudyDetailRule from "@/components/board/StudyDetailRule.vue";
+import { joinStudy } from "@/api/board";
+import { userStore } from "@/stores/user";
+
 defineProps({
   detailData: Object,
 });
 
 const emit = defineEmits(["close"]);
-
+const store = userStore();
 const rankImgUrl = "/src/assets/rank/";
 
 const closeBtn = function () {
   emit("close");
 };
+
+const sendJoin = function (sessionId) {
+  const success = (res) => {
+    console.log(res.data);
+  };
+  const fail = (err) => {
+    console.log(err);
+  };
+  const joinData = {
+    userName: store.user.nickname,
+    sessionId: sessionId,
+  };
+  joinStudy(joinData, success, fail);
+};
 </script>
 
 <template>
-  <div class="study-detail box-p">
+  <div class="study-detail board-modal box-main-con slideDown">
     <img
       src="/src/assets/exit.svg"
       alt="나가기"
@@ -24,49 +39,58 @@ const closeBtn = function () {
       @click="closeBtn"
     />
     <div class="detail-content">
-      <RecruitmentBadge class="badge" />
-      <div class="title sub-title group-name">{{ detailData.groupName }}</div>
+      <RecruitmentBadge class="badge" :group-badge="detailData.isRecruitment" />
+      <div class="title sub-title group-name">{{ detailData.regularName }}</div>
       <div class="top">
-        <div class="box-sp text-p md lang">
-          {{ detailData.groupData.lang }}
+        <div class="box-psb text-p md lang">
+          {{ detailData.language ? detailData.language : "상관없음" }}
         </div>
-        <div class="box-sp text-p md member">
+        <div class="box-psb text-p md member">
           <div
-            v-for="member in detailData.groupData.member"
-            :key="member.id"
+            v-for="(cnt, tier) in detailData.tiers"
+            :key="tier.index"
             class="rank md"
           >
-            <img :src="member.img" alt="등급" />
-            <span style="margin-left: 8px">{{ member.cnt }}명</span>
+            <img :src="rankImgUrl + tier + '.svg'" alt="등급" />
+            <span style="margin-left: 8px">{{ cnt }}명</span>
           </div>
         </div>
       </div>
       <div class="middle">
-        <div class="box-sp box-col times">
-          <div class="text-p content-title">시간</div>
+        <div class="box-psb box-col times">
+          <div class="text-p nomal-text time-label">시간</div>
           <div class="time-list">
-            <StudyDetailTime
-              v-for="time in detailData.groupData.times"
-              :key="time.week"
-              :study-time="time"
-            />
+            <div
+              v-for="time in detailData.times"
+              :key="time.index"
+              class="time bold-text box-main-group md"
+            >
+              {{ time }}
+            </div>
           </div>
         </div>
-        <div class="box-sp box-col rules">
-          <div class="text-p content-title">규칙</div>
+        <div class="box-psb box-col rules">
+          <div class="text-p nomal-text rule-label">규칙</div>
           <div class="rule-list">
-            <StudyDetailRule
-              v-for="rule in detailData.groupData.rules"
+            <div
+              v-for="rule in detailData.rules"
               :key="rule.id"
-              :study-rule="rule"
-            />
+              class="rule bold-text box-main-group md"
+            >
+              {{ rule }}
+            </div>
           </div>
         </div>
       </div>
       <div class="bottom">
-        <div class="box-sp text-p intro">{{ detailData.groupData.intro }}</div>
+        <div class="box-psb text-p intro">{{ detailData.regularComment }}</div>
       </div>
-      <button class="content board-btn">가입신청</button>
+      <button
+        class="nomal-text board-btn"
+        @click="sendJoin(detailData.sessionId)"
+      >
+        가입신청
+      </button>
     </div>
   </div>
 </template>
@@ -82,20 +106,26 @@ const closeBtn = function () {
 }
 
 .top {
-  height: 70px;
+  height: 60px;
   background-color: transparent;
 }
+
 .middle {
   height: 280px;
 }
+
 .bottom {
   height: 150px;
+}
+.group-name {
+  margin-top: 5px;
 }
 .lang {
   width: 20%;
 
   height: 50px;
 }
+
 .member {
   width: 79%;
   height: 50px;
@@ -104,15 +134,34 @@ const closeBtn = function () {
   justify-content: space-around;
   align-items: center;
 }
+
+.time,
+.rule {
+  width: 90%;
+  height: 50px;
+
+  margin-top: 5px;
+  font-size: 20px;
+  color: white;
+  -webkit-text-stroke: 1.5px black;
+}
+
+.time-label,
+.rule-label {
+  font-size: 25px;
+  padding-left: 10px;
+}
 .rank img,
 span {
   background-color: transparent;
 }
+
 .times,
 .rules {
   width: 49%;
   height: 280px;
 }
+
 .time-list,
 .rule-list {
   display: flex;
@@ -121,21 +170,18 @@ span {
 
   background-color: transparent;
 }
+
 .intro {
   width: 100%;
   height: 130px;
 
   padding-top: 5px;
   padding-left: 15px;
+  font-size: 25px;
+  overflow-y: scroll;
 }
-.study-detail {
-  width: 700px;
-  height: 700px;
-  z-index: 1;
-  position: absolute;
-  top: 5px;
-  left: 350px;
 
+.study-detail {
   display: flex;
   justify-content: center;
 }
@@ -144,19 +190,11 @@ span {
   top: 20px;
   left: 40px;
 }
-.exit {
-  position: absolute;
-  right: 15px;
-  top: 15px;
-  background-color: transparent;
-}
+
 .detail-content {
   margin-top: 70px;
   width: 620px;
   height: 300px;
   background-color: transparent;
-}
-.board-btn {
-  background-color: #ff4d4d;
 }
 </style>

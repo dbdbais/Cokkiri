@@ -1,0 +1,23 @@
+[
+    {
+        "senderId": "jongdeok",
+        "senderName": "김종덕",
+        "timestamp": 1625152800000,
+        "text": "안녕",
+        "attachments": []
+    },
+    {
+        "senderId": "jimin",
+        "senderName": "어지민",
+        "timestamp": 1625152900000,
+        "text": "안녕하세요 형",
+        "attachments": []
+    },
+    {
+        "senderId": "jimin",
+        "senderName": "어지민",
+        "timestamp": 1625153000000,
+        "text": "장문 테스트장문 테스트장문 테스트장문 테스트장문 테스트장문 테스트장문 테스트장문 테스트장문 테스트장문 테스트장문 테스트장문 테스트",
+        "attachments": []
+    }
+]

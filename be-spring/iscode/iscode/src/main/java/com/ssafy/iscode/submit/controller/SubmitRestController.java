@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/submitapi")
+@RequestMapping("/api/submitapi")
 public class SubmitRestController {
 
     private final SubmitService submitService;

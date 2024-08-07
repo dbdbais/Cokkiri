@@ -2,6 +2,7 @@ package com.ssafy.iscode.game.model.dto;
 
 import com.ssafy.iscode.user.model.dto.User;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -12,6 +13,7 @@ import org.hibernate.annotations.Check;
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
 @Check(constraints = "ranking BETWEEN 1 AND 3")
 public class GamePrize {
     @Id
@@ -29,6 +31,9 @@ public class GamePrize {
     @Column(name = "ranking")
     private int ranking; // rank
 
+    @Column(name = "time")
+    private long time;
+
     @Override
     public String toString() {
         return "GamePrize{" +
@@ -36,6 +41,7 @@ public class GamePrize {
                 ", game=" + game +
                 ", user=" + user +
                 ", rank=" + ranking +
+                ", time=" + time +
                 '}';
     }
 }

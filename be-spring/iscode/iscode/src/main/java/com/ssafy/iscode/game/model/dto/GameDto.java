@@ -18,7 +18,6 @@ import java.util.Map;
 @Getter
 @Setter
 @NoArgsConstructor
-@AllArgsConstructor
 @Check(constraints = "game_diff BETWEEN 1 AND 5 AND game_mode BETWEEN 1 AND 3")
 public class GameDto {
     // game id == waiting room's id
@@ -35,29 +34,21 @@ public class GameDto {
     @Column(name = "game_time",nullable = false)
     private Long maxTime;
 
-    // user success times
-    // milli-second
-    // 123113, 1123331, 2973314
-    // => 123113|1123331|2973314
-    @Column(name = "user_times",nullable = true)
-    private Long times;
-
     // 1 : item mode
     // 2 : blind mode
     // 3 : random language
     @Column(name = "game_mode",nullable = false)
     private int mode;
 
-    // user prices => 1st, 2nd, 3rd
+    // user prizes => 1st, 2nd, 3rd
     // max length = 3
     @OneToMany(mappedBy = "game", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<GamePrize> prizes;
 
-    @ManyToMany
-    @JoinTable(
-            name = "game_problems",
-            joinColumns = @JoinColumn(name = "game_id"),
-            inverseJoinColumns = @JoinColumn(name = "problem_id")
-    )
-    private List<Problem> problems;
+    public GameDto(Long id, int difficulty, Long maxTime, int mode) {
+        this.id = id;
+        this.difficulty = difficulty;
+        this.maxTime = maxTime;
+        this.mode = mode;
+    }
 }

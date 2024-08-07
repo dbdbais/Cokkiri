@@ -8,20 +8,12 @@
         </button>
       </div>
       <div class="accordion-item" :class="isOpen(index) ? 'open' : ''">
-        <div
-          v-for="friend in friends"
-          :key="friend.index"
-          class="box-main-exp box-content"
-        >
+        <div v-for="friend in friends" :key="friend.index" class="box-main-exp box-content">
           <img class="friend-profile" src="@/assets/elephant-profile2.svg" />
           <slot :name="`content-${friend}`" class="title-member">
             <span class="title friend-name">{{ friend }}</span>
           </slot>
-          <img
-            src="@/assets/message.svg"
-            class="message-icon"
-            @click="openModal(member)"
-          />
+          <img src="@/assets/message.svg" class="message-icon" @click="openModal(member)" />
         </div>
       </div>
     </div>
@@ -51,11 +43,7 @@
         </div>
       </div> -->
     <!-- </div> -->
-    <Chat
-      v-if="isModalOpen"
-      @close="closeModal"
-      :selectedMember="selectedMember"
-    />
+    <Chat v-if="isModalOpen" @close="closeModal" :selectedMember="selectedMember" />
   </div>
 </template>
 
@@ -64,14 +52,17 @@ import { ref, onMounted } from "vue";
 import { useModal } from "@/composables/useModal";
 import { getFriends, getUser } from "@/api/user";
 import { userStore } from "@/stores/user";
+import { friendStore } from "@/stores/friend";
 import Chat from "@/components/home/modal/Chat.vue";
 
 const items = ref([]);
 const friends = ref([]);
-const store = userStore();
+const uStore = userStore();
+const fStore = friendStore();
 
 onMounted(async () => {
-  const response = await getFriends(store.user.id);
+  const response = await getFriends(uStore.user.id);
+  fStore.setAllRelationships(response.data);
   console.log(response);
   response.data.forEach((element) => {
     console.log(element);

@@ -445,7 +445,9 @@ const problem2 = ref(`<div id="problem-body" class="">
   </section>
  </div>
 </div>`);
-
+defineProps({
+  blind: Number,
+});
 const currentProblem = ref(1);
 const showProblem1 = () => {
   currentProblem.value = 1;
@@ -479,6 +481,7 @@ const problemActive = (problem) => {
         >
           문제 2
         </div>
+        <div class="blind" :style="{ height: blind * 50 + 'px' }"></div>
       </div>
       <div class="nomal-text problem-box">
         <div v-if="currentProblem === 1" v-html="problem1"></div>
@@ -501,7 +504,19 @@ const problemActive = (problem) => {
   height: 680px;
   padding: 0px 35px;
   font-size: 20px;
-  overflow-y: scroll;
+  overflow-y: auto;
+}
+.blind {
+  width: 100%;
+
+  background-color: black;
+  border-radius: 5px;
+  position: absolute;
+  top: 0px;
+  left: 0;
+  z-index: 1;
+  transition: 0.8s ease-in-out;
+  opacity: 0.94;
 }
 .problem1,
 .problem2 {

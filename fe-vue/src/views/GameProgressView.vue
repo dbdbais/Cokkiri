@@ -17,10 +17,12 @@ const items = ref({
   minimum: true,
   prevent: true,
 });
-
+const useBlind = ref(0);
+const useMinimum = ref(100);
+const usePrevernt = ref(false);
 const useItem = ref(false);
 const pickItem = ref("");
-
+const showitem = ref(false);
 const useItemFun = function (item) {
   useItem.value = true;
   pickItem.value = item;
@@ -49,12 +51,32 @@ ws.onmessage = function (event) {
 
     if (event === "BLIND") {
       console.log("문제 가리기");
+      useBlind.value += 10;
+      setTimeout(() => {
+        useBlind.value = 0;
+      }, 10000);
     } else if (event === "SIZE") {
       console.log("버튼 크기 작게");
+      if (useMinimum.value > 20) {
+        useMinimum.value -= 40;
+      }
+      console.log(useMinimum.value);
     } else if (event === "PREVENT") {
       console.log("제출 방해");
+      usePrevernt.value = true;
+      setTimeout(() => {
+        usePrevernt.value = false;
+      }, 10000);
     }
   }
+};
+
+const showItemFun = function () {
+  showitem.value = true;
+};
+
+const hideItmeFun = function () {
+  showitem.value = false;
 };
 
 onMounted(() => {
@@ -72,66 +94,126 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="game-prog-con box-col">
-    <RouterLink :to="{ name: 'home' }">
-      <img src="@/assets/room_exit.svg" class="exit-icon" />
-    </RouterLink>
-    <img src="@/assets/timer_temp.svg" class="timer" />
-    <div class="game-header box-row box-sb">
-      <!-- <div class="prog-gui-con box-row">
+  <div class="md container">
+    <div class="game-prog-con box-col">
+      <RouterLink :to="{ name: 'home' }">
+        <img src="@/assets/room_exit.svg" class="exit-icon" />
+      </RouterLink>
+      <img src="@/assets/timer_temp.svg" class="timer" />
+      <div class="game-header box-row box-sb">
+        <!-- <div class="prog-gui-con box-row">
                 <BattleStatus :url="myCharacter" class="myStatus" />
                 <BattleStatus :url="enemyCharacter" class="enemyStatus" />
     </div> -->
-      <div class="user bold-text">
-        {{ users }}
+        <div class="user bold-text">
+          {{ users }}
+        </div>
+        <div class="box user-btn box-row" v-if="useItem">
+          <div>
+            <button
+              class="item bold-text"
+              v-for="user in users"
+              :key="user.index"
+              @click="userUseItem(user)"
+            >
+              {{ user }}
+            </button>
+          </div>
+          <button class="item bold-text close" @click="useItem = false">
+            닫기
+          </button>
+        </div>
+        <div @mouseenter="showItemFun" @mouseleave="hideItmeFun">
+          <div class="box slideUp item-box" v-if="showitem">
+            <button
+              class="item bold-text"
+              :class="{ used: !items.blind }"
+              :disabled="!items.blind"
+              @click="useItemFun('blind')"
+            >
+              <img src="/src/assets/item/blind.svg" alt="가리기" />
+            </button>
+            <button
+              class="item bold-text"
+              :class="{ used: !items.minimum }"
+              :disabled="!items.minimum"
+              @click="useItemFun('minimum')"
+            >
+              <img src="/src/assets/item/minimum.svg" alt="버튼 작게" />
+            </button>
+            <button
+              class="item bold-text"
+              :class="{ used: !items.prevent }"
+              :disabled="!items.prevent"
+              @click="useItemFun('prevent')"
+            >
+              <img src="/src/assets/item/prevent.svg" alt="제출 방해" />
+            </button>
+          </div>
+          <div class="item-guide md">
+            <img
+              src="/src/assets/item-guide.svg"
+              alt="아이템 가이드"
+              class="floating"
+              style="margin-top: 50px"
+            />
+          </div>
+        </div>
       </div>
-      <div class="box" v-if="useItem">
-        <button
-          class="item bold-text"
-          v-for="user in users"
-          :key="user.index"
-          @click="userUseItem(user)"
-        >
-          {{ user }}
-        </button>
+      <div class="game-content box-row">
+        <Main :blind="useBlind" :minimum="useMinimum" :prevent="usePrevernt" />
       </div>
-      <div>
-        <button
-          class="item bold-text"
-          :disabled="!items.blind"
-          @click="useItemFun('blind')"
-        >
-          가리기
-        </button>
-        <button
-          class="item bold-text"
-          :disabled="!items.minimum"
-          @click="useItemFun('minimum')"
-        >
-          작게 만들기
-        </button>
-        <button
-          class="item bold-text"
-          :disabled="!items.prevent"
-          @click="useItemFun('prevent')"
-        >
-          제출 방해
-        </button>
-      </div>
-    </div>
-    <div class="game-content box-row">
-      <Main />
     </div>
   </div>
 </template>
 
 <style scoped>
+.item-box,
+.item-guide,
+.user-btn {
+  position: absolute;
+  bottom: -70px;
+}
+.user-btn,
+.item-box {
+  width: 700px;
+  left: 590px;
+  background-color: #9fbaff;
+}
+.item-box {
+  z-index: 2;
+}
+.item-guide {
+  left: 900px;
+  width: 200px;
+  height: 100px;
+  z-index: 1;
+}
+.item {
+  width: 100px;
+  height: 100px;
+  margin: 20px;
+
+  border-radius: 10px;
+  border-width: 5px;
+  border-color: #3b72ff;
+  background-color: #dbe7ff;
+}
+.user-btn {
+  justify-content: space-between;
+  z-index: 3;
+}
+.close {
+  background-color: #ff4d4d;
+  border-color: #ff8e8e;
+}
 /* Game Progress Container */
 
 .game-prog-con {
   position: relative;
-  width: 1920px;
-  height: 1080px;
+  width: 1820px;
+  height: 970px;
+  margin-top: 20px;
 }
 
 /* ============================ */
@@ -141,7 +223,8 @@ onMounted(() => {
 .game-header {
   display: flex;
   width: 100%;
-  height: 280px;
+  height: 240px;
+  margin-bottom: 20px;
 }
 
 .game-header span {
@@ -160,12 +243,7 @@ onMounted(() => {
   position: absolute;
   width: 250px;
   right: 0px;
-  top: 190px;
-}
-.item {
-  width: 100px;
-  height: 100px;
-  margin: 20px;
+  top: 110px;
 }
 
 .prog-gui-con {
@@ -189,13 +267,17 @@ onMounted(() => {
 /* ============================ */
 
 .game-content {
-  width: 1920px;
-  height: 800px;
+  width: 1820px;
+  height: 750px;
 }
 
 .main-content {
   width: 100%;
   height: 800px;
   margin: 0px;
+}
+.used {
+  background-color: rgb(117, 117, 117);
+  border-color: gray;
 }
 </style>

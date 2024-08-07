@@ -11,6 +11,8 @@
         </select>
         <button @click="runCode">실행</button>
         <button @click="resetCode">코드 초기화</button>
+        <button @click="fontIncrease">폰트 크게</button>
+        <button @click="fontReduce">폰트 작게</button>
         <button>제출</button>
         <div id="editor"></div>
       </div>
@@ -49,6 +51,7 @@ const editor = ref(null);
 const selectedLanguage = ref("python");
 const inputText = ref("");
 const outputText = ref("");
+const editorFontSize = ref(16);
 
 const defaultCode = {
   python: 'print("Hello, World!")',
@@ -59,12 +62,50 @@ const defaultCode = {
 
 const userCode = ref({ ...defaultCode });
 
-const initializeEditor = () => {
+const initializeEditor = (val) => {
   editor.value = ace.edit("editor");
   editor.value.setTheme("ace/theme/monokai");
   editor.value.session.setMode("ace/mode/python");
-  editor.value.setValue(defaultCode.python);
-  editor.value.setFontSize(16); // Set the desired font size here
+  editor.value.setValue(val ? val : defaultCode.python);
+  editor.value.setFontSize(editorFontSize.value); // Set the desired font size here
+};
+
+// 2초 간격으로 메시지를 보여줌
+
+// 5초 후에 정지
+
+const fontReduce = () => {
+  const saveVal = editor.value.getValue();
+
+  console.log("폰트 작게!");
+  let timerId = setInterval(() => {
+    console.log("작아지는 중!");
+    if (editorFontSize.value > 9) {
+      editorFontSize.value -= 1;
+      initializeEditor(saveVal);
+    }
+    // console.log(editorFontSize.value);
+  }, 400);
+  setTimeout(() => {
+    clearInterval(timerId);
+  }, 1000);
+};
+
+const fontIncrease = () => {
+  const saveVal = editor.value.getValue();
+
+  console.log("폰트 크게!");
+  let timerId = setInterval(() => {
+    console.log("커지는 중!");
+    if (editorFontSize.value < 40) {
+      editorFontSize.value += 1;
+      initializeEditor(saveVal);
+    }
+    // console.log(editorFontSize.value);
+  }, 200);
+  setTimeout(() => {
+    clearInterval(timerId);
+  }, 1000);
 };
 
 onMounted(() => {

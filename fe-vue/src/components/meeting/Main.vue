@@ -6,6 +6,12 @@ import SubmitList from "@/components/meeting/SubmitList.vue";
 import { ref } from "vue";
 import { RouterView } from "vue-router";
 
+defineProps({
+  blind: Number,
+  minimum: Number,
+  prevent: Boolean,
+});
+
 const main = ref(null);
 const resizer = ref(null);
 const problemWidth = ref(1300);
@@ -44,15 +50,32 @@ const stopResize = () => {
 
 <template>
   <div ref="main" class="flex-align main-content">
-    <div :style="{
-      width: problemWidth + 'px',
-    }" class="problem box-sb">
-      <Problem />
+    <div
+      :style="{
+        width: problemWidth + 'px',
+      }"
+      class="problem box-sb"
+    >
+      <Problem :blind="blind" />
     </div>
     <button ref="resizer" class="resizer" @mousedown="initResize"></button>
-    <div class="compiler box-sb" :style="{
-      flex: 1,
-    }">
+    <div
+      class="compiler box-sb"
+      :style="{
+        flex: 1,
+      }"
+    >
+      <button
+        class="submit bold-text"
+        :style="{ scale: minimum * 0.01 }"
+        :class="{
+          prevent: prevent,
+        }"
+        :disabled="prevent"
+        @click="console.log('제출')"
+      >
+        제출하기
+      </button>
       <button class="btn bold-text change" @click="changCompilerView">
         {{ compilerText[compiler] }}
       </button>
@@ -80,7 +103,18 @@ const stopResize = () => {
   top: 10px;
   right: 20px;
 }
+.submit {
+  width: 120px;
+  height: 60px;
+  position: absolute;
+  top: 10px;
+  transition: all 0.8s ease-in-out;
 
+  border-radius: 10px;
+  border-width: 5px;
+  background-color: #c191ff;
+  border-color: #3b72ff;
+}
 .compiler {
   height: 800px;
   padding: 70px 20px 20px 20px;
@@ -93,5 +127,10 @@ const stopResize = () => {
   background-color: skyblue;
   border-color: white;
   cursor: url(/src/assets/drag.svg) 20 20, pointer;
+}
+.prevent {
+  background-color: rgb(117, 117, 117);
+  border-color: gray;
+  color: gray;
 }
 </style>

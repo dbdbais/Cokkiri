@@ -1,5 +1,6 @@
 package com.ssafy.iscode.study.model.dto;
 
+import com.ssafy.iscode.problem.model.dto.Problem;
 import com.ssafy.iscode.user.model.dto.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -56,11 +57,11 @@ public class StudyDto {
     @OneToMany(mappedBy = "study", fetch = FetchType.LAZY)
     private List<StudyUser> users;
 
-//    @ManyToMany
-//    @JoinTable(
-//            name = "study_algo",
-//            joinColumns = @JoinColumn(name = "study_id"),
-//            inverseJoinColumns = @JoinColumn(name = "algo_num")
-//    )
-//    private List<Problem> problems;
+    @ManyToMany
+    @JoinTable(
+            name = "study_problem",
+            joinColumns = @JoinColumn(name = "study_id"),
+            inverseJoinColumns = @JoinColumn(name = "problem_id")
+    )
+    private List<Problem> problems;
 }

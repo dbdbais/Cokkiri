@@ -28,13 +28,13 @@ const getUserData = async () => {
     const response = await getUser(userData.value.id);
     store.setUser(response.data);
     console.log(response);
-    if (response.data === 1) {
-      router.push({ name: "home" });
-    } else {
+    if (response.data === "") {
       Swal.fire({
         icon: "error",
         title: "아이디 또는 비밀번호가 틀렸습니다.",
       });
+    } else {
+      router.push({ name: "home" });
     }
   } catch (e) {
     console.log(e);

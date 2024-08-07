@@ -1,60 +1,3 @@
-<template>
-  <div class="signup-container">
-    <div class="signup-box">
-      <div>
-        <img id="elephant" src="@/assets/login_elephant.svg" alt="" />
-        <div class="form-group">
-          <label for="username" class="title" id="name">아이디 </label>
-          <input type="text" id="username" v-model="userId" />
-          <button
-            v-if="userIdCheck"
-            type="button"
-            class="check-btn"
-            @click="userIdCheckFun"
-          >
-            중복확인
-          </button>
-          <span v-else class="check">중복확인</span>
-        </div>
-
-        <div class="form-group">
-          <label for="nickname" class="title" id="name">닉네임 </label>
-          <input type="text" id="nickname" v-model="nickname" />
-          <button
-            v-if="nicknameCheck"
-            type="button"
-            class="verify-btn"
-            @click="nicknameCheckFun"
-          >
-            중복확인
-          </button>
-          <span v-else class="check">중복확인</span>
-        </div>
-
-        <div class="form-group">
-          <label for="password" class="title" id="password">비밀번호 </label>
-          <input type="password" id="password" v-model="password" />
-        </div>
-
-        <div class="form-group">
-          <label for="passwordConfirm" class="title" id="password"
-            >비밀번호<br />확인
-          </label>
-          <input
-            type="password"
-            id="passwordConfirm"
-            v-model="passwordConfirm"
-          />
-        </div>
-
-        <button type="submit" class="signup-btn" @click="submitForm">
-          회원가입
-        </button>
-      </div>
-    </div>
-  </div>
-</template>
-
 <script setup>
 import { onMounted, ref, watch } from "vue";
 import { register, getAllUser } from "@/api/user";
@@ -174,80 +117,145 @@ const submitForm = async () => {
 };
 </script>
 
+<template>
+  <div class="signup-container box-row">
+    <div class="signup-box">
+      <div class="form box-col">
+        <img class="signup-img" src="@/assets/login_elephant.svg" alt="" />
+        <div class="input-group box-col id-group">
+          <label for="username" class="title lbl-id">아이디 </label>
+          <div>
+            <input type="text" id="username" v-model="userid" />
+            <button v-if="useridcheck" type="button" class="check-btn" @click="useridcheckfun">
+              중복확인
+            </button>
+            <span v-else class="check">중복확인</span>
+          </div>
+        </div>
+
+        <div class="input-group box-col name-group">
+          <label for="nickname" class="title lbl-name" id="name">닉네임 </label>
+          <div>
+            <input type="text" id="nickname" v-model="nickname" />
+            <button v-if="nicknamecheck" type="button" class="verify-btn" @click="nicknamecheckfun">
+              중복확인
+            </button>
+            <span v-else class="check">중복확인</span>
+          </div>
+        </div>
+
+        <div class="input-group box-col pass-group">
+          <label for="password" class="title lbl-pass">비밀번호 </label>
+          <input type="password" id="password" v-model="password" />
+        </div>
+
+        <div class="input-group box-col pass-group">
+          <label for="passwordconfirm" class="title lbl-pass-chk">비밀번호확인
+          </label>
+          <input type="password" id="passwordconfirm" v-model="passwordconfirm" />
+        </div>
+
+      </div>
+      <button type="submit" class="signup-btn" @click="submitform">
+        회원가입
+      </button>
+    </div>
+  </div>
+</template>
+
 <style scoped>
-#name {
-  letter-spacing: 1.7vh;
-}
-
-#elephant {
-  position: relative;
-  top: -12vh;
-  height: 20vh;
-}
-
 .signup-container {
-  display: flex;
+  width: 1920px;
+  height: 1080px;
   justify-content: center;
   align-items: center;
-  height: 100vh;
   /* background-image: url("@/assets/login_bg_elephant.svg"); */
   background-color: #d1e7ff;
-  background-repeat: space;
+  /* background-repeat: space; */
 }
 
 .signup-box {
-  background-color: #a6c9ff;
-  padding: 3vh;
+  position: relative;
+  width: 680px;
+  height: 830px;
+  padding: 50px;
   border-radius: 20px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  /* box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); */
   text-align: center;
-  height: 70vh;
-  width: 90vh;
   border: 10px solid #0073e6;
+  background-color: #a6c9ff;
   /* justify-content: space-around; */
 }
 
-form {
-  display: flex;
-  flex-direction: column;
+.form {
+  margin-top: 40px;
+  margin-left: 80px;
+  justify-content: center;
+  align-items: start;
 }
 
-.form-group {
-  display: flex;
-  position: relative;
-  align-items: center;
-  margin-bottom: 3vh;
-  font-size: 5.5vh;
-  top: -10vh;
+.signup-img {
+  position: absolute;
+  width: 160px;
+  top: -90px;
+  left: 260px;
+}
+
+.input-group {
+  align-items: start;
+  font-size: 38px;
   -webkit-text-stroke: 1px black;
 }
 
+.lbl-id,
+.lbl-name {
+  letter-spacing: 18px;
+  margin-left: 110px;
+  margin-bottom: 10px;
+}
+
+.lbl-pass {
+  letter-spacing: 30px;
+  margin-left: 70px;
+  margin-bottom: 10px;
+}
+
+.lbl-pass-chk {
+  letter-spacing: 10px;
+  margin-left: 50px;
+  margin-bottom: 10px;
+}
+
 label {
-  /* flex: 1; */
+  display: block;
   font-weight: bold;
   text-align: center;
-  margin-right: 10px;
 }
 
 input {
-  flex: 1;
-  padding: 1vh;
+  width: 360px;
+  height: 64px;
+  padding: 15px;
   border: 5px solid black;
   border-radius: 5px;
-  font-size: 3vh;
+  font-size: 30px;
   border-radius: 10px;
+}
+
+.name-group,
+.pass-group {
+  margin-top: 25px;
 }
 
 .check-btn,
 .check,
 .verify-btn {
-  margin-left: 2vh;
-  padding: 1vh;
+  margin-left: 10px;
+  padding: 5px;
   background-color: #8585ff;
   color: white;
   border-radius: 10px;
-  height: 7vh;
-  font-size: 4vh;
+  font-size: 25px;
   font-family: "RixInooAriDuriR";
   -webkit-text-stroke: 1px black;
   border: 5px solid #0073e6;
@@ -259,18 +267,15 @@ input {
 }
 
 .signup-btn {
-  background-color: #a6a6ff;
+  width: 370px;
+  height: 85px;
+  margin-top: 45px;
   color: white;
+  font-size: 45px;
   border: none;
   border-radius: 20px;
-  font-size: 4vh;
-  width: 50%;
-  height: 8vh;
-  position: relative;
-  top: -11vh;
-  margin: 0 auto;
-  margin-bottom: 4vh;
   border: 5px solid #0073e6;
+  background-color: #a6a6ff;
   font-family: "RixInooAriDuriR";
   -webkit-text-stroke: 1px black;
 }

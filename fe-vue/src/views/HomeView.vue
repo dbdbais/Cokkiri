@@ -41,7 +41,7 @@ import { userStore } from "@/stores/user";
 import { useMessageStore } from "@/stores/message";
 
 const store = userStore();
-const lobby = new WebSocket(`https://i11e108/socket/lobby/${store.user.nickname}`);
+const lobby = new WebSocket(`https://i11e108.p.ssafy.io/socket/lobby/${store.user.nickname}`);
 const messageStore = useMessageStore();
 const router = useRouter();
 const currentPage = ref(1);

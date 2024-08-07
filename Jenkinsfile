@@ -43,7 +43,8 @@ pipeline {
 
         stage('run container'){
             steps{
-
+                sh 'docker rm -f compiler_mysql_test'
+                sh 'docker rm -f compiler_server_test'
                 sh 'docker-compose down'
                 sh 'docker-compose up --build -d'
             }

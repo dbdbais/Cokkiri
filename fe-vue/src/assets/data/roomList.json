@@ -1,0 +1,54 @@
+{
+    "roomList": {
+        "room": [
+            {
+                "id": 2156,
+                "title": "알고리즘 고수들만~",
+                "category": "공부방",
+                "img": "/src/assets/default.svg",
+                "people": 1,
+                "maxPeople": 6
+            },
+            {
+                "id": 4619,
+                "title": "알고리즘 고수들만~",
+                "category": "공부방",
+                "img": "/src/assets/default.svg",
+                "people": 1,
+                "maxPeople": 6
+            },
+            {
+                "id": 1306,
+                "title": "알고리즘 고수들만~",
+                "category": "공부방",
+                "img": "/src/assets/default.svg",
+                "people": 1,
+                "maxPeople": 6
+            },
+            {
+                "id": 18,
+                "title": "초보, 매너잡아요",
+                "category": "공부방",
+                "img": "/src/assets/default.svg",
+                "people": 2,
+                "maxPeople": 6
+            },
+            {
+                "id": 2018,
+                "title": "초보, 매너잡아요",
+                "category": "공부방",
+                "img": "/src/assets/default.svg",
+                "people": 2,
+                "maxPeople": 6
+            },
+            {
+                "id": 1412,
+                "title": "초보, 매너잡아요",
+                "category": "공부방",
+                "img": "/src/assets/default.svg",
+                "people": 2,
+                "maxPeople": 6
+            }
+        ]
+    }
+}

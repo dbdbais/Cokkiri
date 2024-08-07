@@ -5,10 +5,10 @@ export const userStore = defineStore(
   "user",
   () => {
     const user = ref({
-      id: "ssafy",
-      nickname: "ssafy",
-      tier: "SEED",
-      percent: 0,
+      id: "",
+      nickname: "",
+      tier: "",
+      percent: 
     });
 
     function setUser(newUser) {

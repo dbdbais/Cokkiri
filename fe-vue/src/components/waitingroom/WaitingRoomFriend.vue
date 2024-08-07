@@ -3,9 +3,12 @@ import { getFriend } from "@/api/friend";
 import { inviteFriend } from "@/api/friend";
 import { getUser } from "@/api/user";
 import { onMounted, ref } from "vue";
+import { userStore } from "@/stores/user";
+
+const store = userStore();
 
 onMounted(() => {
-  getFriend("김종덕").then((res) => {
+  getFriend(store.user.nickname).then((res) => {
     friendList.value = res.data;
   });
 });

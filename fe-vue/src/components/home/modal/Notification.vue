@@ -111,7 +111,11 @@ const goRoom = function (roomId) {
     console.log(err);
   };
 
-  goWaitingRoom({ userName: "김종덕", sessionId: roomId }, success, fail);
+  goWaitingRoom(
+    { userName: store.user.nickname, sessionId: roomId },
+    success,
+    fail
+  );
 };
 </script>
 

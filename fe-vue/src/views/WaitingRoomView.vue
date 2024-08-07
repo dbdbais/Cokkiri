@@ -8,10 +8,12 @@ import WaitingRoomRule from "@/components/waitingroom/WaitingRoomRule.vue";
 import WaitingRoomMember from "@/components/waitingroom/WaitingRoomMember.vue";
 import WaitingRoomChat from "@/components/waitingroom/WaitingRoomChat.vue";
 import WaitingRoomFriend from "@/components/waitingroom/WaitingRoomFriend.vue";
+import { userStore } from "@/stores/user";
 
 import { ref, onMounted } from "vue";
 import { useLodingStore } from "@/stores/loading";
 
+const store = userStore();
 const loadingStore = useLodingStore();
 const router = useRouter();
 const route = useRoute();
@@ -20,7 +22,9 @@ const roomUsers = ref([]);
 const chatList = ref([]);
 const friendInvite = ref(false);
 
-const ws = new WebSocket(`ws://localhost:8080/room/${route.params.roomId}/abc`);
+const ws = new WebSocket(
+  `ws://localhost:8080/room/${route.params.roomId}/${store.user.nickname}`
+);
 
 ws.onmessage = function (event) {
   let data = event.data.split("|!|");
@@ -95,7 +99,10 @@ const exitRoom = function () {
     console.log(err);
   };
 
-  exitWaitingRoom({ sessionId: route.params.roomId, userName: "김종덕" });
+  exitWaitingRoom({
+    sessionId: route.params.roomId,
+    userName: store.user.nickname,
+  });
   router.replace({ name: "home" });
 };
 </script>

@@ -7,9 +7,22 @@
       <FriendsList id="friends-list" />
     </div>
     <div id="main-right" class="box-col">
-      <Header id="header" class="box-col" @create="getRoomList" @search="searchList" @go-room="goRightNow" />
-      <MainContent id="main-content" :rooms="rooms" :current-page="currentPage" :category-obj="categoryObj"
-        @go-room="goRoom" @change-page="pageChange" @is-game="categoryList" />
+      <Header
+        id="header"
+        class="box-col"
+        @create="getRoomList"
+        @search="searchList"
+        @go-room="goRightNow"
+      />
+      <MainContent
+        id="main-content"
+        :rooms="rooms"
+        :current-page="currentPage"
+        :category-obj="categoryObj"
+        @go-room="goRoom"
+        @change-page="pageChange"
+        @is-game="categoryList"
+      />
     </div>
   </div>
 </template>
@@ -97,7 +110,11 @@ const goRoom = function (id) {
   const fail = (err) => {
     console.log(err);
   };
-  goWaitingRoom({ sessionId: id, userName: "김종덕" }, success, fail);
+  goWaitingRoom(
+    { sessionId: id, userName: store.user.nickname },
+    success,
+    fail
+  );
 };
 
 lobby.onmessage = function (event) {

@@ -8,7 +8,7 @@ export const userStore = defineStore(
       id: "",
       nickname: "",
       tier: "",
-      percent: 
+      percent: 0,
     });
 
     function setUser(newUser) {

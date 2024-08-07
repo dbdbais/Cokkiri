@@ -28,7 +28,14 @@ const getUserData = async () => {
     const response = await getUser(userData.value.id);
     store.setUser(response.data);
     console.log(response);
-    router.push({ name: "home" });
+    if (response.data === "") {
+      Swal.fire({
+        icon: "error",
+        title: "아이디 또는 비밀번호가 틀렸습니다.",
+      });
+    } else {
+      router.push({ name: "home" });
+    }
   } catch (e) {
     console.log(e);
   }
@@ -57,10 +64,7 @@ const getUserData = async () => {
       </RouterLink>
 
       <button class="google-login">
-        <img
-          src="https://developers.google.com/identity/images/g-logo.png"
-          alt="Google Logo"
-        />
+        <img src="https://developers.google.com/identity/images/g-logo.png" alt="Google Logo" />
         <span class="title">Continue with Google</span>
       </button>
     </div>
@@ -75,6 +79,7 @@ const getUserData = async () => {
 span {
   color: black;
 }
+
 #elephant {
   position: relative;
   top: -12vh;

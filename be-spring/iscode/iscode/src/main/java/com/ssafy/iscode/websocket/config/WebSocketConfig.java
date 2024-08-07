@@ -25,7 +25,7 @@ public class WebSocketConfig implements WebSocketConfigurer {
                 .setAllowedOrigins("*");
 
         // lobby socket
-        registry.addHandler(lobbyWebSocketHandler(), "/socket/lobby/{userName}")
+        registry.addHandler(lobbyWebSocketHandler, "/socket/lobby/{userName}")
                 .setAllowedOrigins("*");
 
         // room socket

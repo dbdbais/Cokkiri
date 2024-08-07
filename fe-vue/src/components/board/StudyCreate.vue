@@ -68,16 +68,15 @@ const studyCreate = function () {
   };
 
   const times = selectedTime.value.map((time) => {
-    return `${time.week}|${
-      time.start[0] + time.start[1] + time.start[3] + time.start[4]
-    }|${time.end[0] + time.end[1] + time.end[3] + time.end[4]}`;
+    return `${time.week}|${time.start[0] + time.start[1] + time.start[3] + time.start[4]
+      }|${time.end[0] + time.end[1] + time.end[3] + time.end[4]}`;
   });
 
   const studyData = {
     regularName: studyName.value,
     maxNum: studyMember.value,
     times: times,
-    userName: "김종덕",
+    userName: "",
     regularComment: studyIntro.value,
   };
 
@@ -109,49 +108,25 @@ const studyCreate = function () {
 <template>
   <div class="board-modal slideDown">
     <div class="bold-text" style="margin: 10px 0 0 30px">스터디 만들기</div>
-    <img
-      src="@/assets/exit.svg"
-      alt="나가기"
-      class="exit"
-      @click="emit('get-regular-list')"
-    />
+    <img src="@/assets/exit.svg" alt="나가기" class="exit" @click="emit('get-regular-list')" />
     <div class="md-col">
       <div class="create-box">
         <div class="flex-align top">
           <div class="study-name box-col">
             <label for="name" class="bold-text">스터디 명</label>
-            <input
-              type="text"
-              name="name"
-              id="name"
-              class="nomal-text"
-              v-model="studyName"
-            />
+            <input type="text" name="name" id="name" class="nomal-text" v-model="studyName" />
           </div>
           <div class="member md-col">
             <label for="member" class="bold-text">인원</label>
             <!-- 스터디 인원 6명 제한 -->
-            <input
-              type="number"
-              id="member"
-              class="nomal-text"
-              min="1"
-              max="6"
-              value="1"
-              v-model="studyMember"
-            />
+            <input type="number" id="member" class="nomal-text" min="1" max="6" value="1" v-model="studyMember" />
           </div>
         </div>
         <!--스터디 요일 및 시간 선택  -->
         <div class="bold-text study-time">스터디 시간</div>
         <StudyTime @selectedTime="selected" time-type="시간추가" />
         <div class="selected-time md-col">
-          <div
-            class="time-item bold-text"
-            v-for="time in selectedTime"
-            :key="time.index"
-            @click="timeRemove(time)"
-          >
+          <div class="time-item bold-text" v-for="time in selectedTime" :key="time.index" @click="timeRemove(time)">
             {{ weekKorea[time.week] }} {{ time.start }} ~
             {{ time.end }}
             <button class="time-remove nomal-text">삭제</button>
@@ -160,15 +135,8 @@ const studyCreate = function () {
 
         <div class="study-intro box-col">
           <label for="intro" class="bold-text">스터디 소개</label>
-          <textarea
-            name=""
-            id="intro"
-            class="nomal-text"
-            rows="3"
-            placeholder="잘 부탁드립니다~"
-            v-model="studyIntro"
-            @keyup.enter="introEnter(studyIntro)"
-          ></textarea>
+          <textarea name="" id="intro" class="nomal-text" rows="3" placeholder="잘 부탁드립니다~" v-model="studyIntro"
+            @keyup.enter="introEnter(studyIntro)"></textarea>
         </div>
       </div>
       <button class="board-btn nomal-text" @click="studyCreate">
@@ -182,6 +150,7 @@ const studyCreate = function () {
 .bold-text {
   font-size: 30px;
 }
+
 .create-box,
 .board-btn,
 .study-intro,
@@ -193,6 +162,7 @@ const studyCreate = function () {
 .study-name {
   width: 450px;
 }
+
 /* 선택된 스터디 시간들의 목록이 나올 부분 */
 .selected-time {
   width: 100%;
@@ -218,6 +188,7 @@ const studyCreate = function () {
 
   position: relative;
 }
+
 .time-remove {
   width: 50px;
   height: 25px;
@@ -230,12 +201,14 @@ const studyCreate = function () {
   position: absolute;
   right: 10px;
 }
+
 /* 인원 선택 박스 방향키 항상 표시 */
 input[type="number"]::-webkit-inner-spin-button,
 input[type="number"]::-webkit-outer-spin-button {
   -webkit-appearance: inner-spin-button;
   opacity: 1;
 }
+
 .top {
   justify-content: space-between;
 }
@@ -246,6 +219,7 @@ textarea {
   font-size: 25px;
   padding-left: 10px;
 }
+
 #name,
 #member,
 #intro {
@@ -258,10 +232,12 @@ textarea {
   width: 400px;
   height: 40px;
 }
+
 #member {
   width: 70px;
   height: 40px;
 }
+
 #intro {
   width: 100%;
 }

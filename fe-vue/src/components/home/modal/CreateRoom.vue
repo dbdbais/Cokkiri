@@ -1,8 +1,9 @@
 <script setup>
 import { ref } from 'vue';
 import { createWaitingRoom } from '@/api/waitingroom';
+import { userStore } from '@/stores/user';
 
-
+const store = userStore();
 const emit = defineEmits('create')
 const people = ref(1);
 const placeholder = ref('규칙을 입력해주세요.');
@@ -60,10 +61,10 @@ const createRoom = function () {
     const fail = (err) => {
         console.log(err)
     }
-    
+
     const roomData = {
         roomName: roomName.value,
-        userName: '김종덕',
+        userName: store.user.nickname,
         roomComment: roomComment.value,
         rules: ruleList.value,
         maxNum: people.value,
@@ -83,7 +84,7 @@ const createRoom = function () {
             <div class="left-con box-col">
                 <div class="title-con box-row">
                     <span class="title main-title">제목</span>
-                    <input type="text" class="nomal-text" v-model="roomName" required/>
+                    <input type="text" class="nomal-text" v-model="roomName" required />
                 </div>
                 <div class="description-con box-col">
                     <span class="title main-title">소개 문구</span>
@@ -98,12 +99,12 @@ const createRoom = function () {
                                 class="normal-text md" @click="() => isGame = false">공부</label>
                             <input id="game" type="radio" name="type" class="game-radio" /><label for="game"
                                 class="normal-text md" @click="() => isGame = true">게임</label>
-                            </div>
-                    <div class="open-box title box-row">
-                        공개
-                        <input type="checkbox" class="open" v-model="isOpen">
-                    </div>
-                        
+                        </div>
+                        <div class="open-box title box-row">
+                            공개
+                            <input type="checkbox" class="open" v-model="isOpen">
+                        </div>
+
                     </div>
                     <div class="box-row people" style="height: 50px;">
                         <span class="title main-title">인원</span>
@@ -114,9 +115,9 @@ const createRoom = function () {
                         </div>
                     </div>
                 </div>
-            
+
                 <button class="title main-title create-btn" @click="createRoom">방 만들기</button>
-                
+
             </div>
             <div class="right-con box-col">
                 <span class="title main-title">규칙</span>
@@ -129,7 +130,8 @@ const createRoom = function () {
                         <div class="box-main-con"><span class="title" @click="selectManner">예의</span></div>
                     </div>
                     <div class="input-con">
-                        <input type="text" class="nomal-text" maxlength="12" :placeholder="placeholder" v-model="ruleValue" />
+                        <input type="text" class="nomal-text" maxlength="12" :placeholder="placeholder"
+                            v-model="ruleValue" />
                         <button @click="addrule" class="rule-plus nomal-text md">+</button>
                     </div>
                     <div class="rule-list-con box-col">
@@ -213,7 +215,7 @@ const createRoom = function () {
 
 .type input[type="radio"]+label {
     width: 150px;
-    height: 50px;    
+    height: 50px;
     background-color: #fff;
     border: 5px solid #CADCFF;
     border-radius: 10px;
@@ -221,31 +223,36 @@ const createRoom = function () {
     color: #2d87ef;
     font-size: 25px;
 }
-.type input[type="radio"] +label:hover {
+
+.type input[type="radio"]+label:hover {
     background-color: #2d87ef;
     color: #CADCFF;
 }
+
 .type input[type="radio"]:checked+label {
     background-color: #3B72FF;
     border: 5px solid #7498f3;
     color: rgb(255, 255, 255);
 }
+
 .open-box {
     width: 130px;
     align-items: center;
-    
+
     font-size: 30px;
     position: absolute;
     bottom: 5px;
     right: -145px;
 }
-.open-box > input {
+
+.open-box>input {
     width: 30px;
     height: 30px;
     margin-left: 10px;
     border: 3px solid black;
 
 }
+
 .game-radio {
     margin-left: 10px;
 }
@@ -316,6 +323,7 @@ const createRoom = function () {
     margin-top: 10px;
     padding: 10px 15px;
 }
+
 .rule-plus {
     width: 25px;
     height: 25px;
@@ -332,6 +340,7 @@ const createRoom = function () {
     right: 10px;
     top: 10px;
 }
+
 /* Template Container */
 .template-con {
     justify-content: space-between;
@@ -350,16 +359,20 @@ const createRoom = function () {
 .nomal-text {
     font-size: 20px;
 }
+
 .input-con {
     position: relative;
     margin-top: 15px;
 }
 
-.title-con > input, .input-con input,  textarea {
+.title-con>input,
+.input-con input,
+textarea {
     border: 3px solid black;
     border-radius: 5px;
     padding-left: 5px;
 }
+
 .people input {
     border: 3px solid #3a5eff;
     border-radius: 5px;
@@ -378,6 +391,7 @@ const createRoom = function () {
     font-size: 40px;
     color: #3a5eff;
 }
+
 /* rule Container */
 .rule-list-con {
     margin-top: 15px;
@@ -410,6 +424,7 @@ const createRoom = function () {
     border-color: #3a5eff;
     font-size: 35px;
 }
+
 .scrollable-box {
     height: 200px;
     padding: 10px;

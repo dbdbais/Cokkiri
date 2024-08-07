@@ -1,23 +1,39 @@
 <template>
   <div class="signup-container">
     <div class="signup-box">
-      <form @submit.prevent="submitForm">
+      <div>
         <img id="elephant" src="@/assets/login_elephant.svg" alt="" />
         <div class="form-group">
           <label for="username" class="title" id="name">아이디 </label>
-          <input type="text" id="username" v-model="userData.id" />
-          <button type="button" class="check-btn">중복확인</button>
+          <input type="text" id="username" v-model="userId" />
+          <button
+            v-if="userIdCheck"
+            type="button"
+            class="check-btn"
+            @click="userIdCheckFun"
+          >
+            중복확인
+          </button>
+          <span v-else class="check">중복확인</span>
         </div>
 
         <div class="form-group">
           <label for="nickname" class="title" id="name">닉네임 </label>
-          <input type="text" id="nickname" v-model="userData.nickname" />
-          <button type="button" class="verify-btn">중복확인</button>
+          <input type="text" id="nickname" v-model="nickname" />
+          <button
+            v-if="nicknameCheck"
+            type="button"
+            class="verify-btn"
+            @click="nicknameCheckFun"
+          >
+            중복확인
+          </button>
+          <span v-else class="check">중복확인</span>
         </div>
 
         <div class="form-group">
           <label for="password" class="title" id="password">비밀번호 </label>
-          <input type="password" id="password" v-model="userData.password" />
+          <input type="password" id="password" v-model="password" />
         </div>
 
         <div class="form-group">
@@ -27,54 +43,134 @@
           <input
             type="password"
             id="passwordConfirm"
-            v-model="userData.passwordConfirm"
+            v-model="passwordConfirm"
           />
         </div>
 
-        <button type="submit" class="signup-btn">회원가입</button>
-      </form>
+        <button type="submit" class="signup-btn" @click="submitForm">
+          회원가입
+        </button>
+      </div>
     </div>
   </div>
 </template>
 
-<script>
-import { ref } from "vue";
-import { register } from "@/api/user";
+<script setup>
+import { onMounted, ref, watch } from "vue";
+import { register, getAllUser } from "@/api/user";
 import { useRouter } from "vue-router";
 import "@/assets/css/home.css";
+// import { re } from "@/api/openvidu-browser-2.30.0";
 
-export default {
-  setup() {
-    const userData = ref({
-      id: "",
-      password: "",
-      passwordConfirm: "",
-      nickname: "",
+const router = useRouter();
+const userData = ref({});
+const allUser = ref([]);
+const userId = ref("");
+const password = ref("");
+const passwordConfirm = ref("");
+const nickname = ref("");
+
+const userIdCheck = ref(true);
+const nicknameCheck = ref(true);
+
+onMounted(() => {
+  getAllUser()
+    .then((res) => {
+      console.log(res.data);
+      allUser.value = res.data;
+    })
+    .catch((err) => {
+      console.log(err);
     });
+});
 
-    const router = useRouter();
-
-    const submitForm = async () => {
-      if (userData.value.password !== userData.value.passwordConfirm) {
-        alert("비밀번호가 일치하지 않습니다.");
-        return;
+const userIdCheckFun = function () {
+  if (userId.value === "") {
+    Swal.fire({
+      icon: "error",
+      title: "아이디를 입력해주세요!",
+    });
+  } else if (
+    allUser.value.some((user) => {
+      if (user.id === userId.value) {
+        return true;
       }
+    })
+  ) {
+    console.log("중복 아이디 있음!");
+    Swal.fire({
+      icon: "error",
+      title: "이미 아이디가 존재합니다!",
+      text: "다른 아이디를 입력해주세요!",
+    });
+  } else {
+    console.log("중복 아이디 없음");
+    userIdCheck.value = false;
+  }
+};
 
-      try {
-        const response = await register(userData.value);
-        console.log(response);
-        alert("회원가입이 완료되었습니다.");
-        router.push({ name: "login" });
-      } catch (e) {
-        alert("회원가입에 실패했습니다.");
+const nicknameCheckFun = function () {
+  if (nickname.value === "") {
+    Swal.fire({
+      icon: "error",
+      title: "닉네임을 입력해주세요!",
+    });
+  } else if (
+    allUser.value.some((user) => {
+      if (user.nickname === nickname.value) {
+        return true;
       }
+    })
+  ) {
+    console.log("중복 닉네임 있음!");
+    Swal.fire({
+      icon: "error",
+      title: "이미  존재하는 닉네임입니다!",
+      text: "다른 닉네임을 입력해주세요!",
+    });
+  } else {
+    console.log("중복 닉네임 없음");
+    nicknameCheck.value = false;
+  }
+};
+
+const submitForm = async () => {
+  if (nicknameCheck.value || userIdCheck.value) {
+    Swal.fire({
+      icon: "warning",
+      title: "중복확인을 진행해주세요!",
+    });
+    return;
+  }
+  if (password.value !== passwordConfirm.value) {
+    Swal.fire({
+      icon: "warning",
+      title: "비밀번호가 일치하지 않습니다!",
+    });
+    return;
+  }
+
+  try {
+    userData.value = {
+      id: userId.value,
+      password: password.value,
+      passwordConfirm: passwordConfirm.value,
+      nickname: nickname.value,
     };
 
-    return {
-      userData,
-      submitForm,
-    };
-  },
+    const response = await register(userData.value);
+    console.log(response);
+    Swal.fire({
+      icon: "success",
+      title: "성공적으로 가입되었습니다!",
+    });
+    router.push({ name: "login" });
+  } catch (e) {
+    Swal.fire({
+      icon: "error",
+      title: "회원가입에 실패했습니다.",
+    });
+  }
 };
 </script>
 
@@ -143,13 +239,13 @@ input {
 }
 
 .check-btn,
+.check,
 .verify-btn {
   margin-left: 2vh;
   padding: 1vh;
   background-color: #8585ff;
   color: white;
   border-radius: 10px;
-  cursor: pointer;
   height: 7vh;
   font-size: 4vh;
   font-family: "RixInooAriDuriR";
@@ -181,5 +277,11 @@ input {
 
 .signup-btn:hover {
   background-color: #8585ff;
+}
+
+.check {
+  background-color: gray;
+  color: gainsboro;
+  border-color: gainsboro;
 }
 </style>

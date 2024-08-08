@@ -61,7 +61,7 @@ const friendList = ref([]);
       >
         {{ friend.friendUserId }}
         <button
-          class="plus nomal-text"
+          class="plus bold-text"
           @click="friendInvite(friend.friendUserId, roomId)"
         >
           초대
@@ -78,6 +78,7 @@ const friendList = ref([]);
   height: 550px;
   left: 700px;
   top: 200px;
+  z-index: 3;
   background-color: #c191ff;
 }
 .top {
@@ -107,13 +108,14 @@ const friendList = ref([]);
   margin-bottom: 10px;
 }
 .plus {
-  font-size: 15px;
+  width: 80px;
+  font-size: 20px;
   padding: 3px 5px;
   background-color: #ff8888;
   color: white;
 
   border-radius: 10px;
   border-width: 5px;
-  border-color: #ff8888;
+  border-color: #f4b8b8;
 }
 </style>

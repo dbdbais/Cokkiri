@@ -134,7 +134,6 @@ const exitRoom = function () {
         @problem-select="selectProblem"
       />
       <WaitingRoomFriend
-        id="test"
         v-if="friendInvite"
         :room-id="route.params.roomId"
         @close="friendInvite = false"

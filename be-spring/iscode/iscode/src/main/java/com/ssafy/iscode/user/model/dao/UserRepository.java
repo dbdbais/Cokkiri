@@ -1,6 +1,7 @@
 package com.ssafy.iscode.user.model.dao;
 
 import com.ssafy.iscode.user.model.dto.Status;
+import com.ssafy.iscode.user.model.dto.Tier;
 import com.ssafy.iscode.user.model.dto.User;
 import com.ssafy.iscode.user.model.dto.UserFriend;
 import jakarta.persistence.EntityManager;
@@ -162,6 +163,7 @@ public class UserRepository {
         }
     }
 
+    @Transactional
     //get All FriendList
     public List<UserFriend> getFriendList(String id){
         return em.createQuery(
@@ -169,7 +171,33 @@ public class UserRepository {
                 .setParameter("userId", id)
                 .getResultList();
     }
+    @Transactional
+    public int scoreAchieved(String id, int pLevel){
+        try{
+            User aUser = findById(id);
+            //get achieved User
+            System.out.println(aUser);
 
+            if(aUser.getScore() == 500){
+                return 0;
+            }
+            else{
+                Tier uTier = aUser.getTier();
+                aUser.setScore(Math.min(aUser.getScore() + pLevel,500));
+                //max is 500
+                aUser.updateTier();
+                //tier update
+                em.merge(aUser);
+                return 1;
+            }
+        }catch(Exception e){
+            e.printStackTrace();
+            return 0;
+        }
+
+    }
+
+    @Transactional
     public User findById(String id){
         return em.find(User.class,id);
     }
@@ -193,11 +221,13 @@ public class UserRepository {
         }
     }
 
+    @Transactional
     public List<User> findAll(){
         return em.createQuery("SELECT u FROM User u", User.class)
                 .getResultList();
     }
 
+    @Transactional
     public Optional<User> findByName(String nickname) {
         try {
             User user = em.createQuery("SELECT u FROM User u WHERE u.nickname = :nickname", User.class)

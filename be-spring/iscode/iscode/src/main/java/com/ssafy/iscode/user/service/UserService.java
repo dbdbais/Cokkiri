@@ -81,6 +81,10 @@ public class UserService {
             return 0;
         }
     }
+    //call when problem is correct
+    public int plusScore(String uid, int pLevel ){
+        return userRepository.scoreAchieved(uid,pLevel);
+    }
 
 
     public List<Long> getRegular(String userName) {

@@ -76,6 +76,12 @@ public class UserRestController {
                      @RequestParam String password){
         return userService.login(user_id,password);
     }
+
+    @PutMapping("/correct")
+    public int correct(@RequestParam String userId, @RequestParam int level){
+        return userService.plusScore(userId,level);
+    }
+
     @PutMapping("/modify")
     public int modify(@RequestBody User user){
         return userService.modifyUser(user);

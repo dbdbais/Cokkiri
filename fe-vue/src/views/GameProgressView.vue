@@ -42,7 +42,7 @@ const userUseItem = function (user) {
 };
 
 const ws = new WebSocket(
-  `ws://localhost:8080/game/${route.params.gameId}/${store.user.nickname}`
+  `ws://192.168.30.160:8080/game/${route.params.gameId}/${store.user.nickname}`
 );
 
 ws.onmessage = function (event) {
@@ -53,7 +53,7 @@ ws.onmessage = function (event) {
 
     if (event === "BLIND") {
       console.log("문제 가리기");
-      useBlind.value += 10;
+      useBlind.value += 680;
       setTimeout(() => {
         useBlind.value = 0;
       }, 10000);

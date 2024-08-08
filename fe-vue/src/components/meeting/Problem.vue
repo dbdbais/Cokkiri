@@ -481,7 +481,7 @@ const problemActive = (problem) => {
         >
           문제 2
         </div>
-        <div class="blind" :style="{ height: blind * 50 + 'px' }"></div>
+        <div class="blind" :style="{ height: blind + 'px' }"></div>
       </div>
       <div class="nomal-text problem-box">
         <div v-if="currentProblem === 1" v-html="problem1"></div>
@@ -507,7 +507,7 @@ const problemActive = (problem) => {
   overflow-y: auto;
 }
 .blind {
-  width: 100%;
+  width: 99%;
 
   background-color: black;
   border-radius: 5px;
@@ -516,7 +516,7 @@ const problemActive = (problem) => {
   left: 0;
   z-index: 1;
   transition: 0.8s ease-in-out;
-  opacity: 0.94;
+  opacity: 0.9;
 }
 .problem1,
 .problem2 {

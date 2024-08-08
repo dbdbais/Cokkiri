@@ -34,16 +34,20 @@ services:
       - Cokkiri-develop-Network
   
   openvidu-server:
-    image: openvidu/openvidu-server-kms:2.23.0
+    image: openvidu/openvidu-server-kms:2.30.0
     environment:
       - openvidu.secret=MY_SECRET
       - openvidu.publicurl=https://i11e108.p.ssafy.io
       - openvidu.recording=true
       - openvidu.recording.path=/opt/openvidu/recordings
+      - SERVER_SSL_ENABLED=true
+      - SERVER_SSL_KEYSTORE=/etc/certificates/fullchain.pem
+      - SERVER_SSL_KEYSTORE_TYPE=PEM
+      - SERVER_SSL_KEY_ALIAS=Cokkiri
     ports:
       - "4443:4443"
-    # volumes:
-    #   - ./recordings:/opt/openvidu/recordings
+    volumes:
+      - /etc/letsencrypt/live/i11e108.p.ssafy.io:/etc/certificates
     networks:
       - Cokkiri-develop-Network
 

@@ -89,7 +89,7 @@ const selected = function () {
   width: 80px;
   height: 80px;
   background-color: #c191ff;
-  border-width: 3px;
+  border-width: 5px;
   border-radius: 10px;
   border-color: #3b72ff;
   font-size: 30px;

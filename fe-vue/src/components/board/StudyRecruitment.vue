@@ -48,11 +48,11 @@ const goDetail = function (group) {
     console.log(res.data);
     const tiers = {
       SEED: 0,
+      KIWI: 0,
       ORANGE: 0,
       APPLE: 0,
       KOREAMELON: 0,
       DURIAN: 0,
-      KIWI: 0,
     };
     studyDetail.value = true;
     detailData.value = res.data;

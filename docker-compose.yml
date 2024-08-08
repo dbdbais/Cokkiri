@@ -31,7 +31,7 @@ services:
     depends_on:
       - backend
     networks:
-      - Cokkiri-develop-Networt
+      - Cokkiri-develop-Network
 
 
 volumes:

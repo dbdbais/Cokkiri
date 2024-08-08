@@ -1,24 +1,42 @@
 import { localAxios } from "@/utils/request";
 
 const axios = localAxios();
+const baseURL = "/problemapi";
 
 export function getAllProblems() {
   return axios({
-    url: "/problemapi/all",
+    url: `${baseURL}/all`,
     method: "get",
   });
 }
 
-export function getProblems(id) {
+export function getProblem(id) {
   return axios({
-    url: `/problemapi/${id}`,
+    url: `${baseURL}/${id}`,
     method: "get",
   });
 }
 
-export function getAllReviews(id) {
+export function insertClass() {
   return axios({
-    url: `/reviewapi/${id}`,
+    url: `${baseURL}/class`,
+    method: "post",
+  });
+}
+
+export function filterSearch(tier) {
+  return axios({
+    url: `${baseURL}/filter/${tier}`,
     method: "get",
+  });
+}
+
+export function conditionSearch(keyword) {
+  return axios({
+    url: `${baseURL}/search`,
+    method: "get",
+    params: {
+      keyword,
+    },
   });
 }

@@ -43,6 +43,7 @@ public class ReviewRestController {
         User gUser = userService.getUser(reviewRequestDTO.getUser());
         Problem gProblem = problemService.getProblem(reviewRequestDTO.getProblem());
 
+        review.setCode(reviewRequestDTO.getCode());
         review.setContent(reviewRequestDTO.getContent());
         review.setUser(gUser);
         review.setProblem(gProblem);

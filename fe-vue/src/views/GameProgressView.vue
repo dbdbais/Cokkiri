@@ -1,30 +1,33 @@
 <script setup>
-import { onMounted, ref } from "vue";
 import Main from "@/components/meeting/Main.vue";
 import BattleStatus from "@/components/gameprogress/BattleStatus.vue";
+import GameRamdomItem from "@/components/gameprogress/GameRandomItem.vue";
+import { onMounted, ref } from "vue";
 import { useRoute } from "vue-router";
 import { userStore } from "@/stores/user";
 import { getWaitingRoom } from "@/api/waitingroom";
 
-const myCharacter = "/src/assets/game-character.svg";
 const enemyCharacter = "/src/assets/game-character.svg";
+const myCharacter = "/src/assets/game-character.svg";
 const store = userStore();
 const route = useRoute();
 const roomData = ref([]);
 const users = ref([]);
 const items = ref({
-  blind: true,
-  minimum: true,
-  prevent: true,
-  fontBig: true,
-  fontSmall: true,
+  blind: false,
+  minimum: false,
+  prevent: false,
+  fontBig: false,
+  fontSmall: false,
 });
+
 const useBlind = ref(0);
 const useMinimum = ref(100);
 const usePrevernt = ref(false);
+const showitem = ref(false);
+const getItem = ref(false);
 const useItem = ref(false);
 const pickItem = ref("");
-const showitem = ref(false);
 const useItemFun = function (item) {
   useItem.value = true;
   pickItem.value = item;
@@ -73,8 +76,29 @@ ws.onmessage = function (event) {
   }
 };
 
+const itemList = [
+  "blind",
+  "minimum",
+  "prevent",
+  "fontBig",
+  "fontSmall",
+  "blind",
+  "minimum",
+  "prevent",
+  "fontBig",
+  "fontSmall",
+  "blind",
+  "minimum",
+  "prevent",
+  "fontBig",
+  "fontSmall",
+];
+const userItem = ref([]);
+
 const showItemFun = function () {
-  showitem.value = true;
+  if (!getItem.value) {
+    showitem.value = true;
+  }
 };
 
 const hideItmeFun = function () {
@@ -82,6 +106,18 @@ const hideItmeFun = function () {
 };
 
 onMounted(() => {
+  getItem.value = true;
+  for (let i = 0; i < 2; i++) {
+    let itemIdx = getRandomIntInclusive(0, 4);
+    if (items.value[itemList[itemIdx]] === true) {
+      itemIdx += 1;
+    }
+    userItem.value.push(itemList[itemIdx]);
+    items.value[itemList[itemIdx]] = true;
+  }
+
+  console.log(userItem.value);
+
   const success = (res) => {
     console.log(res.data);
     roomData.value = res.data;
@@ -93,10 +129,26 @@ onMounted(() => {
 
   getWaitingRoom(route.params.gameId, success, fail);
 });
+
+function getRandomIntInclusive(min, max) {
+  const minCeiled = Math.ceil(min);
+  const maxFloored = Math.floor(max);
+  return Math.floor(Math.random() * (maxFloored - minCeiled + 1) + minCeiled); // 최댓값도 포함, 최솟값도 포함
+}
+
+const close = () => {
+  getItem.value = false;
+};
 </script>
 
 <template>
   <div class="md container">
+    <GameRamdomItem
+      v-if="getItem"
+      :items="itemList"
+      :user-item="userItem"
+      @close="close"
+    />
     <div class="game-prog-con box-col">
       <RouterLink :to="{ name: 'home' }">
         <img src="@/assets/room_exit.svg" class="exit-icon" />
@@ -112,7 +164,12 @@ onMounted(() => {
         </div>
         <div class="box user-btn box-row" v-if="useItem">
           <div>
-            <button class="item bold-text" v-for="user in users" :key="user.index" @click="userUseItem(user)">
+            <button
+              class="item bold-text"
+              v-for="user in users"
+              :key="user.index"
+              @click="userUseItem(user)"
+            >
               {{ user }}
             </button>
           </div>
@@ -122,8 +179,14 @@ onMounted(() => {
         </div>
         <div @mouseenter="showItemFun" @mouseleave="hideItmeFun">
           <div class="box slideUp item-box" v-if="showitem">
-            <button v-for="(val, key) in items" :key="key" class="item bold-text" :class="{ used: !items[key] }"
-              :disabled="!items[key]" @click="useItemFun(key)">
+            <button
+              v-for="(val, key) in items"
+              :key="key"
+              class="item bold-text"
+              :class="{ used: !items[key] }"
+              :disabled="!items[key]"
+              @click="useItemFun(key)"
+            >
               <img :src="'/src/assets/item/' + key + '.svg'" alt="아이템" />
             </button>
 
@@ -137,7 +200,12 @@ onMounted(() => {
             </button> -->
           </div>
           <div class="item-guide md">
-            <img src="/src/assets/item-guide.svg" alt="아이템 가이드" class="floating" style="margin-top: 50px" />
+            <img
+              src="/src/assets/item-guide.svg"
+              alt="아이템 가이드"
+              class="floating"
+              style="margin-top: 50px"
+            />
           </div>
         </div>
       </div>

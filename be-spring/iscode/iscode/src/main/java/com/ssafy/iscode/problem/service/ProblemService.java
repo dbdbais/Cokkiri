@@ -52,6 +52,8 @@ public class ProblemService {
         return problemRepository.findAll();
     }
 
+    public List<Problem> getFilteredProblem(int level){return problemRepository.findProblemWithTier(level); }
+
     public int getHiddenTestCase(Long pid, String jsonData) {
         return problemRepository.getHiddenTC(pid,jsonData);
     }

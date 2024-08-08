@@ -38,6 +38,17 @@ public class ProblemRepository{
                 .getResultList();
     }
 
+    //select filter
+    public List<Problem> findProblemWithTier(int level) {
+        int lTier = (level - 1) * 5 + 1;
+        int hTier = level * 5;
+
+        return em.createQuery("SELECT p FROM Problem p WHERE p.level BETWEEN :lTier AND :hTier", Problem.class)
+                .setParameter("lTier", lTier)
+                .setParameter("hTier", hTier)
+                .getResultList();
+    }
+
     public int getHiddenTC(Long pid,String jsonData){
         Problem tProblem = findById(pid);
         if(tProblem != null){

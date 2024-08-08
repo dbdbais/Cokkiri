@@ -71,11 +71,19 @@ public class ProblemRestController {
                 insert(elem);
             }
 
-
-
-
         return 1;
     }
+
+    //레벨로 검색
+    @GetMapping("filter/{tier}")
+    public List<Problem> filterSearch(@PathVariable  int tier){
+        return ps.getFilteredProblem(tier);
+    }
+
+//    @GetMapping("/search")
+//    public List<Problem> conditionSearch(String content){
+//
+//    }
 
 
     @PostMapping("/insert")

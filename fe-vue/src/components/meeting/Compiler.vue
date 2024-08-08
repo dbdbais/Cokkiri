@@ -46,11 +46,18 @@ import "ace-builds/src-noconflict/mode-python";
 import "ace-builds/src-noconflict/mode-java";
 import "ace-builds/src-noconflict/mode-c_cpp";
 import "ace-builds/src-noconflict/theme-monokai";
+import { useGameStore } from "@/stores/game";
+
+defineProps({
+  bigfont: Boolean,
+});
 
 const editor = ref(null);
 const selectedLanguage = ref("python");
 const inputText = ref("");
 const outputText = ref("");
+const fontReduceVal = ref(false);
+const fontIncreaseVal = ref(false);
 const editorFontSize = ref(16);
 
 const defaultCode = {
@@ -76,7 +83,6 @@ const initializeEditor = (val) => {
 
 const fontReduce = () => {
   const saveVal = editor.value.getValue();
-
   console.log("폰트 작게!");
   let timerId = setInterval(() => {
     console.log("작아지는 중!");
@@ -91,22 +97,32 @@ const fontReduce = () => {
   }, 1000);
 };
 
-const fontIncrease = () => {
-  const saveVal = editor.value.getValue();
+const gameStore = useGameStore()
 
-  console.log("폰트 크게!");
-  let timerId = setInterval(() => {
-    console.log("커지는 중!");
-    if (editorFontSize.value < 40) {
-      editorFontSize.value += 2;
-      initializeEditor(saveVal);
-    }
-    // console.log(editorFontSize.value);
-  }, 200);
-  setTimeout(() => {
-    clearInterval(timerId);
-  }, 1000);
-};
+const fontIncrease = () => {
+    const saveVal = editor.value.getValue();
+    console.log("폰트 크게!");
+    let timerId = setInterval(() => {
+      console.log("커지는 중!");
+      if (editorFontSize.value < 40) {
+        editorFontSize.value += 2;
+        initializeEditor(saveVal);
+      }
+      // console.log(editorFontSize.value);
+    }, 200);
+    setTimeout(() => {
+      clearInterval(timerId);
+    }, 1000);
+  };
+
+watch(gameStore, () => {
+  if (gameStore.bigFont) {
+    fontIncrease()
+  }
+  if (gameStore.smallFont) {
+    fontReduce()
+  }
+})
 
 onMounted(() => {
   initializeEditor();

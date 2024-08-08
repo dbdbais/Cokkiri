@@ -1,5 +1,7 @@
 package com.ssafy.iscode.websocket.handler;
 
+import com.ssafy.iscode.game.model.dto.GameDto;
+import com.ssafy.iscode.game.service.GameService;
 import com.ssafy.iscode.user.model.dao.UserRepository;
 import com.ssafy.iscode.user.model.dto.User;
 import com.ssafy.iscode.study.model.dao.StudyRepository;
@@ -21,6 +23,9 @@ public class GameWebSocketHandler extends TextWebSocketHandler {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private GameService gameService;
 
     // connected
     // room id, user name, start time manage
@@ -61,6 +66,10 @@ public class GameWebSocketHandler extends TextWebSocketHandler {
                 long nowMillis = now.getTime();
 
                 long diff = nowMillis - startTime;
+
+                GameDto gameDto = gameService.getGame(Long.parseLong(roomId));
+
+                gameService.inputRankUser(Long.parseLong(roomId), userName, gameDto.getPrizes().size()+1, diff);
 
                 Map<String, Long> input = new HashMap<>();
                 input.put(userName, diff);

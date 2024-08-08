@@ -283,6 +283,7 @@ public class StudyService {
             }
 
             studyDto.setProblems(input);
+            studyRepository.save(studyDto);
             return 1;
         } catch (Exception e) {
             e.printStackTrace();

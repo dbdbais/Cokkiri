@@ -2,7 +2,6 @@
 import { ref } from "vue";
 import { getProblems } from "@/api/problem";
 import { problemStore } from "@/stores/problem";
-import { extractProblems } from "@/utils/parse-problem";
 
 const store = problemStore();
 

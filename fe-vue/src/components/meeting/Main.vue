@@ -10,6 +10,7 @@ defineProps({
   blind: Number,
   minimum: Number,
   prevent: Boolean,
+  bigfont: Boolean,
 });
 
 const main = ref(null);
@@ -79,7 +80,7 @@ const stopResize = () => {
       <button class="btn bold-text change" @click="changCompilerView">
         {{ compilerText[compiler] }}
       </button>
-      <Compiler v-if="compiler === 0" />
+      <Compiler v-if="compiler === 0" :bigfont="bigfont" />
       <SubmitList v-else />
     </div>
   </div>

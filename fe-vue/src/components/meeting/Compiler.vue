@@ -47,10 +47,16 @@ import "ace-builds/src-noconflict/mode-java";
 import "ace-builds/src-noconflict/mode-c_cpp";
 import "ace-builds/src-noconflict/theme-monokai";
 
+defineProps({
+  bigfont: Boolean,
+});
+
 const editor = ref(null);
 const selectedLanguage = ref("python");
 const inputText = ref("");
 const outputText = ref("");
+const fontReduceVal = ref(false);
+const fontIncreaseVal = ref(false);
 const editorFontSize = ref(16);
 
 const defaultCode = {
@@ -93,7 +99,6 @@ const fontReduce = () => {
 
 const fontIncrease = () => {
   const saveVal = editor.value.getValue();
-
   console.log("폰트 크게!");
   let timerId = setInterval(() => {
     console.log("커지는 중!");

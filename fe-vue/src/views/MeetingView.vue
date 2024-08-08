@@ -1,5 +1,6 @@
 <script setup>
 import "@/assets/css/meeting.css";
+import { userStore } from "@/stores/user";
 import {
   changeAudio,
   changeVideo,
@@ -13,8 +14,10 @@ import Chat from "@/components/meeting/Chat.vue";
 import { ref, onMounted } from "vue";
 import { useRoute, useRouter } from "vue-router";
 
+const user = userStore();
+
 onMounted(() => {
-  joinSession(route.params.roomId);
+  joinSession(route.params.roomId, user.user.nickname);
 });
 
 const route = useRoute();

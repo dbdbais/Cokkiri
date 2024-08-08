@@ -24,6 +24,7 @@ const items = ref({
 const useBlind = ref(0);
 const useMinimum = ref(100);
 const usePrevernt = ref(false);
+const useBigFont = ref(false);
 const showitem = ref(false);
 const getItem = ref(false);
 const useItem = ref(false);
@@ -38,7 +39,13 @@ const userUseItem = function (user) {
   items.value[pickItem.value] = false;
   useItem.value = false;
 
-  const itemText = { blind: "#", minimum: "$", prevent: "%" };
+  const itemText = {
+    blind: "#",
+    minimum: "$",
+    prevent: "%",
+    fontBig: "^",
+    fontSmall: "&",
+  };
 
   const data = `|${itemText[pickItem.value]}||!|${user}`;
   ws.send(data);
@@ -51,7 +58,7 @@ const ws = new WebSocket(
 ws.onmessage = function (event) {
   let data = event.data.split("|!|");
   console.log(data);
-  if (data.length === 1) {
+  if (data.length === 2) {
     let event = data[0];
 
     if (event === "BLIND") {
@@ -72,6 +79,9 @@ ws.onmessage = function (event) {
       setTimeout(() => {
         usePrevernt.value = false;
       }, 10000);
+    } else if (event === "BIG") {
+      console.log("폰트 크게");
+      useBigFont.value = !useBigFont.value;
     }
   }
 };
@@ -210,7 +220,12 @@ const close = () => {
         </div>
       </div>
       <div class="game-content box-row">
-        <Main :blind="useBlind" :minimum="useMinimum" :prevent="usePrevernt" />
+        <Main
+          :blind="useBlind"
+          :minimum="useMinimum"
+          :prevent="usePrevernt"
+          :bigfont="useBigFont"
+        />
       </div>
     </div>
   </div>

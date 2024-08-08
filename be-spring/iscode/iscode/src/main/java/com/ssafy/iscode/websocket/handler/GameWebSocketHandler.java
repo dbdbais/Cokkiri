@@ -94,6 +94,10 @@ public class GameWebSocketHandler extends TextWebSocketHandler {
                 event = "SIZE|!|.";
             } else if ("|%|".equals(m[0])) { // used item 3 (prevent code input)
                 event = "PREVENT|!|.";
+            } else if ("|^|".equals(m[0])) {
+                event = "BIG|!|.";
+            } else if ("|&|".equals(m[0])) {
+                event = "SMALL|!|.";
             } else {
                 return;
             }

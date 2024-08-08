@@ -6,10 +6,12 @@ import { onMounted, ref } from "vue";
 import { useRoute } from "vue-router";
 import { userStore } from "@/stores/user";
 import { getWaitingRoom } from "@/api/waitingroom";
+import { useGameStore } from "@/stores/game";
 
 const enemyCharacter = "/src/assets/game-character.svg";
 const myCharacter = "/src/assets/game-character.svg";
 const store = userStore();
+const gameStore = useGameStore()
 const route = useRoute();
 const roomData = ref([]);
 const users = ref([]);
@@ -24,7 +26,9 @@ const items = ref({
 const useBlind = ref(0);
 const useMinimum = ref(100);
 const usePrevernt = ref(false);
-const useBigFont = ref(false);
+const useBigFont = ref(() => {
+
+});
 const showitem = ref(false);
 const getItem = ref(false);
 const useItem = ref(false);
@@ -80,8 +84,11 @@ ws.onmessage = function (event) {
         usePrevernt.value = false;
       }, 10000);
     } else if (event === "BIG") {
-      console.log("폰트 크게");
-      useBigFont.value = !useBigFont.value;
+      console.log("크게");
+      gameStore.bigFontFun()
+    } else if (event === "SMALL") {
+      console.log("작게");
+      gameStore.smallFontFun()
     }
   }
 };

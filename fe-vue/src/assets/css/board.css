@@ -1,7 +1,7 @@
 /* 스터디 만들기 버튼 스타일 */
 .create-btn {
-  background-color: #cfdbfb;
-  border-color: #a5baf3;
+  border-color: #ff8888;
+  background-color: #ff1f1f;
   border-width: 5px;
   border-radius: 10px;
 }
@@ -36,7 +36,7 @@
   position: absolute;
   top: 25px;
   left: 580px;
-  background-color: #9fbaff;
+  background-color: #c191ff;
   border: solid #3b72ff;
   border-radius: 10px;
 }

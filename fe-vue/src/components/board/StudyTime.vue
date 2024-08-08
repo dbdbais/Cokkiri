@@ -97,7 +97,7 @@ const selected = function () {
 }
 
 input[type="time"] {
-  font-size: 18px;
+  font-size: 19px;
   margin-right: 15px;
   margin-top: 10px;
   border-radius: 10px;

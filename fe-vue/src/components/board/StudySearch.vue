@@ -50,32 +50,31 @@ const selected = function (timeData) {
 /* 검색창 */
 .search {
   /* 크기, 위치 */
-  width: 1180px;
+  width: 1080px;
   height: 120px;
-  margin-top: 20px;
   position: relative;
   background-color: white;
   border: 5px solid #3b72ff;
   border-radius: 10px;
 }
 .time {
-  width: 580px;
+  width: 420px;
   margin-left: 20px;
 }
 .bold-text {
-  font-size: 55px;
+  font-size: 45px;
   -webkit-text-stroke: 1.5px #3b72ff;
 }
 .nomal-text {
-  font-size: 40px;
+  font-size: 35px;
 }
 .name-con {
   margin: 10px 20px;
 }
 #study-name {
-  width: 400px;
+  width: 450px;
   height: 80px;
-  margin-left: 20px;
+  margin-left: 25px;
   padding-left: 10px;
   border: 3px solid #3b72ff;
   color: #3b72ff;

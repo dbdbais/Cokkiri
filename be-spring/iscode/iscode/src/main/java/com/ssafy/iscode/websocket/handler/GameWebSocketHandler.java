@@ -1,5 +1,7 @@
 package com.ssafy.iscode.websocket.handler;
 
+import com.ssafy.iscode.game.model.dto.GameDto;
+import com.ssafy.iscode.game.service.GameService;
 import com.ssafy.iscode.user.model.dao.UserRepository;
 import com.ssafy.iscode.user.model.dto.User;
 import com.ssafy.iscode.study.model.dao.StudyRepository;
@@ -21,6 +23,9 @@ public class GameWebSocketHandler extends TextWebSocketHandler {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private GameService gameService;
 
     // connected
     // room id, user name, start time manage
@@ -62,6 +67,10 @@ public class GameWebSocketHandler extends TextWebSocketHandler {
 
                 long diff = nowMillis - startTime;
 
+                GameDto gameDto = gameService.getGame(Long.parseLong(roomId));
+
+                gameService.inputRankUser(Long.parseLong(roomId), userName, gameDto.getPrizes().size()+1, diff);
+
                 Map<String, Long> input = new HashMap<>();
                 input.put(userName, diff);
 
@@ -80,11 +89,15 @@ public class GameWebSocketHandler extends TextWebSocketHandler {
             String event = "";
 
             if ("|#|".equals(m[0])) { // used item 1 (blind problem)
-                event = "BLIND";
+                event = "BLIND|!|.";
             } else if ("|$|".equals(m[0])) { // used item 2 (minimum size of submit button)
-                event = "SIZE";
+                event = "SIZE|!|.";
             } else if ("|%|".equals(m[0])) { // used item 3 (prevent code input)
-                event = "PREVENT";
+                event = "PREVENT|!|.";
+            } else if ("|^|".equals(m[0])) {
+                event = "BIG|!|.";
+            } else if ("|&|".equals(m[0])) {
+                event = "SMALL|!|.";
             } else {
                 return;
             }
@@ -99,6 +112,7 @@ public class GameWebSocketHandler extends TextWebSocketHandler {
     @Override
     public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
         String roomId = getRoomId(session);
+        String userName = getUserName(session);
         userSessions.remove(session);
 
         Set<WebSocketSession> sessions = roomSessions.get(roomId);
@@ -108,6 +122,11 @@ public class GameWebSocketHandler extends TextWebSocketHandler {
                 roomSessions.remove(roomId);
                 roomEnterTimes.remove(roomId);
                 roomPrices.remove(roomId);
+            }
+
+            String event = "EXIT|!|" + userName;
+            for (WebSocketSession webSocketSession : sessions) {
+                webSocketSession.sendMessage(new TextMessage(event));
             }
         }
     }

@@ -1,5 +1,6 @@
 package com.ssafy.iscode.problem.model.dao;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.ssafy.iscode.problem.model.dto.Problem;
 import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
@@ -12,7 +13,6 @@ import java.util.List;
 @Repository
 @Transactional
 public class ProblemRepository{
-
 
     private final EntityManager em;
 
@@ -36,6 +36,18 @@ public class ProblemRepository{
     public List<Problem> findAll(){
         return em.createQuery("SELECT p FROM Problem p", Problem.class)
                 .getResultList();
+    }
+
+    public int getHiddenTC(Long pid,String jsonData){
+        Problem tProblem = findById(pid);
+        if(tProblem != null){
+            tProblem.getHidden(jsonData);
+            em.merge(tProblem);
+            return 1;
+        }
+        else{
+            return 0;
+        }
     }
 
 

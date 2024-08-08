@@ -1,5 +1,6 @@
 package com.ssafy.iscode.problem.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.ssafy.iscode.problem.model.dto.Problem;
 import com.ssafy.iscode.problem.service.ProblemService;
 import com.ssafy.iscode.util.APIConnection;
@@ -38,6 +39,12 @@ public class ProblemRestController {
     public String insert(@RequestParam Long id) throws IOException {
         return ps.insertProblem(id).toString();
     }
+
+    @PostMapping("/hidden/{pid}")
+    public int insertProblem(@PathVariable Long pid, @RequestBody String data)  {
+        return ps.getHiddenTestCase(pid,data);
+    }
+
 
     @GetMapping("/hint/{pid}")
     public String getHint(@PathVariable Long pid) throws IOException {

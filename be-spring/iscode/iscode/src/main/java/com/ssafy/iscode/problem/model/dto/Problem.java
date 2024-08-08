@@ -43,22 +43,22 @@ public class Problem {
 
     @ElementCollection(fetch = FetchType.LAZY)
     @CollectionTable(name = "algo_input", joinColumns = @JoinColumn(name = "algo_num"))
-    @Column(name = "algo_input_value")
+    @Column(name = "algo_input_value",columnDefinition = "LONGTEXT")
     private Map<Integer, String> algoInput;
 
     @ElementCollection(fetch = FetchType.LAZY)
     @CollectionTable(name = "algo_output", joinColumns = @JoinColumn(name = "algo_num"))
-    @Column(name = "algo_output_value")
+    @Column(name = "algo_output_value",columnDefinition = "LONGTEXT")
     private Map<Integer, String> algoOutput;
 
     @ElementCollection(fetch = FetchType.LAZY)
     @CollectionTable(name = "algo_hidden_input", joinColumns = @JoinColumn(name = "algo_num"))
-    @Column(name = "hidden_input_value")
+    @Column(name = "hidden_input_value",columnDefinition = "LONGTEXT")
     private Map<Integer, String> algoHiddenInput;
 
     @ElementCollection(fetch = FetchType.LAZY)
     @CollectionTable(name = "algo_hidden_output", joinColumns = @JoinColumn(name = "algo_num"))
-    @Column(name = "hidden_output_value")
+    @Column(name = "hidden_output_value",columnDefinition = "LONGTEXT")
     private Map<Integer, String> algoHiddenOutput;
 
     public Problem() {

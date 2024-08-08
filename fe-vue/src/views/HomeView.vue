@@ -7,22 +7,9 @@
       <FriendsList id="friends-list" />
     </div>
     <div id="main-right" class="box-col">
-      <Header
-        id="header"
-        class="box-col"
-        @create="getRoomList"
-        @search="searchList"
-        @go-room="goRightNow"
-      />
-      <MainContent
-        id="main-content"
-        :rooms="rooms"
-        :current-page="currentPage"
-        :category-obj="categoryObj"
-        @go-room="goRoom"
-        @change-page="pageChange"
-        @is-game="categoryList"
-      />
+      <Header id="header" class="box-col" @create="getRoomList" @search="searchList" @go-room="goRightNow" />
+      <MainContent id="main-content" :rooms="rooms" :current-page="currentPage" :category-obj="categoryObj"
+        @go-room="goRoom" @change-page="pageChange" @is-game="categoryList" />
     </div>
   </div>
 </template>
@@ -42,7 +29,7 @@ import { useMessageStore } from "@/stores/message";
 
 const store = userStore();
 const lobby = new WebSocket(
-  `ws://192.168.30.160:8080/lobby/${store.user.nickname}`
+  `${process.env.VITE_VUE_SOCKET_URL}lobby/${store.user.nickname}`
 );
 
 const messageStore = useMessageStore();

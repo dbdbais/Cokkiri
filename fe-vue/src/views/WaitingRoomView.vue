@@ -24,7 +24,7 @@ const chatList = ref([]);
 const friendInvite = ref(false);
 
 const ws = new WebSocket(
-  `ws://192.168.30.160:8080/room/${route.params.roomId}/${store.user.nickname}`
+  `${process.env.VITE_VUE_SOCKET_URL}room/${route.params.roomId}/${store.user.nickname}`
 );
 
 ws.onmessage = function (event) {
@@ -121,12 +121,7 @@ const exitRoom = function () {
   <div>
     <div class="waiting-room">
       <WaitingRoomSetting v-if="false" />
-      <WaitingRoomFriend
-        id="test"
-        v-if="friendInvite"
-        :room-id="route.params.roomId"
-        @close="friendInvite = false"
-      />
+      <WaitingRoomFriend id="test" v-if="friendInvite" :room-id="route.params.roomId" @close="friendInvite = false" />
       <div class="box-row">
         <div class="box-col">
           <div class="rule-data">
@@ -155,28 +150,16 @@ const exitRoom = function () {
         </div>
       </div>
       <div class="bottom flex-align">
-        <WaitingRoomChat
-          @chat="
-            (chatData) => {
-              ws.send(chatData);
-            }
-          "
-          :chat-list="chatList"
-        />
+        <WaitingRoomChat @chat="(chatData) => {
+          ws.send(chatData);
+        }
+          " :chat-list="chatList" />
         <div class="box-col button-con">
           <button class="bold-text btn friend" @click="friendInvite = true">
-            <img
-              src="/src/assets/friend.svg"
-              alt="친구초대"
-              style="margin-right: 20px; width: 90px"
-            />친구초대
+            <img src="/src/assets/friend.svg" alt="친구초대" style="margin-right: 20px; width: 90px" />친구초대
           </button>
           <button class="bold-text btn start" @click="startStudy">
-            <img
-              src="/src/assets/start.svg"
-              alt="시작하기"
-              style="margin-right: 20px; width: 90px"
-            />시작하기
+            <img src="/src/assets/start.svg" alt="시작하기" style="margin-right: 20px; width: 90px" />시작하기
           </button>
         </div>
       </div>
@@ -189,34 +172,42 @@ const exitRoom = function () {
   padding: 30px 30px 0px 30px;
   position: relative;
 }
+
 .room-exit,
 .category {
   width: 160px;
   height: 60px;
 }
+
 .category {
   margin-left: 40px;
 }
+
 .title {
   margin-left: 40px;
   -webkit-text-stroke: 2px black;
 }
+
 .bottom {
   justify-content: space-between;
 }
+
 .button-con {
   justify-content: space-between;
   align-items: center;
   height: 320px;
 }
+
 .start {
   background-color: #00f6ac;
   border-color: #2ec5a1;
 }
+
 .friend {
   background-color: #c191ff;
   border-color: #3b72ff;
 }
+
 .btn button {
   width: 200px;
   height: 200px;
@@ -232,9 +223,11 @@ const exitRoom = function () {
   border-radius: 10px;
   padding-right: 10px;
 }
+
 .bold-text {
   font-size: 35px;
 }
+
 .btn {
   width: 400px;
   height: 140px;

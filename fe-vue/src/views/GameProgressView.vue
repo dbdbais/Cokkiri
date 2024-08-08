@@ -42,7 +42,7 @@ const userUseItem = function (user) {
 };
 
 const ws = new WebSocket(
-  `ws://192.168.30.160:8080/game/${route.params.gameId}/${store.user.nickname}`
+  `${process.env.VITE_VUE_SOCKET_URL}game/${route.params.gameId}/${store.user.nickname}`
 );
 
 ws.onmessage = function (event) {
@@ -112,12 +112,7 @@ onMounted(() => {
         </div>
         <div class="box user-btn box-row" v-if="useItem">
           <div>
-            <button
-              class="item bold-text"
-              v-for="user in users"
-              :key="user.index"
-              @click="userUseItem(user)"
-            >
+            <button class="item bold-text" v-for="user in users" :key="user.index" @click="userUseItem(user)">
               {{ user }}
             </button>
           </div>
@@ -127,14 +122,8 @@ onMounted(() => {
         </div>
         <div @mouseenter="showItemFun" @mouseleave="hideItmeFun">
           <div class="box slideUp item-box" v-if="showitem">
-            <button
-              v-for="(val, key) in items"
-              :key="key"
-              class="item bold-text"
-              :class="{ used: !items[key] }"
-              :disabled="!items[key]"
-              @click="useItemFun(key)"
-            >
+            <button v-for="(val, key) in items" :key="key" class="item bold-text" :class="{ used: !items[key] }"
+              :disabled="!items[key]" @click="useItemFun(key)">
               <img :src="'/src/assets/item/' + key + '.svg'" alt="아이템" />
             </button>
 
@@ -148,12 +137,7 @@ onMounted(() => {
             </button> -->
           </div>
           <div class="item-guide md">
-            <img
-              src="/src/assets/item-guide.svg"
-              alt="아이템 가이드"
-              class="floating"
-              style="margin-top: 50px"
-            />
+            <img src="/src/assets/item-guide.svg" alt="아이템 가이드" class="floating" style="margin-top: 50px" />
           </div>
         </div>
       </div>
@@ -171,21 +155,25 @@ onMounted(() => {
   position: absolute;
   bottom: -70px;
 }
+
 .user-btn,
 .item-box {
   width: 710px;
   left: 590px;
   background-color: #9fbaff;
 }
+
 .item-box {
   z-index: 2;
 }
+
 .item-guide {
   left: 890px;
   width: 200px;
   height: 100px;
   z-index: 1;
 }
+
 .item {
   width: 100px;
   height: 100px;
@@ -196,14 +184,17 @@ onMounted(() => {
   border-color: #3b72ff;
   background-color: #dbe7ff;
 }
+
 .user-btn {
   justify-content: space-between;
   z-index: 3;
 }
+
 .close {
   background-color: #ff4d4d;
   border-color: #ff8e8e;
 }
+
 /* Game Progress Container */
 
 .game-prog-con {
@@ -273,6 +264,7 @@ onMounted(() => {
   height: 800px;
   margin: 0px;
 }
+
 .used {
   background-color: rgb(117, 117, 117);
   border-color: gray;

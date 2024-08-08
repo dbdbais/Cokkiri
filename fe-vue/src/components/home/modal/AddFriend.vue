@@ -1,6 +1,6 @@
 <script setup>
 import { ref } from "vue";
-import { getAllUser, addFriend } from "@/api/user";
+import { getAllUser, addFriend, getFriends } from "@/api/user";
 import { userStore } from "@/stores/user";
 import { friendStore } from "@/stores/friend";
 
@@ -12,14 +12,19 @@ const isAdded = ref([])
 
 const search = async () => {
     try {
-        const response = await getAllUser();
-        searchedList.value = response.data;
+        const [getUserResponse, relationshipResponse] = await Promise.all([
+            getAllUser(),
+            getFriends(uStore.user.id)
+        ]);
+        console.log(getUserResponse);
+        console.log(relationshipResponse);
+        searchedList.value = getUserResponse.data;
+        fStore.setAllRelationships(relationshipResponse.data);
         searchedList.value = filterDefault();
         if (keyword.value != "") {
             searchedList.value = filterUsersById(keyword.value);
         }
         isAdded.value = Array(searchedList.value.length).fill(false);
-        console.log(response);
     } catch (e) {
         console.log(e);
     }
@@ -38,7 +43,6 @@ const add = async (friendId, index) => {
     try {
         const response = await addFriend(uStore.user.id, friendId);
         isAdded.value[index] = true;
-        console.log(isAdded.value)
         console.log(response);
     } catch (e) {
         console.log(e);

@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.Check;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -50,5 +51,6 @@ public class GameDto {
         this.difficulty = difficulty;
         this.maxTime = maxTime;
         this.mode = mode;
+        this.prizes = new ArrayList<>();
     }
 }

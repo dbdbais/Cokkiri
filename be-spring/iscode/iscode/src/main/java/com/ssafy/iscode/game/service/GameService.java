@@ -12,6 +12,7 @@ import com.ssafy.iscode.study.model.dao.StudyRepository;
 import com.ssafy.iscode.study.model.dto.StudyDto;
 import com.ssafy.iscode.user.model.dao.UserRepository;
 import com.ssafy.iscode.user.model.dto.User;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -39,6 +40,7 @@ public class GameService {
     @Autowired
     private ProblemRepository problemRepository;
 
+    @Transactional
     public int updateGame(Map<String, String> params) {
         GameDto gameDto = new GameDto(
                 Long.parseLong(params.get("sessionId")),
@@ -81,7 +83,7 @@ public class GameService {
                     .distinct()
                     .limit(2)
                     .mapToObj(problems::get)
-                    .toList();
+                    .collect(Collectors.toList());
 
             StudyDto studyDto = studyRepository.findById(sessionId);
 

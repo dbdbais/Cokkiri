@@ -1,5 +1,6 @@
 <script setup>
 import ReviewItem from "@/components/problem/ReviewItem.vue";
+
 const props = defineProps({
     reviewData: Object,
 });
@@ -25,6 +26,8 @@ const props = defineProps({
 
 <style scoped>
 .modal-con {
+    position: absolute;
+    right: 0;
     width: 800px;
     height: 900px;
     border: 3px solid #3B72FF;

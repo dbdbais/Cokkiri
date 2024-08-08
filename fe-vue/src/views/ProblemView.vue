@@ -1,8 +1,27 @@
 <script setup>
+import { ref } from "vue";
 import Logo from "@/components/common/Logo.vue";
 import ProblemList from "@/components/problem/ProblemList.vue";
 import ProblemSearch from "@/components/problem/ProblemSearch.vue";
-import Page from "@/components/common/Page.vue";
+
+const currentPage = ref(1);
+const totalPage = ref(1);
+
+const prevPage = function () {
+  if (currentPage.value > 1) {
+    currentPage.value -= 1;
+  }
+};
+
+const nextPage = function () {
+  if (currentPage.value < totalPage.value) {
+    currentPage.value += 1;
+  }
+};
+
+const setTotalPage = function (total) {
+  totalPage.value = total;
+};
 </script>
 
 <template>
@@ -13,8 +32,9 @@ import Page from "@/components/common/Page.vue";
     </div>
     <div class="problem-con">
       <ProblemSearch />
-      <ProblemList />
-      <Page />
+      <ProblemList :current-page="currentPage" @emit-total-page="setTotalPage" />
+      <button @click="prevPage">&lt;</button>
+      <button @click="nextPage">&gt;</button>
     </div>
   </div>
 </template>

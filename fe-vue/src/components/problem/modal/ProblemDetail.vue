@@ -1,5 +1,9 @@
 <script setup>
 import { infoSplit } from "@/utils/parse-problem";
+import { useModal } from "@/composables/useModal";
+import WriteReview from "@/components/problem/modal/WriteReview.vue";
+
+const { isModalOpen, openModal, closeModal } = useModal();
 defineProps({
     problemData: Object
 });
@@ -36,7 +40,7 @@ defineProps({
                     </div>
                     <div class="btn-con">
                         <div class="btn-review">
-                            <span class="title">리뷰작성</span>
+                            <span class="title" @click="openModal">리뷰작성</span>
                         </div>
                         <div class="btn-like">
                             <span class="title">찜하기</span>
@@ -46,7 +50,7 @@ defineProps({
             </div>
         </div>
     </div>
-
+    <WriteReview v-if="isModalOpen" @close="closeModal" :problem-id="problemData.no" />
 </template>
 
 <style scoped>
@@ -65,6 +69,7 @@ defineProps({
 
 .main-con {
     position: absolute;
+    left: 0;
     width: 1000px;
     height: 800px;
     border: 5px solid #3B72FF;

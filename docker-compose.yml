@@ -32,6 +32,30 @@ services:
       - backend
     networks:
       - Cokkiri-develop-Network
+  
+  openvidu-server:
+    image: openvidu/openvidu-server-kms:2.23.0
+    environment:
+      - openvidu.secret=MY_SECRET
+      - openvidu.publicurl=https://i11e108.p.ssafy.io
+      - openvidu.recording=true
+      - openvidu.recording.path=/opt/openvidu/recordings
+    ports:
+      - "4443:4443"
+    # volumes:
+    #   - ./recordings:/opt/openvidu/recordings
+    networks:
+      - Cokkiri-develop-Network
+
+  coturn:
+    image: instrumentisto/coturn  # coturn 이미지 사용
+    restart: always  # 항상 재시작 설정
+    command: ["-c", "/etc/coturn/turnserver.conf"]  # coturn 설정 파일을 사용하여 실행
+    # volumes:
+    #   - ./coturn.conf:/etc/coturn/turnserver.conf  # 로컬의 coturn.conf 파일을 컨테이너 내 설정 파일로 마운트
+    networks:
+      - Cokkiri-develop-Network  # openvidu-net 네트워크에 연결
+
 
 volumes:
   mysql_develop_data:

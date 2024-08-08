@@ -20,7 +20,6 @@ public class WebCrawler {
     //GET Problem Information of BaekJoon OJS
     public Problem crawlProblem(Long pid) throws IOException {
 
-
         String url = "https://www.acmicpc.net/problem/";
         // problem url
         //String problemName = "21611";
@@ -31,6 +30,8 @@ public class WebCrawler {
         Document document = Jsoup.connect(url+pid).get();
 
         double percent = 0.0;
+        int time = 0;
+        int memory = 0;
 
         Elements elem = document.select("#problem-body");
 
@@ -51,8 +52,22 @@ public class WebCrawler {
             Element firstRow = problemInfo.selectFirst("tbody tr");
 
             if (firstRow != null) {
-                // Select the last td in the first tr
+
+                Element firstTd = firstRow.select("td").first();
+
+                Element secondTd = firstRow.select("td").get(1);
+
                 Element lastTd = firstRow.select("td").last();
+
+                if(firstTd != null){
+                    String firstTdText = firstTd.text().replaceAll("[^0-9]", "");
+                    time = Integer.parseInt(firstTdText);
+                }
+
+                if(secondTd != null){
+                    String secondTdText = secondTd.text().replaceAll("[^0-9]", "");
+                    memory = Integer.parseInt(secondTdText);
+                }
 
                 if (lastTd != null) {
                     // Extract the text from the last td and convert it to a Double
@@ -61,6 +76,8 @@ public class WebCrawler {
                 }
             }
         }
+        System.out.println("Time: "+time);
+        System.out.println("Memory: "+memory);
         System.out.println("Percent: "+percent);
 
         Map<Integer,String> inputList = new HashMap<>();
@@ -82,10 +99,13 @@ public class WebCrawler {
         }
 
         prob.setNo(pid);
+        prob.setTime(time);
+        prob.setMemory(memory);
         prob.setAlgoInput(inputList);
         prob.setAlgoOutput(outputList);
         prob.setAlgoPercent(percent);
         //set HTML
+        prob.setText(elem.text());
         prob.setInfo(elem.html());
         return prob;
     }
@@ -101,6 +121,9 @@ public class WebCrawler {
 
         Double percent = 0.0;
 
+        int time = 0;
+        int memory = 0;
+
         // Select the #problem-info element
         Element problemInfo = document.selectFirst("#problem-info");
 
@@ -109,8 +132,22 @@ public class WebCrawler {
             Element firstRow = problemInfo.selectFirst("tbody tr");
 
             if (firstRow != null) {
-                // Select the last td in the first tr
+                Element firstTd = firstRow.select("td").first();
+
+                Element secondTd = firstRow.select("td").get(1);
+
                 Element lastTd = firstRow.select("td").last();
+
+                if(firstTd != null){
+                    String firstTdText = firstTd.text().replaceAll("[^0-9]", "");
+                    time = Integer.parseInt(firstTdText);
+                }
+
+                if(secondTd != null){
+                    String secondTdText = secondTd.text().replaceAll("[^0-9]", "");
+                    memory = Integer.parseInt(secondTdText);
+                }
+
 
                 if (lastTd != null) {
                     // Extract the text from the last td and convert it to a Double
@@ -119,6 +156,8 @@ public class WebCrawler {
                 }
             }
         }
+        System.out.println("Time: "+time);
+        System.out.println("Memory: "+memory);
         System.out.println("Percent: "+percent);
 
         HashMap<Integer,String> inputList = new HashMap<>();
@@ -134,7 +173,6 @@ public class WebCrawler {
             Element p = new Element("span").text(anchor.text());
             anchor.replaceWith(p);
         }
-
 
         int iidx = 1;
         int oidx = 1;
@@ -152,12 +190,11 @@ public class WebCrawler {
         }
 
         // print extracted inputs and outputs
-        System.out.println("Sample Inputs: " + inputList);
-        System.out.println("Sample Outputs: " + outputList);
+        //System.out.println("Sample Inputs: " + inputList);
+        //System.out.println("Sample Outputs: " + outputList);
 
         //print element
         System.out.println(elem);
-
 
     }
 }

@@ -29,6 +29,15 @@ public class Problem {
     private String title;
     @Column(name = "algo_level")
     private int level;
+
+    @Column(name = "algo_time")
+    private int time;
+    @Column(name = "algo_memory")
+    private int memory;
+
+    @Column(name ="algo_text" , columnDefinition = "LONGTEXT")
+    private String text;
+
     @Column(name = "algo_info" ,columnDefinition = "LONGTEXT")
     private String info;
     @Column(name="algo_percent")
@@ -43,6 +52,43 @@ public class Problem {
     @CollectionTable(name = "algo_output", joinColumns = @JoinColumn(name = "algo_num"))
     @Column(name = "algo_output_value")
     private Map<Integer, String> algoOutput;
+
+    @ElementCollection(fetch = FetchType.LAZY)
+    @CollectionTable(name = "algo_hidden_input", joinColumns = @JoinColumn(name = "algo_num"))
+    @Column(name = "hidden_input_value")
+    private Map<Integer, String> algoHiddenInput;
+
+    @ElementCollection(fetch = FetchType.LAZY)
+    @CollectionTable(name = "algo_hidden_output", joinColumns = @JoinColumn(name = "algo_num"))
+    @Column(name = "hidden_output_value")
+    private Map<Integer, String> algoHiddenOutput;
+
+    public Problem() {
+    }
+
+    public Problem(Long no, List<String> algoType, String title, int level, int time, int memory, String text, String info, double algoPercent, Map<Integer, String> algoInput, Map<Integer, String> algoOutput, Map<Integer, String> algoHiddenInput, Map<Integer, String> algoHiddenOutput) {
+        this.no = no;
+        this.algoType = algoType;
+        this.title = title;
+        this.level = level;
+        this.time = time;
+        this.memory = memory;
+        this.text = text;
+        this.info = info;
+        this.algoPercent = algoPercent;
+        this.algoInput = algoInput;
+        this.algoOutput = algoOutput;
+        this.algoHiddenInput = algoHiddenInput;
+        this.algoHiddenOutput = algoHiddenOutput;
+    }
+
+    public String getText() {
+        return text;
+    }
+
+    public void setText(String text) {
+        this.text = text;
+    }
 
     public Long getNo() {
         return no;
@@ -74,6 +120,22 @@ public class Problem {
 
     public void setLevel(int level) {
         this.level = level;
+    }
+
+    public int getTime() {
+        return time;
+    }
+
+    public void setTime(int time) {
+        this.time = time;
+    }
+
+    public int getMemory() {
+        return memory;
+    }
+
+    public void setMemory(int memory) {
+        this.memory = memory;
     }
 
     public String getInfo() {
@@ -108,6 +170,22 @@ public class Problem {
         this.algoOutput = algoOutput;
     }
 
+    public Map<Integer, String> getAlgoHiddenInput() {
+        return algoHiddenInput;
+    }
+
+    public void setAlgoHiddenInput(Map<Integer, String> algoHiddenInput) {
+        this.algoHiddenInput = algoHiddenInput;
+    }
+
+    public Map<Integer, String> getAlgoHiddenOutput() {
+        return algoHiddenOutput;
+    }
+
+    public void setAlgoHiddenOutput(Map<Integer, String> algoHiddenOutput) {
+        this.algoHiddenOutput = algoHiddenOutput;
+    }
+
     @Override
     public String toString() {
         return "Problem{" +
@@ -115,10 +193,15 @@ public class Problem {
                 ", algoType=" + algoType +
                 ", title='" + title + '\'' +
                 ", level=" + level +
+                ", time=" + time +
+                ", memory=" + memory +
+                ", text='" + text + '\'' +
                 ", info='" + info + '\'' +
                 ", algoPercent=" + algoPercent +
                 ", algoInput=" + algoInput +
                 ", algoOutput=" + algoOutput +
+                ", algoHiddenInput=" + algoHiddenInput +
+                ", algoHiddenOutput=" + algoHiddenOutput +
                 '}';
     }
 }

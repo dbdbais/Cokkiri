@@ -2,8 +2,11 @@
 import StudyTime from "@/components/board/StudyTime.vue";
 import { createStudy } from "@/api/board";
 import { ref } from "vue";
+import { userStore } from "@/stores/user";
 
 const emit = defineEmits(["get-regular-list"]);
+
+const store = userStore();
 
 // 영어로 받은 요일을 한글로 바꿔줄 객체
 const weekKorea = {
@@ -76,7 +79,7 @@ const studyCreate = function () {
     regularName: studyName.value,
     maxNum: studyMember.value,
     times: times,
-    userName: "",
+    userName: store.user.nickname,
     regularComment: studyIntro.value,
   };
 

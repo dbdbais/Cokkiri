@@ -1,8 +1,21 @@
 <script setup>
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
+import { getAllComment } from '@/api/comment';
+import Comment from '@/components/problem/Comment.vue';
 
 const props = defineProps({
     review: Object,
+});
+const commentData = ref([]);
+
+onMounted(async () => {
+    try {
+        const response = await getAllComment(props.review.rid);
+        commentData.value = response.data;
+        console.log(commentData);
+    } catch (error) {
+        console.error(error);
+    }
 });
 
 const openIndex = ref(false);
@@ -10,7 +23,6 @@ const openIndex = ref(false);
 const toggle = () => {
     openIndex.value = openIndex.value === true ? false : true;
 };
-
 </script>
 
 <template>
@@ -30,6 +42,7 @@ const toggle = () => {
                 <span class="title">코드 리뷰</span>
                 <span class="normal-text inner-text">{{ props.review.content }}</span>
             </div>
+            <Comment v-for="comment in commentData" :key="comment.id" :comment="comment" />
         </div>
     </div>
 </template>

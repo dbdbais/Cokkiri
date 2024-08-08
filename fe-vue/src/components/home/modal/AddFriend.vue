@@ -1,30 +1,48 @@
 <script setup>
 import { ref } from "vue";
-import { getAllUser, addFriend } from "@/api/user";
+import { getAllUser, addFriend, getFriends } from "@/api/user";
 import { userStore } from "@/stores/user";
+import { friendStore } from "@/stores/friend";
 
-const store = userStore();
-const friendList = ref();
+const uStore = userStore();
+const fStore = friendStore();
+const searchedList = ref([]);
 const keyword = ref("");
+const isAdded = ref([])
 
 const search = async () => {
     try {
-        const response = await getAllUser();
-        friendList.value = response.data;
-        friendList.value = filterUsersById(keyword.value);
-        console.log(response);
+        const [getUserResponse, relationshipResponse] = await Promise.all([
+            getAllUser(),
+            getFriends(uStore.user.id)
+        ]);
+        console.log(getUserResponse);
+        console.log(relationshipResponse);
+        searchedList.value = getUserResponse.data;
+        fStore.setAllRelationships(relationshipResponse.data);
+        searchedList.value = filterDefault();
+        if (keyword.value != "") {
+            searchedList.value = filterUsersById(keyword.value);
+        }
+        isAdded.value = Array(searchedList.value.length).fill(false);
     } catch (e) {
         console.log(e);
     }
 }
 
-function filterUsersById(keyword) {
-    return friendList.value.filter(user => user.id.toLowerCase().includes(keyword.toLowerCase()));
+function filterDefault() {
+    return searchedList.value.filter((user) => user.nickname != uStore.user.nickname && fStore.allRelationships.find(relationship => relationship.friendUserId === user.id
+    ) === undefined);
 }
 
-const add = async (friendId) => {
+function filterUsersById(keyword) {
+    return searchedList.value.filter(user => user.nickname.toLowerCase().includes(keyword.toLowerCase()));
+}
+
+const add = async (friendId, index) => {
     try {
-        const response = await addFriend(store.user.id, friendId);
+        const response = await addFriend(uStore.user.id, friendId);
+        isAdded.value[index] = true;
         console.log(response);
     } catch (e) {
         console.log(e);
@@ -44,19 +62,22 @@ const add = async (friendId) => {
             <div class="modal-body">
                 <div class="search-con box-row box-main-con">
                     <span class="title main-title">검색</span>
-                    <input type="text" placeholder="아이디 입력" class="nomal-text" v-model="keyword"
+                    <input type="text" placeholder="닉네임 입력" class="nomal-text" v-model="keyword"
                         @keyup.enter="search" />
                     <button class="search-btn" @click="search">🔍</button>
                 </div>
                 <div class="box-main-con friend-list">
                     <div class="grid-container">
-                        <div v-for="friend in friendList" :key="friend.id" class="box-row box-main-exp friend-item">
+                        <div v-for="(friend, index) in searchedList" :key="friend.id"
+                            class="box-row box-main-exp friend-item">
                             <img :src="'/src/assets/rank/' + friend.tier.toLowerCase() + '.svg'" alt="friend"
                                 class="friend-profile" />
                             <div>
                                 <span class="title main-title">{{ friend.nickname }}</span>
                             </div>
-                            <img src="@/assets/plus-green.svg" class="friend-plus" @click="add(friend.id)">
+                            <img v-if="!isAdded[index]" src="@/assets/plus_green.svg" class="friend-plus"
+                                @click="add(friend.id, index)">
+                            <img v-else src="@/assets/check_green.svg" class="friend-plus">
                         </div>
                     </div>
                     <div class="box-row pagi-con">

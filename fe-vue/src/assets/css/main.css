@@ -245,6 +245,12 @@ a {
   -webkit-text-stroke: 1px #87aa3d;
 }
 
+.text-font {
+  font-family: "Black Han Sans", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
 @font-face {
   font-family: "RixInooAriDuriR";
   src: url("https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2207-01@1.0/RixInooAriDuriR.woff2")
@@ -260,6 +266,13 @@ a {
   font-style: normal;
 }
 
+@font-face {
+  font-family: "Pretendard-Regular";
+  src: url("https://fastly.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff")
+    format("woff");
+  font-weight: 400;
+  font-style: normal;
+}
 /* =============================
                보류
    ============================= */

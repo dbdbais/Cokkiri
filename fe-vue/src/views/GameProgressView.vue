@@ -16,6 +16,8 @@ const items = ref({
   blind: true,
   minimum: true,
   prevent: true,
+  fontBig: true,
+  fontSmall: true,
 });
 const useBlind = ref(0);
 const useMinimum = ref(100);
@@ -126,29 +128,24 @@ onMounted(() => {
         <div @mouseenter="showItemFun" @mouseleave="hideItmeFun">
           <div class="box slideUp item-box" v-if="showitem">
             <button
+              v-for="(val, key) in items"
+              :key="key"
               class="item bold-text"
-              :class="{ used: !items.blind }"
-              :disabled="!items.blind"
-              @click="useItemFun('blind')"
+              :class="{ used: !items[key] }"
+              :disabled="!items[key]"
+              @click="useItemFun(key)"
             >
-              <img src="/src/assets/item/blind.svg" alt="가리기" />
+              <img :src="'/src/assets/item/' + key + '.svg'" alt="아이템" />
             </button>
-            <button
-              class="item bold-text"
-              :class="{ used: !items.minimum }"
-              :disabled="!items.minimum"
-              @click="useItemFun('minimum')"
-            >
-              <img src="/src/assets/item/minimum.svg" alt="버튼 작게" />
-            </button>
-            <button
+
+            <!-- <button
               class="item bold-text"
               :class="{ used: !items.prevent }"
               :disabled="!items.prevent"
               @click="useItemFun('prevent')"
             >
               <img src="/src/assets/item/prevent.svg" alt="제출 방해" />
-            </button>
+            </button> -->
           </div>
           <div class="item-guide md">
             <img
@@ -176,7 +173,7 @@ onMounted(() => {
 }
 .user-btn,
 .item-box {
-  width: 700px;
+  width: 710px;
   left: 590px;
   background-color: #9fbaff;
 }
@@ -184,7 +181,7 @@ onMounted(() => {
   z-index: 2;
 }
 .item-guide {
-  left: 900px;
+  left: 890px;
   width: 200px;
   height: 100px;
   z-index: 1;

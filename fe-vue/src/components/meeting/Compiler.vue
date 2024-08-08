@@ -85,7 +85,7 @@ const fontReduce = () => {
       initializeEditor(saveVal);
     }
     // console.log(editorFontSize.value);
-  }, 400);
+  }, 200);
   setTimeout(() => {
     clearInterval(timerId);
   }, 1000);
@@ -98,7 +98,7 @@ const fontIncrease = () => {
   let timerId = setInterval(() => {
     console.log("커지는 중!");
     if (editorFontSize.value < 40) {
-      editorFontSize.value += 1;
+      editorFontSize.value += 2;
       initializeEditor(saveVal);
     }
     // console.log(editorFontSize.value);

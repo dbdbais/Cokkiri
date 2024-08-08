@@ -225,4 +225,16 @@ public class WebrtcController {
         json.put("exception", e.getClass().getCanonicalName());
         return new ResponseEntity<>(json, HttpStatus.INTERNAL_SERVER_ERROR);
     }
+
+
+//     private ResponseEntity<Map<String, String>> getErrorResponse(Exception e) {
+//     Map<String, String> json = new HashMap<>();
+//     // e.getCause()가 null일 수 있으므로, null 체크 후 처리
+//     String cause = (e.getCause() != null) ? e.getCause().toString() : "No cause available";
+//     json.put("cause", cause);
+//     json.put("error", e.getMessage());
+//     json.put("exception", e.getClass().getCanonicalName());
+//     return new ResponseEntity<>(json, HttpStatus.INTERNAL_SERVER_ERROR);
+// }
+
 }

@@ -9,14 +9,14 @@ defineProps({
     class="recruitment-badge nomal-text"
     :class="groupBadge ? 'open' : 'close'"
   >
-    {{ groupBadge ? "모집중" : "종료" }}
+    {{ groupBadge ? "모집중" : "모집완료" }}
   </div>
 </template>
 
 <style scoped>
 .recruitment-badge {
   /* 크기 */
-  width: 100px;
+  width: 130px;
   height: 50px;
   /* 폰트, 테두리 */
   border: 5px solid;

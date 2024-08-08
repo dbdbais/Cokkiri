@@ -48,11 +48,11 @@ const goDetail = function (group) {
     console.log(res.data);
     const tiers = {
       SEED: 0,
+      KIWI: 0,
       ORANGE: 0,
       APPLE: 0,
       KOREAMELON: 0,
       DURIAN: 0,
-      KIWI: 0,
     };
     studyDetail.value = true;
     detailData.value = res.data;
@@ -94,23 +94,27 @@ const closeBtn = function () {
   <div class="container">
     <div class="bold-text sub-title">정기 스터디 모집</div>
     <div class="recruitment">
-      <button class="create-btn btn bold-text md" @click="goCreate">
-        스터디 만들기
-      </button>
       <StudyDetail
         v-if="studyDetail"
         :detail-data="detailData"
         @close="closeBtn"
       />
       <StudyCreate v-if="studyCreate" @getRegularList="getRegularList" />
-      <StudySearch @search="getRegularList" />
-      <StudyRecruitmentGroup
-        v-for="group in studyGroup"
-        :key="group.id"
-        :group-data="group"
-        :class="preventCilck"
-        @click="goDetail(group)"
-      />
+      <div class="flex-align top" style="margin-top: 20px">
+        <StudySearch @search="getRegularList" />
+        <button class="create-btn bold-text md" @click="goCreate">
+          스터디 만들기
+        </button>
+      </div>
+      <div class="study-group">
+        <StudyRecruitmentGroup
+          v-for="group in studyGroup"
+          :key="group.id"
+          :group-data="group"
+          :class="preventCilck"
+          @click="goDetail(group)"
+        />
+      </div>
       <Page class="page" :current-page="currentPage" @changePage="pageChange" />
     </div>
   </div>
@@ -120,16 +124,24 @@ const closeBtn = function () {
 .container {
   background-color: transparent;
 }
-
+.top {
+  width: 95%;
+  justify-content: center;
+}
 /* 스터디 상세정보 클릭시 다른 스터디 클릭 금지 */
 .prevent-click {
   pointer-events: none;
 }
-
+.create-btn {
+  width: 200px;
+  height: 80px;
+  font-size: 30px;
+  margin-left: 100px;
+}
 /* 정기 스터디 모집 */
 .recruitment {
   /* 크기 */
-  width: 1250px;
+  width: 1750px;
   height: 800px;
   /* 배치 */
   display: flex;
@@ -143,10 +155,14 @@ const closeBtn = function () {
   border: 5px solid #3b72ff;
   border-radius: 10px;
 }
-.create-btn {
-  position: absolute;
-  top: -75px;
-  right: 0;
+.study-group {
+  display: grid;
+  width: 95%;
+  height: 100%;
+  margin-top: 20px;
+  grid-template-columns: 840px 840px;
+  grid-template-rows: 150px 150px 150px;
+  grid-gap: 30px;
 }
 .page {
   position: absolute;

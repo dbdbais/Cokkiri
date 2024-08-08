@@ -125,8 +125,8 @@ const submitForm = async () => {
         <div class="input-group box-col id-group">
           <label for="username" class="title lbl-id">아이디 </label>
           <div>
-            <input type="text" id="username" v-model="userid" />
-            <button v-if="useridcheck" type="button" class="check-btn" @click="useridcheckfun">
+            <input type="text" id="username" v-model="userId" />
+            <button v-if="userIdCheck" type="button" class="check-btn" @click="userIdCheckFun">
               중복확인
             </button>
             <span v-else class="check">중복확인</span>
@@ -137,7 +137,7 @@ const submitForm = async () => {
           <label for="nickname" class="title lbl-name" id="name">닉네임 </label>
           <div>
             <input type="text" id="nickname" v-model="nickname" />
-            <button v-if="nicknamecheck" type="button" class="verify-btn" @click="nicknamecheckfun">
+            <button v-if="nicknameCheck" type="button" class="verify-btn" @click="nicknameCheckFun">
               중복확인
             </button>
             <span v-else class="check">중복확인</span>
@@ -152,11 +152,11 @@ const submitForm = async () => {
         <div class="input-group box-col pass-group">
           <label for="passwordconfirm" class="title lbl-pass-chk">비밀번호확인
           </label>
-          <input type="password" id="passwordconfirm" v-model="passwordconfirm" />
+          <input type="password" id="passwordconfirm" v-model="passwordConfirm" />
         </div>
 
       </div>
-      <button type="submit" class="signup-btn" @click="submitform">
+      <button class="signup-btn" @click="submitForm">
         회원가입
       </button>
     </div>

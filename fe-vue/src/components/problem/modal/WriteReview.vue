@@ -11,16 +11,9 @@ const reviewCode = ref("");
 const reviewContent = ref("");
 const uStore = userStore();
 
-/*
-    private String code;
-    private String content;
-    private Long problem;
-    private String user;
-
-*/
-
 const writeReview = async () => {
     try {
+        console.log(uStore.user.id + " " + props.problemId + " " + reviewCode.value + " " + reviewContent.value);
         const response = await create({
             user: uStore.user.id,
             problem: props.problemId,

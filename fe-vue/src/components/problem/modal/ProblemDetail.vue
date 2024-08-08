@@ -19,7 +19,8 @@ defineProps({
                 <div class="left-content">
                     <div class="problem-con">
                         <span class="title">문제</span><br />
-                        <span class="content">{{ infoSplit(problemData.info) }}</span>
+                        <span v-html="problemData.info"></span>
+                        <!-- <span class="content">{{ infoSplit(problemData.info) }}</span> -->
                     </div>
                 </div>
                 <div class="rigth-content right-grid">

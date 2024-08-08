@@ -22,9 +22,7 @@ const roomUsers = ref([]);
 const chatList = ref([]);
 const friendInvite = ref(false);
 
-const ws = new WebSocket(
-  `https://i11e108.p.ssafy.io/socket/room/${route.params.roomId}/${store.user.nickname}`
-);
+const ws = new WebSocket(`https://i11e108.p.ssafy.io/socket/room/${route.params.roomId}/${store.user.nickname}`);
 
 ws.onmessage = function (event) {
   let data = event.data.split("|!|");

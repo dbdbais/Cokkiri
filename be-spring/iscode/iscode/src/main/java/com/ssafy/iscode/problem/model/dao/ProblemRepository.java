@@ -49,6 +49,16 @@ public class ProblemRepository{
                 .getResultList();
     }
 
+    public List<Problem> findProblemWithKeyword(String keyword){
+
+        String likeQuery = "%" + keyword + "%";
+        return em.createQuery("SELECT p FROM Problem p WHERE CAST(p.no AS string) LIKE :keyword OR " +
+                        "p.title LIKE :keyword OR p.text LIKE :keyword", Problem.class)
+                .setParameter("keyword", likeQuery)
+                .getResultList();
+
+    }
+
     public int getHiddenTC(Long pid,String jsonData){
         Problem tProblem = findById(pid);
         if(tProblem != null){

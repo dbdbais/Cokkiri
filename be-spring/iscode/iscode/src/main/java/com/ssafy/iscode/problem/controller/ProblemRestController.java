@@ -80,11 +80,10 @@ public class ProblemRestController {
         return ps.getFilteredProblem(tier);
     }
 
-//    @GetMapping("/search")
-//    public List<Problem> conditionSearch(String content){
-//
-//    }
-
+    @GetMapping("/search")
+    public List<Problem> conditionSearch(@RequestParam String keyword){
+        return ps.getKeywordProblem(keyword);
+    }
 
     @PostMapping("/insert")
     public String insert(@RequestParam Long id) throws IOException {

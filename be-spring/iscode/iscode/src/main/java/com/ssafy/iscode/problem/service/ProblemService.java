@@ -54,6 +54,8 @@ public class ProblemService {
 
     public List<Problem> getFilteredProblem(int level){return problemRepository.findProblemWithTier(level); }
 
+    public List<Problem> getKeywordProblem(String keyword) {return problemRepository.findProblemWithKeyword(keyword);}
+
     public int getHiddenTestCase(Long pid, String jsonData) {
         return problemRepository.getHiddenTC(pid,jsonData);
     }

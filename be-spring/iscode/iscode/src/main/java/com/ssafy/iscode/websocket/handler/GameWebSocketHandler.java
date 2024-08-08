@@ -89,11 +89,11 @@ public class GameWebSocketHandler extends TextWebSocketHandler {
             String event = "";
 
             if ("|#|".equals(m[0])) { // used item 1 (blind problem)
-                event = "BLIND";
+                event = "BLIND|!|.";
             } else if ("|$|".equals(m[0])) { // used item 2 (minimum size of submit button)
-                event = "SIZE";
+                event = "SIZE|!|.";
             } else if ("|%|".equals(m[0])) { // used item 3 (prevent code input)
-                event = "PREVENT";
+                event = "PREVENT|!|.";
             } else {
                 return;
             }
@@ -108,6 +108,7 @@ public class GameWebSocketHandler extends TextWebSocketHandler {
     @Override
     public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
         String roomId = getRoomId(session);
+        String userName = getUserName(session);
         userSessions.remove(session);
 
         Set<WebSocketSession> sessions = roomSessions.get(roomId);
@@ -117,6 +118,11 @@ public class GameWebSocketHandler extends TextWebSocketHandler {
                 roomSessions.remove(roomId);
                 roomEnterTimes.remove(roomId);
                 roomPrices.remove(roomId);
+            }
+
+            String event = "EXIT|!|" + userName;
+            for (WebSocketSession webSocketSession : sessions) {
+                webSocketSession.sendMessage(new TextMessage(event));
             }
         }
     }

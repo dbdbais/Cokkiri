@@ -95,18 +95,16 @@ const friendList = ref([]);
   margin: 10px 20px;
   background-color: #cadcff;
   padding: 10px;
-  display: grid;
-  grid-template-columns: 200px 200px;
-  grid-template-rows: 100px 100px 100px;
-  grid-gap: 20px;
+  overflow-y: auto;
 }
 
 .friend-item {
   align-content: center;
   justify-content: space-between;
-  padding: 0px 10px;
+  padding: 10px 10px;
 
   background-color: white;
+  margin-bottom: 10px;
 }
 .plus {
   font-size: 15px;

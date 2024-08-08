@@ -1,6 +1,8 @@
 .rule-container,
 .member-container,
-.chat-container {
+.chat-container,
+.problem-container,
+.problem-list {
   background-color: #c191ff;
   margin: 10px 0px;
 }
@@ -10,6 +12,12 @@
 }
 
 .rule-box,
-.chat-box {
+.problem-box,
+.chat-box,
+.problem-list-box {
   background-color: #d9bbff;
+}
+
+.problem-item {
+  background-color: #dbe7ff;
 }

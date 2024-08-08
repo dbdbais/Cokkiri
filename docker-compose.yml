@@ -34,7 +34,7 @@ services:
       - Cokkiri-develop-Network
   
   openvidu-server:
-    image: openvidu/openvidu-server-kms:2.30.0
+    image: openvidu/openvidu-dev:2.30.0
     environment:
       - openvidu.secret=MY_SECRET
       - openvidu.publicurl=https://i11e108.p.ssafy.io

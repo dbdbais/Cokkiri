@@ -294,7 +294,7 @@ function removeUserData(connection) {
     // 카메라 세션에서 token 제거
     httpRequest(
       "POST",
-      "http://localhost:8080/session/remove-user",
+      "https://i11e108.p.ssafy.io/api/session/remove-user",
       {
         sessionId: mySessionId,
         token: token,
@@ -308,7 +308,7 @@ function removeUserData(connection) {
     // 화면 세션에서 token 제거
     httpRequest(
       "POST",
-      "http://localhost:8080/session/remove-user",
+      "https://i11e108.p.ssafy.io/api/session/remove-user",
       {
         sessionId: mySessionIdScreen,
         token: tokenScreen,
@@ -378,7 +378,7 @@ function httpRequest(method, url, body, errorMsg, callback) {
 function getToken(callback) {
   httpRequest(
     "POST",
-    "http://localhost:8080/session/get-token",
+    "https://i11e108.p.ssafy.io/api/session/get-token",
     // 세션 ID와 유저 정보 전송
     {
       sessionId: mySessionId,
@@ -397,7 +397,7 @@ function getToken(callback) {
 function getScreenToken(callback) {
   httpRequest(
     "POST",
-    "http://localhost:8080/session/get-token",
+    "https://i11e108.p.ssafy.io/api/session/get-token",
     // 세션 ID와 유저 정보 전송
     {
       sessionId: mySessionIdScreen,

@@ -16,6 +16,7 @@ import { userStore } from "@/stores/user";
 import { ref, onMounted } from "vue";
 import { useLodingStore } from "@/stores/loading";
 import { useChatStore } from "@/stores/chat";
+import { getProblem } from "@/api/problem";
 
 const store = userStore();
 const chatStore = useChatStore();
@@ -27,6 +28,7 @@ const roomUsers = ref([]);
 const chatList = ref([]);
 const friendInvite = ref(false);
 const problemModal = ref(false);
+const problemList = ref([]);
 
 const ws = new WebSocket(
   `${process.env.VITE_VUE_SOCKET_URL}room/${route.params.roomId}/${store.user.nickname}`
@@ -64,6 +66,19 @@ ws.onmessage = function (event) {
             name: "meeting",
             params: { roomId: route.params.roomId },
           });
+        }
+        break;
+      case "ADD":
+        problemList.value = [];
+
+        for (let i = 3; i < data.length; i++) {
+          getProblem(data[i])
+            .then((res) => {
+              problemList.value.push(res.data);
+            })
+            .catch((err) => {
+              console.log(err);
+            });
         }
     }
   }
@@ -106,7 +121,11 @@ const startStudy = function () {
 const selectProblem = (problemList) => {
   console.log(problemList);
   // send 보내야함
-  ws.send(problemList);
+  let sendData = "|%|";
+  problemList.forEach((problem) => {
+    sendData += "|!|" + problem;
+  });
+  ws.send(sendData);
   problemModal.value = false;
 };
 
@@ -174,7 +193,10 @@ const exitRoom = function () {
         </div>
       </div>
       <div class="bottom flex-align">
-        <WaitingRoomProblem @open="problemModal = true" />
+        <WaitingRoomProblem
+          @open="problemModal = true"
+          :problem-list="problemList"
+        />
         <WaitingRoomChat @chat="sendChat" />
         <div class="box-col button-con">
           <button class="bold-text btn friend" @click="friendInvite = true">

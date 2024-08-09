@@ -22,14 +22,17 @@ import Profile from "@/components/home/Profile.vue";
 import FriendsList from "@/components/home/FriendsList.vue";
 import MainContent from "@/components/home/MainContent.vue";
 import { getWaitingRoomList, goWaitingRoom } from "@/api/waitingroom";
+import { insertClass } from "@/api/problem"
 import { ref, onMounted, onUnmounted } from "vue";
 import { useRouter } from "vue-router";
 import { userStore } from "@/stores/user";
+import { problemStore } from "@/stores/problem";
 import { useMessageStore } from "@/stores/message";
 
-const store = userStore();
+const uStore = userStore();
+const pStore = problemStore();
 const lobby = new WebSocket(
-  `${process.env.VITE_VUE_SOCKET_URL}lobby/${store.user.nickname}`
+  `${process.env.VITE_VUE_SOCKET_URL}lobby/${uStore.user.nickname}`
 );
 
 const messageStore = useMessageStore();
@@ -101,7 +104,7 @@ const goRoom = function (id) {
     console.log(err);
   };
   goWaitingRoom(
-    { sessionId: id, userName: store.user.nickname },
+    { sessionId: id, userName: uStore.user.nickname },
     success,
     fail
   );
@@ -140,6 +143,7 @@ const getRoomList = function (params) {
 
 onMounted(() => {
   getRoomList();
+  callInsertClass();
 });
 
 onUnmounted(() => {
@@ -159,6 +163,15 @@ const pageChange = function (motion) {
   console.log(currentPage.value);
   getRoomList({ page: currentPage.value });
 };
+
+const callInsertClass = async () => {
+  try {
+    const response = await insertClass();
+    console.log(response.data);
+  } catch (e) {
+    console.log(e);
+  }
+}
 </script>
 
 <style scoped>

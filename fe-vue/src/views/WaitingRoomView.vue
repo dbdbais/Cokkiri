@@ -17,6 +17,8 @@ import { ref, onMounted } from "vue";
 import { useLodingStore } from "@/stores/loading";
 import { useChatStore } from "@/stores/chat";
 import { getProblem } from "@/api/problem";
+import { selectedProblem } from "@/api/waitingroom";
+import { problemStore } from "@/stores/problem";
 
 const store = userStore();
 const chatStore = useChatStore();
@@ -26,9 +28,11 @@ const route = useRoute();
 const roomData = ref([]);
 const roomUsers = ref([]);
 const chatList = ref([]);
+const useProblemStore = problemStore();
 const friendInvite = ref(false);
 const problemModal = ref(false);
 const problemList = ref([]);
+const problemListNum = ref([]);
 
 const ws = new WebSocket(
   `${process.env.VITE_VUE_SOCKET_URL}room/${route.params.roomId}/${store.user.nickname}`
@@ -36,7 +40,6 @@ const ws = new WebSocket(
 
 ws.onmessage = function (event) {
   let data = event.data.split("|!|");
-  console.log(data);
   if (data.length === 2) {
     let username = data[0];
     let message = data[1];
@@ -55,6 +58,13 @@ ws.onmessage = function (event) {
         // chatList.value.push(`${param}님이 퇴장하였습니다.`);
         break;
       case "START":
+        selectedProblem(problemListNum.value, route.params.roomId)
+          .then((res) => {
+            console.log(res.data);
+          })
+          .catch((err) => {
+            console.log(err);
+          });
         ws.close();
         if (roomData.value.isGame) {
           router.push({
@@ -62,6 +72,7 @@ ws.onmessage = function (event) {
             params: { gameId: route.params.roomId },
           });
         } else {
+          useProblemStore.select(problemList.value);
           router.push({
             name: "meeting",
             params: { roomId: route.params.roomId },
@@ -70,8 +81,10 @@ ws.onmessage = function (event) {
         break;
       case "ADD":
         problemList.value = [];
+        problemListNum.value = [];
 
         for (let i = 3; i < data.length; i++) {
+          problemListNum.value.push(Number(data[i]));
           getProblem(data[i])
             .then((res) => {
               problemList.value.push(res.data);
@@ -92,9 +105,7 @@ function getRandomIntInclusive(min, max) {
 
 onMounted(async () => {
   loadingStore.loading();
-
   setTimeout(() => {
-    console.log(roomData.value);
     loadingStore.loadingSuccess();
     roomData.value.users.forEach((user) => {
       getUserName(user)
@@ -109,14 +120,12 @@ onMounted(async () => {
   }, 1000);
   const route = useRoute();
   const success = (res) => {
-    // console.log(res.data)
     roomData.value = res.data;
   };
 
   const fail = (err) => {
     console.log(err);
   };
-
   getWaitingRoom(route.params.roomId, success, fail);
   // getUser();
 });

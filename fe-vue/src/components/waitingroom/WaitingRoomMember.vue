@@ -25,7 +25,6 @@ const animamteSpeed = [
     <div class="member box md-col" v-for="user in users" :key="user.index">
       <div class="bold-text name" :class="user.rank">
         {{ user.nickname }}
-        {{ user.num }}
       </div>
       <img
         :src="imgUrl + user.tier + '.svg'"

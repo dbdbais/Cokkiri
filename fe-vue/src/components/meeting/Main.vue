@@ -4,7 +4,6 @@ import Compiler from "@/components/meeting/Compiler.vue";
 import SubmitList from "@/components/meeting/SubmitList.vue";
 
 import { ref } from "vue";
-import { RouterView } from "vue-router";
 
 defineProps({
   blind: Number,

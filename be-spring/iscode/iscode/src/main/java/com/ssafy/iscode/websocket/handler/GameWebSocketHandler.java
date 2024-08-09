@@ -61,21 +61,34 @@ public class GameWebSocketHandler extends TextWebSocketHandler {
 
         // code success
         if ("|@|".equals(m[0])) {
-            if(roomPrices.get(roomId).size() < 3) {
-                Date now = new Date();
-                long nowMillis = now.getTime();
+            if(m.length == 1) {
+                if (roomPrices.get(roomId).size() < 3) {
+                    Date now = new Date();
+                    long nowMillis = now.getTime();
 
-                long diff = nowMillis - startTime;
+                    long diff = nowMillis - startTime;
 
-                GameDto gameDto = gameService.getGame(Long.parseLong(roomId));
+                    GameDto gameDto = gameService.getGame(Long.parseLong(roomId));
 
-                gameService.inputRankUser(Long.parseLong(roomId), userName, gameDto.getPrizes().size()+1, diff);
+                    gameService.inputRankUser(Long.parseLong(roomId), userName, gameDto.getPrizes().size() + 1, diff);
 
-                Map<String, Long> input = new HashMap<>();
-                input.put(userName, diff);
+                    Map<String, Long> input = new HashMap<>();
+                    input.put(userName, diff);
 
-                roomPrices.get(roomId).add(input);
-                String content = roomPrices.get(roomId).size() + "|!|" + userName + "|!|" + diff;
+                    roomPrices.get(roomId).add(input);
+                    String content = roomPrices.get(roomId).size() + "|!|" + userName + "|!|" + diff;
+
+                    Set<WebSocketSession> sessions = roomSessions.get(roomId);
+                    if (sessions != null) {
+                        for (WebSocketSession webSocketSession : sessions) {
+                            webSocketSession.sendMessage(new TextMessage(content));
+                        }
+                    }
+                }
+            } else {
+                roomPrices.remove(roomId);
+
+                String content = "END|!|.";
 
                 Set<WebSocketSession> sessions = roomSessions.get(roomId);
                 if (sessions != null) {

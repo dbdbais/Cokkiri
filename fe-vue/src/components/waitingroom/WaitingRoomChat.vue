@@ -1,4 +1,5 @@
 <script setup>
+import { useChatStore } from "@/stores/chat";
 import { ref } from "vue";
 
 defineProps({
@@ -6,19 +7,23 @@ defineProps({
 });
 
 const emit = defineEmits(["chat"]);
+const chatStore = useChatStore();
 
 const user = ref("어지민");
 const chatText = ref("");
+
+const chatBox = ref(null);
+
 const chatSubmit = function () {
-  console.log(chatText.value);
   emit("chat", chatText.value);
   chatText.value = "";
+  chatStore.insertChatBox(chatBox.value);
 };
 </script>
 
 <template>
   <div class="chat-container box box-col">
-    <div class="chat-list chat-box box">
+    <div class="chat-list chat-box box" ref="chatBox">
       <p
         v-for="chat in chatList"
         :key="chat.index"

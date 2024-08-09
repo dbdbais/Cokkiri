@@ -15,8 +15,10 @@ import { userStore } from "@/stores/user";
 
 import { ref, onMounted } from "vue";
 import { useLodingStore } from "@/stores/loading";
+import { useChatStore } from "@/stores/chat";
 
 const store = userStore();
+const chatStore = useChatStore();
 const loadingStore = useLodingStore();
 const router = useRouter();
 const route = useRoute();
@@ -66,6 +68,7 @@ ws.onmessage = function (event) {
         }
     }
   }
+  chatStore.autoScroll();
 };
 
 onMounted(async () => {
@@ -105,6 +108,10 @@ const selectProblem = (problemList) => {
   console.log(problemList);
   // send 보내야함
   problemModal.value = false;
+};
+
+const sendChat = (chatData) => {
+  ws.send(chatData);
 };
 
 const exitRoom = function () {
@@ -167,14 +174,7 @@ const exitRoom = function () {
       </div>
       <div class="bottom flex-align">
         <WaitingRoomProblem @open="problemModal = true" />
-        <WaitingRoomChat
-          @chat="
-            (chatData) => {
-              ws.send(chatData);
-            }
-          "
-          :chat-list="chatList"
-        />
+        <WaitingRoomChat @chat="sendChat" :chat-list="chatList" />
         <div class="box-col button-con">
           <button class="bold-text btn friend" @click="friendInvite = true">
             <img

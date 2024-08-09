@@ -9,7 +9,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.concurrent.*;
-
+@CrossOrigin("*")
 @RestController
 @RequestMapping("/api/compiler")
 public class CompilerController {
@@ -18,119 +18,108 @@ public class CompilerController {
         public String language;
         public String code;
         public String ipt;
-        public Map<String, Object> inputOutput;
+        public Map<Integer, String> input;
         public long time; // 실행 시간 제한 (초 단위)
         public long memory; // 메모리 사용 제한 (메가바이트 단위)
     }
 
     @PostMapping("/run")
-    public ResponseEntity<Map<String, String>> compileCode(@RequestBody CompileRequest request) {
-        Map<String, String> result = new HashMap<>();
+    public Map<Integer, String> compileCode(@RequestBody CompileRequest request) {
+        Map<Integer, String> result = new HashMap<>();
 
-        // ipt가 null인지 확인
-        if (request.ipt == "") {
-            ExecutorService executor = Executors.newSingleThreadExecutor();
-            Future<Map<String, String>> future = executor.submit(() -> {
-                Map<String, String> output = new HashMap<>();
-                for (Map.Entry<String, Object> entry : request.inputOutput.entrySet()) {
-                    String input = entry.getKey();
-                    String expectedOutput = entry.getValue().toString();
+        // ipt가 null이거나 빈 문자열인지 확인
+        if (request.ipt == null || request.ipt.equals("")) {
+            for (Map.Entry<Integer, String> entry : request.input.entrySet()) {
+                Integer index = entry.getKey();
+                String input = entry.getValue();
 
-                    try {
-                        String actualOutput = compileAndRunCode(request.language, request.code, input, request.time, request.memory).trim();
+                try {
+                    String actualOutput = compileAndRunCode(request.language, request.code, input, request.time, request.memory).trim();
+                    result.put(index, actualOutput);
 
-                        if (expectedOutput.equals(actualOutput)) {
-                            output.put(actualOutput, "correct");
-                        } else {
-                            output.put(actualOutput, "false");
-                        }
-                    } catch (Exception e) {
-                        output.put("Error: " + e.getMessage(), "false");
-                    }
+                } catch (Exception e) {
+                    result.put(index, "Error: " + e.getMessage());
                 }
-                return output;
-            });
-
-            Map<String, String> output;
-            try {
-                output = future.get(request.time * 1000 + 5000, TimeUnit.MILLISECONDS); // 시간 제한에 버퍼 추가
-            } catch (TimeoutException e) {
-                output = new HashMap<>();
-                output.put("error", "Execution time exceeded the limit");
-            } catch (InterruptedException | ExecutionException e) {
-                output = new HashMap<>();
-                output.put("error", "An error occurred during execution");
-            } finally {
-                executor.shutdown();
             }
 
-            return new ResponseEntity<>(output, HttpStatus.OK);
+//            Map<String, String> output;
+//            try {
+//                output = future.get(request.time * 1000 + 5000, TimeUnit.MILLISECONDS); // 시간 제한에 버퍼 추가
+//            } catch (TimeoutException e) {
+//                output = new HashMap<>();
+//                output.put("error", "Execution time exceeded the limit");
+//            } catch (InterruptedException | ExecutionException e) {
+//                output = new HashMap<>();
+//                output.put("error", "An error occurred during execution");
+//            } finally {
+//                executor.shutdown();
+//            }
+//
+//            return new ResponseEntity<>(output, HttpStatus.OK);
 
         } else {
-            // ipt가 null이 아닌 경우
+            // ipt가 null이 아니고 빈 문자열도 아닌 경우
             try {
-                String actualOutput = compileAndRunCode(request.language, request.code, request.ipt, request.time, request.memory).trim();
-                result.put("output", actualOutput);
+                // ipt를 문자열로 변환하여 전달
+                String input = request.ipt.toString();
+                String actualoutput = compileAndRunCode(request.language, request.code, input, request.time, request.memory).trim();
+                result.put(0, actualoutput);
             } catch (Exception e) {
-                result.put("error", "Error: " + e.getMessage());
+                result.put(0, "Error: " + e.getMessage());
             }
-
-            return new ResponseEntity<>(result, HttpStatus.OK);
         }
+        return result;
     }
 
 
 
 
     @PostMapping("/submit")
-    public ResponseEntity<String> submitCode(@RequestBody CompileRequest request) {
-        Map<String, String> result = new HashMap<>();
+    public Map<Integer, String> submitCode(@RequestBody CompileRequest request) {
+        Map<Integer, String> result = new HashMap<>();
         ExecutorService executor = Executors.newSingleThreadExecutor();
-        Future<Map<String, String>> future = executor.submit(() -> {
-            Map<String, String> output = new HashMap<>();
-            for (Map.Entry<String, Object> entry : request.inputOutput.entrySet()) {
-                String input = entry.getKey();
-                String expectedOutput = entry.getValue().toString();
+        for (Map.Entry<Integer, String> entry : request.input.entrySet()) {
+            Integer index = entry.getKey();
+            String input = entry.getValue();
 
-                try {
-                    String actualOutput = compileAndRunCode(request.language, request.code, input, request.time, request.memory).trim();
+            try {
+                String actualOutput = compileAndRunCode(request.language, request.code, input, request.time, request.memory).trim();
+                result.put(index, actualOutput);
 
-                    if (expectedOutput.equals(actualOutput)) {
-                        output.put(actualOutput, "correct");
-                    } else {
-                        output.put(actualOutput, "false");
-                    }
-                } catch (Exception e) {
-                    output.put("Error: " + e.getMessage(), "false");
-                }
+            } catch (Exception e) {
+                result.put(index, "Error: " + e.getMessage());
             }
-            return output;
-        });
 
-        Map<String, String> output;
-        try {
-            output = future.get(request.time * 1000 + 5000, TimeUnit.MILLISECONDS); // 시간 제한에 버퍼 추가
-        } catch (TimeoutException e) {
-            output = new HashMap<>();
-            output.put("error", "Execution time exceeded the limit");
-        } catch (InterruptedException | ExecutionException e) {
-            output = new HashMap<>();
-            output.put("error", "An error occurred during execution");
-        } finally {
-            executor.shutdown();
         }
-
-        // 결과 처리
-        long correctCount = output.values().stream().filter("correct"::equals).count();
-        long totalCases = output.size();
-
-        if (output.containsValue("false")) {
-            double ratio = (double) correctCount / totalCases;
-            return new ResponseEntity<>(String.format("%.2f", ratio), HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>("correct", HttpStatus.OK);
-        }
+        return result;
     }
+
+
+
+//        Map<String, String> output;
+//        try {
+//            output = future.get(request.time * 1000 + 5000, TimeUnit.MILLISECONDS); // 시간 제한에 버퍼 추가
+//        } catch (TimeoutException e) {
+//            output = new HashMap<>();
+//            output.put("error", "Execution time exceeded the limit");
+//        } catch (InterruptedException | ExecutionException e) {
+//            output = new HashMap<>();
+//            output.put("error", "An error occurred during execution");
+//        } finally {
+//            executor.shutdown();
+//        }
+//
+//        // 결과 처리
+//        long correctCount = output.values().stream().filter("correct"::equals).count();
+//        long totalCases = output.size();
+//
+//        if (output.containsValue("false")) {
+//            double ratio = (double) correctCount / totalCases;
+//            return new ResponseEntity<>(String.format("%.2f", ratio), HttpStatus.OK);
+//        } else {
+//            return new ResponseEntity<>("correct", HttpStatus.OK);
+//        }
+//    }
 
     private String compileAndRunCode(String language, String code, String input, long time, long memory) throws Exception {
         String result = "";
@@ -244,6 +233,7 @@ public class CompilerController {
 
         MemoryMonitor(long memoryLimitMB) {
             this.memoryLimitMB = memoryLimitMB;
+            System.out.println(123);
         }
 
         @Override

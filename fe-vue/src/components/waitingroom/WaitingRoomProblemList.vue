@@ -52,12 +52,7 @@ watch([minLevel, maxLevel], () => {
 
 <template>
   <div class="problem-list box box-col slideDown">
-    <img
-      src="/src/assets/exit.svg"
-      alt="나가기"
-      class="exit"
-      @click="$emit('close')"
-    />
+    <img src="/src/assets/exit.svg" alt="나가기" class="exit" @click="$emit('close')" />
     <div class="filter flex-align bold-text">
       <div class="flex-align">
         <label for="">LEVEL</label>
@@ -72,8 +67,7 @@ watch([minLevel, maxLevel], () => {
     <div class="problem-list-box box box-col">
       <div class="problem-item box bold-text flex-align" v-for="problem in problemList" :key="problem.no">
         <div class="badge md">LEVEL {{ problem.level }}</div>
-        <span class="no">NO.{{ String(problem.no).padStart(5, "0") }}</span
-        ><span class="dash nomal-text">-</span>
+        <span class="no">NO.{{ String(problem.no).padStart(5, "0") }}</span><span class="dash nomal-text">-</span>
         <span class="name">{{ problem.title }}</span>
         <button class="select-btn bold-text" :class="{ selected: selectedProblemList[problem.no] }"
           @click="selectedProblem(problem.no)">

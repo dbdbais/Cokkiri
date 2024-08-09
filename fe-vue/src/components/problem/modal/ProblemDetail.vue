@@ -19,14 +19,6 @@ defineProps({
                 </div>
                 <div class="box-row">
                     <div>
-                        <div class="btn-con">
-                            <div class="btn-review">
-                                <img src="@/assets/shopping.svg" alt="찜하기" class="icon" />
-                            </div>
-                            <div class="btn-like">
-                                <img src="@/assets/shopping.svg" alt="찜하기" class="icon" />
-                            </div>
-                        </div>
                     </div>
                     <img src="@/assets/exit.svg" alt="close" class="icon-close" @click="$emit('close')" />
                 </div>
@@ -38,22 +30,10 @@ defineProps({
                         <!-- <span class="content">{{ infoSplit(problemData.info) }}</span> -->
                     </div>
                 </div>
-                <div class="rigth-content right-grid">
-                    <!-- <div class="input-con">
-                        <span class="title">입력</span><br />
-                        <span class="content">{{ problemData.algoInput }}</span>
-                    </div>
-                    <div class="output-con">
-                        <span class="title">출력</span><br />
-                        <span class="content">{{ problemData.algoOutput }}</span>
-                    </div>
-                    <div class="restrict-con">
-                        <span class="title">제한</span><br />
-                    </div>
-                    <div class="category-con">
-                        <span class="title">유형</span><br />
-                        <span class="content">{{ problemData.algoType }}</span>
-                    </div> -->
+            </div>
+            <div class="btn-con">
+                <div class="btn-review" @click="openModal">
+                    <span class="title main-title">리뷰하기</span>
                 </div>
             </div>
         </div>
@@ -132,14 +112,10 @@ defineProps({
 }
 
 .problem-con {
-    height: 640px;
+    height: 560px;
 }
 
 .btn-con {
-    display: grid;
-    grid-template-columns: 75px 75px;
-    grid-template-rows: 75px;
-    gap: 20px;
     text-align: center;
 }
 

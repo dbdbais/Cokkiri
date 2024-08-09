@@ -153,7 +153,7 @@ const { isModalOpen, selectedMember, openModal, closeModal } = useModal();
 }
 
 .box-main-group {
-  border: 5px solid #3b72ff;
+  border: 2px solid #3b72ff;
   border-radius: 1px;
 }
 

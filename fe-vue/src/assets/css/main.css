@@ -111,7 +111,8 @@ a {
 .box-main-con {
   border: 5px solid #3b72ff;
   border-radius: 10px;
-  background-color: #c191ff;
+  /* background-color: #c191ff; */
+  background-color: ##a6c9ff;
 }
 
 /* 퍼블(purple)-스카이블루(skyblue) 박스 */

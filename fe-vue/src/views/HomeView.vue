@@ -4,12 +4,8 @@
     <div id="main-left" class="box-col">
       <div class="box-row profile-header">
         <div class="btn-profile title main-title">개인 프로필</div>
-        <img class="logout" src="@/assets/logout.svg" @click="logout" />
-        <img class="logout" src="@/assets/logout2.svg" @click="logout" />
-        <img class="logout" src="@/assets/logout3.svg" @click="logout" />
-        <img class="logout" src="@/assets/logout4.svg" @click="logout" />
       </div>
-      <Profile id="profile" />
+      <Profile class="profile" />
       <FriendsList id="friends-list" />
     </div>
     <div id="main-right" class="box-col">
@@ -202,11 +198,11 @@ const logout = function () {
   font-size: 40px;
 }
 
-#profile {
+.profile {
   width: 340px;
   height: 150px;
   margin-top: 15px;
-  padding: 15px;
+  padding: 8px 15px;
 }
 
 #friends-list {
@@ -223,12 +219,13 @@ const logout = function () {
 }
 
 .logout {
+  font-size: 22px;
   margin-right: 10px;
   border: 4px solid hsl(0, 90%, 53%);
   border-radius: 10px;
   background-color: hsl(0, 71%, 53%);
-  width: 50px;
-  height: 50px;
+  width: 110px;
+  height: 40px;
 }
 
 .logout:hover {

@@ -71,14 +71,14 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
     }
 
     private String getRoomId(WebSocketSession session) {
-        UriTemplate template = new UriTemplate("/chat/{roomId}/{userName}");
+        UriTemplate template = new UriTemplate("/socket/chat/{roomId}/{userName}");
         Map<String, String> variables = template.match(session.getUri().getPath());
         return variables.get("roomId");
     }
 
 
     private String getUserName(WebSocketSession session) {
-        UriTemplate template = new UriTemplate("/chat/{roomId}/{userName}");
+        UriTemplate template = new UriTemplate("/socket/chat/{roomId}/{userName}");
         Map<String, String> variables = template.match(session.getUri().getPath());
         Optional<User> user = userRepository.findByName(variables.get("userName"));
 

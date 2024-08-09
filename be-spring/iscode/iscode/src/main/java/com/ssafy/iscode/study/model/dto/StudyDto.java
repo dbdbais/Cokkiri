@@ -69,8 +69,4 @@ public class StudyDto {
     )
     private List<Problem> problems;
 
-    @CreatedDate
-    @Column(name = "createdTime",columnDefinition = "TIMESTAMP", updatable = false)
-    private LocalDateTime createdTime;
-
 }

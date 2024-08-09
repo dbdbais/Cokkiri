@@ -50,10 +50,6 @@ public class GameDto {
     @OneToMany(mappedBy = "game", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<GamePrize> prizes;
 
-    @CreatedDate
-    @Column(name = "createdTime",columnDefinition = "TIMESTAMP", updatable = false)
-    private LocalDateTime createdTime;
-
     public GameDto(Long id, int difficulty, Long maxTime, int mode) {
         this.id = id;
         this.difficulty = difficulty;

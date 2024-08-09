@@ -48,7 +48,7 @@ public class LobbyWebSocketHandler extends TextWebSocketHandler {
     }
 
     private String getUserName(WebSocketSession session) {
-        UriTemplate template = new UriTemplate("/lobby/{userName}");
+        UriTemplate template = new UriTemplate("/socket/lobby/{userName}");
         Map<String, String> variables = template.match(session.getUri().getPath());
         Optional<User> user = userRepository.findByName(variables.get("userName"));
 

@@ -24,7 +24,7 @@ const chatList = ref([]);
 const friendInvite = ref(false);
 
 const ws = new WebSocket(
-  `${process.env.VITE_VUE_SOCKET_URL}/socket/room/${route.params.roomId}/${store.user.nickname}`
+  `${process.env.VITE_VUE_SOCKET_URL}socket/room/${route.params.roomId}/${store.user.nickname}`
 );
 
 ws.onmessage = function (event) {

@@ -3,8 +3,8 @@ pipeline {
 
     environment {
         PATH = "${tool 'Cokirri-node'}/bin:${env.PATH}"
-        DOCKER_IMAGE_BE = 'ohuggy/cokkiri_develop_be'
-        DOCKER_IMAGE_FE = 'ohuggy/cokkiri_develop_fe'
+        // DOCKER_IMAGE_BE = 'ohuggy/cokkiri_develop_be'
+        // DOCKER_IMAGE_FE = 'ohuggy/cokkiri_develop_fe'
         DOCKER_HUB = 'dockerhub' // Jenkins 자격 증명 ID
 //         PATH = "/usr/local/bin"
     }
@@ -12,7 +12,7 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git branch: 'develop',
+                git branch: 'infra-fe/refresh_test',
                     url: 'https://lab.ssafy.com/s11-webmobile1-sub2/S11P12E108.git',
                     credentialsId: 'Be' // Jenkins 자격 증명 ID
             }
@@ -64,50 +64,51 @@ pipeline {
             }
         }
 
-        stage('Build Docker Image') {
-            steps {
-                dir('be-spring'){
-                    script {
-                        sh 'docker build -t ${DOCKER_IMAGE_BE} .'
-                    }
-                }
+        // stage('Build Docker Image') {
+        //     steps {
+        //         dir('be-spring'){
+        //             script {
+        //                 sh 'docker build -t ${DOCKER_IMAGE_BE} .'
+        //             }
+        //         }
 
-                dir('fe-vue'){
-                    script {
-                        sh 'docker build -t ${DOCKER_IMAGE_FE} .'
-                    }
-                }
-            }
-        }
+        //         dir('fe-vue'){
+        //             script {
+        //                 sh 'docker build -t ${DOCKER_IMAGE_FE} .'
+        //             }
+        //         }
+        //     }
+        // }
 
-        stage('Push Docker Image to Docker Hub') {
-            steps {
-                script {
-                    docker.withRegistry('https://index.docker.io/v1/', env.DOCKER_HUB) {
-                        // Docker 이미지 푸시
-                        sh 'docker push ${DOCKER_IMAGE_BE}'
-                    }
+        // stage('Push Docker Image to Docker Hub') {
+        //     steps {
+        //         script {
+        //             docker.withRegistry('https://index.docker.io/v1/', env.DOCKER_HUB) {
+        //                 // Docker 이미지 푸시
+        //                 sh 'docker push ${DOCKER_IMAGE_BE}'
+        //             }
                     
-                }
-                script {
-                    docker.withRegistry('https://index.docker.io/v1/', env.DOCKER_HUB) {
-                        // Docker 이미지 푸시
-                        sh 'docker push ${DOCKER_IMAGE_FE}'
-                    }
-                }
+        //         }
+        //         script {
+        //             docker.withRegistry('https://index.docker.io/v1/', env.DOCKER_HUB) {
+        //                 // Docker 이미지 푸시
+        //                 sh 'docker push ${DOCKER_IMAGE_FE}'
+        //             }
+        //         }
 
-            }
-        }
+        //     }
+        // }
 
         stage('Deploy Docker Container with docker compose'){
             steps{
                 script{
                     // Docker Compose 실행 전에 기존 컨테이너를 종료 및 제거
-                    sh 'docker rm -f mysql'
-                    sh 'docker rm -f vuejs'
-                    sh 'docker rm -f Cokkiri-springboot'
-                    sh 'docker-compose down'
+                    // sh 'docker rm -f mysql'
+                    // sh 'docker rm -f vuejs'
+                    // sh 'docker rm -f Cokkiri-springboot'
+                    // sh 'docker-compose down'
                     // Docker Compose를 사용하여 서비스 빌드 및 실행
+                    sh 'docker-compose '
                     sh 'docker-compose up --build -d'
                 }
             }

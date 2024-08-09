@@ -39,7 +39,6 @@ ws.onmessage = function (event) {
     let username = data[0];
     let message = data[1];
     chatList.value.push(`${username} : ${message}`);
-    console.log(chatList.value);
   } else {
     let event = data[2];
     let param = data[3];
@@ -52,9 +51,6 @@ ws.onmessage = function (event) {
         break;
       case "START":
         ws.close();
-        console.log("입장!");
-
-        console.log(roomData.value);
         if (roomData.value.isGame) {
           router.push({
             name: "gameProgress",
@@ -73,6 +69,7 @@ ws.onmessage = function (event) {
 
 onMounted(async () => {
   loadingStore.loading();
+
   setTimeout(() => {
     console.log(roomData.value);
     loadingStore.loadingSuccess();

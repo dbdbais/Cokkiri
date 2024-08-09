@@ -9,7 +9,7 @@ export const useChatStore = defineStore("chat", () => {
   };
 
   const autoScroll = () => {
-    chatBox.value.scrollTop = chatBox.value.scrollHeight + 57;
+    chatBox.value.scrollTop = chatBox.value.scrollHeight + 100;
   };
 
   return { chatBox, insertChatBox, autoScroll };

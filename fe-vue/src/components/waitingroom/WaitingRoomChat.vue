@@ -1,6 +1,6 @@
 <script setup>
 import { useChatStore } from "@/stores/chat";
-import { ref } from "vue";
+import { onMounted, ref } from "vue";
 
 defineProps({
   chatList: Array,
@@ -19,6 +19,10 @@ const chatSubmit = function () {
   chatText.value = "";
   chatStore.insertChatBox(chatBox.value);
 };
+
+onMounted(() => {
+  chatStore.insertChatBox(chatBox.value);
+});
 </script>
 
 <template>

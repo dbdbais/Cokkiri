@@ -1,12 +1,16 @@
 package com.ssafy.iscode.user.service;
 
+import com.ssafy.iscode.mission.model.dto.MissionType;
+import com.ssafy.iscode.mission.service.MissionService;
 import com.ssafy.iscode.regular.model.dto.RegularUser;
 import com.ssafy.iscode.review.model.dao.ReviewRepository;
 import com.ssafy.iscode.user.model.dao.UserRepository;
 import com.ssafy.iscode.user.model.dto.Status;
 import com.ssafy.iscode.user.model.dto.User;
 import com.ssafy.iscode.user.model.dto.UserFriend;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -24,11 +28,14 @@ public class UserService {
 
     private final ReviewRepository reviewRepository;
 
+    private final MissionService missionService;
+
     @Autowired
-    public UserService(PasswordEncoder passwordEncoder, UserRepository userRepository, ReviewRepository reviewRepository) {
+    public UserService(PasswordEncoder passwordEncoder, UserRepository userRepository, ReviewRepository reviewRepository, MissionService missionService) {
         this.passwordEncoder = passwordEncoder;
         this.userRepository = userRepository;
         this.reviewRepository = reviewRepository;
+        this.missionService = missionService;
     }
 
     public List<User> getUsers(){
@@ -41,9 +48,44 @@ public class UserService {
         return userRepository.getFriendList(id);
     }
 
+    // Schedule to run at midnight every day
+    @Transactional
+    @Scheduled(cron = "0 0 0 * * ?")
+    public void assignDailyMissions() {
+        System.out.println("dailyMission Generated");
+        List<User> users = userRepository.findAll(); // Fetch all users
+
+        for (User user : users) {
+            MissionType randomMission = missionService.assignRandomMission();
+            user.setMission(randomMission, false); // Assign random mission and reset completion
+            userRepository.modify(user); // Save the updated user
+            System.out.println(user);
+        }
+    }
+
+    @Transactional
+    @Scheduled(cron = "0 0/30 * * * ?")
+    public void isMissionAccomplished(){
+        System.out.println("mission accomplished? ");
+        List<User> users = userRepository.findAllWithIncompleteMissions();
+
+        for(User user : users){
+            System.out.println(user);
+            boolean isAccomplished = userRepository.isMissionAccomplished(user);
+            if(isAccomplished){
+                user.completeCurrentMission();
+                //make complete
+                userRepository.modify(user);
+            }
+        }
+    }
+
     public int insertUser(User user){
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         //ENCRYPT PW
+        MissionType dailyMS = missionService.assignRandomMission();
+        //Insert
+        user.setMission(dailyMS,false);
         return userRepository.save(user);
     }
     public int modifyUser(User user){
@@ -107,7 +149,5 @@ public class UserService {
                 .orElseThrow(() -> new RuntimeException("User not found"));
     }
 
-    public boolean isMissionAccomplished(String userId){
-        return userRepository.isMissionAccomplished(userId);
-    }
+
 }

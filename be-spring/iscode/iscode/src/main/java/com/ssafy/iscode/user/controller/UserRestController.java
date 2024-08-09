@@ -102,11 +102,6 @@ public class UserRestController {
         return userService.plusScore(userId,level);
     }
 
-    @GetMapping("/mission")
-    public boolean accomplish( @RequestParam String userId){
-        return userService.isMissionAccomplished(userId);
-    }
-
     @PutMapping("/modify")
     public int modify(@RequestBody User user){
         return userService.modifyUser(user);

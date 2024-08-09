@@ -39,8 +39,16 @@ const writeReview = async () => {
             content: reviewContent.value
         });
         console.log(response);
+        Swal.fire({
+            icon: "success",
+            title: "리뷰 작성이 완료되었습니다.",
+        });
     } catch (error) {
         console.error(error);
+        Swal.fire({
+            icon: "error",
+            title: "리뷰 작성에 실패했습니다.",
+        });
     }
 };  
 </script>

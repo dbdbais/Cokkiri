@@ -28,8 +28,7 @@ import { userStore } from "@/stores/user";
 import { useMessageStore } from "@/stores/message";
 
 const store = userStore();
-const lobby = new WebSocket(
-  `${process.env.VITE_VUE_SOCKET_URL}lobby/${store.user.nickname}`
+const lobby = new WebSocket(`${process.env.VITE_VUE_SOCKET_URL}/socket/lobby/${store.user.nickname}`
 );
 
 const messageStore = useMessageStore();

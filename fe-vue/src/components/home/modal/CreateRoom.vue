@@ -65,7 +65,7 @@ const createRoom = function () {
     const fail = (err) => {
         console.log(err)
     }
-    
+
     const roomData = {
         roomName: roomName.value,
         userName: store.user.nickname,
@@ -82,8 +82,8 @@ const createRoom = function () {
 </script>
 
 <template>
-    <div class="modal-overlay slideDown" @click.self="$emit('close')">
-        <div class="modal-content box-main-create-room box-row">
+    <div class="modal-overlay" @click.self="$emit('close')">
+        <div class="modal-content box-main-create-room box-row slideDown">
             <img src="/src/assets/exit.svg" alt="나가기" class="exit" @click.self="$emit('close')">
             <div class="left-con box-col">
                 <div class="title-con box-row">

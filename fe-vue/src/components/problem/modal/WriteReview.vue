@@ -7,6 +7,24 @@ const props = defineProps({
     problemId: Number
 });
 
+const codeSelected = ref(false);
+const tmpCode = ref(`print('hello, world')
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+`);
+
 const reviewCode = ref("");
 const reviewContent = ref("");
 const uStore = userStore();
@@ -35,18 +53,23 @@ const writeReview = async () => {
                 <img src="@/assets/exit.svg" alt="close" class="icon-close" @click="$emit('close')" />
             </div>
             <div class="modal-content">
-                <div class="input-con code-con">
-                    <span class="title">코드 히스토리</span><br />
-                    <input type="text" v-model="reviewCode" />
+                <div v-if="codeSelected">
+
                 </div>
-                <!-- <div class="input-con review-con">
-                    <span class="title">리뷰</span><br />
-                    <textarea v-model="reviewContent"></textarea>
-                </div> -->
-                <div class="btn-con">
-                    <button @click="writeReview">
+                <div v-else>
+                    <div class="input-con code-con">
+                        <span class="title">코드 히스토리</span><br />
+                        <div class="code">
+                            <highlightjs language="python" :code="tmpCode"></highlightjs>
+                        </div>
+                    </div>
+                    <div class=" input-con review-con">
+                        <span class="title">리뷰</span><br />
+                        <textarea v-model="reviewContent"></textarea>
+                    </div>
+                    <div class="btn-con" @click="writeReview">
                         <span class="title">작성하기</span>
-                    </button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -87,17 +110,33 @@ const writeReview = async () => {
 }
 
 .code-con {
-    height: 460px;
+    height: 210px;
+}
+
+.code {
     overflow: auto;
+    height: 190px;
 }
 
 .review-con {
-    height: 120px;
+    height: 250px;
     margin-top: 20px;
+}
+
+textarea {
+    width: 100%;
+    height: 200px;
+}
+
+.btn-con {
+    width: 120px;
+    padding: 10px 0;
+    text-align: center;
+    border-radius: 10px;
+    background-color: #6969f0;
 }
 
 .btn-con span {
     font-size: 25px;
-    padding: 20px 10px;
 }
 </style>

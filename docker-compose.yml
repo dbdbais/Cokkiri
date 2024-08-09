@@ -36,8 +36,8 @@ services:
     networks:
       - Cokkiri-develop-Network
 
-# volumes:
-#   mysql_develop_data:
+volumes:
+  mysql_develop_data:
 
 networks:
   Cokkiri-develop-Network:

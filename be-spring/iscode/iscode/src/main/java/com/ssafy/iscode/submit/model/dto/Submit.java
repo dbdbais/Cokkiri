@@ -5,8 +5,13 @@ import com.ssafy.iscode.user.model.dto.User;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
+import java.time.LocalDateTime;
 
 @Entity
+@EntityListeners(AuditingEntityListener.class)
 @Table(name="submit")
 @Getter
 @Setter
@@ -30,6 +35,10 @@ public class Submit {
 
     @Column(name="correct")
     private Boolean correct;
+
+    @CreatedDate
+    @Column(name = "createdTime",columnDefinition = "TIMESTAMP", updatable = false)
+    private LocalDateTime createdTime;
 
     public Submit() {
     }

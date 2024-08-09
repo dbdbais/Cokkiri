@@ -1,6 +1,5 @@
 package com.ssafy.iscode.review.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.ssafy.iscode.problem.model.dto.Problem;
 import com.ssafy.iscode.problem.service.ProblemService;
 import com.ssafy.iscode.review.model.dto.Review;

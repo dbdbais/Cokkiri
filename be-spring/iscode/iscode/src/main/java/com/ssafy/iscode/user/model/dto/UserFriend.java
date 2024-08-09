@@ -2,8 +2,17 @@ package com.ssafy.iscode.user.model.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import java.time.LocalDateTime;
+
+@Getter
+@Setter
 @Entity
+@EntityListeners(AuditingEntityListener.class)
 @Table(name="user_friend")
 public class UserFriend {
     @Id
@@ -16,6 +25,10 @@ public class UserFriend {
 
     @Column(name="friend_user_id")
     private String friendUserId;
+
+    @CreatedDate
+    @Column(name = "createdTime",columnDefinition = "TIMESTAMP", updatable = false)
+    private LocalDateTime createdTime;
 
     @Enumerated(value = EnumType.STRING)
     @Column(name="status")
@@ -42,53 +55,7 @@ public class UserFriend {
         this.status = status;
     }
 
-    public Long getId() {
-        return id;
-    }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getUserId() {
-        return userId;
-    }
-
-    public void setUserId(String userId) {
-        this.userId = userId;
-    }
-
-    public Status getStatus() {
-        return status;
-    }
-
-    public void setStatus(Status status) {
-        this.status = status;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
-    public String getFriendUserId() {
-        return friendUserId;
-    }
-
-    public void setFriendUserId(String friendUserId) {
-        this.friendUserId = friendUserId;
-    }
-
-    public User getFriendUser() {
-        return friendUser;
-    }
-
-    public void setFriendUser(User friendUser) {
-        this.friendUser = friendUser;
-    }
 
     @Override
     public String toString() {

@@ -63,13 +63,33 @@ public class UserRestController {
     @PutMapping("/friends/accept")
     public int acceptFriends(@RequestParam String userId,
                             @RequestParam String friendUserId){
-        return userService.acceptFriend(friendUserId,userId);
+        try {
+            String event = ".|!|.|!|FRIADD|!|.";
+            User user = userService.getUser(userId);
+            User friendUser = userService.getUser(friendUserId);
+
+            lobbyWebSocketHandler.sendEvent(user.getNickname(), event);
+            lobbyWebSocketHandler.sendEvent(friendUser.getNickname(), event);
+            return userService.acceptFriend(friendUserId,userId);
+        } catch (Exception e) {
+            return 0;
+        }
     }
     //delete friend request to friendUserId
     @DeleteMapping("/friends")
     public int deleteRelation(@RequestParam String userId,
                               @RequestParam String friendUserId){
-        return userService.deleteFriend(userId,friendUserId);
+        try {
+            String event = ".|!|.|!|FRISUB|!|.";
+            User user = userService.getUser(userId);
+            User friendUser = userService.getUser(friendUserId);
+
+            lobbyWebSocketHandler.sendEvent(user.getNickname(), event);
+            lobbyWebSocketHandler.sendEvent(friendUser.getNickname(), event);
+            return userService.deleteFriend(userId,friendUserId);
+        } catch (Exception e) {
+            return 0;
+        }
     }
     @PostMapping("/login")
     public int login(@RequestParam String user_id,

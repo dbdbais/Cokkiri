@@ -2,6 +2,7 @@ package com.ssafy.iscode.regular.controller;
 
 import com.ssafy.iscode.regular.model.dto.RegularRequestDto;
 import com.ssafy.iscode.regular.model.dto.RegularResponseDto;
+import com.ssafy.iscode.regular.model.dto.RegularUser;
 import com.ssafy.iscode.regular.service.RegularService;
 import com.ssafy.iscode.websocket.handler.LobbyWebSocketHandler;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,7 +59,18 @@ public class RegularController {
             int result = regularService.enterRegular(regularRequestDto);
 
             if(result == 1) {
-                return new ResponseEntity<>(HttpStatus.OK);
+                try {
+                    String event = ".|!|.|!|REGADD|!|.";
+                    List<String> users = regularService.getRegular(regularRequestDto.getSessionId()).getUsers();
+
+                    for(String user: users) {
+                        lobbyWebSocketHandler.sendEvent(user, event);
+                    }
+                    return new ResponseEntity<>(HttpStatus.OK);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+                }
             } else {
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             }
@@ -115,7 +127,18 @@ public class RegularController {
             int result = regularService.quitRegular(regularRequestDto);
 
             if(result == 1) {
-                return new ResponseEntity<>(HttpStatus.OK);
+                try {
+                    String event = ".|!|.|!|REGSUB|!|.";
+                    List<String> users = regularService.getRegular(regularRequestDto.getSessionId()).getUsers();
+
+                    for(String user: users) {
+                        lobbyWebSocketHandler.sendEvent(user, event);
+                    }
+                    return new ResponseEntity<>(HttpStatus.OK);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+                }
             } else {
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             }

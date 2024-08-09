@@ -38,23 +38,22 @@ ws.onmessage = function (event) {
   if (data.length === 2) {
     let username = data[0];
     let message = data[1];
-    chatList.value.push(`${username} : ${message}`);
-    console.log(chatList.value);
+    chatStore.sendChat(`${username} : ${message}`);
+    // chatList.value.push(`${username} : ${message}`);
   } else {
     let event = data[2];
     let param = data[3];
     switch (event) {
       case "ENTER":
-        chatList.value.push(`${param}님이 입장하였습니다.`);
+        chatStore.sendChat(`${param}님이 입장하였습니다.`);
+        // chatList.value.push(`${param}님이 입장하였습니다.`);
         break;
       case "QUIT":
-        chatList.value.push(`${param}님이 퇴장하였습니다.`);
+        chatStore.sendChat(`${param}님이 퇴장하였습니다.`);
+        // chatList.value.push(`${param}님이 퇴장하였습니다.`);
         break;
       case "START":
         ws.close();
-        console.log("입장!");
-
-        console.log(roomData.value);
         if (roomData.value.isGame) {
           router.push({
             name: "gameProgress",
@@ -68,11 +67,11 @@ ws.onmessage = function (event) {
         }
     }
   }
-  chatStore.autoScroll();
 };
 
 onMounted(async () => {
   loadingStore.loading();
+
   setTimeout(() => {
     console.log(roomData.value);
     loadingStore.loadingSuccess();
@@ -107,6 +106,7 @@ const startStudy = function () {
 const selectProblem = (problemList) => {
   console.log(problemList);
   // send 보내야함
+  ws.send(problemList);
   problemModal.value = false;
 };
 
@@ -139,6 +139,7 @@ const exitRoom = function () {
       <WaitingRoomProblemList
         v-if="problemModal"
         @problem-select="selectProblem"
+        @close="problemModal = false"
       />
       <WaitingRoomFriend
         v-if="friendInvite"
@@ -174,7 +175,7 @@ const exitRoom = function () {
       </div>
       <div class="bottom flex-align">
         <WaitingRoomProblem @open="problemModal = true" />
-        <WaitingRoomChat @chat="sendChat" :chat-list="chatList" />
+        <WaitingRoomChat @chat="sendChat" />
         <div class="box-col button-con">
           <button class="bold-text btn friend" @click="friendInvite = true">
             <img

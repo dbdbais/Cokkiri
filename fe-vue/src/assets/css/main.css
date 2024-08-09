@@ -18,9 +18,6 @@
   cursor: url(@/assets/cursor.svg) 4 5, auto;
   box-sizing: border-box;
 }
-.btn {
-  cursor: url(@/assets/pointer.svg) 2 2, pointer;
-}
 
 body {
   background-color: #cadcff;

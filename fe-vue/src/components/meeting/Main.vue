@@ -15,18 +15,8 @@ defineProps({
 
 const main = ref(null);
 const resizer = ref(null);
-const problemWidth = ref(1300);
-const compiler = ref(0);
-
-const compilerText = ["에디터", "제출 목록"];
-
-const changCompilerView = function () {
-  if (compiler.value === 0) {
-    compiler.value = 1;
-  } else {
-    compiler.value = 0;
-  }
-};
+const problemWidth = ref(1000);
+const compiler = ref(true);
 
 const initResize = (e) => {
   window.addEventListener("mousemove", startResize);
@@ -67,6 +57,7 @@ const stopResize = () => {
       }"
     >
       <button
+        v-if="false"
         class="submit bold-text"
         :style="{ scale: minimum * 0.01 }"
         :class="{
@@ -77,10 +68,24 @@ const stopResize = () => {
       >
         제출하기
       </button>
-      <button class="btn bold-text change" @click="changCompilerView">
-        {{ compilerText[compiler] }}
-      </button>
-      <Compiler v-if="compiler === 0" :bigfont="bigfont" />
+
+      <div class="flex-align btn-box">
+        <div
+          class="compiler-btn bold-text md"
+          :class="{ active: compiler }"
+          @click="compiler = true"
+        >
+          에디터
+        </div>
+        <div
+          class="submit-btn bold-text md"
+          :class="{ active: !compiler }"
+          @click="compiler = false"
+        >
+          제출 목록
+        </div>
+      </div>
+      <Compiler v-if="compiler" :bigfont="bigfont" />
       <SubmitList v-else />
     </div>
   </div>
@@ -104,6 +109,17 @@ const stopResize = () => {
   top: 10px;
   right: 20px;
 }
+.editor-box {
+  position: relative;
+}
+.compiler-btn,
+.submit-btn {
+  width: 120px;
+  height: 50px;
+  border: 5px solid #3b72ff;
+  font-size: 25px;
+  border-radius: 10px 10px 0 0;
+}
 .submit {
   width: 120px;
   height: 60px;
@@ -118,10 +134,16 @@ const stopResize = () => {
 }
 .compiler {
   height: 800px;
-  padding: 70px 20px 20px 20px;
+  padding: 20px;
   position: relative;
 }
-
+.btn-box {
+  position: absolute;
+  top: 25px;
+}
+.active {
+  background-color: blue;
+}
 .resizer {
   width: 20px;
   height: 800px;

@@ -15,7 +15,6 @@ onMounted(() => {
 const getProblemsList = () => {
   getAllProblems()
     .then((res) => {
-      console.log(res.data);
       problemList.value = res.data.filter((problem) => {
         return (
           problem.level >= minLevel.value && problem.level <= maxLevel.value
@@ -34,10 +33,18 @@ const selectedProblem = (no) => {
     });
     selectedProblemList.value[no] = false;
   } else {
+    if (selectProblem.value.length > 2) {
+      Swal.fire({
+        icon: "warning",
+        title: "문제는 3개 이하로 골라주세요!",
+      });
+      return;
+    }
     selectProblem.value.push(no);
     selectedProblemList.value[no] = true;
   }
 };
+
 watch([minLevel, maxLevel], () => {
   getProblemsList();
 });
@@ -45,6 +52,12 @@ watch([minLevel, maxLevel], () => {
 
 <template>
   <div class="problem-list box box-col slideDown">
+    <img
+      src="/src/assets/exit.svg"
+      alt="나가기"
+      class="exit"
+      @click="$emit('close')"
+    />
     <div class="filter flex-align bold-text">
       <div class="flex-align">
         <label for="">LEVEL</label>
@@ -75,7 +88,7 @@ watch([minLevel, maxLevel], () => {
         :key="problem.no"
       >
         <div class="badge md">LEVEL {{ problem.level }}</div>
-        <span class="no">NO.{{ String(problem.no).padStart(4, "0") }}</span
+        <span class="no">NO.{{ String(problem.no).padStart(5, "0") }}</span
         ><span class="dash nomal-text">-</span>
         <span class="name">{{ problem.title }}</span>
         <button
@@ -98,27 +111,27 @@ watch([minLevel, maxLevel], () => {
 
 <style scoped>
 .problem-list {
-  width: 600px;
+  width: 750px;
   height: 510px;
   padding: 20px;
   position: absolute;
   top: 300px;
-  left: 670px;
+  left: 570px;
   align-items: center;
   z-index: 3;
 }
 .problem-list-box {
-  width: 550px;
+  width: 700px;
   height: 350px;
   align-items: center;
   padding: 10px;
   overflow-y: auto;
 }
 .problem-item {
-  width: 500px;
-  height: 50px;
+  width: 650px;
+  height: 70px;
   margin-bottom: 10px;
-  padding: 0 10px;
+  padding: 5px 10px;
   position: relative;
 }
 .problem-item span {
@@ -140,10 +153,10 @@ watch([minLevel, maxLevel], () => {
   left: 100px;
 }
 .dash {
-  left: 200px;
+  left: 210px;
 }
 .name {
-  left: 230px;
+  left: 240px;
 }
 
 .filter {

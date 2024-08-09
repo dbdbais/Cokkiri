@@ -80,6 +80,7 @@ pre {
   font-size: 20px;
   border: 2px solid black;
   padding: 15px;
+  white-space: pre-wrap;
 }
 code {
   font-family: "goorm-sans-code";

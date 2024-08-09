@@ -27,8 +27,8 @@ const startResize = (e) => {
   problemWidth.value = e.clientX - mainRect.left;
   if (problemWidth.value < 500) {
     problemWidth.value = 500;
-  } else if (problemWidth.value > 1500) {
-    problemWidth.value = 1500;
+  } else if (problemWidth.value > 1300) {
+    problemWidth.value = 1300;
   }
 };
 

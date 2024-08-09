@@ -51,19 +51,45 @@ public class UserRestController {
     @PutMapping("/friends/accept")
     public int acceptFriends(@RequestParam String userId,
                             @RequestParam String friendUserId){
-        return userService.acceptFriend(friendUserId,userId);
+        try {
+            String event = ".|!|.|!|FRIADD|!|.";
+            User user = userService.getUser(userId);
+            User friendUser = userService.getUser(friendUserId);
+
+            lobbyWebSocketHandler.sendEvent(user.getNickname(), event);
+            lobbyWebSocketHandler.sendEvent(friendUser.getNickname(), event);
+            return userService.acceptFriend(friendUserId,userId);
+        } catch (Exception e) {
+            return 0;
+        }
     }
     //delete friend request to friendUserId
     @DeleteMapping("/friends")
     public int deleteRelation(@RequestParam String userId,
                               @RequestParam String friendUserId){
-        return userService.deleteFriend(userId,friendUserId);
+        try {
+            String event = ".|!|.|!|FRISUB|!|.";
+            User user = userService.getUser(userId);
+            User friendUser = userService.getUser(friendUserId);
+
+            lobbyWebSocketHandler.sendEvent(user.getNickname(), event);
+            lobbyWebSocketHandler.sendEvent(friendUser.getNickname(), event);
+            return userService.deleteFriend(userId,friendUserId);
+        } catch (Exception e) {
+            return 0;
+        }
     }
     @PostMapping("/login")
     public int login(@RequestParam String user_id,
                      @RequestParam String password){
         return userService.login(user_id,password);
     }
+
+    @PutMapping("/correct")
+    public int correct(@RequestParam String userId, @RequestParam int level){
+        return userService.plusScore(userId,level);
+    }
+
     @PutMapping("/modify")
     public int modify(@RequestBody User user){
         return userService.modifyUser(user);
@@ -79,6 +105,20 @@ public class UserRestController {
         try {
             List<Long> list = userService.getRegular(userName);
             return new ResponseEntity<>(list, HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping("/name/{userName}")
+    public ResponseEntity<User> getUserByName(@PathVariable("userName") String userName) {
+        try {
+            User user = userService.getUserByName(userName);
+            return new ResponseEntity<>(user, HttpStatus.OK);
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         } catch (Exception e) {
             e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);

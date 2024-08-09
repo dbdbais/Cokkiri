@@ -3,14 +3,12 @@ package com.ssafy.iscode.problem.model.dto;
 
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.persistence.*;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Entity
 @Table(name="Algo")
@@ -45,22 +43,22 @@ public class Problem {
 
     @ElementCollection(fetch = FetchType.LAZY)
     @CollectionTable(name = "algo_input", joinColumns = @JoinColumn(name = "algo_num"))
-    @Column(name = "algo_input_value")
+    @Column(name = "algo_input_value",columnDefinition = "LONGTEXT")
     private Map<Integer, String> algoInput;
 
     @ElementCollection(fetch = FetchType.LAZY)
     @CollectionTable(name = "algo_output", joinColumns = @JoinColumn(name = "algo_num"))
-    @Column(name = "algo_output_value")
+    @Column(name = "algo_output_value",columnDefinition = "LONGTEXT")
     private Map<Integer, String> algoOutput;
 
     @ElementCollection(fetch = FetchType.LAZY)
     @CollectionTable(name = "algo_hidden_input", joinColumns = @JoinColumn(name = "algo_num"))
-    @Column(name = "hidden_input_value")
+    @Column(name = "hidden_input_value",columnDefinition = "LONGTEXT")
     private Map<Integer, String> algoHiddenInput;
 
     @ElementCollection(fetch = FetchType.LAZY)
     @CollectionTable(name = "algo_hidden_output", joinColumns = @JoinColumn(name = "algo_num"))
-    @Column(name = "hidden_output_value")
+    @Column(name = "hidden_output_value",columnDefinition = "LONGTEXT")
     private Map<Integer, String> algoHiddenOutput;
 
     public Problem() {
@@ -80,6 +78,43 @@ public class Problem {
         this.algoOutput = algoOutput;
         this.algoHiddenInput = algoHiddenInput;
         this.algoHiddenOutput = algoHiddenOutput;
+    }
+
+    public void getHidden(String jsonData) {
+
+        try {
+            // ObjectMapper 인스턴스 생성
+            ObjectMapper objectMapper = new ObjectMapper();
+            // JSON 데이터를 JsonNode로 파싱
+            JsonNode rootNode = objectMapper.readTree(jsonData);
+
+            // algoHiddenInput과 algoHiddenOutput 노드 추출
+            JsonNode inputNode = rootNode.path("algoHiddenInput");
+            JsonNode outputNode = rootNode.path("algoHiddenOutput");
+
+            Iterator<Map.Entry<String, JsonNode>> inputFields = inputNode.fields();
+
+            int iidx = 1;
+            while (inputFields.hasNext()) {
+                Map.Entry<String, JsonNode> field = inputFields.next();
+                algoHiddenInput.put(iidx++, field.getValue().asText());
+            }
+
+            Iterator<Map.Entry<String, JsonNode>> outputFields = outputNode.fields();
+            int oidx = 1;
+            while (outputFields.hasNext()) {
+                Map.Entry<String, JsonNode> field = outputFields.next();
+                algoHiddenOutput.put(oidx++, field.getValue().asText());
+            }
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+
+        // 결과 출력
+        System.out.println("Input List: " + algoHiddenInput);
+        System.out.println("Output List: " + algoHiddenOutput);
+
     }
 
     public String getText() {

@@ -81,6 +81,10 @@ public class UserService {
             return 0;
         }
     }
+    //call when problem is correct
+    public int plusScore(String uid, int pLevel ){
+        return userRepository.scoreAchieved(uid,pLevel);
+    }
 
 
     public List<Long> getRegular(String userName) {
@@ -96,5 +100,10 @@ public class UserService {
         }
 
         return list;
+    }
+
+    public User getUserByName(String userName) {
+        return userRepository.findByName(userName)
+                .orElseThrow(() -> new RuntimeException("User not found"));
     }
 }

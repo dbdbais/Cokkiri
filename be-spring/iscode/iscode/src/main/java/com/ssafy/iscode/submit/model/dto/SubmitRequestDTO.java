@@ -1,9 +1,12 @@
 package com.ssafy.iscode.submit.model.dto;
 
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
 public class SubmitRequestDTO {
 
-    private Long no;
-    private Long study_id;
     private Long algo_num;
     private String user_id;
     private String submit_code;
@@ -11,51 +14,11 @@ public class SubmitRequestDTO {
 
     public SubmitRequestDTO() {}
 
-    public Long getNo() {
-        return no;
-    }
-
-    public void setNo(Long no) {
-        this.no = no;
-    }
-
-    public Long getStudy_id() {
-        return study_id;
-    }
-
-    public void setStudy_id(Long study_id) {
-        this.study_id = study_id;
-    }
-
-    public Long getAlgo_num() {
-        return algo_num;
-    }
-
-    public void setAlgo_num(Long algo_num) {
+    public SubmitRequestDTO(Long algo_num, String user_id, String submit_code) {
         this.algo_num = algo_num;
-    }
-
-    public String getUser_id() {
-        return user_id;
-    }
-
-    public void setUser_id(String user_id) {
         this.user_id = user_id;
-    }
-
-    public String getSubmit_code() {
-        return submit_code;
-    }
-
-    public void setSubmit_code(String submit_code) {
         this.submit_code = submit_code;
     }
 
-    public boolean isCorrect() {
-        return correct;
-    }
 
-    public void setCorrect(boolean correct) {
-        this.correct = correct;
-    }
 }

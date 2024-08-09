@@ -1,5 +1,6 @@
 package com.ssafy.iscode.problem.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.ssafy.iscode.problem.model.dao.ProblemRepository;
 import com.ssafy.iscode.problem.model.dto.Problem;
 import com.ssafy.iscode.util.APIConnection;
@@ -49,6 +50,14 @@ public class ProblemService {
 
     public List<Problem> getAllProblem(){
         return problemRepository.findAll();
+    }
+
+    public List<Problem> getFilteredProblem(int level){return problemRepository.findProblemWithTier(level); }
+
+    public List<Problem> getKeywordProblem(String keyword) {return problemRepository.findProblemWithKeyword(keyword);}
+
+    public int getHiddenTestCase(Long pid, String jsonData) {
+        return problemRepository.getHiddenTC(pid,jsonData);
     }
 
 }

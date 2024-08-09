@@ -3,6 +3,8 @@ package com.ssafy.iscode.user.model.dto;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.ssafy.iscode.regular.model.dto.RegularUser;
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
 
 import java.util.HashSet;
@@ -10,6 +12,8 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
+@Getter
+@Setter
 @Entity
 @Table(name="user")
 public class User {
@@ -26,8 +30,8 @@ public class User {
     @Column(name = "tier")
     private Tier tier = Tier.SEED;
 
-    @Column(name ="user_percent")
-    private double percent= 0.0;
+    @Column(name ="user_score")
+    private int score= 0;
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     private List<RegularUser> regulars;
@@ -78,6 +82,31 @@ public class User {
                 .findFirst()
                 .orElse(null);
     }
+
+    public void updateTier() {
+        int score = this.score;
+        Tier newTier;
+
+        if (score >= 500) {
+            newTier = Tier.DURIAN;
+        } else if (score >= 400) {
+            newTier = Tier.MELON;
+        } else if (score >= 300) {
+            newTier = Tier.ORANGE;
+        } else if (score >= 200) {
+            newTier = Tier.APPLE;
+        } else if (score >= 100) {
+            newTier = Tier.KIWI;
+        } else {
+            newTier = Tier.SEED;
+        }
+        //if Tier is different
+        if(this.getTier() != newTier){
+            this.setTier(newTier);
+        }
+
+    }
+
     public User() {
 
     }
@@ -88,86 +117,23 @@ public class User {
         this.password = password;
     }
 
-    public User(String id, String nickname, String password, Tier tier, double percent) {
+    public User(String id, String nickname, String password, Tier tier, int score, List<RegularUser> regulars, Set<UserFriend> friends) {
         this.id = id;
         this.nickname = nickname;
         this.password = password;
         this.tier = tier;
-        this.percent = percent;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getNickname() {
-        return nickname;
-    }
-
-    public void setNickname(String nickname) {
-        this.nickname = nickname;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public Tier getTier() {
-        return tier;
-    }
-
-    public void setTier(Tier tier) {
-        this.tier = tier;
-    }
-
-    public double getPercent() {
-        return percent;
-    }
-
-    public void setPercent(double percent) {
-        this.percent = percent;
-    }
-
-    public List<RegularUser> getRegulars() {
-        return regulars;
-    }
-
-    public void setRegulars(List<RegularUser> regulars) {
+        this.score = score;
         this.regulars = regulars;
-    }
-
-
-    public Set<UserFriend> getFriends() {
-        return friends;
-    }
-
-    public void setFriends(Set<UserFriend> friends) {
         this.friends = friends;
     }
+
+
+
 
     @Override
     public int hashCode() {
         return Objects.hash(id, password);
     }
 
-    @Override
-    public String toString() {
-        return "User{" +
-                "id='" + id + '\'' +
-                ", nickname='" + nickname + '\'' +
-                ", password='" + password + '\'' +
-                ", tier=" + tier +
-                ", percent=" + percent +
-                ", regulars=" + regulars +
-                ", friends=" + friends +
-                '}';
-    }
+
 }

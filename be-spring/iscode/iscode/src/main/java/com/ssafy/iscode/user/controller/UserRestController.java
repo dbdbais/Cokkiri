@@ -48,7 +48,15 @@ public class UserRestController {
     @PostMapping("/friends")
     public int insertRelation(@RequestParam String userId,
                               @RequestParam String friendUserId){
-        return userService.insertFriend(userId,friendUserId);
+        try {
+            String event = ".|!|.|!|NOTI|!|.";
+            User friendUser = userService.getUser(friendUserId);
+
+            lobbyWebSocketHandler.sendEvent(friendUser.getNickname(), event);
+            return userService.insertFriend(userId,friendUserId);
+        } catch (Exception e) {
+            return 0;
+        }
     }
 
     //accept friend

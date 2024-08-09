@@ -106,6 +106,7 @@ const startStudy = function () {
 const selectProblem = (problemList) => {
   console.log(problemList);
   // send 보내야함
+  ws.send(problemList);
   problemModal.value = false;
 };
 
@@ -138,6 +139,7 @@ const exitRoom = function () {
       <WaitingRoomProblemList
         v-if="problemModal"
         @problem-select="selectProblem"
+        @close="problemModal = false"
       />
       <WaitingRoomFriend
         v-if="friendInvite"

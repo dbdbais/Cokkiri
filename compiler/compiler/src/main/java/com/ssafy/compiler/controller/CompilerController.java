@@ -17,7 +17,7 @@ import java.util.HashMap;
 import java.util.concurrent.*;
 @CrossOrigin("*")
 @RestController
-@RequestMapping("/api/compiler")
+@RequestMapping("/compiler")
 public class CompilerController {
 
     static class CompileRequest {

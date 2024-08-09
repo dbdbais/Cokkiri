@@ -51,7 +51,7 @@ const add = async (friendId, index) => {
 </script>
 
 <template>
-    <div class="modal-overlay" @click.self="$emit('close')">
+    <div class="modal-overlay">
         <div class="modal-content box-main-group">
             <div class="modal-header box-row">
                 <span class="title main-title">친구 추가</span>

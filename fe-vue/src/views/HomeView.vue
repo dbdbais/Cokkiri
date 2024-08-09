@@ -2,8 +2,10 @@
   <Logo class="logo" />
   <div id="main-container" class="box-row">
     <div id="main-left" class="box-col">
-      <div id="profile-btn" class="title main-title">개인 프로필</div>
-      <Profile id="profile" />
+      <div class="box-row profile-header">
+        <div class="btn-profile title main-title">개인 프로필</div>
+      </div>
+      <Profile class="profile" />
       <FriendsList id="friends-list" />
     </div>
     <div id="main-right" class="box-col">
@@ -22,13 +24,15 @@ import Profile from "@/components/home/Profile.vue";
 import FriendsList from "@/components/home/FriendsList.vue";
 import MainContent from "@/components/home/MainContent.vue";
 import { getWaitingRoomList, goWaitingRoom } from "@/api/waitingroom";
+import { insertClass } from "@/api/problem"
 import { ref, onMounted, onUnmounted } from "vue";
 import { useRouter } from "vue-router";
 import { userStore } from "@/stores/user";
 import { useMessageStore } from "@/stores/message";
 
-const store = userStore();
-const lobby = new WebSocket(`${process.env.VITE_VUE_SOCKET_URL}socket/lobby/${store.user.nickname}`
+const uStore = userStore();
+const lobby = new WebSocket(
+  `${process.env.VITE_VUE_SOCKET_URL}lobby/${uStore.user.nickname}`
 );
 
 const messageStore = useMessageStore();
@@ -100,7 +104,7 @@ const goRoom = function (id) {
     console.log(err);
   };
   goWaitingRoom(
-    { sessionId: id, userName: store.user.nickname },
+    { sessionId: id, userName: uStore.user.nickname },
     success,
     fail
   );
@@ -139,6 +143,7 @@ const getRoomList = function (params) {
 
 onMounted(() => {
   getRoomList();
+  callInsertClass();
 });
 
 onUnmounted(() => {
@@ -158,6 +163,20 @@ const pageChange = function (motion) {
   console.log(currentPage.value);
   getRoomList({ page: currentPage.value });
 };
+
+const callInsertClass = async () => {
+  try {
+    const response = await insertClass();
+    console.log(response.data);
+  } catch (e) {
+    console.log(e);
+  }
+}
+
+const logout = function () {
+  uStore.logout();
+  router.replace({ name: "login" });
+};
 </script>
 
 <style scoped>
@@ -173,16 +192,17 @@ const pageChange = function (motion) {
   margin-right: 35px;
 }
 
-#profile-btn {
+.btn-profile {
+  /* text-align: center; */
   margin-top: 150px;
   font-size: 40px;
 }
 
-#profile {
+.profile {
   width: 340px;
   height: 150px;
   margin-top: 15px;
-  padding: 15px;
+  padding: 8px 15px;
 }
 
 #friends-list {
@@ -191,6 +211,25 @@ const pageChange = function (motion) {
   margin-top: 15px;
   padding: 15px;
   overflow-y: auto;
+}
+
+.profile-header {
+  justify-content: space-between;
+  align-items: end;
+}
+
+.logout {
+  font-size: 22px;
+  margin-right: 10px;
+  border: 4px solid hsl(0, 90%, 53%);
+  border-radius: 10px;
+  background-color: hsl(0, 71%, 53%);
+  width: 110px;
+  height: 40px;
+}
+
+.logout:hover {
+  background-color: hsl(0, 100%, 53%);
 }
 
 /* 오른쪽 영역 */

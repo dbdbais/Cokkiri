@@ -9,12 +9,16 @@ import WaitingRoomMember from "@/components/waitingroom/WaitingRoomMember.vue";
 import WaitingRoomChat from "@/components/waitingroom/WaitingRoomChat.vue";
 import WaitingRoomFriend from "@/components/waitingroom/WaitingRoomFriend.vue";
 import WaitingRoomSetting from "@/components/waitingroom/WaitingRoomSetting.vue";
+import WaitingRoomProblem from "@/components/waitingroom/WaitingRoomProblem.vue";
+import WaitingRoomProblemList from "@/components/waitingroom/WaitingRoomProblemList.vue";
 import { userStore } from "@/stores/user";
 
 import { ref, onMounted } from "vue";
 import { useLodingStore } from "@/stores/loading";
+import { useChatStore } from "@/stores/chat";
 
 const store = userStore();
+const chatStore = useChatStore();
 const loadingStore = useLodingStore();
 const router = useRouter();
 const route = useRoute();
@@ -22,6 +26,7 @@ const roomData = ref([]);
 const roomUsers = ref([]);
 const chatList = ref([]);
 const friendInvite = ref(false);
+const problemModal = ref(false);
 
 const ws = new WebSocket(
   `${process.env.VITE_VUE_SOCKET_URL}socket/room/${route.params.roomId}/${store.user.nickname}`
@@ -33,23 +38,22 @@ ws.onmessage = function (event) {
   if (data.length === 2) {
     let username = data[0];
     let message = data[1];
-    chatList.value.push(`${username} : ${message}`);
-    console.log(chatList.value);
+    chatStore.sendChat(`${username} : ${message}`);
+    // chatList.value.push(`${username} : ${message}`);
   } else {
     let event = data[2];
     let param = data[3];
     switch (event) {
       case "ENTER":
-        chatList.value.push(`${param}님이 입장하였습니다.`);
+        chatStore.sendChat(`${param}님이 입장하였습니다.`);
+        // chatList.value.push(`${param}님이 입장하였습니다.`);
         break;
       case "QUIT":
-        chatList.value.push(`${param}님이 퇴장하였습니다.`);
+        chatStore.sendChat(`${param}님이 퇴장하였습니다.`);
+        // chatList.value.push(`${param}님이 퇴장하였습니다.`);
         break;
       case "START":
         ws.close();
-        console.log("입장!");
-
-        console.log(roomData.value);
         if (roomData.value.isGame) {
           router.push({
             name: "gameProgress",
@@ -67,6 +71,7 @@ ws.onmessage = function (event) {
 
 onMounted(async () => {
   loadingStore.loading();
+
   setTimeout(() => {
     console.log(roomData.value);
     loadingStore.loadingSuccess();
@@ -74,7 +79,7 @@ onMounted(async () => {
       getUser(user)
         .then((res) => {
           console.log(res.data);
-          // roomUsers.value.push(res.data);
+          roomUsers.value.push(res.data);
         })
         .catch((err) => {
           console.log(err);
@@ -97,6 +102,16 @@ onMounted(async () => {
 
 const startStudy = function () {
   ws.send("|@|");
+};
+const selectProblem = (problemList) => {
+  console.log(problemList);
+  // send 보내야함
+  ws.send(problemList);
+  problemModal.value = false;
+};
+
+const sendChat = (chatData) => {
+  ws.send(chatData);
 };
 
 const exitRoom = function () {
@@ -121,7 +136,16 @@ const exitRoom = function () {
   <div>
     <div class="waiting-room">
       <WaitingRoomSetting v-if="false" />
-      <WaitingRoomFriend id="test" v-if="friendInvite" :room-id="route.params.roomId" @close="friendInvite = false" />
+      <WaitingRoomProblemList
+        v-if="problemModal"
+        @problem-select="selectProblem"
+        @close="problemModal = false"
+      />
+      <WaitingRoomFriend
+        v-if="friendInvite"
+        :room-id="route.params.roomId"
+        @close="friendInvite = false"
+      />
       <div class="box-row">
         <div class="box-col">
           <div class="rule-data">
@@ -150,16 +174,22 @@ const exitRoom = function () {
         </div>
       </div>
       <div class="bottom flex-align">
-        <WaitingRoomChat @chat="(chatData) => {
-          ws.send(chatData);
-        }
-          " :chat-list="chatList" />
+        <WaitingRoomProblem @open="problemModal = true" />
+        <WaitingRoomChat @chat="sendChat" />
         <div class="box-col button-con">
           <button class="bold-text btn friend" @click="friendInvite = true">
-            <img src="/src/assets/friend.svg" alt="친구초대" style="margin-right: 20px; width: 90px" />친구초대
+            <img
+              src="/src/assets/friend.svg"
+              alt="친구초대"
+              style="margin-right: 30px; width: 70px"
+            />친구초대
           </button>
           <button class="bold-text btn start" @click="startStudy">
-            <img src="/src/assets/start.svg" alt="시작하기" style="margin-right: 20px; width: 90px" />시작하기
+            <img
+              src="/src/assets/start.svg"
+              alt="시작하기"
+              style="margin-right: 30px; width: 70px"
+            />시작하기
           </button>
         </div>
       </div>
@@ -229,14 +259,14 @@ const exitRoom = function () {
 }
 
 .btn {
-  width: 400px;
+  width: 300px;
   height: 140px;
   border-width: 10px;
   border-radius: 10px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 55px;
+  font-size: 35px;
   -webkit-text-stroke: 2px black;
 }
 

@@ -126,43 +126,22 @@ const goRoom = function (roomId) {
 </script>
 
 <template>
-  <div class="modal-overlay slideLeft" @click.self="$emit('close')">
-    <div class="modal-content box-col">
+  <div class="modal-overlay">
+    <div class="modal-content box-col slideLeft">
       <div class="modal-header box-row">
         <img src="@/assets/mail2.svg" alt="mail-icon" class="mail-icon" />
         <span>우편함</span>
-        <img
-          src="@/assets/mail-close.svg"
-          alt="close-icon"
-          class="close-icon"
-          @click="$emit('close')"
-        />
+        <img src="@/assets/mail-close.svg" alt="close-icon" class="close-icon" @click="$emit('close')" />
       </div>
       <div class="type-con box-row">
-        <input
-          id="announ-in"
-          type="radio"
-          name="type"
-          value="announ"
-          v-model="isSelected"
-        />
+        <input id="announ-in" type="radio" name="type" value="announ" v-model="isSelected" />
         <label for="announ-in">공지</label>
-        <input
-          id="noti-in"
-          type="radio"
-          name="type"
-          value="noti"
-          v-model="isSelected"
-        />
+        <input id="noti-in" type="radio" name="type" value="noti" v-model="isSelected" />
         <label for="noti-in">알림</label>
       </div>
       <div class="content-con">
         <div v-if="isSelected == 'announ'">
-          <div
-            v-for="(item, index) in announ"
-            :key="index"
-            class="box-row announ-con"
-          >
+          <div v-for="(item, index) in announ" :key="index" class="box-row announ-con">
             <span>{{ item.title }}</span>
             <div class="btn-detail">
               <span @click="openAnnounceModal(item.content)">자세히</span>
@@ -172,17 +151,10 @@ const goRoom = function (roomId) {
         <div v-if="isSelected == 'noti'">
           <div class="room-con box">
             <span>방 초대</span>
-            <div
-              v-for="(item, index) in notiRequest.room"
-              :key="index"
-              class="box-row announ-con"
-            >
+            <div v-for="(item, index) in notiRequest.room" :key="index" class="box-row announ-con">
               <span>{{ item.userName }}님이 초대하였습니다.</span>
               <div class="box-row">
-                <button
-                  class="btn-accept bold-text"
-                  @click="goRoom(item.roomId)"
-                >
+                <button class="btn-accept bold-text" @click="goRoom(item.roomId)">
                   수락
                 </button>
                 <button class="btn-reject bold-text">거절</button>
@@ -191,17 +163,10 @@ const goRoom = function (roomId) {
           </div>
           <div class="friend-con box">
             <span>친구 신청</span>
-            <div
-              v-for="(item, index) in notiRequest.friends"
-              :key="index"
-              class="box-row announ-con"
-            >
+            <div v-for="(item, index) in notiRequest.friends" :key="index" class="box-row announ-con">
               <span>{{ item.nickname }}</span>
               <div class="box-row">
-                <button
-                  class="btn-accept bold-text"
-                  @click="addFriend(item.id)"
-                >
+                <button class="btn-accept bold-text" @click="addFriend(item.id)">
                   수락
                 </button>
                 <button class="btn-reject bold-text">거절</button>
@@ -211,17 +176,10 @@ const goRoom = function (roomId) {
           <div class="regular-con box">
             <span>정기 스터디 (닉네임 [스터디 명])</span>
             <div v-for="(regular, index) in notiRequest.regular" :key="index">
-              <div
-                v-for="(user, index) in regular.users"
-                :key="index"
-                class="box-row announ-con"
-              >
+              <div v-for="(user, index) in regular.users" :key="index" class="box-row announ-con">
                 <span>{{ user }} [{{ regular.regularName }}]</span>
                 <div class="box-row">
-                  <button
-                    class="btn-accept bold-text"
-                    @click="acceptRegular(regular.sessionId, user)"
-                  >
+                  <button class="btn-accept bold-text" @click="acceptRegular(regular.sessionId, user)">
                     수락
                   </button>
                   <button class="btn-reject bold-text">거절</button>
@@ -232,11 +190,7 @@ const goRoom = function (roomId) {
         </div>
       </div>
     </div>
-    <AnnounceDetail
-      v-if="isModalOpen"
-      @close="closeModal"
-      :announce="selectedAnnoun"
-    />
+    <AnnounceDetail v-if="isModalOpen" @close="closeModal" :announce="selectedAnnoun" />
   </div>
 </template>
 
@@ -292,7 +246,7 @@ div {
   appearance: none;
 }
 
-.type-con input + label {
+.type-con input+label {
   border: 3px solid #3b72ff;
   border-radius: 6px 6px 0 0;
   background-color: #dbe7ff;
@@ -300,7 +254,7 @@ div {
   font-size: 25px;
 }
 
-.type-con input:checked + label {
+.type-con input:checked+label {
   border: 3px solid #3b72ff;
   background-color: #c191ff;
 }
@@ -325,7 +279,7 @@ div {
   background-color: #dbe7ff;
 }
 
-.announ-con > span {
+.announ-con>span {
   font-size: 22px;
 }
 
@@ -349,9 +303,9 @@ div {
   overflow-y: auto;
 }
 
-.room-con > span,
-.friend-con > span,
-.regular-con > span {
+.room-con>span,
+.friend-con>span,
+.regular-con>span {
   font-size: 25px;
 }
 

@@ -11,7 +11,7 @@ import { useGameStore } from "@/stores/game";
 const enemyCharacter = "/src/assets/game-character.svg";
 const myCharacter = "/src/assets/game-character.svg";
 const store = userStore();
-const gameStore = useGameStore()
+const gameStore = useGameStore();
 const route = useRoute();
 const roomData = ref([]);
 const users = ref([]);
@@ -26,9 +26,7 @@ const items = ref({
 const useBlind = ref(0);
 const useMinimum = ref(100);
 const usePrevernt = ref(false);
-const useBigFont = ref(() => {
-
-});
+const useBigFont = ref(() => {});
 const showitem = ref(false);
 const getItem = ref(false);
 const useItem = ref(false);
@@ -85,10 +83,10 @@ ws.onmessage = function (event) {
       }, 10000);
     } else if (event === "BIG") {
       console.log("크게");
-      gameStore.bigFontFun()
+      gameStore.bigFontFun();
     } else if (event === "SMALL") {
       console.log("작게");
-      gameStore.smallFontFun()
+      gameStore.smallFontFun();
     }
   }
 };
@@ -246,14 +244,15 @@ const close = () => {
   bottom: -70px;
 }
 
-.user-btn,
-.item-box {
-  width: 710px;
-  left: 590px;
+.user-btn {
+  width: 990px;
+  left: 440px;
   background-color: #9fbaff;
 }
-
 .item-box {
+  width: 720px;
+  left: 610px;
+  background-color: #9fbaff;
   z-index: 2;
 }
 

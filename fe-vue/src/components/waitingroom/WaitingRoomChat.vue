@@ -1,26 +1,31 @@
 <script setup>
-import { ref } from "vue";
-
-defineProps({
-  chatList: Array,
-});
+import { useChatStore } from "@/stores/chat";
+import { onMounted, ref, watch } from "vue";
 
 const emit = defineEmits(["chat"]);
+const chatStore = useChatStore();
 
 const user = ref("어지민");
 const chatText = ref("");
+
+const chatBox = ref(null);
+
 const chatSubmit = function () {
-  console.log(chatText.value);
   emit("chat", chatText.value);
   chatText.value = "";
+  chatStore.insertChatBox(chatBox.value);
 };
+
+onMounted(() => {
+  chatStore.insertChatBox(chatBox.value);
+});
 </script>
 
 <template>
   <div class="chat-container box box-col">
-    <div class="chat-list chat-box box">
+    <div class="chat-list chat-box box" ref="chatBox">
       <p
-        v-for="chat in chatList"
+        v-for="chat in chatStore.chatList"
         :key="chat.index"
         class="chat-item nomal-text"
       >
@@ -40,9 +45,10 @@ const chatSubmit = function () {
 
 <style scoped>
 .chat-container {
-  width: 1400px;
+  width: 840px;
   height: 320px;
   align-items: center;
+  margin-left: 20px;
 }
 .chat-box {
   width: 98%;

@@ -1,12 +1,12 @@
 <template>
   <div class="box-main-con box-col">
     <div class="box-row" style="justify-content: space-between; align-items: center">
-      <div id="name" class="title main-title">{{ store.user.nickname }}</div>
-      <button class="bold-text logout" @click="logout">로그아웃</button>
+      <div id="name" class="title main-title">{{ uStore.user.nickname }}</div>
+      <img class="logout" src="@/assets/logout2.svg" @click="logout" />
     </div>
-    <div id="rank-container" class="box-row box-main-exp" style="align-items: center">
+    <div class="rank-con box-row box-main-exp" style="align-items: center">
       <img id="rank-img" :src="imageSrc" alt="rank" class="rank" />
-      <Exp id="rank-exp" :grade="grade" :percentage="store.user.percent"></Exp>
+      <Exp id="rank-exp" :grade="grade" :percentage="uStore.user.percent"></Exp>
     </div>
   </div>
 </template>
@@ -17,9 +17,9 @@ import Exp from "@/components/home/Exp.vue";
 import { userStore } from "@/stores/user";
 import { useRouter } from "vue-router";
 
-const store = userStore();
+const uStore = userStore();
 const router = useRouter();
-const grade = store.user.tier;
+const grade = uStore.user.tier;
 
 const imageSrc = computed(() => {
   switch (grade) {
@@ -41,7 +41,7 @@ const imageSrc = computed(() => {
 });
 
 const logout = function () {
-  store.logout();
+  uStore.logout();
   router.replace({ name: "login" });
 };
 </script>
@@ -63,15 +63,11 @@ const logout = function () {
   margin: 10px 10px;
 }
 
-.logout {
-  padding: 10px 20px;
-  background-color: #cadcff;
-  border-radius: 5px;
-  border-width: 3px;
-  border-color: #c191ff;
+.rank-con {
+  margin-top: 5px;
 }
 
-.logout:hover {
-  background-color: #E69500;
+.logout {
+  width: 40px;
 }
 </style>

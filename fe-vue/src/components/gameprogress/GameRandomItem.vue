@@ -52,7 +52,7 @@ const stopBtn = (userItem, get) => {
   width: 700px;
   height: 400px;
   position: absolute;
-  z-index: 3;
+  z-index: 10;
 
   background-color: #9fbaff;
 }

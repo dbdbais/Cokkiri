@@ -1,3 +1,45 @@
+<<<<<<< HEAD
+=======
+<template>
+  <div>
+    <div class="editor-con box-w">
+      <div id="editor-container">
+        <h3>Code Editor</h3>
+        <select id="language" v-model="selectedLanguage">
+          <option value="python">Python</option>
+          <option value="java">Java</option>
+          <option value="cpp">C++</option>
+          <option value="c">C</option>
+        </select>
+        <button @click="runCode">실행</button>
+        <button @click="resetCode">코드 초기화</button>
+        <button>제출</button>
+        <button>힌트</button>
+        <div id="editor"></div>
+      </div>
+    </div>
+    <div class="input-con box-w">
+      <div id="input-output-area">
+        <div id="input">
+          <h3>Input <button @click="clearInput">Clear Input</button></h3>
+
+          <textarea
+            id="inputText"
+            v-model="inputText"
+            rows="10"
+            cols="30"
+          ></textarea>
+        </div>
+        <div id="output">
+          <h3>Output</h3>
+          <pre id="outputText">{{ outputText }}</pre>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+>>>>>>> 51b01656996eb9ee30107f44d1eb97dc04d9a64f
 <script setup>
 import { ref, onMounted, watch } from "vue";
 import axios from "axios";

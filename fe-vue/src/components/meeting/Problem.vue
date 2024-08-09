@@ -101,6 +101,7 @@ code {
   font-size: 30px;
   white-space: pre-wrap;
   font-family: "yg-jalnan";
+  margin-bottom: 10px;
 }
 .problem-box li {
   margin-left: 20px;

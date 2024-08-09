@@ -23,7 +23,7 @@ const chatList = ref([]);
 const friendInvite = ref(false);
 
 const ws = new WebSocket(
-  `https://i11e108.p.ssafy.io/room/${route.params.roomId}/${store.user.nickname}`
+  `https://i11e108.p.ssafy.io/socket/room/${route.params.roomId}/${store.user.nickname}`
 );
 
 ws.onmessage = function (event) {

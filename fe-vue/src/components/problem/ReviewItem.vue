@@ -30,7 +30,7 @@ const toggle = () => {
         <div class="review-header box-row">
             <span class="title">{{ props.review.user.nickname }}</span>
             <span class="nomal-text md" @click="toggle()">
-                {{ openIndex === false ? '▲' : '▼' }}
+                {{ openIndex === false ? '▼' : '▲' }}
             </span>
         </div>
         <div v-if="openIndex" class="review-content">
@@ -48,6 +48,10 @@ const toggle = () => {
 </template>
 
 <style scoped>
+.review-con {
+    margin-bottom: 25px;
+}
+
 .review-header {
     justify-content: space-between;
     align-items: center;

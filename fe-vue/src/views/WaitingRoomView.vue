@@ -1,7 +1,7 @@
 <script setup>
 import { useRoute, useRouter } from "vue-router";
 import { getWaitingRoom, exitWaitingRoom } from "@/api/waitingroom";
-import { getUser } from "@/api/user";
+import { getUser, getUserName } from "@/api/user";
 import "@/assets/css/waitingroom.css";
 
 import WaitingRoomRule from "@/components/waitingroom/WaitingRoomRule.vue";
@@ -84,6 +84,12 @@ ws.onmessage = function (event) {
   }
 };
 
+function getRandomIntInclusive(min, max) {
+  const minCeiled = Math.ceil(min);
+  const maxFloored = Math.floor(max);
+  return Math.floor(Math.random() * (maxFloored - minCeiled + 1) + minCeiled); // 최댓값도 포함, 최솟값도 포함
+}
+
 onMounted(async () => {
   loadingStore.loading();
 
@@ -91,9 +97,9 @@ onMounted(async () => {
     console.log(roomData.value);
     loadingStore.loadingSuccess();
     roomData.value.users.forEach((user) => {
-      getUser(user)
+      getUserName(user)
         .then((res) => {
-          console.log(res.data);
+          res.data["num"] = getRandomIntInclusive(1, 6);
           roomUsers.value.push(res.data);
         })
         .catch((err) => {

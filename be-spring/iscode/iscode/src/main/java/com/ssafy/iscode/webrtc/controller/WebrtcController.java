@@ -33,6 +33,7 @@ public class WebrtcController {
         this.SECRET = secret;
         this.OPENVIDU_URL = openviduUrl;
         this.openVidu = new OpenVidu(OPENVIDU_URL, SECRET);
+        System.out.println(this.openVidu==null);
     }
 
     @PostMapping(value = "/get-token")
@@ -97,7 +98,7 @@ public class WebrtcController {
             Session session = this.openVidu.createSession();
             // Generate a new token with the recently created connectionProperties
             String token = session.createConnection(connectionProperties).getToken();
-
+            System.out.println("session : "+session + "/n token: "+token);
             // Store the session and the token in our collections
             this.mapSessions.put(sessionId, session);
             this.mapSessionNamesTokens.put(sessionId, new ConcurrentHashMap<>());

@@ -96,6 +96,7 @@ public class WebrtcController {
 
             // Create a new OpenVidu Session
             Session session = this.openVidu.createSession();
+            System.out.println("session: " + session);
             // Generate a new token with the recently created connectionProperties
             String token = session.createConnection(connectionProperties).getToken();
             System.out.println("session : "+session + "/n token: "+token);

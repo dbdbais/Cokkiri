@@ -12,9 +12,9 @@ const pageChange = function (motion) {
 
 <template>
   <div class="page box-row">
-    <button class="nomal-text" @click="pageChange(0)"></button>
+    <button class="nomal-text" @click="pageChange(0)">&lt</button>
     <div class="nomal-text page-num">{{ currentPage }}</div>
-    <button class="nomal-text" @click="pageChange(1)"></button>
+    <button class="nomal-text" @click="pageChange(1)">&gt</button>
   </div>
 </template>
 

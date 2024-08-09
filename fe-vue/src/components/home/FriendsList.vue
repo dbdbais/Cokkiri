@@ -1,10 +1,10 @@
 <template>
-    <div class="box-main-con">
-        <button id="add-friend-container" class=" box-row">
+    <div class="box-main-con box-col friend-con">
+        <button class="add-friend-con box-row">
             <img src="@/assets/friend-plus.svg" alt="add-friend" class="icon" />
-            <div id="add-friend-btn" class="title main-title" @click="openModal">친구 추가</div>
+            <div class="title main-title btn-add-friend" @click="openModal">친구 추가</div>
         </button>
-        <Accordion id="friend-list" />
+        <Accordion class="friend-list" />
         <AddFriend v-if="isModalOpen" @close="closeModal" />
     </div>
 </template>
@@ -19,30 +19,38 @@ const { isModalOpen, openModal, closeModal } = useModal();
 </script>
 
 <style scoped>
-#add-friend-container {
-    width: 250px;
-    margin-bottom: 5px;
-    padding: 10px 25px;
+.friend-con {
+    align-items: center;
+}
 
+.add-friend-con {
+    justify-content: center;
+    align-items: center;
+    width: 95%;
+    padding: 5px 10px;
     background-color: #81c3ff;
     border-width: 5px;
     border-radius: 10px;
     border-color: #b8cffe;
 }
 
-#add-friend-btn {
+.btn-add-friend {
     margin-left: 12px;
-    font-size: 35px;
+    font-size: 40px;
 }
-#add-friend-container:hover {
+
+
+.add-friend-con:hover {
     background-color: #5a88fd;
     border-color: #3B72FF;
 }
+
 .icon {
-    width: 40px;
-    height: 40px;
+    width: 60px;
+    height: 60px;
 }
-#friend-list {
+
+.friend-list {
     width: 280px;
     margin-top: 15px;
 }

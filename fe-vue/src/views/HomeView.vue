@@ -2,8 +2,10 @@
   <Logo class="logo" />
   <div id="main-container" class="box-row">
     <div id="main-left" class="box-col">
-      <div id="profile-btn" class="title main-title">개인 프로필</div>
-      <Profile id="profile" />
+      <div class="box-row profile-header">
+        <div class="btn-profile title main-title">개인 프로필</div>
+      </div>
+      <Profile class="profile" />
       <FriendsList id="friends-list" />
     </div>
     <div id="main-right" class="box-col">
@@ -26,11 +28,9 @@ import { insertClass } from "@/api/problem"
 import { ref, onMounted, onUnmounted } from "vue";
 import { useRouter } from "vue-router";
 import { userStore } from "@/stores/user";
-import { problemStore } from "@/stores/problem";
 import { useMessageStore } from "@/stores/message";
 
 const uStore = userStore();
-const pStore = problemStore();
 const lobby = new WebSocket(
   `${process.env.VITE_VUE_SOCKET_URL}lobby/${uStore.user.nickname}`
 );
@@ -172,6 +172,11 @@ const callInsertClass = async () => {
     console.log(e);
   }
 }
+
+const logout = function () {
+  uStore.logout();
+  router.replace({ name: "login" });
+};
 </script>
 
 <style scoped>
@@ -187,16 +192,17 @@ const callInsertClass = async () => {
   margin-right: 35px;
 }
 
-#profile-btn {
+.btn-profile {
+  /* text-align: center; */
   margin-top: 150px;
   font-size: 40px;
 }
 
-#profile {
+.profile {
   width: 340px;
   height: 150px;
   margin-top: 15px;
-  padding: 15px;
+  padding: 8px 15px;
 }
 
 #friends-list {
@@ -205,6 +211,25 @@ const callInsertClass = async () => {
   margin-top: 15px;
   padding: 15px;
   overflow-y: auto;
+}
+
+.profile-header {
+  justify-content: space-between;
+  align-items: end;
+}
+
+.logout {
+  font-size: 22px;
+  margin-right: 10px;
+  border: 4px solid hsl(0, 90%, 53%);
+  border-radius: 10px;
+  background-color: hsl(0, 71%, 53%);
+  width: 110px;
+  height: 40px;
+}
+
+.logout:hover {
+  background-color: hsl(0, 100%, 53%);
 }
 
 /* 오른쪽 영역 */

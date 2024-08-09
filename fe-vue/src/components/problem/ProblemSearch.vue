@@ -56,6 +56,7 @@ const callFilterSearch = async () => {
     <div class="input-con box-row">
       <span class="title">문제</span>
       <input type="text" class="input" v-model="keyword" />
+      <span class="title btn-search" @click="search">검색</span>
     </div>
     <div class="filter-con box-row">
       <span class="title">필터</span>
@@ -70,7 +71,6 @@ const callFilterSearch = async () => {
       <input id="diamond" type="radio" name="tier" :checked="selectedTier === 5" @click="handleSelection(5)" />
       <label class="title" for="diamond">다이아몬드</label>
     </div>
-    <span class="btn-search title" @click="search">검색</span>
   </div>
 </template>
 
@@ -84,29 +84,48 @@ const callFilterSearch = async () => {
   border-radius: 10px;
   background-color: #8220ff;
   padding: 25px 30px;
-  -webkit-text-stroke: 3px black;
+  /* -webkit-text-stroke: 3px black; */
 }
 
 /* Font */
-
-.input-con>span,
+.input-con>span:nth-child(1),
 .filter-con>span {
   font-size: 35px;
 }
 
 .filter-con label {
   font-size: 28px;
-  -webkit-text-stroke-color: none;
+  -webkit-text-stroke: unset;
 }
 
-.btn-search {
-  font-size: 32px;
-}
 
 /* Input Container */
 .input-con input {
   width: 300px;
   margin-left: 10px;
+  border: 3px solid black;
+  border-radius: 10px;
+  height: 40px;
+  font-size: 30px;
+  font-weight: lighter;
+}
+
+/* Search Button  */
+.btn-search {
+  width: 80px;
+  height: 40px;
+  padding: 3px 0 0 0;
+  margin-left: 10px;
+  text-align: center;
+  border: 2px solid #5b89ff;
+  border-radius: 4px;
+  background-color: #cfdbfb;
+  font-size: 28px;
+}
+
+.btn-search:hover {
+  background-color: #5b89ff;
+  color: #fff;
 }
 
 /* Filter Container */
@@ -132,6 +151,7 @@ input[type="radio"]:checked+label {
 }
 
 .filter-con label {
+  height: 40px;
   margin-left: 12px;
   padding: 2px 4px;
   border-radius: 5px;
@@ -167,35 +187,5 @@ input[type="radio"]:checked+label {
   background-color: #b9f2ff;
   border-color: #51c2dc;
   color: #51c2dc;
-}
-
-/* Search Button  */
-.btn-search {
-  background-color: #cfdbfb;
-  border: 2px solid #5b89ff;
-  width: 90px;
-  text-align: center;
-  border-radius: 4px;
-  padding: 4px;
-}
-
-label {
-  height: 40px;
-}
-
-.input {
-  border: 3px solid black;
-  border-radius: 10px;
-  height: 40px;
-  font-size: 30px;
-  font-weight: lighter;
-}
-
-#app>div>div.problem-con>div.search-con.box-row>span {
-  height: 40px;
-}
-
-.btn-search title {
-  height: 40px;
 }
 </style>

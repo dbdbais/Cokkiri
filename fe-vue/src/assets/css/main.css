@@ -111,7 +111,8 @@ a {
 .box-main-con {
   border: 5px solid #3b72ff;
   border-radius: 10px;
-  background-color: #c191ff;
+  /* background-color: #c191ff; */
+  background-color: ##a6c9ff;
 }
 
 /* 퍼블(purple)-스카이블루(skyblue) 박스 */
@@ -285,12 +286,12 @@ a {
    ============================= */
 
 .modal-overlay {
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0);
+  background-color: rgba(0, 0, 0, 0.4);
   width: 1920px;
   height: 1080px;
   display: flex;

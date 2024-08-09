@@ -30,11 +30,13 @@ const setTotalPage = function (total) {
     <div class="header">
       <span class="title">문제 목록</span>
     </div>
-    <div class="problem-con">
+    <div class="problem-con box-col">
       <ProblemSearch />
       <ProblemList :current-page="currentPage" @emit-total-page="setTotalPage" />
-      <button @click="prevPage">&lt;</button>
-      <button @click="nextPage">&gt;</button>
+      <div class="btn-con">
+        <button class="btn-prev" @click="prevPage">◀</button>
+        <button class="btn-next" @click="nextPage">▶</button>
+      </div>
     </div>
   </div>
 </template>
@@ -59,11 +61,40 @@ const setTotalPage = function (total) {
 }
 
 .problem-con {
+  position: relative;
   width: calc(1920px - 250px);
   height: calc(1080px - 180px);
   background-color: #bed0fd;
   border: 10px solid #3b72ff;
   border-radius: 20px;
   padding: 50px 80px;
+}
+
+.btn-con {
+  position: absolute;
+  bottom: 15px;
+  margin-top: 20px;
+  margin-left: 600px;
+
+}
+
+.btn-prev,
+.btn-next {
+  color: white;
+  font-size: 25px;
+  padding: 5px 50px;
+  border: 3px solid #7397f5;
+  border-radius: 10px;
+  background-color: #5484fc;
+}
+
+.btn-next {
+  margin-left: 25px;
+}
+
+.btn-prev:hover,
+.btn-next:hover {
+  border: 3px solid #3f5fae;
+  background-color: #2d55ba;
 }
 </style>

@@ -11,8 +11,8 @@ const emit = defineEmits(["emitTotalPage"]);
 
 const store = problemStore();
 const currentPageProblems = computed(() => {
-  const start = (props.currentPage - 1) * 5;
-  const end = props.currentPage * 5;
+  const start = (props.currentPage - 1) * 8;
+  const end = props.currentPage * 8;
   return store.problems.slice(start, end);
 });
 
@@ -20,7 +20,7 @@ onMounted(() => {
   getAllProblems().then((response) => {
     console.log(response);
     store.setProblems(response.data);
-    emit("emitTotalPage", Math.ceil(store.problems.length / 5));
+    emit("emitTotalPage", Math.ceil(store.problems.length / 8));
   }).catch((error) => {
     console.log(error);
   });
@@ -28,7 +28,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <div>
+  <div class="table-con">
     <table>
       <thead class="bold-text">
         <tr>
@@ -47,28 +47,27 @@ onMounted(() => {
 </template>
 
 <style scoped>
-body {
-  padding: 1.5em;
-  background: #f5f5f5;
+.table-con {
+  height: 652px;
 }
 
 table {
   border: 1px #a39485 solid;
-  font-size: 0.9em;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.25);
   width: 100%;
   border-collapse: collapse;
-  border-radius: 10px;
+  /* border-radius: 10px; */
   overflow: hidden;
   margin-top: 20px;
 }
 
 th {
-  font-size: 3vh;
-  padding: 1em 0.5em;
-  vertical-align: middle;
-  text-align: center;
-  border-right: 3px solid white;
+  font-size: 32px;
+  padding: 32px 16px;
+  /* vertical-align: middle; */
+  /* text-align: center; */
+  border: 3px solid #215cf4;
+  /* border-right: 3px solid white; */
 }
 
 thead {
@@ -79,5 +78,25 @@ thead {
 
 a {
   color: #73685d;
+}
+
+th:nth-child(1) {
+  width: 150px;
+}
+
+th:nth-child(2) {
+  width: 380px;
+}
+
+th:nth-child(3) {
+  width: 100px;
+}
+
+th:nth-child(4) {
+  width: 250px;
+}
+
+th:nth-child(5) {
+  width: 250px;
 }
 </style>

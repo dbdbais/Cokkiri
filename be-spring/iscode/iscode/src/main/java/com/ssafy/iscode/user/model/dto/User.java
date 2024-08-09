@@ -47,6 +47,10 @@ public class User {
     @Column(name = "completed")
     private Map<MissionType, Boolean> mission = new HashMap<>();
 
+    public Optional<MissionType> getSingleMissionType() {
+        return mission.keySet().stream().findFirst();
+    }
+
     // Add a friend with status
     public void addFriend(User friend) {
         UserFriend userFriend = new UserFriend(this.id, friend.getId(), Status.REQUEST);
@@ -100,7 +104,7 @@ public class User {
         if (score >= 500) {
             newTier = Tier.DURIAN;
         } else if (score >= 400) {
-            newTier = Tier.MELON;
+            newTier = Tier.KOREAMELON;
         } else if (score >= 300) {
             newTier = Tier.ORANGE;
         } else if (score >= 200) {

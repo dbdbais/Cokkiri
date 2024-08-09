@@ -44,7 +44,6 @@ public class UserFriend {
     @JsonIgnore
     private User friendUser;
 
-
     public UserFriend() {
     }
 
@@ -54,8 +53,6 @@ public class UserFriend {
         this.friendUserId = friendUserId;
         this.status = status;
     }
-
-
 
     @Override
     public String toString() {

@@ -106,4 +106,8 @@ public class UserService {
         return userRepository.findByName(userName)
                 .orElseThrow(() -> new RuntimeException("User not found"));
     }
+
+    public boolean isMissionAccomplished(String userId){
+        return userRepository.isMissionAccomplished(userId);
+    }
 }

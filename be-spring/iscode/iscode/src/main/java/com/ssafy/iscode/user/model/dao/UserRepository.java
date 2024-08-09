@@ -64,6 +64,30 @@ public class UserRepository {
     }
 
     @Transactional
+    public boolean isMissionAccomplished(String userId) {
+
+        User aUser = findById(userId);
+        Optional<MissionType> missionType = aUser.getSingleMissionType();
+
+        if(missionType.isPresent()){
+
+            String sql = missionType.get().getSql();
+            System.out.println(sql);
+            Long result = (Long) em.createQuery(sql)
+                    .setParameter("userId", userId)
+                    .getSingleResult();
+
+            return result > 0;
+        }
+        else{
+            return false;
+        }
+    }
+
+
+
+
+    @Transactional
     public int saveFriend(String userId, String friendUserId) {
         try {
             // Find both users

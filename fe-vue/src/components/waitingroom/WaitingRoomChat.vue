@@ -1,10 +1,6 @@
 <script setup>
 import { useChatStore } from "@/stores/chat";
-import { onMounted, ref } from "vue";
-
-defineProps({
-  chatList: Array,
-});
+import { onMounted, ref, watch } from "vue";
 
 const emit = defineEmits(["chat"]);
 const chatStore = useChatStore();
@@ -29,7 +25,7 @@ onMounted(() => {
   <div class="chat-container box box-col">
     <div class="chat-list chat-box box" ref="chatBox">
       <p
-        v-for="chat in chatList"
+        v-for="chat in chatStore.chatList"
         :key="chat.index"
         class="chat-item nomal-text"
       >

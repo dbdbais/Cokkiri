@@ -32,7 +32,7 @@ import { useMessageStore } from "@/stores/message";
 
 const uStore = userStore();
 const lobby = new WebSocket(
-  `${process.env.VITE_VUE_SOCKET_URL}lobby/${uStore.user.nickname}`
+  `${process.env.VITE_VUE_SOCKET_URL}socket/lobby/${uStore.user.nickname}`
 );
 
 const messageStore = useMessageStore();

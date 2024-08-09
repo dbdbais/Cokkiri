@@ -294,7 +294,7 @@ function removeUserData(connection) {
     // 카메라 세션에서 token 제거
     httpRequest(
       "POST",
-      `${process.env.VITE_VUE_API_URL}session/remove-user`,
+      `${process.env.VITE_VUE_API_URL}api/session/remove-user`,
       {
         sessionId: mySessionId,
         token: token,
@@ -308,7 +308,7 @@ function removeUserData(connection) {
     // 화면 세션에서 token 제거
     httpRequest(
       "POST",
-      `${process.env.VITE_VUE_API_URL}session/remove-user`,
+      `${process.env.VITE_VUE_API_URL}api/session/remove-user`,
       {
         sessionId: mySessionIdScreen,
         token: tokenScreen,
@@ -378,7 +378,7 @@ function httpRequest(method, url, body, errorMsg, callback) {
 function getToken(callback) {
   httpRequest(
     "POST",
-    `${process.env.VITE_VUE_API_URL}session/get-token`,
+    `${process.env.VITE_VUE_API_URL}api/session/get-token`,
     // 세션 ID와 유저 정보 전송
     {
       sessionId: mySessionId,
@@ -397,7 +397,7 @@ function getToken(callback) {
 function getScreenToken(callback) {
   httpRequest(
     "POST",
-    `${process.env.VITE_VUE_API_URL}session/get-token`,
+    `${process.env.VITE_VUE_API_URL}api/session/get-token`,
     // 세션 ID와 유저 정보 전송
     {
       sessionId: mySessionIdScreen,

@@ -40,9 +40,10 @@ const chatSubmit = function () {
 
 <style scoped>
 .chat-container {
-  width: 1400px;
+  width: 840px;
   height: 320px;
   align-items: center;
+  margin-left: 20px;
 }
 .chat-box {
   width: 98%;

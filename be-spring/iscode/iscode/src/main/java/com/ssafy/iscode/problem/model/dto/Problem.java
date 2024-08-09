@@ -1,8 +1,6 @@
 package com.ssafy.iscode.problem.model.dto;
 
 
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.persistence.*;
@@ -50,6 +48,8 @@ public class Problem {
     @CollectionTable(name = "algo_output", joinColumns = @JoinColumn(name = "algo_num"))
     @Column(name = "algo_output_value",columnDefinition = "LONGTEXT")
     private Map<Integer, String> algoOutput;
+
+
 
     @ElementCollection(fetch = FetchType.LAZY)
     @CollectionTable(name = "algo_hidden_input", joinColumns = @JoinColumn(name = "algo_num"))

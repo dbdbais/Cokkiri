@@ -1,5 +1,7 @@
 package com.ssafy.iscode.user.model.dao;
 
+import com.ssafy.iscode.mission.model.dto.MissionType;
+import com.ssafy.iscode.mission.service.MissionService;
 import com.ssafy.iscode.user.model.dto.Status;
 import com.ssafy.iscode.user.model.dto.Tier;
 import com.ssafy.iscode.user.model.dto.User;
@@ -15,9 +17,11 @@ import java.util.Optional;
 public class UserRepository {
 
     private final EntityManager em;
+    private final MissionService missionService;
 
-    public UserRepository(EntityManager em) {
+    public UserRepository(EntityManager em, MissionService missionService) {
         this.em = em;
+        this.missionService = missionService;
     }
 
     @Transactional
@@ -25,7 +29,10 @@ public class UserRepository {
         try {
 
             if(findById(user.getId()) == null){
+
+                MissionType dailyMS = missionService.assignRandomMission();
                 //Insert
+                user.setMission(dailyMS,false);
                 em.persist(user);
             }
             else{

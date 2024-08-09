@@ -1,16 +1,15 @@
 package com.ssafy.iscode.user.model.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.ssafy.iscode.mission.model.dto.MissionType;
 import com.ssafy.iscode.regular.model.dto.RegularUser;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 @Getter
 @Setter
@@ -20,9 +19,10 @@ public class User {
     @Id
     @Column(name = "user_id")
     private String id;
+
     @Column(name="nick_name")
     private String nickname;
-    // might be using Spring Security later..
+
     @Column(name = "user_password")
     private String password;
 
@@ -40,6 +40,12 @@ public class User {
     @JsonIgnore // Avoid serialization of the full list of friends
     private Set<UserFriend> friends = new HashSet<>();
 
+    @ElementCollection
+    @CollectionTable(name = "user_mission", joinColumns = @JoinColumn(name = "user_id"))
+    @MapKeyEnumerated(EnumType.STRING)
+    @Column(name = "completed")
+    private Map<MissionType, Boolean> mission = new HashMap<>();
+
     // Add a friend with status
     public void addFriend(User friend) {
         UserFriend userFriend = new UserFriend(this.id, friend.getId(), Status.REQUEST);
@@ -48,6 +54,9 @@ public class User {
         friend.getFriends().add(reverseRealtion);
     }
 
+    public void setMission(MissionType missionType, boolean completed) {
+        mission.put(missionType, completed);
+    }
     // Remove a friend
     public void removeFriend(User friend) {
 
@@ -128,12 +137,21 @@ public class User {
     }
 
 
-
-
     @Override
     public int hashCode() {
         return Objects.hash(id, password);
     }
 
-
+    @Override
+    public String toString() {
+        return "User{" +
+                "id='" + id + '\'' +
+                ", nickname='" + nickname + '\'' +
+                ", password='" + password + '\'' +
+                ", tier=" + tier +
+                ", score=" + score +
+                ", regulars=" + regulars +
+                ", friends=" + friends +
+                '}';
+    }
 }

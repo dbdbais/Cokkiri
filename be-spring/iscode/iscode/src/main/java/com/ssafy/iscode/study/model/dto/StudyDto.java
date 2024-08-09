@@ -1,5 +1,6 @@
 package com.ssafy.iscode.study.model.dto;
 
+import com.ssafy.iscode.problem.model.dto.Problem;
 import com.ssafy.iscode.user.model.dto.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -7,7 +8,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 
@@ -15,6 +19,7 @@ import java.util.List;
 @Table(name = "study")
 @Getter
 @Setter
+@EntityListeners(AuditingEntityListener.class)
 @NoArgsConstructor
 @AllArgsConstructor
 public class StudyDto {
@@ -56,11 +61,16 @@ public class StudyDto {
     @OneToMany(mappedBy = "study", fetch = FetchType.LAZY)
     private List<StudyUser> users;
 
-//    @ManyToMany
-//    @JoinTable(
-//            name = "study_algo",
-//            joinColumns = @JoinColumn(name = "study_id"),
-//            inverseJoinColumns = @JoinColumn(name = "algo_num")
-//    )
-//    private List<Problem> problems;
+    @ManyToMany
+    @JoinTable(
+            name = "study_problem",
+            joinColumns = @JoinColumn(name = "study_id"),
+            inverseJoinColumns = @JoinColumn(name = "problem_id")
+    )
+    private List<Problem> problems;
+
+    @CreatedDate
+    @Column(name = "createdTime",columnDefinition = "TIMESTAMP", updatable = false)
+    private LocalDateTime createdTime;
+
 }

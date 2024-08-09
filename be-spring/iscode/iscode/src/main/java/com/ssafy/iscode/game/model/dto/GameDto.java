@@ -8,7 +8,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.Check;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -19,6 +22,7 @@ import java.util.Map;
 @Getter
 @Setter
 @NoArgsConstructor
+@EntityListeners(AuditingEntityListener.class)
 @Check(constraints = "game_diff BETWEEN 1 AND 5 AND game_mode BETWEEN 1 AND 3")
 public class GameDto {
     // game id == waiting room's id
@@ -45,6 +49,10 @@ public class GameDto {
     // max length = 3
     @OneToMany(mappedBy = "game", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<GamePrize> prizes;
+
+    @CreatedDate
+    @Column(name = "createdTime",columnDefinition = "TIMESTAMP", updatable = false)
+    private LocalDateTime createdTime;
 
     public GameDto(Long id, int difficulty, Long maxTime, int mode) {
         this.id = id;

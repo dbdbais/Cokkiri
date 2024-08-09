@@ -5,10 +5,15 @@ import com.ssafy.iscode.user.model.dto.User;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
 @Setter
+@EntityListeners(AuditingEntityListener.class)
 @Table(name = "review")
 public class Review {
     @Id
@@ -20,6 +25,10 @@ public class Review {
 
     @Column(name = "review_content", columnDefinition = "LONGTEXT")
     private String content;
+
+    @CreatedDate
+    @Column(name = "createdTime",columnDefinition = "TIMESTAMP", updatable = false)
+    private LocalDateTime createdTime;
 
     //Eager for serializable
     @ManyToOne(fetch = FetchType.EAGER, optional = true)

@@ -30,7 +30,8 @@ public class ProblemRestController {
         return ps.getAllProblem();
     }
 
-    @GetMapping("{pid}")
+
+    @GetMapping("/{pid}")
     public Problem getProblem(@PathVariable Long pid){
         return ps.getProblem(pid);
     }
@@ -74,7 +75,7 @@ public class ProblemRestController {
         return 1;
     }
 
-    //레벨로 검색
+
     @GetMapping("filter/{tier}")
     public List<Problem> filterSearch(@PathVariable  int tier){
         return ps.getFilteredProblem(tier);

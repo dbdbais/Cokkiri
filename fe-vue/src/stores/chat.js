@@ -9,6 +9,10 @@ export const useChatStore = defineStore("chat", () => {
     chatBox.value = box;
   };
 
+  const resetChatBox = () => {
+    chatList.value = [];
+  };
+
   const sendChat = (message) => {
     chatList.value.push(message);
     setTimeout(autoScroll, 1);
@@ -18,5 +22,5 @@ export const useChatStore = defineStore("chat", () => {
     chatBox.value.scrollTop = chatBox.value.scrollHeight;
   };
 
-  return { chatBox, chatList, sendChat, insertChatBox };
+  return { chatBox, chatList, sendChat, insertChatBox, resetChatBox };
 });

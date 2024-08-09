@@ -27,7 +27,7 @@ const router = useRouter();
 const route = useRoute();
 const roomData = ref([]);
 const roomUsers = ref([]);
-const chatList = ref([]);
+
 const useProblemStore = problemStore();
 const friendInvite = ref(false);
 const problemModal = ref(false);
@@ -44,18 +44,18 @@ ws.onmessage = function (event) {
     let username = data[0];
     let message = data[1];
     chatStore.sendChat(`${username} : ${message}`);
-    // chatList.value.push(`${username} : ${message}`);
   } else {
     let event = data[2];
     let param = data[3];
     switch (event) {
       case "ENTER":
+        if (store.user.nickname === param) {
+          chatStore.resetChatBox();
+        }
         chatStore.sendChat(`${param}님이 입장하였습니다.`);
-        // chatList.value.push(`${param}님이 입장하였습니다.`);
         break;
       case "QUIT":
         chatStore.sendChat(`${param}님이 퇴장하였습니다.`);
-        // chatList.value.push(`${param}님이 퇴장하였습니다.`);
         break;
       case "START":
         selectedProblem(problemListNum.value, route.params.roomId)

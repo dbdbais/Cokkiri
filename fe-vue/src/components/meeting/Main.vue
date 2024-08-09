@@ -55,19 +55,6 @@ const stopResize = () => {
         flex: 1,
       }"
     >
-      <button
-        v-if="false"
-        class="submit bold-text"
-        :style="{ scale: minimum * 0.01 }"
-        :class="{
-          prevent: prevent,
-        }"
-        :disabled="prevent"
-        @click="console.log('제출')"
-      >
-        제출하기
-      </button>
-
       <div class="flex-align btn-box">
         <div
           class="compiler-btn bold-text md"
@@ -84,7 +71,12 @@ const stopResize = () => {
           제출 목록
         </div>
       </div>
-      <Compiler v-if="compiler" :bigfont="bigfont" />
+      <Compiler
+        v-if="compiler"
+        :bigfont="bigfont"
+        :minimum="minimum"
+        :prevent="prevent"
+      />
       <SubmitList v-else />
     </div>
   </div>
@@ -149,10 +141,5 @@ const stopResize = () => {
   background-color: skyblue;
   border-color: white;
   cursor: url(/src/assets/drag.svg) 20 20, pointer;
-}
-.prevent {
-  background-color: rgb(117, 117, 117);
-  border-color: gray;
-  color: gray;
 }
 </style>

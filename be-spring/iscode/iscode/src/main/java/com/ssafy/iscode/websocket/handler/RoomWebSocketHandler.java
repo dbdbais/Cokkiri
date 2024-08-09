@@ -45,7 +45,8 @@ public class RoomWebSocketHandler extends TextWebSocketHandler {
     public void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
         String roomId = getRoomId(session);
         String userName = userSessions.get(session);
-        String m = message.getPayload();
+        String[] payload = message.getPayload().split("\\|!\\|");
+        String m = payload[0];
         String content = userName + "|!|" + m;
 
         // press start button
@@ -68,6 +69,15 @@ public class RoomWebSocketHandler extends TextWebSocketHandler {
             sendEvent(roomId, event);
         } else if ("|$|".equals(m)) { // press not ready button
             String event = ".|!|.|!|NREADY|!|" + userName;
+            sendEvent(roomId, event);
+        } else if ("|%|".equals(m)) { // add problems
+            StringBuilder event = new StringBuilder(".|!|.|!|ADD");
+            for(int i=1; i<payload.length; i++) {
+                event.append("|!|").append(payload[i]);
+            }
+            sendEvent(roomId, event.toString());
+        } else if ("|^|".equals(m)) { // sub problem
+            String event = ".|!|.|!|SUB|!|" + payload[1];
             sendEvent(roomId, event);
         } else { // just chatting
             Set<WebSocketSession> sessions = roomSessions.get(roomId);

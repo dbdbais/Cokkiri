@@ -101,4 +101,9 @@ public class UserService {
 
         return list;
     }
+
+    public User getUserByName(String userName) {
+        return userRepository.findByName(userName)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+    }
 }

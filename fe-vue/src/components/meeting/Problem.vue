@@ -33,9 +33,6 @@ const showProblem = (no) => {
       </div>
       <div class="blind" :style="{ height: blind + 'px' }"></div>
       <div class="nomal-text problem-box">
-        <!-- <div>
-          {{ getProblem(currentProblem - 1) }}
-        </div> -->
         <div v-html="getProblem(currentProblem - 1).info"></div>
       </div>
     </div>
@@ -53,9 +50,10 @@ const showProblem = (no) => {
 .problem-box {
   width: 100%;
   height: 680px;
-  padding: 0px 35px;
-  font-size: 20px;
+  padding: 0px 25px;
+  font-weight: bold;
   overflow-y: auto;
+  background-color: white;
 }
 .blind {
   width: 99%;
@@ -76,9 +74,18 @@ const showProblem = (no) => {
   border-radius: 10px 10px 0px 0px;
   font-size: 25px;
 }
-
+pre {
+  font-family: "goorm-sans-code";
+  margin-top: 5px;
+  font-size: 20px;
+  border: 2px solid black;
+  padding: 15px;
+}
+code {
+  font-family: "goorm-sans-code";
+}
 .nomal-text {
-  font-size: 30px;
+  font-size: 25px;
 }
 .active {
   background-color: blue;
@@ -89,7 +96,8 @@ const showProblem = (no) => {
   overflow-y: scroll;
   border-radius: 10px;
   height: 300px;
-  padding: 10px;
+  padding: 10px 20px;
+  font-size: 30px;
   white-space: pre-wrap;
   font-family: "yg-jalnan";
 }
@@ -126,5 +134,13 @@ const showProblem = (no) => {
 }
 .active {
   background-color: blue;
+}
+
+@font-face {
+  font-family: "goorm-sans-code";
+  src: url("https://fastly.jsdelivr.net/gh/projectnoonnu/2408@1.0/goorm-sans-code.woff2")
+    format("woff2");
+  font-weight: normal;
+  font-style: normal;
 }
 </style>

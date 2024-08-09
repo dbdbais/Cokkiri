@@ -49,6 +49,7 @@ const store = userStore();
   margin-top: 10px;
   padding: 10px 10px 0px 10px;
   align-items: center;
+  background-color: #d9bbff;
 }
 .problem-btn {
   width: 100px;

@@ -1,7 +1,7 @@
 <script setup>
 import ProblemItem from "@/components/problem/ProblemItem.vue";
-import { onMounted, ref, watch, computed } from "vue";
-import { getAllProblems, getProblems } from "@/api/problem";
+import { onMounted, ref, computed } from "vue";
+import { getAllProblems } from "@/api/problem";
 import { problemStore } from "@/stores/problem";
 
 const props = defineProps({
@@ -10,20 +10,11 @@ const props = defineProps({
 const emit = defineEmits(["emitTotalPage"]);
 
 const store = problemStore();
-const totalPage = ref(1);
 const currentPageProblems = computed(() => {
   const start = (props.currentPage - 1) * 5;
   const end = props.currentPage * 5;
   return store.problems.slice(start, end);
 });
-
-const test = function () {
-  console.log(currentPageProblems.value);
-};
-
-// watch(() => props.currentPage, (newPage) => {
-//   currentPageProblems.value = store.problems.slice((newPage - 1) * 5, newPage * 5);
-// });
 
 onMounted(() => {
   getAllProblems().then((response) => {

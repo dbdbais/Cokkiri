@@ -3,7 +3,7 @@ import { ref } from "vue";
 import { useModal } from "@/composables/useModal";
 import ProblemDetail from "@/components/problem/modal/ProblemDetail.vue";
 import ProblemReview from "@/components/problem/modal/ProblemReview.vue";
-import { getAllReviews } from "@/api/problem";
+import { getAllReviews } from "@/api/review";
 
 const { isModalOpen: isDetailModalOpen, openModal: openDetailModal, closeModal: closeDetailModal } = useModal();
 const { isModalOpen: isReviewModalOpen, openModal: openReviewModal, closeModal: closeReviewModal } = useModal();

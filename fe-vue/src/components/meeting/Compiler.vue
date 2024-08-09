@@ -1,45 +1,3 @@
-<<<<<<< HEAD
-=======
-<template>
-  <div>
-    <div class="editor-con box-w">
-      <div id="editor-container">
-        <h3>Code Editor</h3>
-        <select id="language" v-model="selectedLanguage">
-          <option value="python">Python</option>
-          <option value="java">Java</option>
-          <option value="cpp">C++</option>
-          <option value="c">C</option>
-        </select>
-        <button @click="runCode">실행</button>
-        <button @click="resetCode">코드 초기화</button>
-        <button>제출</button>
-        <button>힌트</button>
-        <div id="editor"></div>
-      </div>
-    </div>
-    <div class="input-con box-w">
-      <div id="input-output-area">
-        <div id="input">
-          <h3>Input <button @click="clearInput">Clear Input</button></h3>
-
-          <textarea
-            id="inputText"
-            v-model="inputText"
-            rows="10"
-            cols="30"
-          ></textarea>
-        </div>
-        <div id="output">
-          <h3>Output</h3>
-          <pre id="outputText">{{ outputText }}</pre>
-        </div>
-      </div>
-    </div>
-  </div>
-</template>
-
->>>>>>> 51b01656996eb9ee30107f44d1eb97dc04d9a64f
 <script setup>
 import { ref, onMounted, watch } from "vue";
 import axios from "axios";
@@ -134,12 +92,12 @@ onMounted(() => {
     const currentLanguage = currentMode.includes("python")
       ? "python"
       : currentMode.includes("java")
-      ? "java"
-      : currentMode.includes("c_cpp")
-      ? editor.value.getValue().includes("#include <stdio.h>")
-        ? "c"
-        : "cpp"
-      : "python";
+        ? "java"
+        : currentMode.includes("c_cpp")
+          ? editor.value.getValue().includes("#include <stdio.h>")
+            ? "c"
+            : "cpp"
+          : "python";
 
     userCode.value[currentLanguage] = editor.value.getValue();
     editor.value.session.setMode(
@@ -211,11 +169,7 @@ const clearInput = () => {
   <div>
     <div class="editor-con box-w">
       <div id="editor-container">
-        <select
-          id="language"
-          class="box language bold-text"
-          v-model="selectedLanguage"
-        >
+        <select id="language" class="box language bold-text" v-model="selectedLanguage">
           <option value="python">Python</option>
           <option value="java">Java</option>
           <option value="cpp">C++</option>
@@ -237,13 +191,7 @@ const clearInput = () => {
             </button>
           </p>
 
-          <textarea
-            id="inputText"
-            class="nomal-text"
-            v-model="inputText"
-            rows="10"
-            cols="30"
-          ></textarea>
+          <textarea id="inputText" class="nomal-text" v-model="inputText" rows="10" cols="30"></textarea>
         </div>
         <div id="output">
           <p class="bold-text">Output</p>
@@ -260,6 +208,7 @@ const clearInput = () => {
   height: 200px;
   margin-top: 50px;
 }
+
 .editor-con {
   width: 100%;
   height: 450px;
@@ -267,6 +216,7 @@ const clearInput = () => {
   border-radius: 0px 10px 10px 10px;
   position: relative;
 }
+
 .language {
   position: absolute;
   width: 130px;
@@ -277,9 +227,11 @@ const clearInput = () => {
   font-size: 20px;
   background-color: #9fbaff;
 }
+
 option {
   color: black;
 }
+
 #input-output-area {
   width: 100%;
   margin: 10px;
@@ -295,15 +247,18 @@ option {
   border-color: #3b72ff;
   background-color: #9fbaff;
 }
+
 .run-btn,
 .submit-btn {
   width: 80px;
   height: 40px;
   margin-top: 10px;
 }
+
 .submit-btn {
   margin-left: 20px;
 }
+
 .clear-btn {
   width: 90px;
   height: 35px;
@@ -312,15 +267,18 @@ option {
   top: -5px;
   right: 5px;
 }
+
 #input,
 #output {
   width: 48%;
   margin: 0 5px;
   position: relative;
 }
+
 #editor-container {
   width: 100%;
 }
+
 textarea {
   width: 100%;
   flex-grow: 1;
@@ -329,12 +287,14 @@ textarea {
   font-size: 20px;
   margin-top: 10px;
 }
+
 textarea,
 #outputText {
   margin-top: 15px;
   height: 130px;
   overflow-y: auto;
 }
+
 #editor {
   height: 440px;
   width: 100%;
@@ -344,10 +304,13 @@ textarea,
 #inputText {
   padding: 5px;
 }
+
 #outputText {
   border: 2px solid black;
   width: 90%;
-  overflow: auto; /* Enable scrolling */
-  white-space: pre-wrap; /* Preserve whitespace and wrap long lines */
+  overflow: auto;
+  /* Enable scrolling */
+  white-space: pre-wrap;
+  /* Preserve whitespace and wrap long lines */
 }
 </style>

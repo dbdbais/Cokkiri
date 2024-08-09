@@ -9,7 +9,7 @@ var sessionCamera; // 카메라 정보를 담을 세션
 var sessionScreen; // 화면 정보를 담을 세션
 
 // const myUser = userStore();
-var myUserName = "abc"; //myUser.user.name; // 들어오기 전 설정하는 유저 이름
+var myUserName; //myUser.user.name; // 들어오기 전 설정하는 유저 이름
 var mySessionId; // 카메라 정보를 담을 세션의 id
 var mySessionIdScreen; // 화면 정보를 담을 세션의 id
 var screensharing = false; // 화면 공유 상태
@@ -22,14 +22,14 @@ var tokenScreen; // 화면 세션의 유저 토큰
 var numVideos = 0; // 카메라 영역 css 적용을 위한 변수
 
 // 유저 이름, 세션 ID 입력 후 join 버튼 클릭시 동작
-function joinSession(roomId) {
+function joinSession(roomId, userName) {
   // join 버튼 비활성화
   // document.getElementById("join-btn").disabled = true;
   // document.getElementById("join-btn").innerHTML = "Joining...";
 
   // 입력받은 정보 저장
   mySessionId = "" + roomId;
-  // myUserName = user123;
+  myUserName = userName;
 
   // 화면 세션 생성을 위한 id 생성 => 현재 "카메라 세션 ID + Screen" 이며 바꿔도 됨
   mySessionIdScreen = mySessionId + "Screen";
@@ -294,7 +294,7 @@ function removeUserData(connection) {
     // 카메라 세션에서 token 제거
     httpRequest(
       "POST",
-      "http://localhost:8080/session/remove-user",
+      `${process.env.VITE_VUE_API_URL}session/remove-user`,
       {
         sessionId: mySessionId,
         token: token,
@@ -308,7 +308,7 @@ function removeUserData(connection) {
     // 화면 세션에서 token 제거
     httpRequest(
       "POST",
-      "http://localhost:8080/session/remove-user",
+      `${process.env.VITE_VUE_API_URL}session/remove-user`,
       {
         sessionId: mySessionIdScreen,
         token: tokenScreen,
@@ -378,7 +378,7 @@ function httpRequest(method, url, body, errorMsg, callback) {
 function getToken(callback) {
   httpRequest(
     "POST",
-    "http://localhost:8080/session/get-token",
+    `${process.env.VITE_VUE_API_URL}session/get-token`,
     // 세션 ID와 유저 정보 전송
     {
       sessionId: mySessionId,
@@ -397,7 +397,7 @@ function getToken(callback) {
 function getScreenToken(callback) {
   httpRequest(
     "POST",
-    "http://localhost:8080/session/get-token",
+    `${process.env.VITE_VUE_API_URL}session/get-token`,
     // 세션 ID와 유저 정보 전송
     {
       sessionId: mySessionIdScreen,

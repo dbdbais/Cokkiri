@@ -91,7 +91,7 @@ defineProps({
   /* 위치 */
   position: absolute;
   top: 2px;
-  left: 130px;
+  left: 160px;
   /* 색깔 */
   color: #dbe7ff;
   background-color: transparent;
@@ -107,7 +107,7 @@ defineProps({
   content: "";
   display: block;
   width: 65px;
-  height: 120px;
+  height: 140px;
   transform: skewX(-20deg);
   background-color: #ddc3ff;
 }
@@ -118,7 +118,7 @@ defineProps({
 }
 
 .study-group:hover::before {
-  left: 1250px;
-  transition: all 1s ease-in;
+  left: 850px;
+  transition: all 0.7s ease-in;
 }
 </style>

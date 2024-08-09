@@ -6,7 +6,6 @@
   <div class="board-home">
     <div class="board-container">
       <StudyRecruitment />
-      <StudyRank />
     </div>
   </div>
 </template>

@@ -7,22 +7,9 @@
       <FriendsList id="friends-list" />
     </div>
     <div id="main-right" class="box-col">
-      <Header
-        id="header"
-        class="box-col"
-        @create="getRoomList"
-        @search="searchList"
-        @go-room="goRightNow"
-      />
-      <MainContent
-        id="main-content"
-        :rooms="rooms"
-        :current-page="currentPage"
-        :category-obj="categoryObj"
-        @go-room="goRoom"
-        @change-page="pageChange"
-        @is-game="categoryList"
-      />
+      <Header id="header" class="box-col" @create="getRoomList" @search="searchList" @go-room="goRightNow" />
+      <MainContent id="main-content" :rooms="rooms" :current-page="currentPage" :category-obj="categoryObj"
+        @go-room="goRoom" @change-page="pageChange" @is-game="categoryList" />
     </div>
   </div>
 </template>
@@ -41,7 +28,9 @@ import { userStore } from "@/stores/user";
 import { useMessageStore } from "@/stores/message";
 
 const store = userStore();
-const lobby = new WebSocket(`ws://localhost:8080/lobby/${store.user.nickname}`);
+const lobby = new WebSocket(`${process.env.VITE_VUE_SOCKET_URL}/socket/lobby/${store.user.nickname}`
+);
+
 const messageStore = useMessageStore();
 const router = useRouter();
 const currentPage = ref(1);
@@ -123,7 +112,7 @@ lobby.onmessage = function (event) {
   if (data.length === 4) {
     let event = data[2];
     let param = data[3];
-    if (event === "ROOM") {
+    if (event === "NOTI") {
       console.log(event, param);
       messageStore.receiveInvite(param);
     }

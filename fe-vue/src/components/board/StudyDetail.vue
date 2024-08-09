@@ -42,9 +42,6 @@ const sendJoin = function (sessionId) {
       <RecruitmentBadge class="badge" :group-badge="detailData.isRecruitment" />
       <div class="title sub-title group-name">{{ detailData.regularName }}</div>
       <div class="top">
-        <div class="box-psb text-p md lang">
-          {{ detailData.language ? detailData.language : "상관없음" }}
-        </div>
         <div class="box-psb text-p md member">
           <div
             v-for="(cnt, tier) in detailData.tiers"
@@ -106,7 +103,7 @@ const sendJoin = function (sessionId) {
 }
 
 .top {
-  height: 60px;
+  height: 80px;
   background-color: transparent;
 }
 
@@ -115,20 +112,15 @@ const sendJoin = function (sessionId) {
 }
 
 .bottom {
-  height: 150px;
+  height: 130px;
 }
 .group-name {
   margin-top: 5px;
 }
-.lang {
-  width: 20%;
-
-  height: 50px;
-}
 
 .member {
-  width: 79%;
-  height: 50px;
+  width: 99%;
+  height: 60px;
 
   display: flex;
   justify-content: space-around;
@@ -140,7 +132,7 @@ const sendJoin = function (sessionId) {
   width: 90%;
   height: 50px;
 
-  margin-top: 5px;
+  margin-top: 10px;
   font-size: 20px;
   color: white;
   -webkit-text-stroke: 1.5px black;
@@ -155,7 +147,9 @@ const sendJoin = function (sessionId) {
 span {
   background-color: transparent;
 }
-
+.rank img {
+  scale: 1.3;
+}
 .times,
 .rules {
   width: 49%;
@@ -173,7 +167,7 @@ span {
 
 .intro {
   width: 100%;
-  height: 130px;
+  height: 110px;
 
   padding-top: 5px;
   padding-left: 15px;

@@ -1,9 +1,9 @@
 <template>
   <div class="accordion">
     <div class="accordion-category">
-      <div class="accordion-header box-main-group">
+      <div class="box-main-group accordion-header" @click="toggle(index)">
         <span class="title header-title">친구</span>
-        <button class="open-btn nomal-text md" @click="toggle(index)">
+        <button class="open-btn nomal-text md" @click.stop="toggle(index)">
           {{ openIndex[index] === null ? "+" : "-" }}
         </button>
       </div>
@@ -122,7 +122,7 @@ const { isModalOpen, selectedMember, openModal, closeModal } = useModal();
 .accordion-item {
   transition: max-height 0.3s ease-in-out;
   max-height: 0;
-  overflow-y: scroll;
+  overflow-y: auto;
 }
 
 .open {
@@ -131,10 +131,8 @@ const { isModalOpen, selectedMember, openModal, closeModal } = useModal();
 }
 
 .open-btn {
-  width: 20px;
-  height: 20px;
+  width: 30px;
   font-size: 15px;
-
   background-color: #dbe7ff;
   color: #3b72ff;
   border-width: 3px;
@@ -142,17 +140,26 @@ const { isModalOpen, selectedMember, openModal, closeModal } = useModal();
   border-color: #3b72ff;
 }
 
+.open-btn:hover {
+  border-color: #1957f5;
+  background-color: #b8cffe;
+}
+
 .accordion-header {
-  height: 35px;
-  padding: 2px 5px;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  padding: 5px 10px;
 }
 
 .box-main-group {
-  border: 3px solid #3b72ff;
+  border: 5px solid #3b72ff;
   border-radius: 1px;
+}
+
+.box-main-group:hover {
+  border-color: #1957f5;
+  background-color: #618cf8;
 }
 
 .box-content {

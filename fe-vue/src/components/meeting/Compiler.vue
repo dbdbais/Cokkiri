@@ -1,43 +1,3 @@
-<template>
-  <div>
-    <div class="editor-con box-w">
-      <div id="editor-container">
-        <h3>Code Editor</h3>
-        <select id="language" v-model="selectedLanguage">
-          <option value="python">Python</option>
-          <option value="java">Java</option>
-          <option value="cpp">C++</option>
-          <option value="c">C</option>
-        </select>
-        <button @click="runCode">실행</button>
-        <button @click="resetCode">코드 초기화</button>
-        <button @click="fontIncrease">폰트 크게</button>
-        <button @click="fontReduce">폰트 작게</button>
-        <button>제출</button>
-        <div id="editor"></div>
-      </div>
-    </div>
-    <div class="input-con box-w">
-      <div id="input-output-area">
-        <div id="input">
-          <h3>Input <button @click="clearInput">Clear Input</button></h3>
-
-          <textarea
-            id="inputText"
-            v-model="inputText"
-            rows="10"
-            cols="30"
-          ></textarea>
-        </div>
-        <div id="output">
-          <h3>Output</h3>
-          <pre id="outputText">{{ outputText }}</pre>
-        </div>
-      </div>
-    </div>
-  </div>
-</template>
-
 <script setup>
 import { ref, onMounted, watch } from "vue";
 import axios from "axios";
@@ -58,7 +18,7 @@ const inputText = ref("");
 const outputText = ref("");
 const fontReduceVal = ref(false);
 const fontIncreaseVal = ref(false);
-const editorFontSize = ref(16);
+const editorFontSize = ref(18);
 
 const defaultCode = {
   python: 'print("Hello, World!")',
@@ -71,7 +31,7 @@ const userCode = ref({ ...defaultCode });
 
 const initializeEditor = (val) => {
   editor.value = ace.edit("editor");
-  editor.value.setTheme("ace/theme/monokai");
+  editor.value.setTheme("ace/theme/Dawn");
   editor.value.session.setMode("ace/mode/python");
   editor.value.setValue(val ? val : defaultCode.python);
   editor.value.setFontSize(editorFontSize.value); // Set the desired font size here
@@ -97,32 +57,32 @@ const fontReduce = () => {
   }, 1000);
 };
 
-const gameStore = useGameStore()
+const gameStore = useGameStore();
 
 const fontIncrease = () => {
-    const saveVal = editor.value.getValue();
-    console.log("폰트 크게!");
-    let timerId = setInterval(() => {
-      console.log("커지는 중!");
-      if (editorFontSize.value < 40) {
-        editorFontSize.value += 2;
-        initializeEditor(saveVal);
-      }
-      // console.log(editorFontSize.value);
-    }, 200);
-    setTimeout(() => {
-      clearInterval(timerId);
-    }, 1000);
-  };
+  const saveVal = editor.value.getValue();
+  console.log("폰트 크게!");
+  let timerId = setInterval(() => {
+    console.log("커지는 중!");
+    if (editorFontSize.value < 40) {
+      editorFontSize.value += 2;
+      initializeEditor(saveVal);
+    }
+    // console.log(editorFontSize.value);
+  }, 200);
+  setTimeout(() => {
+    clearInterval(timerId);
+  }, 1000);
+};
 
 watch(gameStore, () => {
   if (gameStore.bigFont) {
-    fontIncrease()
+    fontIncrease();
   }
   if (gameStore.smallFont) {
-    fontReduce()
+    fontReduce();
   }
-})
+});
 
 onMounted(() => {
   initializeEditor();
@@ -155,18 +115,40 @@ const runCode = async () => {
 
   axios({
     method: "POST",
-    url: "http://localhost:8080/compile",
+    url: "http://192.168.30.188:8080/api/compiler/run",
     headers: {
-      "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
+      "Content-Type": "application/json",
     },
     data: {
       language: language,
       code: code,
-      input: inputText.value,
+      ipt: inputText.value,
+      inputOutput: {
+        1000: 13,
+        123: 133,
+      },
+      time: 1,
+      memory: 100,
     },
   })
     .then((res) => {
-      outputText.value = res.data;
+      if (inputText.value === "") {
+        console.log(res.data);
+        let outPutData = "";
+        Object.keys(res.data).forEach((key) => {
+          outPutData += key + "\n";
+          if (res.data[key] === "correct") {
+            outPutData += "정답!\n";
+          } else {
+            outPutData += "오답.\n";
+          }
+          outPutData += "\n";
+        });
+        outputText.value = outPutData;
+      } else {
+        console.log(res.data);
+        outputText.value = res.data.output;
+      }
     })
     .catch((err) => {
       console.log(err);
@@ -183,16 +165,78 @@ const clearInput = () => {
 };
 </script>
 
+<template>
+  <div>
+    <div class="editor-con box-w">
+      <div id="editor-container">
+        <select
+          id="language"
+          class="box language bold-text"
+          v-model="selectedLanguage"
+        >
+          <option value="python">Python</option>
+          <option value="java">Java</option>
+          <option value="cpp">C++</option>
+          <option value="c">C</option>
+        </select>
+
+        <div id="editor"></div>
+        <button class="run-btn bold-text" @click="runCode">실행</button>
+        <button class="submit-btn bold-text">제출</button>
+      </div>
+    </div>
+    <div class="input-con box-w">
+      <div id="input-output-area">
+        <div id="input">
+          <p class="bold-text">
+            Input
+            <button class="clear-btn bold-text" @click="clearInput">
+              초기화
+            </button>
+          </p>
+
+          <textarea
+            id="inputText"
+            class="nomal-text"
+            v-model="inputText"
+            rows="10"
+            cols="30"
+          ></textarea>
+        </div>
+        <div id="output">
+          <p class="bold-text">Output</p>
+          <pre id="outputText" class="nomal-text">{{ outputText }}</pre>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
 <style scoped>
 .input-con {
   width: 100%;
-  height: 21vh;
-  margin-top: 2vh;
+  height: 200px;
+  margin-top: 50px;
 }
 .editor-con {
   width: 100%;
-  height: 40vh;
-  margin-top: 2vh;
+  height: 450px;
+  margin-top: 50px;
+  border-radius: 0px 10px 10px 10px;
+  position: relative;
+}
+.language {
+  position: absolute;
+  width: 130px;
+  height: 50px;
+  padding-left: 10px;
+  top: -60px;
+  right: 0;
+  font-size: 20px;
+  background-color: #9fbaff;
+}
+option {
+  color: black;
 }
 #input-output-area {
   width: 100%;
@@ -200,10 +244,37 @@ const clearInput = () => {
   display: flex;
   justify-content: space-between;
 }
+
+.run-btn,
+.submit-btn,
+.clear-btn {
+  border-width: 5px;
+  border-radius: 10px;
+  border-color: #3b72ff;
+  background-color: #9fbaff;
+}
+.run-btn,
+.submit-btn {
+  width: 80px;
+  height: 40px;
+  margin-top: 10px;
+}
+.submit-btn {
+  margin-left: 20px;
+}
+.clear-btn {
+  width: 90px;
+  height: 35px;
+  font-size: 20px;
+  position: absolute;
+  top: -5px;
+  right: 5px;
+}
 #input,
 #output {
   width: 48%;
-  margin: 5px;
+  margin: 0 5px;
+  position: relative;
 }
 #editor-container {
   width: 100%;
@@ -212,19 +283,27 @@ textarea {
   width: 100%;
   flex-grow: 1;
   resize: none;
+  border: 2px solid black;
+  font-size: 20px;
+  margin-top: 10px;
+}
+textarea,
+#outputText {
+  margin-top: 15px;
+  height: 130px;
+  overflow-y: auto;
 }
 #editor {
-  height: 34.8vh;
+  height: 440px;
   width: 100%;
   border-radius: 5px;
 }
 
 #inputText {
-  height: 15vh;
+  padding: 5px;
 }
 #outputText {
-  border: 1px solid black;
-  height: 15vh; /* Adjust this value as needed */
+  border: 2px solid black;
   width: 90%;
   overflow: auto; /* Enable scrolling */
   white-space: pre-wrap; /* Preserve whitespace and wrap long lines */

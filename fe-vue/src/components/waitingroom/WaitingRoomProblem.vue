@@ -1,15 +1,26 @@
 <script setup>
+import { userStore } from "@/stores/user";
 import Problem from "../meeting/Problem.vue";
 
 defineProps({
   problemList: Array,
+  roomData: Object,
 });
+
+const store = userStore();
 </script>
 
 <template>
   <div class="box problem-container bold-text">
     문제 목록
-    <button class="problem-btn bold-text" @click="$emit('open')">선택</button>
+    <button
+      class="problem-btn bold-text"
+      @click="$emit('open')"
+      :class="{ 'no-host': roomData.hostName !== store.user.nickname }"
+      :disabled="roomData.hostName !== store.user.nickname"
+    >
+      선택
+    </button>
     <div class="problem-box box box-col text-font">
       <div
         class="problem-item box bold-text flex-align"
@@ -57,6 +68,11 @@ defineProps({
   position: relative;
   padding: 10px;
   margin-bottom: 10px;
+}
+.no-host {
+  background-color: grey;
+  border-color: rgb(183, 181, 181);
+  color: gray;
 }
 .no,
 .dash,

@@ -202,6 +202,7 @@ const exitRoom = function () {
         <WaitingRoomProblem
           @open="problemModal = true"
           :problem-list="problemList"
+          :room-data="roomData"
         />
         <WaitingRoomChat @chat="sendChat" />
         <div class="box-col button-con">
@@ -212,12 +213,20 @@ const exitRoom = function () {
               style="margin-right: 30px; width: 70px"
             />친구초대
           </button>
-          <button class="bold-text btn start" @click="startStudy">
+          <button
+            class="bold-text btn start"
+            @click="startStudy"
+            :class="{ 'no-host': store.user.nickname !== roomData.hostName }"
+            :disabled="store.user.nickname !== roomData.hostName"
+          >
             <img
               src="/src/assets/start.svg"
               alt="시작하기"
               style="margin-right: 30px; width: 70px"
-            />시작하기
+              v-if="store.user.nickname === roomData.hostName"
+            />{{
+              store.user.nickname === roomData.hostName ? "시작하기" : "대기중"
+            }}
           </button>
         </div>
       </div>
@@ -307,5 +316,11 @@ const exitRoom = function () {
   border-radius: 10px;
   border-width: 5px;
   border-color: #3b72ff;
+}
+
+.no-host {
+  background-color: grey;
+  border-color: rgb(183, 181, 181);
+  color: gray;
 }
 </style>

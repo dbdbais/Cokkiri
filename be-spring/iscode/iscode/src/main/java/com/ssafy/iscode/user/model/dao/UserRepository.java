@@ -60,23 +60,13 @@ public class UserRepository {
     }
 
     @Transactional
-    public boolean isMissionAccomplished(User user) {
-
-        Optional<MissionType> missionType = user.getSingleMissionType();
-
-        if(missionType.isPresent()){
-
-            String sql = missionType.get().getSql();
-            System.out.println(sql);
-            Long result = (Long) em.createQuery(sql)
-                    .setParameter("userId", user.getId())
-                    .getSingleResult();
-
-            return result > 0;
-        }
-        else{
-            return false;
-        }
+    public boolean isMissionAccomplished(User user, MissionType missionType) {
+        String sql = missionType.getSql();
+        System.out.println(sql);
+        Long result = (Long) em.createQuery(sql)
+                .setParameter("userId", user.getId())
+                .getSingleResult();
+        return result > 0;
     }
 
 
@@ -255,7 +245,7 @@ public class UserRepository {
 
     @Transactional
     public List<User> findAllWithIncompleteMissions() {
-        String sql = "SELECT u.* FROM user u " +
+        String sql = "SELECT DISTINCT u.* FROM user u " +
                 "JOIN user_mission um ON u.user_id = um.user_id " +
                 "WHERE um.completed = false";
 

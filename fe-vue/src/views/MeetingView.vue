@@ -74,7 +74,7 @@ const exitRoom = function () {
       <img v-else src="/src/assets/meeting/audio-off.svg" alt="마이크 off" />
     </button>
     <div id="exit" class="room-exit bold-text md" @click="exitRoom">
-      <img src="/src/assets/meeting/exit.svg" alt="방나가기" />
+      <img src="/src/assets/exit_room.svg" alt="방나가기" />
       나가기
     </div>
     <button id="video-share" class="set-btn" @click="publishScreenShare">
@@ -160,7 +160,7 @@ video {
   background-color: #ff6b6b;
   border: 3px solid white;
   border-radius: 10px;
-  padding-left: 3px;
-  font-size: 25px;
+  padding-right: 7px;
+  font-size: 22px;
 }
 </style>

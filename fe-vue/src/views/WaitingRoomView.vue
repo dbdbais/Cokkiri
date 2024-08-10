@@ -50,10 +50,20 @@ ws.onmessage = function (event) {
     let param = data[3];
     switch (event) {
       case "ENTER":
+        if (store.user.nickname !== param) {
+          getUserName(param).then((res) => {
+            console.log(res.data);
+            res.data["num"] = getRandomIntInclusive(1, 5);
+            roomUsers.value.push(res.data);
+          });
+        }
         chatStore.sendChat(`${param}님이 입장하였습니다.`);
         // chatList.value.push(`${param}님이 입장하였습니다.`);
         break;
       case "QUIT":
+        roomUsers.value = roomUsers.value.filter((user) => {
+          return user.nickname !== param;
+        });
         chatStore.sendChat(`${param}님이 퇴장하였습니다.`);
         // chatList.value.push(`${param}님이 퇴장하였습니다.`);
         break;
@@ -105,8 +115,10 @@ function getRandomIntInclusive(min, max) {
 
 onMounted(async () => {
   loadingStore.loading();
+  chatStore.resetChatList();
   setTimeout(() => {
     loadingStore.loadingSuccess();
+    console.log(roomData.value);
     roomData.value.users.forEach((user) => {
       getUserName(user)
         .then((res) => {
@@ -118,6 +130,7 @@ onMounted(async () => {
         });
     });
   }, 1000);
+
   const route = useRoute();
   const success = (res) => {
     roomData.value = res.data;
@@ -133,6 +146,7 @@ onMounted(async () => {
 const startStudy = function () {
   ws.send("|@|");
 };
+
 const selectProblem = (problemList) => {
   console.log(problemList);
   // send 보내야함
@@ -150,14 +164,6 @@ const sendChat = (chatData) => {
 
 const exitRoom = function () {
   ws.close();
-
-  const success = (res) => {
-    console.log(res.data);
-  };
-  const fail = (err) => {
-    console.log(err);
-  };
-
   exitWaitingRoom({
     sessionId: route.params.roomId,
     userName: store.user.nickname,

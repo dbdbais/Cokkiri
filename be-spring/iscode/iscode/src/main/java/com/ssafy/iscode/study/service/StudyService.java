@@ -154,7 +154,7 @@ public class StudyService {
                 if(users.size() == 1) { // nobody here
                     closeStudy(studyDto.getId());
                 } else if (studyDto.getHostUser().getId().equals(user.getId())) { // host change
-                    User nextHost = users.get(0).getUser();
+                    User nextHost = users.get(1).getUser();
                     studyDto.setHostUser(nextHost);
 
                     try {

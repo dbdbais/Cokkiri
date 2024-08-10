@@ -24,27 +24,31 @@ public class GameDto {
     private Long id;
 
     // level 3 ~ 5 => 3|5
-    @Column(name = "game_diff",nullable = false)
-    private int difficulty;
+    @Column(name = "game_dmin",nullable = false)
+    private int minDifficulty;
 
-    // 30 minute => 30 * 60 * 1000 => 3600000
+    @Column(name = "game_dmax",nullable = false)
+    private int maxDifficulty;
+
+    // 30 minute => 30 * 60 * 1000 => 1800000
     @Column(name = "game_time",nullable = false)
-    private Long maxTime;
+    private Long maxTime = (long) (30 * 60 * 1000);
 
     // 1 : item mode
     // 2 : blind mode
     // 3 : random language
     @Column(name = "game_mode",nullable = false)
-    private int mode;
+    private int mode = 1;
 
     // user prizes => 1st, 2nd, 3rd
     // max length = 3
     @OneToMany(mappedBy = "game", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<GamePrize> prizes;
 
-    public GameDto(Long id, int difficulty, Long maxTime, int mode) {
+    public GameDto(Long id, int minDifficulty, int maxDifficulty, Long maxTime, int mode) {
         this.id = id;
-        this.difficulty = difficulty;
+        this.minDifficulty = minDifficulty;
+        this.maxDifficulty = maxDifficulty;
         this.maxTime = maxTime;
         this.mode = mode;
         this.prizes = new ArrayList<>();

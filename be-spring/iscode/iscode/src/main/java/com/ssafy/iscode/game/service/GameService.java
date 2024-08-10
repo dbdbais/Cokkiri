@@ -44,7 +44,8 @@ public class GameService {
     public int updateGame(Map<String, String> params) {
         GameDto gameDto = new GameDto(
                 Long.parseLong(params.get("sessionId")),
-                Integer.parseInt(params.get("difficulty")),
+                Integer.parseInt(params.get("minDifficulty")),
+                Integer.parseInt(params.get("maxDifficulty")),
                 Long.parseLong(params.get("time")),
                 Integer.parseInt(params.get("mode"))
         );
@@ -52,7 +53,7 @@ public class GameService {
         try {
             gameRepository.save(gameDto);
 
-            updateProblem(gameDto.getId(), gameDto.getDifficulty());
+            updateProblem(gameDto.getId(), gameDto.getMinDifficulty(), gameDto.getMaxDifficulty());
 
             return 1;
         } catch (Exception e) {
@@ -66,11 +67,11 @@ public class GameService {
         return gameRepository.findById(sessionId);
     }
 
-    private int updateProblem(Long sessionId, int difficulty) {
+    private int updateProblem(Long sessionId, int minDifficulty, int maxDifficulty) {
         try {
             List<Problem> problemAll = problemRepository.findAll();
             List<Problem> problems = problemAll.stream()
-                    .filter(problem -> problem.getLevel() == difficulty)
+                    .filter(problem -> problem.getLevel() >= minDifficulty && problem.getLevel() <= maxDifficulty)
                     .toList();
 
             if (problems.size() < 2) {

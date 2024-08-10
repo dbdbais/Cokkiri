@@ -13,8 +13,10 @@ import Main from "@/components/meeting/Main.vue";
 import Chat from "@/components/meeting/Chat.vue";
 import { ref, onMounted } from "vue";
 import { useRoute, useRouter } from "vue-router";
+import { getProblemList } from "@/api/waitingroom";
 
 const user = userStore();
+const problemList = ref([]);
 
 onMounted(() => {
   joinSession(route.params.roomId, user.user.nickname);
@@ -24,15 +26,6 @@ const route = useRoute();
 const router = useRouter();
 const audio = ref(true);
 const video = ref(true);
-
-const members = ref([
-  { num: "member_1" },
-  { num: "member_2" },
-  { num: "member_3" },
-  { num: "member_4" },
-  { num: "member_5" },
-  { num: "member_6" },
-]);
 
 const chatOnOff = ref(false);
 

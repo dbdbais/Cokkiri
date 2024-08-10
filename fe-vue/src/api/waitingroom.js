@@ -3,14 +3,27 @@ import { localAxios } from "@/utils/request";
 const axios = localAxios();
 
 export const getWaitingRoom = (roomId, success, fail) => {
-  console.log("get Study Room");
   axios.get(`/waitingroom/${roomId}`).then(success).catch(fail);
 };
 
 export const getWaitingRoomList = (params, success, fail) => {
-  console.log("get Study Room List");
   axios.get("/waitingroom?", { params: params }).then(success).catch(fail);
 };
+
+export function selectedProblem(problemList, roomId) {
+  return axios({
+    url: `/waitingroom/problem`,
+    method: "post",
+    data: { problems: problemList, sessionId: roomId },
+  });
+}
+
+export function getProblemList(roomId) {
+  return axios({
+    url: `/waitingroom/problem/${roomId}`,
+    method: "get",
+  });
+}
 
 export const goWaitingRoom = (user, success, fail) => {
   console.log("go Study Room");

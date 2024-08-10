@@ -52,12 +52,24 @@ public class SubmitRestController {
         Map<Integer, String> hInput;
         if(submitRequestDTO.isSubmit()){
             hInput = sProblem.getAlgoHiddenInput();
+
+            System.out.println("HIDDEN TEST CASE");
+            for(int hi : hInput.keySet()){
+                System.out.println(hi +" : " + hInput.get(hi));
+            }
+            System.out.println("============");
+
             int nxtIdx = input.size();
 
             for(String val : hInput.values()){
-                input.put(++nxtIdx,val);
+                input.put(nxtIdx++,val);
             }
             //add hidden input value
+        }
+
+        System.out.println("INPUT");
+        for(int idx : input.keySet()){
+            System.out.println(idx +" : " + input.get(idx));
         }
 
         long time = sProblem.getTime();

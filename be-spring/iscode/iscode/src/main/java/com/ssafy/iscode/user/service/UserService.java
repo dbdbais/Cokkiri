@@ -22,7 +22,6 @@ import java.util.Optional;
 @Service
 public class UserService {
 
-
     private final PasswordEncoder passwordEncoder;
 
     private final UserRepository userRepository;
@@ -52,7 +51,7 @@ public class UserService {
     // Schedule to run at midnight every day
     @Transactional
     //@Scheduled(cron = "0 0 0 * * ?") //for real
-    @Scheduled(cron = "0 */2 * * * *")  // 매 2분마다 실행
+    //@Scheduled(cron = "0 */2 * * * *")  // 매 2분마다 실행
     public void assignDailyMissions() {
         System.out.println("dailyMission Generated");
         List<User> users = userRepository.findAll(); // Fetch all users

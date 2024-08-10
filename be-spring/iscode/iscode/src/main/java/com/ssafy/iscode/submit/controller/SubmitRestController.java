@@ -48,9 +48,14 @@ public class SubmitRestController {
         String code = submitRequestDTO.getSubmit_code();
         String ipt = submitRequestDTO.getIpt();
 
+
+
         Map<Integer, String> input = sProblem.getAlgoInput();
+
+        Map<Integer,String> finput = new HashMap<>(input);
         Map<Integer, String> hInput;
-        if(submitRequestDTO.isSubmit()){
+        System.out.println(submitRequestDTO.getIsSubmit());
+        if(submitRequestDTO.getIsSubmit() == 1){
             hInput = sProblem.getAlgoHiddenInput();
 
             System.out.println("HIDDEN TEST CASE");
@@ -59,17 +64,17 @@ public class SubmitRestController {
             }
             System.out.println("============");
 
-            int nxtIdx = input.size();
+            int nxtIdx = input.size()+1;
 
             for(String val : hInput.values()){
-                input.put(nxtIdx++,val);
+                finput.put(nxtIdx++,val);
             }
             //add hidden input value
         }
 
         System.out.println("INPUT");
-        for(int idx : input.keySet()){
-            System.out.println(idx +" : " + input.get(idx));
+        for(int idx : finput.keySet()){
+            System.out.println(idx +" : " + finput.get(idx));
         }
 
         long time = sProblem.getTime();
@@ -79,11 +84,11 @@ public class SubmitRestController {
                 language,
                 code,
                 ipt,
-                input,
+                finput,
                 time,
                 memory
         );
-        Map<Integer,String> coutput = apiConnection.compileCode(compileRequest,submitRequestDTO.isSubmit());
+        Map<Integer,String> coutput = apiConnection.compileCode(compileRequest,submitRequestDTO.getIsSubmit()==1);
         //apiConnection
 
         Map<Integer,String> output = sProblem.getAlgoOutput();

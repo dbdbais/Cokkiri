@@ -13,9 +13,12 @@ public class SubmitRequestDTO {
     private String language;
     private String submit_code;
     private String ipt = null;
-    private boolean isSubmit;
+    private int isSubmit;
 
     public SubmitRequestDTO() {}
+
+
+
 
 
 }

@@ -10,9 +10,16 @@ export const userStore = defineStore(
       tier: "",
       percent: 0,
     });
-
+    const userNickname = ref({});
     function setUser(newUser) {
       user.value = newUser;
+    }
+
+    function setUserNickName(allUser) {
+      userNickname.value = {};
+      allUser.forEach((user) => {
+        userNickname.value[user.id] = user.nickname;
+      });
     }
 
     function logout() {
@@ -26,8 +33,10 @@ export const userStore = defineStore(
 
     return {
       user,
+      userNickname,
       setUser,
       logout,
+      setUserNickName,
     };
   },
   {

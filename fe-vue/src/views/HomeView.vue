@@ -38,13 +38,16 @@ import FriendsList from "@/components/home/FriendsList.vue";
 import MainContent from "@/components/home/MainContent.vue";
 
 import { getWaitingRoomList, goWaitingRoom } from "@/api/waitingroom";
+import { getAllUser, getFriends } from "@/api/user";
 import { insertClass } from "@/api/problem";
 import { ref, onMounted, onUnmounted } from "vue";
 import { useRouter } from "vue-router";
 import { userStore } from "@/stores/user";
 import { useMessageStore } from "@/stores/message";
+import { friendStore } from "@/stores/friend";
 
 const uStore = userStore();
+const fStore = friendStore();
 const lobby = new WebSocket(
   `${process.env.VITE_VUE_SOCKET_URL}lobby/${uStore.user.nickname}`
 );
@@ -133,6 +136,16 @@ lobby.onmessage = function (event) {
     if (event === "NOTI") {
       console.log(event, param);
       messageStore.receiveInvite(param);
+    } else if (event === "FRIADD") {
+      console.log("친구 신청 완료!");
+      getAllUser().then((res) => {
+        uStore.setUserNickName(res.data);
+        setTimeout(() => {
+          getFriends(uStore.user.id).then((res) => {
+            fStore.setFriends(res.data);
+          });
+        }, 100);
+      });
     }
   }
 };
@@ -158,6 +171,9 @@ const getRoomList = function (params) {
 onMounted(() => {
   getRoomList();
   callInsertClass();
+  getAllUser().then((res) => {
+    uStore.setUserNickName(res.data);
+  });
 });
 
 onUnmounted(() => {

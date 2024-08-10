@@ -41,6 +41,11 @@ public class SubmitRestController {
         return submitService.insertSubmit(submit);
     }
 
+    @GetMapping
+    public int getSolved(@RequestParam String userId){
+        return submitService.getSolvedProblem(userId);
+    }
+
 
 
 

@@ -13,11 +13,7 @@ public class SubmitRequestDTO {
     private String language;
     private String submit_code;
     private String ipt = null;
-    private long time;
-    private long memory;
     private boolean isSubmit;
-
-
 
     public SubmitRequestDTO() {}
 

@@ -49,7 +49,7 @@ public class SubmitRestController {
         String ipt = submitRequestDTO.getIpt();
 
         Map<Integer, String> input = sProblem.getAlgoInput();
-        Map<Integer, String> hInput = new HashMap<>();
+        Map<Integer, String> hInput;
         if(submitRequestDTO.isSubmit()){
             hInput = sProblem.getAlgoHiddenInput();
             int nxtIdx = input.size();
@@ -76,6 +76,11 @@ public class SubmitRestController {
 
         Map<Integer,String> output = sProblem.getAlgoOutput();
 
+        System.out.println("OUTPUT");
+        for(int idx : coutput.keySet()){
+            System.out.println(idx +" : " + coutput.get(idx));
+        }
+        System.out.println("=============");
         boolean isCorrect = true;
         Map<Integer,Boolean> cResult = new HashMap<>();
         for(int idx : coutput.keySet()){

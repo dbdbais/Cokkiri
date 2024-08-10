@@ -9,9 +9,22 @@
       <FriendsList id="friends-list" />
     </div>
     <div id="main-right" class="box-col">
-      <Header id="header" class="box-col" @create="getRoomList" @search="searchList" @go-room="goRightNow" />
-      <MainContent id="main-content" :rooms="rooms" :current-page="currentPage" :category-obj="categoryObj"
-        @go-room="goRoom" @change-page="pageChange" @is-game="categoryList" />
+      <Header
+        id="header"
+        class="box-col"
+        @create="getRoomList"
+        @search="searchList"
+        @go-room="goRightNow"
+      />
+      <MainContent
+        id="main-content"
+        :rooms="rooms"
+        :current-page="currentPage"
+        :category-obj="categoryObj"
+        @go-room="goRoom"
+        @change-page="pageChange"
+        @is-game="categoryList"
+      />
     </div>
   </div>
 </template>
@@ -23,8 +36,9 @@ import Header from "@/components/home/Header.vue";
 import Profile from "@/components/home/Profile.vue";
 import FriendsList from "@/components/home/FriendsList.vue";
 import MainContent from "@/components/home/MainContent.vue";
+
 import { getWaitingRoomList, goWaitingRoom } from "@/api/waitingroom";
-import { insertClass } from "@/api/problem"
+import { insertClass } from "@/api/problem";
 import { ref, onMounted, onUnmounted } from "vue";
 import { useRouter } from "vue-router";
 import { userStore } from "@/stores/user";
@@ -171,7 +185,7 @@ const callInsertClass = async () => {
   } catch (e) {
     console.log(e);
   }
-}
+};
 
 const logout = function () {
   uStore.logout();

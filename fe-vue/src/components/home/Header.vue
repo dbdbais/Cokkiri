@@ -37,7 +37,7 @@
         </button>
       </div>
       <div class="notifications box-row">
-        <div class="box-main-noti noti-btn">
+        <div class="box-main-noti noti-btn" @click="$emit('mission')">
           <img id="mission-icon" src="@/assets/elephant-circus.svg" />
           일일미션
         </div>
@@ -53,12 +53,14 @@
       @create="$emit('create')"
     />
     <Notification v-if="isNotiModalOpen" @close="closeNotiModal" />
+    <Mission />
   </header>
 </template>
 
 <script setup>
 import CreateRoom from "@/components/home/modal/CreateRoom.vue";
 import Notification from "@/components/home/modal/Notification.vue";
+import Mission from "@/components/home/modal/Mission.vue";
 import { useModal } from "@/composables/useModal";
 import { ref } from "vue";
 

@@ -18,7 +18,7 @@
           검색
         </button>
       </div>
-      <div class="notifications box-row">0
+      <div class="notifications box-row">
         <div class="box-main-noti noti-btn" @click="openModal('mission')">
           <img id="mission-icon" src="@/assets/elephant-circus.svg" />
           일일미션

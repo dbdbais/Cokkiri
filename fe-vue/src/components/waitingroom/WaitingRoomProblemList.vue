@@ -8,6 +8,10 @@ const maxLevel = ref(9);
 const minLevel = ref(1);
 const selectedProblemList = ref({});
 
+defineProps({
+  roomData: Object,
+});
+
 onMounted(() => {
   getProblemsList();
 });
@@ -92,6 +96,7 @@ watch([minLevel, maxLevel], () => {
         ><span class="dash nomal-text">-</span>
         <span class="name">{{ problem.title }}</span>
         <button
+          v-if="!roomData.isGame"
           class="select-btn bold-text"
           :class="{ selected: selectedProblemList[problem.no] }"
           @click="selectedProblem(problem.no)"
@@ -102,7 +107,7 @@ watch([minLevel, maxLevel], () => {
     </div>
     <button
       class="selected-btn bold-text"
-      @click="$emit('problem-select', selectProblem)"
+      @click="$emit('problem-select', selectProblem, minLevel, maxLevel)"
     >
       선택 완료
     </button>

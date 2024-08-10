@@ -49,3 +49,12 @@ export const exitWaitingRoom = (roomData) => {
     data: roomData,
   });
 };
+
+export const getGameProblem = (data) => {
+  console.log("exit Waiting Room");
+  return axios({
+    url: "game/update",
+    method: "post",
+    data: data,
+  });
+};

@@ -1,6 +1,12 @@
 <script setup>
 import { useRoute, useRouter } from "vue-router";
-import { getWaitingRoom, exitWaitingRoom } from "@/api/waitingroom";
+import {
+  getWaitingRoom,
+  exitWaitingRoom,
+  getGameProblem,
+  getProblemList,
+  selectedProblem,
+} from "@/api/waitingroom";
 import { getUser, getUserName } from "@/api/user";
 import "@/assets/css/waitingroom.css";
 
@@ -17,7 +23,7 @@ import { ref, onMounted } from "vue";
 import { useLodingStore } from "@/stores/loading";
 import { useChatStore } from "@/stores/chat";
 import { getProblem } from "@/api/problem";
-import { selectedProblem } from "@/api/waitingroom";
+
 import { problemStore } from "@/stores/problem";
 
 const store = userStore();
@@ -44,7 +50,6 @@ ws.onmessage = function (event) {
     let username = data[0];
     let message = data[1];
     chatStore.sendChat(`${username} : ${message}`);
-    // chatList.value.push(`${username} : ${message}`);
   } else {
     let event = data[2];
     let param = data[3];
@@ -76,13 +81,13 @@ ws.onmessage = function (event) {
             console.log(err);
           });
         ws.close();
+        useProblemStore.select(problemList.value);
         if (roomData.value.isGame) {
           router.push({
             name: "gameProgress",
             params: { gameId: route.params.roomId },
           });
         } else {
-          useProblemStore.select(problemList.value);
           router.push({
             name: "meeting",
             params: { roomId: route.params.roomId },
@@ -147,11 +152,30 @@ const startStudy = function () {
   ws.send("|@|");
 };
 
-const selectProblem = (problemList) => {
-  console.log(problemList);
+const selectProblem = (problems, minLevel, maxLevel) => {
+  problemList.value = problems;
+  if (roomData.value.isGame) {
+    getGameProblem({
+      sessionId: route.params.roomId,
+      minDifficulty: minLevel,
+      maxDifficulty: maxLevel,
+    })
+      .then((res) => {
+        console.log(res.data);
+        getProblemList(route.params.roomId).then((res) => {
+          console.log(res.data);
+          problemList.value = res.data;
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
+
+  console.log(problemList.value);
   // send 보내야함
   let sendData = "|%|";
-  problemList.forEach((problem) => {
+  problemList.value.forEach((problem) => {
     sendData += "|!|" + problem;
   });
   ws.send(sendData);
@@ -178,6 +202,7 @@ const exitRoom = function () {
       <WaitingRoomSetting v-if="false" />
       <WaitingRoomProblemList
         v-if="problemModal"
+        :room-data="roomData"
         @problem-select="selectProblem"
         @close="problemModal = false"
       />

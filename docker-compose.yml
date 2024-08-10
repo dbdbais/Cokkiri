@@ -1,7 +1,7 @@
 services:
   db:
     image: mysql:8.0
-    container_name: mysql
+    container_name: mysql_refresh_test
     environment:
       MYSQL_ROOT_PASSWORD: 1sC0de!
       MYSQL_DATABASE: ssafy

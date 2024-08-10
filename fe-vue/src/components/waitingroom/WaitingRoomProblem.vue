@@ -28,9 +28,13 @@ const store = userStore();
         :key="problem.no"
       >
         <div class="badge md">LEVEL {{ problem.level }}</div>
-        <span class="no">NO.{{ String(problem.no).padStart(5, "0") }}</span
-        ><span class="dash nomal-text">-</span>
-        <span class="name">{{ problem.title }}</span>
+        <span class="no" v-if="roomData.isGame">NO.?????</span>
+        <span class="no" v-else
+          >NO.{{ String(problem.no).padStart(5, "0") }}</span
+        >
+        <span class="dash nomal-text">-</span>
+        <span class="name" v-if="roomData.isGame">??????</span>
+        <span class="name" v-else>{{ problem.title }}</span>
       </div>
     </div>
   </div>

@@ -101,6 +101,7 @@ code {
   font-size: 30px;
   white-space: pre-wrap;
   font-family: "yg-jalnan";
+  margin-bottom: 10px;
 }
 .problem-box li {
   margin-left: 20px;
@@ -117,6 +118,7 @@ code {
 
 .problem-box tr {
   display: flex;
+  padding: 5px;
   justify-content: space-around;
   align-items: center;
   border: 1px solid black;
@@ -126,6 +128,7 @@ code {
   width: 100%;
   text-align: center;
   font-size: 20px;
+  padding: 5px;
   border: 1px solid black;
 }
 .problem-category {

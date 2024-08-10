@@ -1,6 +1,12 @@
 <script setup>
 import { useRoute, useRouter } from "vue-router";
-import { getWaitingRoom, exitWaitingRoom } from "@/api/waitingroom";
+import {
+  getWaitingRoom,
+  exitWaitingRoom,
+  getGameProblem,
+  getProblemList,
+  selectedProblem,
+} from "@/api/waitingroom";
 import { getUser, getUserName } from "@/api/user";
 import "@/assets/css/waitingroom.css";
 
@@ -17,7 +23,7 @@ import { ref, onMounted } from "vue";
 import { useLodingStore } from "@/stores/loading";
 import { useChatStore } from "@/stores/chat";
 import { getProblem } from "@/api/problem";
-import { selectedProblem } from "@/api/waitingroom";
+
 import { problemStore } from "@/stores/problem";
 
 const store = userStore();
@@ -49,12 +55,19 @@ ws.onmessage = function (event) {
     let param = data[3];
     switch (event) {
       case "ENTER":
-        if (store.user.nickname === param) {
-          chatStore.resetChatBox();
+        if (store.user.nickname !== param) {
+          getUserName(param).then((res) => {
+            console.log(res.data);
+            res.data["num"] = getRandomIntInclusive(1, 5);
+            roomUsers.value.push(res.data);
+          });
         }
         chatStore.sendChat(`${param}님이 입장하였습니다.`);
         break;
       case "QUIT":
+        roomUsers.value = roomUsers.value.filter((user) => {
+          return user.nickname !== param;
+        });
         chatStore.sendChat(`${param}님이 퇴장하였습니다.`);
         break;
       case "START":
@@ -66,13 +79,13 @@ ws.onmessage = function (event) {
             console.log(err);
           });
         ws.close();
+        useProblemStore.select(problemList.value);
         if (roomData.value.isGame) {
           router.push({
             name: "gameProgress",
             params: { gameId: route.params.roomId },
           });
         } else {
-          useProblemStore.select(problemList.value);
           router.push({
             name: "meeting",
             params: { roomId: route.params.roomId },
@@ -105,8 +118,10 @@ function getRandomIntInclusive(min, max) {
 
 onMounted(async () => {
   loadingStore.loading();
+  chatStore.resetChatList();
   setTimeout(() => {
     loadingStore.loadingSuccess();
+    console.log(roomData.value);
     roomData.value.users.forEach((user) => {
       getUserName(user)
         .then((res) => {
@@ -118,6 +133,7 @@ onMounted(async () => {
         });
     });
   }, 1000);
+
   const route = useRoute();
   const success = (res) => {
     roomData.value = res.data;
@@ -133,11 +149,31 @@ onMounted(async () => {
 const startStudy = function () {
   ws.send("|@|");
 };
-const selectProblem = (problemList) => {
-  console.log(problemList);
+
+const selectProblem = (problems, minLevel, maxLevel) => {
+  problemList.value = problems;
+  if (roomData.value.isGame) {
+    getGameProblem({
+      sessionId: route.params.roomId,
+      minDifficulty: minLevel,
+      maxDifficulty: maxLevel,
+    })
+      .then((res) => {
+        console.log(res.data);
+        getProblemList(route.params.roomId).then((res) => {
+          console.log(res.data);
+          problemList.value = res.data;
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
+
+  console.log(problemList.value);
   // send 보내야함
   let sendData = "|%|";
-  problemList.forEach((problem) => {
+  problemList.value.forEach((problem) => {
     sendData += "|!|" + problem;
   });
   ws.send(sendData);
@@ -150,14 +186,6 @@ const sendChat = (chatData) => {
 
 const exitRoom = function () {
   ws.close();
-
-  const success = (res) => {
-    console.log(res.data);
-  };
-  const fail = (err) => {
-    console.log(err);
-  };
-
   exitWaitingRoom({
     sessionId: route.params.roomId,
     userName: store.user.nickname,
@@ -170,16 +198,9 @@ const exitRoom = function () {
   <div>
     <div class="waiting-room">
       <WaitingRoomSetting v-if="false" />
-      <WaitingRoomProblemList
-        v-if="problemModal"
-        @problem-select="selectProblem"
-        @close="problemModal = false"
-      />
-      <WaitingRoomFriend
-        v-if="friendInvite"
-        :room-id="route.params.roomId"
-        @close="friendInvite = false"
-      />
+      <WaitingRoomProblemList v-if="problemModal" :room-data="roomData" @problem-select="selectProblem"
+        @close="problemModal = false" />
+      <WaitingRoomFriend v-if="friendInvite" :room-id="route.params.roomId" @close="friendInvite = false" />
       <div class="box-row">
         <div class="box-col">
           <div class="rule-data">
@@ -208,34 +229,19 @@ const exitRoom = function () {
         </div>
       </div>
       <div class="bottom flex-align">
-        <WaitingRoomProblem
-          @open="problemModal = true"
-          :problem-list="problemList"
-          :room-data="roomData"
-        />
+        <WaitingRoomProblem @open="problemModal = true" :problem-list="problemList" :room-data="roomData" />
         <WaitingRoomChat @chat="sendChat" />
         <div class="box-col button-con">
           <button class="bold-text btn friend" @click="friendInvite = true">
-            <img
-              src="/src/assets/friend.svg"
-              alt="친구초대"
-              style="margin-right: 30px; width: 70px"
-            />친구초대
+            <img src="/src/assets/friend.svg" alt="친구초대" style="margin-right: 30px; width: 70px" />친구초대
           </button>
-          <button
-            class="bold-text btn start"
-            @click="startStudy"
+          <button class="bold-text btn start" @click="startStudy"
             :class="{ 'no-host': store.user.nickname !== roomData.hostName }"
-            :disabled="store.user.nickname !== roomData.hostName"
-          >
-            <img
-              src="/src/assets/start.svg"
-              alt="시작하기"
-              style="margin-right: 30px; width: 70px"
-              v-if="store.user.nickname === roomData.hostName"
-            />{{
-              store.user.nickname === roomData.hostName ? "시작하기" : "대기중"
-            }}
+            :disabled="store.user.nickname !== roomData.hostName">
+            <img src="/src/assets/start.svg" alt="시작하기" style="margin-right: 30px; width: 70px"
+              v-if="store.user.nickname === roomData.hostName" />{{
+                store.user.nickname === roomData.hostName ? "시작하기" : "대기중"
+              }}
           </button>
         </div>
       </div>

@@ -47,8 +47,8 @@ const exitRoom = function () {
   <div class="meeting-room">
     <Chat v-if="chatOnOff" />
     <div class="members box-main-con flex-align" id="members"></div>
-    <button
-      class="chat-btn"
+    <!-- <button
+      class="chat-btn set-btn"
       @click="
         () => {
           chatOnOff = true;
@@ -56,15 +56,30 @@ const exitRoom = function () {
       "
     >
       chat
+    </button> -->
+    <button id="myVideo" class="set-btn" @click="videoOnOff">
+      <img
+        v-if="video"
+        src="/src/assets/meeting/video-on.svg"
+        alt="비디오 on"
+      />
+      <img v-else src="/src/assets/meeting/video-off.svg" alt="비디오 off" />
     </button>
-    <button id="myVideo" @click="videoOnOff">
-      video [{{ video ? "ON" : "OFF" }}]
+    <button id="myAudio" class="set-btn" @click="audioOnOff">
+      <img
+        v-if="audio"
+        src="/src/assets/meeting/audio-on.svg"
+        alt="마이크 on"
+      />
+      <img v-else src="/src/assets/meeting/audio-off.svg" alt="마이크 off" />
     </button>
-    <button id="myAudio" @click="audioOnOff">
-      audio [{{ audio ? "ON" : "OFF" }}]
+    <div id="exit" class="room-exit bold-text md" @click="exitRoom">
+      <img src="/src/assets/exit_room.svg" alt="방나가기" />
+      나가기
+    </div>
+    <button id="video-share" class="set-btn" @click="publishScreenShare">
+      <img src="/src/assets/meeting/share.svg" alt="화면공유" />
     </button>
-    <button id="exit" @click="exitRoom">exit</button>
-    <button id="video-share" @click="publishScreenShare">화면 공유</button>
     <div class="main box-main-con">
       <Main />
     </div>
@@ -83,19 +98,25 @@ const exitRoom = function () {
 #video-share,
 .chat-btn {
   position: absolute;
-  top: 0;
 }
 #video-share {
-  right: 350px;
+  top: 90px;
+  right: 190px;
 }
 #myAudio {
-  right: 180px;
+  top: 90px;
+  right: 20px;
+}
+#myVideo {
+  top: 90px;
+  right: 105px;
 }
 #exit {
-  right: 300px;
+  top: 20px;
+  right: 20px;
 }
 .chat-btn {
-  right: 80px;
+  right: 200px;
 }
 
 .members {
@@ -122,5 +143,24 @@ button {
 
 video {
   border-radius: 20%;
+}
+
+.set-btn {
+  width: 70px;
+  height: 70px;
+  border-radius: 10px;
+  border-width: 5px;
+  border-color: #5bb5d9;
+  background-color: #a8dcf0;
+}
+
+.room-exit {
+  width: 120px;
+  height: 50px;
+  background-color: #ff6b6b;
+  border: 3px solid white;
+  border-radius: 10px;
+  padding-right: 7px;
+  font-size: 22px;
 }
 </style>

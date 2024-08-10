@@ -17,10 +17,13 @@ export const useChatStore = defineStore("chat", () => {
     chatList.value.push(message);
     setTimeout(autoScroll, 1);
   };
+  const resetChatList = () => {
+    chatList.value = [];
+  };
 
   const autoScroll = () => {
     chatBox.value.scrollTop = chatBox.value.scrollHeight;
   };
 
-  return { chatBox, chatList, sendChat, insertChatBox, resetChatBox };
+  return { chatBox, chatList, sendChat, insertChatBox, resetChatList };
 });

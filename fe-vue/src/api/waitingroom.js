@@ -41,7 +41,20 @@ export const createWaitingRoom = (roomData, success, fail) => {
     .catch(fail);
 };
 
-export const exitWaitingRoom = (roomData, success, fail) => {
+export const exitWaitingRoom = (roomData) => {
   console.log("exit Waiting Room");
-  axios.post("waitingroom/quit-room", JSON.stringify(roomData), success, fail);
+  return axios({
+    url: "waitingroom/quit-room",
+    method: "post",
+    data: roomData,
+  });
+};
+
+export const getGameProblem = (data) => {
+  console.log("exit Waiting Room");
+  return axios({
+    url: "game/update",
+    method: "post",
+    data: data,
+  });
 };

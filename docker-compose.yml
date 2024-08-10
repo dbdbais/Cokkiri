@@ -7,7 +7,7 @@ services:
       MYSQL_DATABASE: ssafy
     volumes:
       # - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql
-      - mysql_develop_data:/var/lib/mysql
+      - mysql_refresh_data:/var/lib/mysql
     ports:
       - "3308:3306"
     networks:

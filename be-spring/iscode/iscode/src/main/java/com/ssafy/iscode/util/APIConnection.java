@@ -4,8 +4,10 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ssafy.iscode.problem.model.dto.Problem;
+import com.ssafy.iscode.submit.model.dto.CompileRequestDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -76,6 +78,8 @@ public class APIConnection {
         return contentNode.asText();
 
     }
+
+
     public Problem getProblem(Long id) throws IOException {
         String baseurl = "https://solved.ac/api/v3";
         //SOLVED API url
@@ -140,52 +144,83 @@ public class APIConnection {
         //return info of Problem
     }
 
+    public Map<Integer,String> compileCode(CompileRequestDTO compileRequestDTO,boolean sbmit){
+        String url = "https://i11e108.p.ssafy.io/compiler/";
+        if(sbmit){
+            url += "submit";
+        }
+        else{
+            url += "run";
+        }
+        System.out.println(compileRequestDTO);
+        WebClient webClient = WebClient.create(url);
+
+        Map<Integer, String> response = webClient.post()
+                .bodyValue(compileRequestDTO)  // Request Body에 compileRequest 객체를 포함
+                .retrieve()
+                .bodyToMono(new ParameterizedTypeReference<Map<Integer, String>>() {})  // 응답을 Map<Integer, String> 형태로 받기
+                .block();  // 동기적으로 요청을 보내고 응답을 기다림
+
+        return response;
+    }
+
 
     //for Test
     public static void main(String[] args) throws IOException {
-        System.out.print("질문 입력하세요:");
-        String query = in.readLine();
 
-        String url = "https://api.openai.com/v1/chat/completions";
-        //openAI key
+        String language = "python";
+        String code = "print(input()+123)";
+        String ipt = null;
+        Map<Integer, String> input = new HashMap<>();
+        long time = 1;
+        long memory = 128;
 
-        Map<String,Object> request = new HashMap<>();
-        request.put("model","gpt-3.5-turbo");
-        request.put("messages",new Object[]{
-                new HashMap<String,String>(){{
-                    put("role","system");
-                    put("content","너는 JAVA언어를 PYTHON으로 바꿔주기 위한 비서야,");
-                }},
-                new HashMap<String,String>(){{
-                    put("role","user");
-                    put("content",query);
-                }}
-        });
+        String[] st = new String[11];
+        st[1] ="a";
+        st[2] ="b";
+        st[3] ="c";
+        st[4] ="d";
+        st[5] ="e";
+        st[6] ="f";
+        st[7] ="g";
+        st[8] ="h";
+        st[9] ="i";
+        st[10] ="j";
 
+        for(int i=1;i<=10;i++){
+            input.put(i,st[i]);
+        }
+
+        System.out.println("run : 1 or submit : 2");
+        int pos = Integer.parseInt(in.readLine());
+
+        String url = "https://i11e108.p.ssafy.io/compiler/";
+
+        if(pos == 1){
+            url += "run";
+        }
+        else{
+            url += "submit";
+        }
+        CompileRequestDTO compileRequest = new CompileRequestDTO(
+                language,
+                code,
+                ipt,
+                input,
+                time,
+                memory
+        );
+        System.out.println(compileRequest);
+        // WebClient 생성 및 요청 보내기
         WebClient webClient = WebClient.create(url);
-        Mono<String> mono =   webClient
-                .post()
-                .header("Authorization", "Bearer " + "YOUR API KEY")
-                .contentType(MediaType.APPLICATION_JSON)
-                .bodyValue(request)
+
+        Map<Integer, String> response = webClient.post()
+                .bodyValue(compileRequest)  // Request Body에 compileRequest 객체를 포함
                 .retrieve()
-                .bodyToMono(String.class);
+                .bodyToMono(new ParameterizedTypeReference<Map<Integer, String>>() {})  // 응답을 Map<Integer, String> 형태로 받기
+                .block();  // 동기적으로 요청을 보내고 응답을 기다림
 
-        String response = mono.block();
-        //System.out.println(response);
-
-        // JSON PARSING
-        ObjectMapper objectMapper = new ObjectMapper();
-
-        // Root Node
-        JsonNode rootNode = objectMapper.readTree(response);
-
-        // Extract content from choices array
-        JsonNode contentNode = rootNode.path("choices").get(0).path("message").path("content");
-        String content = contentNode.asText();
-
-        System.out.println(content);
-
+        System.out.println("Response from server: " + response);
 
     }
 }

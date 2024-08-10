@@ -1,24 +1,25 @@
 package com.ssafy.iscode.submit.model.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
+@AllArgsConstructor
 public class SubmitRequestDTO {
-
     private Long algo_num;
     private String user_id;
+    private String language;
     private String submit_code;
-    private boolean correct;
+    private String ipt = null;
+    private long time;
+    private long memory;
+    private boolean isSubmit;
+
+
 
     public SubmitRequestDTO() {}
-
-    public SubmitRequestDTO(Long algo_num, String user_id, String submit_code) {
-        this.algo_num = algo_num;
-        this.user_id = user_id;
-        this.submit_code = submit_code;
-    }
 
 
 }

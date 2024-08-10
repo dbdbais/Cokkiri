@@ -3,8 +3,8 @@ pipeline {
 
     environment {
         PATH = "${tool 'Cokirri-node'}/bin:${env.PATH}"
-        // DOCKER_IMAGE_BE = 'ohuggy/cokkiri_develop_be'
-        // DOCKER_IMAGE_FE = 'ohuggy/cokkiri_develop_fe'
+        DOCKER_IMAGE_BE = 'ohuggy/cokkiri_refresh_be'
+        DOCKER_IMAGE_FE = 'ohuggy/cokkiri_refresh_fe'
         DOCKER_HUB = 'dockerhub' // Jenkins 자격 증명 ID
 //         PATH = "/usr/local/bin"
     }
@@ -64,21 +64,21 @@ pipeline {
             }
         }
 
-        // stage('Build Docker Image') {
-        //     steps {
-        //         dir('be-spring'){
-        //             script {
-        //                 sh 'docker build -t ${DOCKER_IMAGE_BE} .'
-        //             }
-        //         }
+        stage('Build Docker Image') {
+            steps {
+                dir('be-spring'){
+                    script {
+                        sh 'docker build -t ${DOCKER_IMAGE_BE} .'
+                    }
+                }
 
-        //         dir('fe-vue'){
-        //             script {
-        //                 sh 'docker build -t ${DOCKER_IMAGE_FE} .'
-        //             }
-        //         }
-        //     }
-        // }
+                dir('fe-vue'){
+                    script {
+                        sh 'docker build -t ${DOCKER_IMAGE_FE} .'
+                    }
+                }
+            }
+        }
 
         // stage('Push Docker Image to Docker Hub') {
         //     steps {

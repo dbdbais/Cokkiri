@@ -14,7 +14,7 @@ services:
       - Cokkiri-refresh-Network
 
   backend:
-    image: ohuggy/cokkiri_develop_be
+    image: ohuggy/cokkiri_refresh_be
     container_name: Cokkiri-springboot_refresh_test
     ports:
       - "8080:8080"
@@ -24,7 +24,7 @@ services:
       - Cokkiri-refresh-Network
 
   frontend:   # 'frontend' 서비스 들여쓰기 수정
-    image: ohuggy/cokkiri_develop_fe
+    image: ohuggy/cokkiri_refresh_fe
     container_name: vuejs_refresh_test
     ports:
       - "8081:80"

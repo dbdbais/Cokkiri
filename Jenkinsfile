@@ -108,7 +108,7 @@ pipeline {
                     // sh 'docker rm -f Cokkiri-springboot'
                     // sh 'docker-compose down'
                     // Docker Compose를 사용하여 서비스 빌드 및 실행
-                    sh 'docker-compose '
+                    sh 'docker-compose down'
                     sh 'docker-compose up --build -d'
                 }
             }

@@ -59,7 +59,11 @@ onMounted(() => {
           :key="mission.mission"
         >
           {{ mission.mission }}
-          <input type="checkbox" class="mission-clear" :value="mission.clear" />
+          <input
+            type="checkbox"
+            class="mission-clear"
+            :checked="mission.clear"
+          />
         </div>
       </div>
     </div>
@@ -113,6 +117,7 @@ onMounted(() => {
   width: 370px;
   height: 90px;
   padding: 10px 20px;
+  margin-bottom: 20px;
   justify-content: space-between;
   background-color: #cadcff;
 }

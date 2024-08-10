@@ -7,7 +7,7 @@ services:
       MYSQL_DATABASE: ssafy
     volumes:
       # - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql
-      - develop_mysql_develop_data:/var/lib/mysql
+      - mysql_develop_data:/var/lib/mysql
     ports:
       - "3306:3306"
     networks:
@@ -33,8 +33,8 @@ services:
     networks:
       - Cokkiri-develop-Network
 
-# volumes:
-#   mysql_develop_data:
+volumes:
+  mysql_develop_data:
 
 networks:
   Cokkiri-develop-Network:

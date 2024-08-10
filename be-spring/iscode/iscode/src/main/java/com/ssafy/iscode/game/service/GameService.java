@@ -12,6 +12,7 @@ import com.ssafy.iscode.study.model.dao.StudyRepository;
 import com.ssafy.iscode.study.model.dto.StudyDto;
 import com.ssafy.iscode.user.model.dao.UserRepository;
 import com.ssafy.iscode.user.model.dto.User;
+import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -42,13 +43,40 @@ public class GameService {
 
     @Transactional
     public int updateGame(Map<String, String> params) {
-        GameDto gameDto = new GameDto(
-                Long.parseLong(params.get("sessionId")),
-                Integer.parseInt(params.get("minDifficulty")),
-                Integer.parseInt(params.get("maxDifficulty")),
-                Long.parseLong(params.get("time")),
-                Integer.parseInt(params.get("mode"))
-        );
+        GameDto gameDto = null;
+        if(params.get("maxTime") == null) {
+            if(params.get("mode") == null) {
+                gameDto = new GameDto(
+                        Long.parseLong(params.get("sessionId")),
+                        Integer.parseInt(params.get("minDifficulty")),
+                        Integer.parseInt(params.get("maxDifficulty"))
+                );
+            } else {
+                gameDto = new GameDto(
+                        Long.parseLong(params.get("sessionId")),
+                        Integer.parseInt(params.get("minDifficulty")),
+                        Integer.parseInt(params.get("maxDifficulty")),
+                        Integer.parseInt(params.get("mode"))
+                );
+            }
+        } else {
+            if(params.get("mode") == null) {
+                gameDto = new GameDto(
+                        Long.parseLong(params.get("sessionId")),
+                        Integer.parseInt(params.get("minDifficulty")),
+                        Integer.parseInt(params.get("maxDifficulty")),
+                        Long.parseLong(params.get("maxTime"))
+                );
+            } else {
+                gameDto = new GameDto(
+                        Long.parseLong(params.get("sessionId")),
+                        Integer.parseInt(params.get("minDifficulty")),
+                        Integer.parseInt(params.get("maxDifficulty")),
+                        Long.parseLong(params.get("maxTime")),
+                        Integer.parseInt(params.get("mode"))
+                );
+            }
+        }
 
         try {
             gameRepository.save(gameDto);

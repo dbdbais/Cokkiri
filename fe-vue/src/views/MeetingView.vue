@@ -11,15 +11,28 @@ import {
 import Member from "@/components/meeting/Member.vue";
 import Main from "@/components/meeting/Main.vue";
 import Chat from "@/components/meeting/Chat.vue";
-import { ref, onMounted } from "vue";
+import { ref, onMounted, onUnmounted } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import { getProblemList } from "@/api/waitingroom";
+import { getProblemList, getWaitingRoom } from "@/api/waitingroom";
+import HintView from "@/components/meeting/modal/HintView.vue";
+import { useModal } from "@/composables/useModal";
 
 const user = userStore();
 const problemList = ref([]);
+const { isModalOpen, openModal, closeModal } = useModal();
 
-onMounted(() => {
-  joinSession(route.params.roomId, user.user.nickname);
+onMounted(async () => {
+  try {
+    joinSession(route.params.roomId, user.user.nickname);
+    const response = await getWaitingRoom();
+    console.log("=====MeetingView Page=====")
+    console.log("roomInfo")
+    console.log(response);
+  } catch (e) {
+    console.error(e);
+  }
+  window.addEventListener("beforeunload", leaveSession);
+  window.addEventListener("popstate", leaveSession);
 });
 
 const route = useRoute();
@@ -37,6 +50,8 @@ const videoOnOff = function () {
   video.value = !video.value;
   changeVideo(video.value);
 };
+
+
 
 const exitRoom = function () {
   leaveSession();
@@ -57,20 +72,16 @@ const exitRoom = function () {
     >
       chat
     </button> -->
+    <button class="set-btn hint" @click="openModal">
+      <img v-if="video" src="/src/assets/meeting/video-on.svg" alt="비디오 on" />
+      <img v-else src="/src/assets/meeting/video-off.svg" alt="비디오 off" />
+    </button>
     <button id="myVideo" class="set-btn" @click="videoOnOff">
-      <img
-        v-if="video"
-        src="/src/assets/meeting/video-on.svg"
-        alt="비디오 on"
-      />
+      <img v-if="video" src="/src/assets/meeting/video-on.svg" alt="비디오 on" />
       <img v-else src="/src/assets/meeting/video-off.svg" alt="비디오 off" />
     </button>
     <button id="myAudio" class="set-btn" @click="audioOnOff">
-      <img
-        v-if="audio"
-        src="/src/assets/meeting/audio-on.svg"
-        alt="마이크 on"
-      />
+      <img v-if="audio" src="/src/assets/meeting/audio-on.svg" alt="마이크 on" />
       <img v-else src="/src/assets/meeting/audio-off.svg" alt="마이크 off" />
     </button>
     <div id="exit" class="room-exit bold-text md" @click="exitRoom">
@@ -84,6 +95,7 @@ const exitRoom = function () {
       <Main />
     </div>
   </div>
+  <HintView v-if="isModalOpen" @close="closeModal" />
 </template>
 
 <style scoped>
@@ -99,22 +111,27 @@ const exitRoom = function () {
 .chat-btn {
   position: absolute;
 }
+
 #video-share {
   top: 90px;
   right: 190px;
 }
+
 #myAudio {
   top: 90px;
   right: 20px;
 }
+
 #myVideo {
   top: 90px;
   right: 105px;
 }
+
 #exit {
   top: 20px;
   right: 20px;
 }
+
 .chat-btn {
   right: 200px;
 }
@@ -162,5 +179,10 @@ video {
   border-radius: 10px;
   padding-right: 7px;
   font-size: 22px;
+}
+
+.hint {
+  top: 90px;
+  right: 280px;
 }
 </style>

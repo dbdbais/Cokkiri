@@ -9,22 +9,9 @@
       <FriendsList id="friends-list" />
     </div>
     <div id="main-right" class="box-col">
-      <Header
-        id="header"
-        class="box-col"
-        @create="getRoomList"
-        @search="searchList"
-        @go-room="goRightNow"
-      />
-      <MainContent
-        id="main-content"
-        :rooms="rooms"
-        :current-page="currentPage"
-        :category-obj="categoryObj"
-        @go-room="goRoom"
-        @change-page="pageChange"
-        @is-game="categoryList"
-      />
+      <Header id="header" class="box-col" @create="getRoomList" @search="searchList" @go-room="goRightNow" />
+      <MainContent id="main-content" :rooms="rooms" :current-page="currentPage" :category-obj="categoryObj"
+        @go-room="goRoom" @change-page="pageChange" @is-game="categoryList" />
     </div>
   </div>
 </template>
@@ -43,8 +30,10 @@ import { ref, onMounted, onUnmounted } from "vue";
 import { useRouter } from "vue-router";
 import { userStore } from "@/stores/user";
 import { useMessageStore } from "@/stores/message";
+import { useMeetingStore } from "@/stores/meeting";
 
 const uStore = userStore();
+const mStore = useMeetingStore();
 const lobby = new WebSocket(
   `${process.env.VITE_VUE_SOCKET_URL}lobby/${uStore.user.nickname}`
 );
@@ -158,6 +147,7 @@ const getRoomList = function (params) {
 onMounted(() => {
   getRoomList();
   callInsertClass();
+  mStore.clearHint();
 });
 
 onUnmounted(() => {

@@ -104,30 +104,36 @@ public class SubmitRestController {
             System.out.println(idx +" : " + coutput.get(idx));
         }
         System.out.println("=============");
-        boolean isCorrect = true;
-        Map<Integer,Boolean> cResult = new HashMap<>();
-        for(int idx : coutput.keySet()){
-            String cop = coutput.get(idx);
-            String op = foutput.get(idx);
-            System.out.println(idx +" : " + cop +" = " + op);
-            if(cop.equals(op)){
-                cResult.put(idx,true);
-            }
-            else{
-                cResult.put(idx,false);
-                isCorrect = false;
-            }
-        }
-        System.out.println("RESULT");
-        for(int idx : cResult.keySet()){
-            System.out.println(idx +" : " + cResult.get(idx));
-        }
 
-        Submit submit = new Submit(sProblem,sUser,submitRequestDTO.getSubmit_code(),isCorrect);
-        submitService.insertSubmit(submit);
-        SubmitResponseDTO submitResponseDTO = new SubmitResponseDTO(isCorrect,cResult);
+        if(ipt != null){
+            boolean isCorrect = true;
+            Map<Integer,Boolean> cResult = new HashMap<>();
+            for(int idx : coutput.keySet()){
+                String cop = coutput.get(idx);
+                String op = foutput.get(idx);
+                System.out.println(idx +" : " + cop +" = " + op);
+                if(cop.equals(op)){
+                    cResult.put(idx,true);
+                }
+                else{
+                    cResult.put(idx,false);
+                    isCorrect = false;
+                }
+            }
+            System.out.println("RESULT");
+            for(int idx : cResult.keySet()){
+                System.out.println(idx +" : " + cResult.get(idx));
+            }
 
-        return submitResponseDTO;
+            Submit submit = new Submit(sProblem,sUser,submitRequestDTO.getSubmit_code(),isCorrect);
+            submitService.insertSubmit(submit);
+            SubmitResponseDTO submitResponseDTO = new SubmitResponseDTO(isCorrect,cResult);
+            return submitResponseDTO;
+        }
+        else{
+            SubmitResponseDTO submitResponseDTO = new SubmitResponseDTO(coutput.get(0));
+            return submitResponseDTO;
+        }
     }
 
     @GetMapping

@@ -138,14 +138,15 @@ lobby.onmessage = function (event) {
       messageStore.receiveInvite(param);
     } else if (event === "FRIADD") {
       console.log("친구 신청 완료!");
-      getAllUser().then((res) => {
-        uStore.setUserNickName(res.data);
-        setTimeout(() => {
+      setTimeout(
+        getAllUser().then((res) => {
+          uStore.setUserNickName(res.data);
           getFriends(uStore.user.id).then((res) => {
             fStore.setFriends(res.data);
           });
-        }, 100);
-      });
+        }),
+        100
+      );
     }
   }
 };

@@ -19,12 +19,13 @@ export const friendStore = defineStore("friend", () => {
     friendList.value = [];
     console.log(newFriends);
     console.log(uStore.userNickname);
-    await newFriends.forEach((element) => {
+    newFriends.forEach((element) => {
       console.log(element);
       if (element.status === "ACCEPT") {
         friendList.value.push(uStore.userNickname[element.friendUserId]);
       }
     });
+
     console.log(friendList.value);
     TStore.isTrigger();
   }

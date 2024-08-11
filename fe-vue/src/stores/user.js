@@ -41,6 +41,6 @@ export const userStore = defineStore(
     };
   },
   {
-    persist: true,
+    // persist: true,
   }
 );

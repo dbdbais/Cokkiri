@@ -132,13 +132,11 @@ async function addFriendFun() {
     console.log("유저 닉네임 가져오기 (2)");
     uStore.setUserNickName(res.data);
   });
-  setTimeout(
-    await getFriends(uStore.user.id).then((res) => {
-      console.log("친구 목록 가져오기 (3)");
-      fStore.setFriends(res.data);
-    }),
-    300
-  );
+  await getFriends(uStore.user.id).then((res) => {
+    console.log("친구 목록 가져오기 (3)");
+
+    setTimeout(fStore.setFriends(res.data), 1000);
+  });
 }
 
 lobby.onmessage = function (event) {

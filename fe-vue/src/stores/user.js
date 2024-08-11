@@ -10,14 +10,15 @@ export const userStore = defineStore(
       tier: "",
       percent: 0,
     });
+
     const userNickname = ref({});
     function setUser(newUser) {
       user.value = newUser;
     }
 
-    function setUserNickName(allUser) {
+    async function setUserNickName(allUser) {
       userNickname.value = {};
-      allUser.forEach((user) => {
+      await allUser.forEach((user) => {
         userNickname.value[user.id] = user.nickname;
       });
     }

@@ -127,6 +127,20 @@ const goRoom = function (id) {
   );
 };
 
+async function addFriendFun() {
+  await getAllUser().then((res) => {
+    console.log("유저 닉네임 가져오기 (2)");
+    uStore.setUserNickName(res.data);
+  });
+  setTimeout(
+    await getFriends(uStore.user.id).then((res) => {
+      console.log("친구 목록 가져오기 (3)");
+      fStore.setFriends(res.data);
+    }),
+    300
+  );
+}
+
 lobby.onmessage = function (event) {
   let data = event.data.split("|!|");
   console.log(data);
@@ -135,18 +149,11 @@ lobby.onmessage = function (event) {
     let param = data[3];
     if (event === "NOTI") {
       console.log(event, param);
+      messageStore.receiveNoti(param);
       messageStore.receiveInvite(param);
     } else if (event === "FRIADD") {
-      console.log("친구 신청 완료!");
-      setTimeout(
-        getAllUser().then((res) => {
-          uStore.setUserNickName(res.data);
-          getFriends(uStore.user.id).then((res) => {
-            fStore.setFriends(res.data);
-          });
-        }),
-        100
-      );
+      console.log("친구 신청 완료! (1)");
+      addFriendFun();
     }
   }
 };
@@ -165,7 +172,6 @@ const getRoomList = function (params) {
     console.log(err);
   };
 
-  console.log(params);
   getWaitingRoomList(params, success, fail);
 };
 

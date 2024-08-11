@@ -14,13 +14,14 @@ export const friendStore = defineStore("friend", () => {
     allRelationships.value = newFriends;
   }
 
-  function setFriends(newFriends) {
+  async function setFriends(newFriends) {
+    console.log("친구 목록 세팅하는 중 (4)");
     friendList.value = [];
     console.log(newFriends);
-    newFriends.forEach((element) => {
+    console.log(uStore.userNickname);
+    await newFriends.forEach((element) => {
+      console.log(element);
       if (element.status === "ACCEPT") {
-        console.log(element.friendUserId);
-        console.log(uStore.userNickname);
         friendList.value.push(uStore.userNickname[element.friendUserId]);
       }
     });

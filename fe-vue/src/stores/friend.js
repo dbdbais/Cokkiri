@@ -1,12 +1,9 @@
 import { ref } from "vue";
 import { defineStore } from "pinia";
-import { getUser } from "@/api/user";
 import { userStore } from "./user";
-import { useTriggerStore } from "./trigger";
 
 export const friendStore = defineStore("friend", () => {
   const uStore = userStore();
-  const TStore = useTriggerStore();
   const allRelationships = ref([]);
   const friendList = ref([]);
 
@@ -29,7 +26,6 @@ export const friendStore = defineStore("friend", () => {
     });
 
     console.log(friendList.value);
-    TStore.isTrigger();
   }
 
   return {

@@ -66,11 +66,8 @@ import { getFriends, getAllUser } from "@/api/user";
 import { userStore } from "@/stores/user";
 import { friendStore } from "@/stores/friend";
 import Chat from "@/components/home/modal/Chat.vue";
-import { useTriggerStore } from "@/stores/trigger";
 const uStore = userStore();
 const fStore = friendStore();
-const tStore = useTriggerStore();
-const friends = ref([]);
 
 onMounted(async () => {
   await getAllUser().then((res) => {
@@ -81,15 +78,6 @@ onMounted(async () => {
     fStore.setFriends(res.data);
   });
 });
-
-watch(tStore, () => {
-  console.log("트리거!");
-  updateFriends();
-});
-
-function updateFriends() {
-  friends.value = fStore.friendList;
-}
 
 const openIndex = ref([]);
 

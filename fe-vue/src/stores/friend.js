@@ -16,8 +16,10 @@ export const friendStore = defineStore("friend", () => {
 
   async function setFriends(newFriends) {
     console.log("친구 목록 세팅하는 중 (4)");
+    const time = new Date();
+    console.log("시간: " + time);
     friendList.value = [];
-    console.log(newFriends);
+    // console.log(newFriends);
     console.log(uStore.userNickname);
     newFriends.forEach((element) => {
       console.log(element);

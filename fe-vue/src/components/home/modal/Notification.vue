@@ -33,54 +33,35 @@ function getNotiData() {
     notiRequest.value.room.push(room);
   });
 
-  receiveRegular({ userName: store.user.nickname })
-    .then((res) => {
-      console.log(res.data);
-      res.data.forEach((element) => {
-        notiRequest.value.regular.push(element);
-      });
-    })
-    .catch((err) => console.log(err));
-
-  getFriends(store.user.id)
-    .then((res) => {
-      res.data.forEach((friend) => {
-        if (friend.status === "SELECT") {
-          getUser(friend.friendUserId)
-            .then((res) => {
-              // console.log(res.data);
-              if (
-                !notiRequest.value.friends.some((element) => {
-                  // console.log(element);
-                  element.nickname === res.data.nickname;
-                  return true;
-                })
-              ) {
-                notiRequest.value.friends.push(res.data);
-              }
-              console.log(notiRequest.value.friends);
-            })
-            .catch((err) => {
-              console.log(err);
-            });
-        }
-      });
-      console.log(notiRequest.value.friends);
-    })
-    .catch((err) => {
-      console.log(err);
+  // receiveRegular({ userName: store.user.nickname })
+  //   .then((res) => {
+  //     console.log(res.data);
+  //     res.data.forEach((element) => {
+  //       notiRequest.value.regular.push(element);
+  //     });
+  //   })
+  //   .catch((err) => console.log(err));
+  messageStore.noti.friend.forEach((friend) => {
+    notiRequest.value.friends.push(friend);
+  });
+  getFriends(store.user.id).then((res) => {
+    res.data.forEach((element) => {
+      if (element.status === "SELECT") {
+        console.log(element);
+        notiRequest.value.friends.push(element.friendUserId);
+      }
     });
+  });
 }
 
 onMounted(() => {
   getNotiData();
+  console.log(messageStore.noti.friend);
 });
 
 const router = useRouter();
 const isSelected = ref("announ");
 const announ = ref(announcement);
-const noti = ref([]);
-const roomInvite = ref([]);
 const fStore = friendStore();
 const selectedAnnoun = ref(null);
 
@@ -92,12 +73,12 @@ async function addFriend(friendUserId) {
     .catch((err) => {
       console.log(err);
     });
-  setTimeout(
-    getFriends(store.user.id).then((res) => {
-      fStore.setFriends(res.data);
-    }),
-    1000
-  );
+  // setTimeout(
+  //   getFriends(store.user.id).then((res) => {
+  //     fStore.setFriends(res.data);
+  //   }),
+  //   1000
+  // );
 
   getNotiData();
 }
@@ -203,9 +184,10 @@ const goRoom = function (roomId) {
             :key="index"
             class="box-row announ-con"
           >
-            <span>{{ item.nickname }}</span>
+            <!-- <span>{{ store.userNickname[item] }}</span> -->
+            <span>{{ item }}</span>
             <div class="box-row">
-              <button class="btn-accept bold-text" @click="addFriend(item.id)">
+              <button class="btn-accept bold-text" @click="addFriend(item)">
                 수락
               </button>
               <button class="btn-reject bold-text">거절</button>

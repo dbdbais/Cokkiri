@@ -9,8 +9,8 @@
       </div>
       <div class="accordion-item" :class="isOpen(index) ? 'open' : ''">
         <div
-          v-for="friend in friends"
-          :key="friend.index"
+          v-for="friend in fStore.friendList"
+          :key="friend"
           class="box-main-exp box-content"
         >
           <img class="friend-profile" src="@/assets/elephant-profile2.svg" />
@@ -62,7 +62,7 @@
 <script setup>
 import { ref, onMounted, watch } from "vue";
 import { useModal } from "@/composables/useModal";
-import { getFriends, getUser } from "@/api/user";
+import { getFriends, getAllUser } from "@/api/user";
 import { userStore } from "@/stores/user";
 import { friendStore } from "@/stores/friend";
 import Chat from "@/components/home/modal/Chat.vue";
@@ -72,8 +72,11 @@ const fStore = friendStore();
 const tStore = useTriggerStore();
 const friends = ref([]);
 
-onMounted(() => {
-  getFriends(uStore.user.id).then((res) => {
+onMounted(async () => {
+  await getAllUser().then((res) => {
+    uStore.setUserNickName(res.data);
+  });
+  await getFriends(uStore.user.id).then((res) => {
     console.log(res.data);
     fStore.setFriends(res.data);
   });

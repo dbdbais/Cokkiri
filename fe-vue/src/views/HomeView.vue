@@ -132,10 +132,13 @@ async function addFriendFun() {
     console.log("유저 닉네임 가져오기 (2)");
     uStore.setUserNickName(res.data);
   });
+  console.log("친구 목록 가져오기 (3)");
+  const time = new Date();
+  console.log("시간: " + time);
   await getFriends(uStore.user.id).then((res) => {
-    console.log("친구 목록 가져오기 (3)");
-
-    setTimeout(fStore.setFriends(res.data), 1000);
+    setTimeout(() => {
+      fStore.setFriends(res.data);
+    }, 5000);
   });
 }
 
@@ -176,9 +179,6 @@ const getRoomList = function (params) {
 onMounted(() => {
   getRoomList();
   callInsertClass();
-  getAllUser().then((res) => {
-    uStore.setUserNickName(res.data);
-  });
 });
 
 onUnmounted(() => {

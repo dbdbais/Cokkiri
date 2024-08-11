@@ -1,11 +1,10 @@
 import { ref } from "vue";
 import { defineStore } from "pinia";
 import { getWaitingRoom } from "@/api/waitingroom";
-import { getFriends } from "@/api/user";
-import { userStore } from "./user";
 
 export const useMessageStore = defineStore("message", () => {
-  const uStore = userStore();
+  const unReadNoti = ref(0);
+
   const noti = ref({
     room: [],
     friend: [],
@@ -13,6 +12,8 @@ export const useMessageStore = defineStore("message", () => {
   });
 
   const receiveNoti = function (param) {
+    unReadNoti.value += 1;
+    console.log(unReadNoti.value);
     if (param === ".") {
       console.log("친구추가");
       // receiveFriend();
@@ -35,9 +36,15 @@ export const useMessageStore = defineStore("message", () => {
     getWaitingRoom(message, success, fail);
   };
 
+  function readNoti() {
+    unReadNoti.value = 0;
+  }
+
   return {
     noti,
+    unReadNoti,
     receiveNoti,
     receiveInvite,
+    readNoti,
   };
 });

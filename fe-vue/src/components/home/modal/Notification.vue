@@ -56,7 +56,7 @@ function getNotiData() {
 
 onMounted(() => {
   getNotiData();
-  console.log(messageStore.noti.friend);
+  messageStore.readNoti();
 });
 
 const router = useRouter();

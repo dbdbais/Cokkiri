@@ -51,13 +51,15 @@ public class SubmitRestController {
 
 
         Map<Integer, String> input = sProblem.getAlgoInput();
-
+        Map<Integer,String> output = sProblem.getAlgoOutput();
         Map<Integer,String> finput = new HashMap<>(input);
-        Map<Integer, String> hInput;
+        Map<Integer,String> foutput = new HashMap<>(output);
+
+        Map<Integer, String> hInput,hOutput;
         System.out.println(submitRequestDTO.getIsSubmit());
         if(submitRequestDTO.getIsSubmit() == 1){
             hInput = sProblem.getAlgoHiddenInput();
-
+            hOutput = sProblem.getAlgoHiddenOutput();
             System.out.println("HIDDEN TEST CASE");
             for(int hi : hInput.keySet()){
                 System.out.println(hi +" : " + hInput.get(hi));
@@ -68,6 +70,11 @@ public class SubmitRestController {
 
             for(String val : hInput.values()){
                 finput.put(nxtIdx++,val);
+            }
+
+            nxtIdx = input.size()+1;
+            for(String val : hOutput.values()){
+                foutput.put(nxtIdx++,val);
             }
             //add hidden input value
         }
@@ -91,7 +98,6 @@ public class SubmitRestController {
         Map<Integer,String> coutput = apiConnection.compileCode(compileRequest,submitRequestDTO.getIsSubmit()==1);
         //apiConnection
 
-        Map<Integer,String> output = sProblem.getAlgoOutput();
 
         System.out.println("OUTPUT");
         for(int idx : coutput.keySet()){
@@ -102,7 +108,7 @@ public class SubmitRestController {
         Map<Integer,Boolean> cResult = new HashMap<>();
         for(int idx : coutput.keySet()){
             String cop = coutput.get(idx);
-            String op = output.get(idx);
+            String op = foutput.get(idx);
             System.out.println(idx +" : " + cop +" = " + op);
             if(cop.equals(op)){
                 cResult.put(idx,true);

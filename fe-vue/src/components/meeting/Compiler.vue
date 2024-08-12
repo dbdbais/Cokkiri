@@ -1,6 +1,5 @@
 <script setup>
 import { ref, onMounted, watch } from "vue";
-import axios from "axios";
 import ace from "ace-builds";
 import "ace-builds/src-noconflict/mode-python";
 import "ace-builds/src-noconflict/mode-java";
@@ -39,10 +38,14 @@ const defaultCode = {
 const userCode = ref({ ...defaultCode });
 
 function getInit() {
-  initializeEditor(
-    userCodeList.value[tStore.currentProblemNum].code,
-    userCodeList.value[tStore.currentProblemNum].language
-  );
+  if (pStore.selectedProblemList.length === 0) {
+    initializeEditor(null, "python");
+  } else {
+    initializeEditor(
+      userCodeList.value[tStore.currentProblemNum].code,
+      userCodeList.value[tStore.currentProblemNum].language
+    );
+  }
   console.log(userCodeList.value);
 }
 
@@ -53,6 +56,8 @@ watch(tStore, () => {
   // console.log(editor.value.getValue());
   userCodeList.value[tStore.beforeProblemNum].code = editor.value.getValue();
   userCodeList.value[tStore.beforeProblemNum].language = selectedLanguage.value;
+  outputText.value = "";
+  inputText.value = "";
   // console.log(userCodeList.value[pStore.beforeProblemNum].code);
   // console.log(userCodeList.value[pStore.beforeProblemNum]);
   getInit();
@@ -132,7 +137,7 @@ onMounted(() => {
   document.getElementById("language").dispatchEvent(new Event("change"));
 });
 
-const runCode = async () => {
+const runCode = async (isSubmit) => {
   const code = editor.value.getValue();
   const language = selectedLanguage.value;
   userCode.value[language] = code;
@@ -143,55 +148,41 @@ const runCode = async () => {
     user_id: uStore.user.id,
     language: userCodeList.value[tStore.currentProblemNum].language,
     submit_code: userCodeList.value[tStore.currentProblemNum].code,
-    ipt: null,
-    isSubmit: 0,
+    ipt: inputText.value === "" ? null : inputText.value,
+    isSubmit: isSubmit,
   };
 
   insert(data).then((res) => {
     console.log(res.data);
-  });
+    if (isSubmit === 0) {
+      if (inputText.value === "") {
+        let outPut = "";
 
-  // axios({
-  //   method: "POST",
-  //   url: "http://192.168.30.188:8080/api/compiler/run",
-  //   headers: {
-  //     "Content-Type": "application/json",
-  //   },
-  //   data: {
-  //     language: language,
-  //     code: code,
-  //     ipt: inputText.value,
-  //     inputOutput: {
-  //       1000: 13,
-  //       123: 133,
-  //     },
-  //     time: 1,
-  //     memory: 100,
-  //   },
-  // })
-  //   .then((res) => {
-  //     if (inputText.value === "") {
-  //       console.log(res.data);
-  //       let outPutData = "";
-  //       Object.keys(res.data).forEach((key) => {
-  //         outPutData += key + "\n";
-  //         if (res.data[key] === "correct") {
-  //           outPutData += "정답!\n";
-  //         } else {
-  //           outPutData += "오답.\n";
-  //         }
-  //         outPutData += "\n";
-  //       });
-  //       outputText.value = outPutData;
-  //     } else {
-  //       console.log(res.data);
-  //       outputText.value = res.data.output;
-  //     }
-  //   })
-  //   .catch((err) => {
-  //     console.log(err);
-  //   });
+        Object.keys(res.data.tcOutput).forEach((key) => {
+          outPut += `예제 입력 ${key}\n${res.data.tcOutput[key]}\n`;
+          outPut += res.data.result[key] ? "정답입니다!" : "틀렸습니다.";
+          outPut += "\n";
+        });
+        outputText.value = outPut;
+      } else {
+        outputText.value = res.data.opt;
+      }
+    } else {
+      if (res.data.correct) {
+        Swal.fire({
+          icon: "success",
+          title: "정답입니다!",
+        });
+      } else {
+        Swal.fire({
+          icon: "error",
+          title: `${res.data.accuracy * 100}점 입니다..`,
+        });
+      }
+    }
+  });
 };
+const submitCode = () => {};
 
 const resetCode = () => {
   console.log("언어 교체");
@@ -221,7 +212,7 @@ const clearInput = () => {
         </select>
 
         <div id="editor"></div>
-        <button class="run-btn bold-text" @click="runCode">실행</button>
+        <button class="run-btn bold-text" @click="runCode(0)">실행</button>
         <button
           class="submit-btn bold-text"
           :style="{ scale: minimum * 0.01 }"
@@ -229,6 +220,7 @@ const clearInput = () => {
             prevent: prevent,
           }"
           :disabled="prevent"
+          @click="runCode(1)"
         >
           제출
         </button>
@@ -362,14 +354,14 @@ textarea,
 }
 
 #inputText {
-  padding: 5px;
+  padding: 15px;
 }
 
 #outputText {
   border: 2px solid black;
   width: 90%;
   overflow: auto;
-
+  font-size: 20px;
   white-space: pre-wrap;
 }
 .prevent {

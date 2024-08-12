@@ -9,7 +9,7 @@ const baseURL = "submitapi";
 
 export function insert(data) {
   return axios({
-    url: `${baseURL}/insert`,
+    url: `${baseURL}`,
     method: "post",
     data,
   });

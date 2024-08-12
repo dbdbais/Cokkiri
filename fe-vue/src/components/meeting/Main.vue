@@ -11,12 +11,14 @@ defineProps({
   minimum: Number,
   prevent: Boolean,
   bigfont: Boolean,
+  roomData: Object,
 });
 
 const main = ref(null);
 const resizer = ref(null);
 const problemWidth = ref(1000);
 const selectedButton = ref("compiler");
+const userCnt = ref(1);
 const compiler = ref(true);
 
 const initResize = (e) => {
@@ -29,8 +31,8 @@ const startResize = (e) => {
   problemWidth.value = e.clientX - mainRect.left;
   if (problemWidth.value < 500) {
     problemWidth.value = 500;
-  } else if (problemWidth.value > 1300) {
-    problemWidth.value = 1300;
+  } else if (problemWidth.value > 1100) {
+    problemWidth.value = 1100;
   }
 };
 
@@ -46,30 +48,66 @@ const selectButton = (button) => {
 
 <template>
   <div ref="main" class="flex-align main-content">
-    <div :style="{
-      width: problemWidth + 'px',
-    }" class="problem box-sb">
+    <div
+      :style="{
+        width: problemWidth + 'px',
+      }"
+      class="problem box-sb"
+    >
       <Problem :blind="blind" />
     </div>
     <button ref="resizer" class="resizer" @mousedown="initResize"></button>
-    <div class="compiler box-sb" :style="{
-      flex: 1,
-    }">
+    <div
+      class="compiler box-sb"
+      :style="{
+        flex: 1,
+      }"
+    >
       <div class="flex-align btn-box">
-        <div class="compiler-btn bold-text md" :class="{ active: selectedButton === 'compiler' }"
-          @click="selectButton('compiler')">
+        <div
+          class="compiler-btn bold-text md"
+          :class="{ active: selectedButton === 'compiler' }"
+          @click="selectButton('compiler')"
+        >
           에디터
         </div>
-        <div class="submit-btn bold-text md" :class="{ active: selectedButton === 'submit' }"
-          @click="selectButton('submit')">
+        <div
+          v-if="roomData.isGame"
+          class="submit-btn bold-text md"
+          :class="{ active: selectedButton === 'submit' }"
+          @click="selectButton('submit')"
+        >
           제출 목록
         </div>
-        <div class="hint-btn bold-text md" :class="{ active: selectedButton === 'hint' }" @click="selectButton('hint')">
+        <div
+          v-else
+          class="submit-btn bold-text md"
+          :class="{ active: selectedButton === 'submit' }"
+          @click="selectButton('submit')"
+        >
+          공유 목록
+        </div>
+        <div
+          class="hint-btn bold-text md"
+          :class="{ active: selectedButton === 'hint' }"
+          @click="selectButton('hint')"
+        >
           힌트
         </div>
       </div>
-      <Compiler v-if="selectedButton === 'compiler'" :bigfont="bigfont" :minimum="minimum" :prevent="prevent" />
-      <SubmitList v-else-if="selectedButton === 'submit'" />
+      <Compiler
+        v-if="selectedButton === 'compiler'"
+        :bigfont="bigfont"
+        :minimum="minimum"
+        :prevent="prevent"
+        :room-data="roomData"
+        :user-cnt="userCnt"
+        @up-cnt="userCnt += 1"
+      />
+      <SubmitList
+        v-else-if="selectedButton === 'submit'"
+        :room-data="roomData"
+      />
       <Hint v-else-if="selectedButton === 'hint'" />
     </div>
   </div>

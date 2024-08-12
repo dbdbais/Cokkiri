@@ -6,37 +6,49 @@ import {
   changeVideo,
   joinSession,
   leaveSession,
+  removeUserRequest,
   publishScreenShare,
 } from "@/api/webRTC";
 import Member from "@/components/meeting/Member.vue";
 import Main from "@/components/meeting/Main.vue";
 import Chat from "@/components/meeting/Chat.vue";
+import ShareCodeDetail from "@/components/meeting/modal/ShareCodeDetail.vue";
 import { ref, onMounted, onUnmounted } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { getProblemList, getWaitingRoom } from "@/api/waitingroom";
 import HintView from "@/components/meeting/modal/HintView.vue";
 import { useModal } from "@/composables/useModal";
+import { useSubmitStore } from "@/stores/submit";
 
 const user = userStore();
 const problemList = ref([]);
+const roomData = ref([]);
+const shareCode = ref(true);
+const roomUser = ref({});
+
 const { isModalOpen, openModal, closeModal } = useModal();
 
 onMounted(async () => {
+  const shareData = [];
+  localStorage.setItem("shareData", JSON.stringify(shareData));
   try {
     joinSession(route.params.roomId, user.user.nickname);
-    const response = await getWaitingRoom();
-    console.log("=====MeetingView Page=====")
-    console.log("roomInfo")
-    console.log(response);
+    getWaitingRoom(route.params.roomId, (res) => {
+      roomData.value = res.data;
+      submitStore.setRoomUser(res.data);
+
+      console.log(roomData.value);
+    });
   } catch (e) {
     console.error(e);
   }
-  window.addEventListener("beforeunload", leaveSession);
-  window.addEventListener("popstate", leaveSession);
+  // window.addEventListener("beforeunload", leaveSession);
+  // window.addEventListener("popstate", leaveSession);
 });
 
 const route = useRoute();
 const router = useRouter();
+const submitStore = useSubmitStore();
 const audio = ref(true);
 const video = ref(true);
 
@@ -51,37 +63,51 @@ const videoOnOff = function () {
   changeVideo(video.value);
 };
 
-
-
 const exitRoom = function () {
-  leaveSession();
   router.replace({ name: "home" });
 };
+
+const member = ref(null);
+console.log(member.value);
+
+onUnmounted(() => {
+  console.log("미팅 종료");
+  removeUserRequest();
+  leaveSession();
+});
 </script>
 <template>
   <div class="meeting-room">
     <Chat v-if="chatOnOff" />
-    <div class="members box-main-con flex-align" id="members"></div>
-    <!-- <button
-      class="chat-btn set-btn"
-      @click="
-        () => {
-          chatOnOff = true;
-        }
-      "
-    >
-      chat
-    </button> -->
+    <ShareCodeDetail v-if="submitStore.showDetail" />
+    <div
+      ref="member"
+      class="members box-main-con flex-align"
+      id="members"
+    ></div>
+
     <button class="set-btn hint" @click="openModal">
-      <img v-if="video" src="/src/assets/meeting/video-on.svg" alt="비디오 on" />
+      <img
+        v-if="video"
+        src="/src/assets/meeting/video-on.svg"
+        alt="비디오 on"
+      />
       <img v-else src="/src/assets/meeting/video-off.svg" alt="비디오 off" />
     </button>
     <button id="myVideo" class="set-btn" @click="videoOnOff">
-      <img v-if="video" src="/src/assets/meeting/video-on.svg" alt="비디오 on" />
+      <img
+        v-if="video"
+        src="/src/assets/meeting/video-on.svg"
+        alt="비디오 on"
+      />
       <img v-else src="/src/assets/meeting/video-off.svg" alt="비디오 off" />
     </button>
     <button id="myAudio" class="set-btn" @click="audioOnOff">
-      <img v-if="audio" src="/src/assets/meeting/audio-on.svg" alt="마이크 on" />
+      <img
+        v-if="audio"
+        src="/src/assets/meeting/audio-on.svg"
+        alt="마이크 on"
+      />
       <img v-else src="/src/assets/meeting/audio-off.svg" alt="마이크 off" />
     </button>
     <div id="exit" class="room-exit bold-text md" @click="exitRoom">
@@ -92,7 +118,7 @@ const exitRoom = function () {
       <img src="/src/assets/meeting/share.svg" alt="화면공유" />
     </button>
     <div class="main box-main-con">
-      <Main />
+      <Main :room-data="roomData" />
     </div>
   </div>
   <HintView v-if="isModalOpen" @close="closeModal" />
@@ -137,11 +163,11 @@ const exitRoom = function () {
 }
 
 .members {
-  width: 1500px;
+  width: 1460px;
   height: 180px;
 
   margin: 20px;
-  justify-content: space-around;
+  /* justify-content: space-around; */
 }
 
 .main {
@@ -159,7 +185,7 @@ button {
 }
 
 video {
-  border-radius: 20%;
+  margin-left: 20px;
 }
 
 .set-btn {

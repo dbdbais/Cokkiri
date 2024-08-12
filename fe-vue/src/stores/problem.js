@@ -7,6 +7,7 @@ export const problemStore = defineStore(
     const problems = ref([]);
     const selectedProblemList = ref([]);
     const selectedProblem = ref();
+    const userCodeList = ref({});
 
     function setProblems(newProblems) {
       problems.value = newProblems;
@@ -19,10 +20,17 @@ export const problemStore = defineStore(
 
     function select(problemList) {
       selectedProblemList.value = [];
+      userCodeList.value = {};
       let num = 1;
       problemList.forEach((element) => {
         element["num"] = num;
         selectedProblemList.value.push(element);
+        userCodeList.value[element.num] = {
+          no: element.no,
+          code: 'print("Hello, World!")',
+          language: "python",
+          ipt: "",
+        };
         num += 1;
       });
       console.log(selectedProblemList.value);
@@ -39,6 +47,7 @@ export const problemStore = defineStore(
       problems,
       selectedProblemList,
       selectedProblem,
+      userCodeList,
       setProblems,
       setSelectedProblem,
       select,

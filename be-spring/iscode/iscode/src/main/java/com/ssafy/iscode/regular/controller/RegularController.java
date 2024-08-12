@@ -173,7 +173,7 @@ public class RegularController {
         return new ResponseEntity<>(regularService.getRegulars(regularName, weekday, start, end, page), HttpStatus.OK);
     }
 
-    @GetMapping("/rankint")
+    @GetMapping("/ranking")
     public ResponseEntity<List<RegularResponseDto>> getRanking() {
         try {
             List<RegularResponseDto> list = regularService.getRanking();

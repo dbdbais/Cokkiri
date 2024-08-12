@@ -28,7 +28,7 @@ export function getProblemList(roomId) {
 export const goWaitingRoom = (user, success, fail) => {
   console.log("go Study Room");
   axios
-    .post("waitingroom/enter-room", JSON.stringify(user))
+    .post("/waitingroom/enter-room", JSON.stringify(user))
     .then(success)
     .catch(fail);
 };
@@ -36,7 +36,7 @@ export const goWaitingRoom = (user, success, fail) => {
 export const createWaitingRoom = (roomData, success, fail) => {
   console.log("create Waiting Room");
   axios
-    .post("waitingroom/create-room", JSON.stringify(roomData))
+    .post("/waitingroom/create-room", JSON.stringify(roomData))
     .then(success)
     .catch(fail);
 };

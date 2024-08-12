@@ -11,16 +11,18 @@ public class SubmitService {
 
     private final SubmitRepository submitRepository;
 
-
     @Autowired
     public SubmitService(SubmitRepository submitRepository) {
         this.submitRepository = submitRepository;
     }
 
-
-    public int insertSubmit(Submit submit){
+    public int insertSubmit(Submit submit)
+    {
         return submitRepository.save(submit);
     }
 
-    //must add view and
+    public int getSolvedProblem(String userId){
+        return submitRepository.getSolvedProblem(userId);
+    }
+
 }

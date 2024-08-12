@@ -134,7 +134,9 @@ public class WebrtcController {
                     // Last user left: session must be removed
                     this.mapSessions.remove(sessionId);
 
-                    studyService.closeStudy(Long.parseLong(sessionId));
+                    if(!sessionId.contains("Screen")) {
+                        studyService.closeStudy(Long.parseLong(sessionId));
+                    }
                 }
                 return new ResponseEntity<>(HttpStatus.OK);
             } else {

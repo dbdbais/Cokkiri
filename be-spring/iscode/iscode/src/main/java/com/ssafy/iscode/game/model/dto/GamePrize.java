@@ -1,5 +1,6 @@
 package com.ssafy.iscode.game.model.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.ssafy.iscode.user.model.dto.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -22,6 +23,7 @@ public class GamePrize {
 
     @ManyToOne
     @JoinColumn(name = "game_id", nullable = false)
+    @JsonIgnore
     private GameDto game;
 
     @ManyToOne
@@ -38,7 +40,7 @@ public class GamePrize {
     public String toString() {
         return "GamePrize{" +
                 "id=" + id +
-                ", game=" + game +
+                ", game=" + game.getId() +
                 ", user=" + user +
                 ", rank=" + ranking +
                 ", time=" + time +

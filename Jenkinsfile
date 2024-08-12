@@ -21,7 +21,7 @@ pipeline {
         }
 
         stage('properties copy'){
-              steps{
+            steps{
                 withCredentials([file(credentialsId: 'Cokkiri-spring-properties', variable: 'properties')]) {
                     script {
                         sh 'pwd'
@@ -31,10 +31,10 @@ pipeline {
                         sh 'cp $properties be-spring/iscode/iscode/src/main/resources/application.properties'
                         sh 'ls'
                     }
-                  }
-                  
+                    }
+                    
             }
-          }
+        }
 
         stage("Install Dependencies"){
             steps{

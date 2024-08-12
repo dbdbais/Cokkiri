@@ -47,13 +47,23 @@ public class RegularRepository {
                 .getResultList();
     }
 
+    public List<RegularDto> getRanking() {
+        String query = "SELECT r FROM RegularDto r " +
+                "JOIN r.users ru " +
+                "GROUP BY r.id " +
+                "ORDER BY SUM(ru.user.score) DESC";
+
+        return em.createQuery(query, RegularDto.class)
+                .getResultList();
+    }
+
     public List<RegularDto> findAll(int offset){
         String query = "SELECT r FROM RegularDto r " +
                 "WHERE r.end IS NULL";
 
         return em.createQuery(query, RegularDto.class)
                 .setFirstResult(offset)
-                .setMaxResults(4)
+                .setMaxResults(6)
                 .getResultList();
     }
 
@@ -65,7 +75,7 @@ public class RegularRepository {
         return em.createQuery(query, RegularDto.class)
                 .setParameter("regularName", "%" + regularName + "%")
                 .setFirstResult(offset)
-                .setMaxResults(4)
+                .setMaxResults(6)
                 .getResultList();
     }
 
@@ -77,7 +87,7 @@ public class RegularRepository {
         return em.createQuery(query, RegularDto.class)
                 .setParameter("weekday", weekday)
                 .setFirstResult(offset)
-                .setMaxResults(4)
+                .setMaxResults(6)
                 .getResultList();
     }
 
@@ -89,7 +99,7 @@ public class RegularRepository {
         return em.createQuery(query, RegularDto.class)
                 .setParameter("start", start)
                 .setFirstResult(offset)
-                .setMaxResults(4)
+                .setMaxResults(6)
                 .getResultList();
     }
 
@@ -101,7 +111,7 @@ public class RegularRepository {
         return em.createQuery(query, RegularDto.class)
                 .setParameter("end", end)
                 .setFirstResult(offset)
-                .setMaxResults(4)
+                .setMaxResults(6)
                 .getResultList();
     }
 
@@ -115,7 +125,7 @@ public class RegularRepository {
                 .setParameter("start", start)
                 .setParameter("end", end)
                 .setFirstResult(offset)
-                .setMaxResults(4)
+                .setMaxResults(6)
                 .getResultList();
     }
 
@@ -129,7 +139,7 @@ public class RegularRepository {
                 .setParameter("regularName", "%" + regularName + "%")
                 .setParameter("weekday", weekday)
                 .setFirstResult(offset)
-                .setMaxResults(4)
+                .setMaxResults(6)
                 .getResultList();
     }
 
@@ -143,7 +153,7 @@ public class RegularRepository {
                 .setParameter("regularName", "%" + regularName + "%")
                 .setParameter("start", start)
                 .setFirstResult(offset)
-                .setMaxResults(4)
+                .setMaxResults(6)
                 .getResultList();
     }
 
@@ -157,7 +167,7 @@ public class RegularRepository {
                 .setParameter("regularName", "%" + regularName + "%")
                 .setParameter("end", end)
                 .setFirstResult(offset)
-                .setMaxResults(4)
+                .setMaxResults(6)
                 .getResultList();
     }
 
@@ -173,7 +183,7 @@ public class RegularRepository {
                 .setParameter("start", start)
                 .setParameter("end", end)
                 .setFirstResult(offset)
-                .setMaxResults(4)
+                .setMaxResults(6)
                 .getResultList();
     }
 
@@ -187,7 +197,7 @@ public class RegularRepository {
                 .setParameter("weekday", weekday)
                 .setParameter("start", start)
                 .setFirstResult(offset)
-                .setMaxResults(4)
+                .setMaxResults(6)
                 .getResultList();
     }
 
@@ -201,7 +211,7 @@ public class RegularRepository {
                 .setParameter("weekday", weekday)
                 .setParameter("end", end)
                 .setFirstResult(offset)
-                .setMaxResults(4)
+                .setMaxResults(6)
                 .getResultList();
     }
 
@@ -217,7 +227,7 @@ public class RegularRepository {
                 .setParameter("start", start)
                 .setParameter("end", end)
                 .setFirstResult(offset)
-                .setMaxResults(4)
+                .setMaxResults(6)
                 .getResultList();
     }
 
@@ -233,7 +243,7 @@ public class RegularRepository {
                 .setParameter("weekday", weekday)
                 .setParameter("start", start)
                 .setFirstResult(offset)
-                .setMaxResults(4)
+                .setMaxResults(6)
                 .getResultList();
     }
 
@@ -249,7 +259,7 @@ public class RegularRepository {
                 .setParameter("weekday", weekday)
                 .setParameter("end", end)
                 .setFirstResult(offset)
-                .setMaxResults(4)
+                .setMaxResults(6)
                 .getResultList();
     }
 
@@ -267,7 +277,7 @@ public class RegularRepository {
                 .setParameter("start", start)
                 .setParameter("end", end)
                 .setFirstResult(offset)
-                .setMaxResults(4)
+                .setMaxResults(6)
                 .getResultList();
     }
 }

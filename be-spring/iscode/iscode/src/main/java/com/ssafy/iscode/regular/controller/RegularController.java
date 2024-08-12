@@ -172,4 +172,17 @@ public class RegularController {
 
         return new ResponseEntity<>(regularService.getRegulars(regularName, weekday, start, end, page), HttpStatus.OK);
     }
+
+    @GetMapping("/rankint")
+    public ResponseEntity<List<RegularResponseDto>> getRanking() {
+        try {
+            List<RegularResponseDto> list = regularService.getRanking();
+
+            return new ResponseEntity<>(list, HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }

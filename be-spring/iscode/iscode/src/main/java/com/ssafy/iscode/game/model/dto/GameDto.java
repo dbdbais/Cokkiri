@@ -15,7 +15,7 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
-@Check(constraints = "game_diff BETWEEN 1 AND 5 AND game_mode BETWEEN 1 AND 3")
+@Check(constraints = "game_mode BETWEEN 1 AND 3")
 public class GameDto {
     // game id == waiting room's id
     // => not auto increment
@@ -24,10 +24,13 @@ public class GameDto {
     private Long id;
 
     // level 3 ~ 5 => 3|5
-    @Column(name = "game_diff",nullable = false)
-    private int difficulty;
+    @Column(name = "game_dmin",nullable = false)
+    private int minDifficulty;
 
-    // 30 minute => 30 * 60 * 1000 => 3600000
+    @Column(name = "game_dmax",nullable = false)
+    private int maxDifficulty;
+
+    // 30 minute => 30 * 60 * 1000 => 1800000
     @Column(name = "game_time",nullable = false)
     private Long maxTime;
 
@@ -42,9 +45,37 @@ public class GameDto {
     @OneToMany(mappedBy = "game", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<GamePrize> prizes;
 
-    public GameDto(Long id, int difficulty, Long maxTime, int mode) {
+    public GameDto(Long id, int minDifficulty, int maxDifficulty) {
         this.id = id;
-        this.difficulty = difficulty;
+        this.minDifficulty = minDifficulty;
+        this.maxDifficulty = maxDifficulty;
+        this.maxTime = (long) (30 * 60 * 1000);
+        this.mode = 1;
+        this.prizes = new ArrayList<>();
+    }
+
+    public GameDto(Long id, int minDifficulty, int maxDifficulty, Long maxTime) {
+        this.id = id;
+        this.minDifficulty = minDifficulty;
+        this.maxDifficulty = maxDifficulty;
+        this.maxTime = maxTime;
+        this.mode = 1;
+        this.prizes = new ArrayList<>();
+    }
+
+    public GameDto(Long id, int minDifficulty, int maxDifficulty, int mode) {
+        this.id = id;
+        this.minDifficulty = minDifficulty;
+        this.maxDifficulty = maxDifficulty;
+        this.maxTime = (long) (30 * 60 * 1000);
+        this.mode = mode;
+        this.prizes = new ArrayList<>();
+    }
+
+    public GameDto(Long id, int minDifficulty, int maxDifficulty, Long maxTime, int mode) {
+        this.id = id;
+        this.minDifficulty = minDifficulty;
+        this.maxDifficulty = maxDifficulty;
         this.maxTime = maxTime;
         this.mode = mode;
         this.prizes = new ArrayList<>();

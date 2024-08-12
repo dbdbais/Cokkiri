@@ -1,6 +1,6 @@
 FROM compiler_image
 
-COPY compiler/compiler/build/libs/*.jar app/app.jar
+COPY compiler/build/libs/*.jar app/app.jar
 
 EXPOSE 80
 

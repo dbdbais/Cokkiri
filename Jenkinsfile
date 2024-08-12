@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        DOCKER_IMAGE_COM = 'be-compiler'
+        DOCKER_IMAGE_COM = 'ohuggy/be-compiler'
         PATH = "${tool 'Cokirri-node'}/bin:${env.PATH}"
         DOCKER_IMAGE_BE = 'ohuggy/cokkiri_develop_be'
         DOCKER_IMAGE_FE = 'ohuggy/cokkiri_develop_fe'

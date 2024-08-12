@@ -17,21 +17,6 @@ pipeline {
                     credentialsId: 'Be' // Jenkins 자격 증명 ID
             }
         }
-        stage('properties copy'){
-              steps{
-                withCredentials([file(credentialsId: 'Cokkiri-spring-properties', variable: 'properties')]) {
-                    script {
-                        sh 'pwd'
-                        sh 'ls'
-                        sh 'chmod +r $properties'
-                        sh 'chmod -R 777 be-spring/iscode/iscode/src/main/resources'
-                        sh 'cp $properties be-spring/iscode/iscode/src/main/resources/application.properties'
-                        sh 'ls'
-                    }
-                  }
-                  
-            }
-          }
 
         stage("Install Dependencies"){
             steps{

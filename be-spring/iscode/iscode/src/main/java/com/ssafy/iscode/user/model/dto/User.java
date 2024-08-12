@@ -59,20 +59,15 @@ public class User {
         friend.getFriends().add(reverseRealtion);
     }
 
-    public boolean isCurrentMissionCompleted() {
-        return mission.values().stream().findFirst().orElse(false);
+
+    public void resetMission(){
+        mission.clear();
     }
 
     public void setMission(MissionType missionType, boolean completed) {
-        mission.clear();
         mission.put(missionType, completed);
     }
 
-    //make user mission to true
-    public void completeCurrentMission() {
-        Optional<MissionType> currentMission = getSingleMissionType();
-        currentMission.ifPresent(missionType -> mission.put(missionType, true));
-    }
 
 
     // Remove a friend

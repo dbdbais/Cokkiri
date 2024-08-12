@@ -215,6 +215,30 @@ public class RegularService {
         }
     }
 
+    public List<RegularResponseDto> getRanking() {
+        List<RegularDto> regularDtos = regularRepository.getRanking();
+
+        List<RegularResponseDto> regularResponseDtos = new ArrayList<>();
+
+        for(RegularDto regularDto: regularDtos) {
+            regularResponseDtos.add(new RegularResponseDto(
+                    regularDto.getId(),
+                    regularDto.getName(),
+                    null,
+                    null,
+                    null,
+                    0,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null
+            ));
+        }
+
+        return regularResponseDtos;
+    }
+
     public RegularResponseDto getRegular(Long sessionId) {
         RegularDto regularDto = regularRepository.findById(sessionId);
 
@@ -266,7 +290,7 @@ public class RegularService {
             weekdayNum = Arrays.asList(WEEKDAY).indexOf(weekday);
         }
 
-        int offset = 4 * (page - 1);
+        int offset = 6 * (page - 1);
 
         List<RegularResponseDto> list = new ArrayList<>();
         List<RegularDto> regulars;

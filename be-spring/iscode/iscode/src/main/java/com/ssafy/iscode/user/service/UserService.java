@@ -16,11 +16,11 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
 public class UserService {
-
 
     private final PasswordEncoder passwordEncoder;
 
@@ -50,42 +50,65 @@ public class UserService {
 
     // Schedule to run at midnight every day
     @Transactional
-    @Scheduled(cron = "0 0 0 * * ?")
+    //@Scheduled(cron = "0 0 0 * * ?") //for real
+    //@Scheduled(cron = "0 */2 * * * *")  // 매 2분마다 실행
     public void assignDailyMissions() {
         System.out.println("dailyMission Generated");
         List<User> users = userRepository.findAll(); // Fetch all users
 
+
         for (User user : users) {
-            MissionType randomMission = missionService.assignRandomMission();
-            user.setMission(randomMission, false); // Assign random mission and reset completion
+            user.resetMission();
+            //reset user's mission
+            List<MissionType> randomMission = missionService.assignRandomMission();
+            // assign random mission
+            for(MissionType msn : randomMission){
+                user.setMission(msn, false); // Assign random mission and reset completion
+            }
+
             userRepository.modify(user); // Save the updated user
             System.out.println(user);
         }
     }
 
     @Transactional
-    @Scheduled(cron = "0 0/30 * * * ?")
+    //@Scheduled(cron = "0 0/30 * * * ?") //for real
+    @Scheduled(cron = "0 * * * * *")  // 매 1분마다 실행
     public void isMissionAccomplished(){
         System.out.println("mission accomplished? ");
         List<User> users = userRepository.findAllWithIncompleteMissions();
 
         for(User user : users){
-            System.out.println(user);
-            boolean isAccomplished = userRepository.isMissionAccomplished(user);
+            System.out.println(user.getId());
+
+            boolean isAccomplished = false;
+            Map<MissionType, Boolean> mp = user.getMission();
+
+            for(MissionType mt : mp.keySet()){
+                if(mp.get(mt)) continue;
+                //if done continue
+                System.out.println(mt);
+                if(userRepository.isMissionAccomplished(user,mt)){
+                    isAccomplished = true;
+                    user.setMission(mt,true);
+                }
+            }
+
             if(isAccomplished){
-                user.completeCurrentMission();
-                //make complete
                 userRepository.modify(user);
             }
+
         }
     }
 
     public int insertUser(User user){
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         //ENCRYPT PW
-        MissionType dailyMS = missionService.assignRandomMission();
+        List<MissionType> dailyMS = missionService.assignRandomMission();
         //Insert
-        user.setMission(dailyMS,false);
+        for(MissionType msn : dailyMS){
+            user.setMission(msn,false);
+        }
         return userRepository.save(user);
     }
     public int modifyUser(User user){

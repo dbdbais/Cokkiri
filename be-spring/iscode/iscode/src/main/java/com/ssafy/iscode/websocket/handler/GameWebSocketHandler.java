@@ -2,6 +2,7 @@ package com.ssafy.iscode.websocket.handler;
 
 import com.ssafy.iscode.game.model.dto.GameDto;
 import com.ssafy.iscode.game.service.GameService;
+import com.ssafy.iscode.study.service.StudyService;
 import com.ssafy.iscode.user.model.dao.UserRepository;
 import com.ssafy.iscode.user.model.dto.User;
 import com.ssafy.iscode.study.model.dao.StudyRepository;
@@ -26,6 +27,9 @@ public class GameWebSocketHandler extends TextWebSocketHandler {
 
     @Autowired
     private GameService gameService;
+
+    @Autowired
+    private StudyService studyService;
 
     // connected
     // room id, user name, start time manage
@@ -131,10 +135,12 @@ public class GameWebSocketHandler extends TextWebSocketHandler {
         Set<WebSocketSession> sessions = roomSessions.get(roomId);
         if (sessions != null) {
             sessions.remove(session);
+
             if (sessions.isEmpty()) {
                 roomSessions.remove(roomId);
                 roomEnterTimes.remove(roomId);
                 roomPrices.remove(roomId);
+                studyService.closeStudy(Long.parseLong(roomId));
             }
 
             String event = "EXIT|!|" + userName;

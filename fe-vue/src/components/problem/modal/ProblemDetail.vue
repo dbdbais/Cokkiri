@@ -1,12 +1,29 @@
 <script setup>
+import { ref } from "vue";
 import { infoSplit } from "@/utils/parse-problem";
 import { useModal } from "@/composables/useModal";
-import WriteReview from "@/components/problem/modal/WriteReview.vue";
+import { getSolved } from "@/api/submit"
+import { userStore } from "@/stores/user";
+// import WriteReview from "@/components/problem/modal/WriteReview.vue";
+import SubmitList from "@/components/problem/modal/SubmitList.vue";
 
+const uStore = userStore();
+const submitData = ref({});
 const { isModalOpen, openModal, closeModal } = useModal();
 defineProps({
     problemData: Object
 });
+
+const fetchSubmit = async () => {
+    try {
+        const response = await getSolved(uStore.user.id);
+        console.log(response);
+        submitData.value = response.data;
+        openModal();
+    } catch (error) {
+        console.error(error);
+    }
+};
 </script>
 
 <template>
@@ -32,13 +49,13 @@ defineProps({
                 </div>
             </div>
             <div class="btn-con">
-                <div class="btn-review" @click="openModal">
+                <div class="btn-review" @click="fetchSubmit">
                     <span class="title main-title">리뷰하기</span>
                 </div>
             </div>
         </div>
     </div>
-    <WriteReview v-if="isModalOpen" @close="closeModal" :problem-id="problemData.no" />
+    <SubmitList v-if="isModalOpen" @close="closeModal" :problem-id="problemData.no" :submit-data="submitData" />
 </template>
 
 <style scoped>

@@ -14,3 +14,11 @@ export function insert(data) {
     data,
   });
 }
+
+export function getSolved(userId) {
+  return axios({
+    url: `${baseURL}`,
+    method: "get",
+    params: { userId },
+  });
+}

@@ -23,6 +23,7 @@ export const useMeetingStore = defineStore(
 
     const clearHint = () => {
       hints.value = [];
+      storedHintNo.value = [];
     };
     return { roomId, setRoomId, hints, storedHintNo, setHint, clearHint };
   },

@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, onMounted, computed } from "vue";
 import { useModal } from "@/composables/useModal";
 import { getSolved } from "@/api/submit"
 import { userStore } from "@/stores/user";
@@ -21,6 +21,7 @@ const fetchSubmit = async () => {
     }
 };
 
+const currentPage = ref(1);
 
 const props = defineProps({
     problemData: Object,
@@ -31,7 +32,7 @@ const tmpReviewData = ref([
     {
         "id": 1,
         "user": {
-            "nickname": "user1234"
+            "nickname": "user1"
         },
         "content": "리뷰내용",
         "code": "print('hello, world')",
@@ -39,7 +40,7 @@ const tmpReviewData = ref([
     {
         "id": 2,
         "user": {
-            "nickname": "user1234"
+            "nickname": "user2"
         },
         "content": "리뷰내용",
         "code": "print('hello, world')",
@@ -47,7 +48,7 @@ const tmpReviewData = ref([
     {
         "id": 3,
         "user": {
-            "nickname": "user1234"
+            "nickname": "user3"
         },
         "content": "리뷰내용",
         "code": "print('hello, world')",
@@ -56,10 +57,29 @@ const tmpReviewData = ref([
 
 onMounted(() => {
     tmpReviewData.value = tmpReviewData.value.map((item) => {
-        item.code = "문제를 해결하거나 3회 이상 코드를 제출해야 확인할 수 있습니다."
-        item.content = "문제를 해결하거나 3회 이상 코드를 제출해야 확인할 수 있습니다."
+        return {
+            ...item,
+            code: "문제를 해결하거나 3회 이상 코드를 제출해야 확인할 수 있습니다.",
+            content: "문제를 해결하거나 3회 이상 코드를 제출해야 확인할 수 있습니다."
+        }
     });
 })
+
+const prevPage = function () {
+    if (currentPage.value > 1) {
+        currentPage.value -= 1;
+    }
+};
+
+const nextPage = function () {
+    if (currentPage.value < tmpReviewData.value.length) {
+        currentPage.value += 1;
+    }
+};
+
+const currentReview = computed(() => {
+    return tmpReviewData.value[currentPage.value - 1];
+});
 </script>
 
 <template>
@@ -84,11 +104,21 @@ onMounted(() => {
                         </div>
                     </div> -->
                 <div class="right-con">
-                    <div class="overlay">
+                    <!-- <div class="overlay">
                         <span>문제를 해결하거나 3회 이상 제출해야합니다.</span>
+                    </div> -->
+                    <div v-if="!tmpReviewData" class="">
+                        <span>아직 등록된 리뷰가 없습니다.</span>
                     </div>
-                    <div v-for="review in tmpReviewData" :key="review.id">
-                        <ReviewItem :review="review" />
+                    <!-- <div v-for="review in tmpReviewData" :key="review.id"> -->
+                    <ReviewItem :review="currentReview" />
+                    <!-- </div> -->
+                    <div class="btn-pagi box-row">
+                        <div class="btn-prev" @click="prevPage">◀</div>
+                        <span v-for="i in tmpReviewData.length" :style="{ active: i === currentPage }"
+                            style="font-size: 35px; font-weight: 800">{{ i
+                            }}</span>
+                        <div class="btn-next" @click="nextPage">▶</div>
                     </div>
                 </div>
             </div>
@@ -179,5 +209,36 @@ onMounted(() => {
     transform: translate(-50%, -50%);
     text-align: center;
 
+}
+
+.active {
+    color: #3B72FF;
+}
+
+.btn-pagi {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    justify-content: space-between;
+}
+
+.btn-prev,
+.btn-next {
+    color: white;
+    font-size: 25px;
+    padding: 5px 50px;
+    border: 3px solid #7397f5;
+    border-radius: 10px;
+    background-color: #5484fc;
+}
+
+.btn-next {
+    margin-left: 25px;
+}
+
+.btn-prev:hover,
+.btn-next:hover {
+    border: 3px solid #3f5fae;
+    background-color: #2d55ba;
 }
 </style>

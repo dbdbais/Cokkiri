@@ -70,7 +70,6 @@ onMounted(async () => {
     // } catch (error) {
     //     console.error(error);
     // }
-
 });
 
 const openIndex = ref(false);

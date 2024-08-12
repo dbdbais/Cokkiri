@@ -118,30 +118,34 @@ watch(gameStore, () => {
   }
 });
 
+watch(selectedLanguage, (newLang) => {
+  console.log(selectedLanguage.value);
+  const currentMode = editor.value.session.getMode().$id;
+  const currentLanguage = currentMode.includes("python")
+    ? "python"
+    : currentMode.includes("java")
+    ? "java"
+    : currentMode.includes("c_cpp")
+    ? "cpp"
+    : "python";
+
+  userCode.value[currentLanguage] = editor.value.getValue();
+  editor.value.session.setMode("ace/mode/" + newLang);
+  editor.value.setValue(userCode.value[newLang] || defaultCode[newLang]);
+});
+
 onMounted(() => {
   getInit();
-  watch(selectedLanguage, (newLang) => {
-    const currentMode = editor.value.session.getMode().$id;
-    const currentLanguage = currentMode.includes("python")
-      ? "python"
-      : currentMode.includes("java")
-      ? "java"
-      : currentMode.includes("c_cpp")
-      ? "cpp"
-      : "python";
 
-    userCode.value[currentLanguage] = editor.value.getValue();
-    editor.value.session.setMode("ace/mode/" + newLang);
-    editor.value.setValue(userCode.value[newLang] || defaultCode[newLang]);
-  });
   document.getElementById("language").dispatchEvent(new Event("change"));
 });
 
 const runCode = async (isSubmit) => {
   const code = editor.value.getValue();
   const language = selectedLanguage.value;
-  userCode.value[language] = code;
-  userCodeList.value[tStore.currentProblemNum].code = editor.value.getValue();
+
+  userCodeList.value[tStore.currentProblemNum].code = code;
+  userCodeList.value[tStore.currentProblemNum].language = language;
 
   const data = {
     algo_num: userCodeList.value[tStore.currentProblemNum].no,

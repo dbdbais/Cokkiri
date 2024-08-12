@@ -12,16 +12,58 @@ import java.util.Map;
 @Setter
 
 public class SubmitResponseDTO {
-    private boolean isCorrect;
+    boolean isCorrect;
+    Map<Integer,String> tcOutput = new HashMap<>();
     Map<Integer,Boolean> result = new HashMap<>();
-    private String output =null;
+    String opt =null;
+    double accuracy;
+
+
+    public SubmitResponseDTO() {
+    }
 
     public SubmitResponseDTO(boolean isCorrect, Map<Integer, Boolean> result) {
         this.isCorrect = isCorrect;
         this.result = result;
     }
 
-    public SubmitResponseDTO(String output) {
-        this.output = output;
+    public boolean isCorrect() {
+        return isCorrect;
+    }
+
+    public void setCorrect(boolean correct) {
+        isCorrect = correct;
+    }
+
+    public Map<Integer, String> getTcOutput() {
+        return tcOutput;
+    }
+
+    public void setTcOutput(Map<Integer, String> tcOutput) {
+        this.tcOutput = tcOutput;
+    }
+
+    public Map<Integer, Boolean> getResult() {
+        return result;
+    }
+
+    public void setResult(Map<Integer, Boolean> result) {
+        this.result = result;
+    }
+
+    public String getOpt() {
+        return opt;
+    }
+
+    public void setOpt(String opt) {
+        this.opt = opt;
+    }
+
+    public double getAccuracy() {
+        return accuracy;
+    }
+
+    public void setAccuracy(double accuracy) {
+        this.accuracy = accuracy;
     }
 }

@@ -37,7 +37,7 @@ public class MailController {
     }
 
     // 인증번호 일치여부 확인
-    @GetMapping("/Check")
+    @GetMapping("/check")
     public ResponseEntity<?> mailCheck(@RequestParam String mail, @RequestParam String userNumber) {
 
         boolean isMatch = mailService.checkCode(mail,userNumber);

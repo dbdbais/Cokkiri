@@ -1,12 +1,21 @@
 package com.ssafy.iscode.mail.service;
 
 import com.ssafy.iscode.mail.model.dto.VerificationCode;
+import jakarta.activation.DataHandler;
+import jakarta.activation.DataSource;
+import jakarta.activation.FileDataSource;
 import jakarta.mail.MessagingException;
+import jakarta.mail.internet.MimeBodyPart;
 import jakarta.mail.internet.MimeMessage;
+import jakarta.mail.internet.MimeMultipart;
+import jakarta.mail.internet.MimeUtility;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
@@ -36,27 +45,46 @@ public class MailService {
         try {
             message.setFrom(senderEmail);
             message.setRecipients(MimeMessage.RecipientType.TO, mail);
-            message.setSubject("이메일 인증");
+            message.setSubject("[코딩하는 사람 끼리 스터디] 비밀번호 재설정");
             String body = "<div style='font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #ddd; border-radius: 10px;'>";
-            body += "<h2 style='text-align: center; color: #4CAF50;'>비밀번호 초기화 코드</h2>";
+            body += "<h2 style='text-align: center; color: #5A79C1;'>비밀번호 초기화 코드</h2>";
             body += "<p style='font-size: 16px; color: #333;'>안녕하세요,</p>";
             body += "<p style='font-size: 16px; color: #333;'>비밀번호를 재설정하려면 아래의 인증 코드를 입력해주세요:</p>";
             body += "<div style='text-align: center; margin: 20px 0;'>";
-            body += "<span style='display: inline-block; font-size: 24px; font-weight: bold; color: #4CAF50; padding: 10px 20px; border: 2px dashed #4CAF50; border-radius: 5px;'>" + code + "</span>";
+            body += "<span style='display: inline-block; font-size: 24px; font-weight: bold; color: #5A79C1; padding: 10px 20px; border: 2px dashed #5A79C1; border-radius: 5px;'>" + code + "</span>";
             body += "</div>";
             body += "<p style='font-size: 16px; color: #333;'>이 요청을 본인이 하지 않으셨다면, 이 이메일을 무시하셔도 됩니다.</p>";
             body += "<p style='font-size: 16px; color: #333;'>감사합니다.<br/><strong>코끼리 팀</strong></p>";
             body += "<hr style='border-top: 1px solid #ddd;'>";
             body += "<p style='font-size: 12px; color: #999; text-align: center;'>이 메일은 자동으로 발송된 메일입니다. 회신하지 마세요.</p>";
+            body += "<img src='cid:elephantImage' style='width: 100px; height: auto; display: block; margin: 0 auto;' />";
             body += "</div>";
-            message.setText(body,"UTF-8", "html");
+
+            MimeBodyPart bodyPart = new MimeBodyPart();
+            bodyPart.setContent(body, "text/html; charset=UTF-8");
+
+            // 이미지 파일 추가 (상대 경로로 지정)
+            MimeBodyPart imagePart = new MimeBodyPart();
+            ClassPathResource resource = new ClassPathResource("static/img/logo.png");
+            DataSource fds = new FileDataSource(resource.getFile());
+            imagePart.setDataHandler(new DataHandler(fds));
+            imagePart.setHeader("Content-ID", "<elephantImage>");
+            imagePart.setFileName(MimeUtility.encodeText(fds.getName(), "UTF-8", null));
+
+            // 본문과 이미지를 하나의 Multipart로 합침
+            MimeMultipart multipart = new MimeMultipart();
+            multipart.addBodyPart(bodyPart);
+            multipart.addBodyPart(imagePart);
+
+            message.setContent(multipart);
+
+            //message.setText(body,"UTF-8", "html");
 
             verificationCodeMap.put(mail,new VerificationCode(code, LocalDateTime.now().plusMinutes(5)));
 
-        } catch (MessagingException e) {
+        } catch (MessagingException |IOException e) {
             e.printStackTrace();
         }
-
         return message;
 
     }

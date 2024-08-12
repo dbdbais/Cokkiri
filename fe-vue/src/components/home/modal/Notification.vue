@@ -33,14 +33,14 @@ function getNotiData() {
     notiRequest.value.room.push(room);
   });
 
-  // receiveRegular({ userName: store.user.nickname })
-  //   .then((res) => {
-  //     console.log(res.data);
-  //     res.data.forEach((element) => {
-  //       notiRequest.value.regular.push(element);
-  //     });
-  //   })
-  //   .catch((err) => console.log(err));
+  receiveRegular({ userName: store.user.nickname })
+    .then((res) => {
+      console.log(res.data);
+      res.data.forEach((element) => {
+        notiRequest.value.regular.push(element);
+      });
+    })
+    .catch((err) => console.log(err));
   messageStore.noti.friend.forEach((friend) => {
     notiRequest.value.friends.push(friend);
   });

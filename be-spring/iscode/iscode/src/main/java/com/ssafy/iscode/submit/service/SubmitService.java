@@ -25,4 +25,8 @@ public class SubmitService {
         return submitRepository.getSolvedProblem(userId);
     }
 
+    public boolean isReview(String userId, Long problemId){
+        return submitRepository.canReview(userId,problemId);
+    }
+
 }

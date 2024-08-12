@@ -25,7 +25,6 @@ public class SubmitRepository {
                 em.persist(submit);
                 return 1; // successfully saved
             }
-
         } catch (Exception e) {
             e.printStackTrace();
             return 0; // failed
@@ -35,6 +34,7 @@ public class SubmitRepository {
         return em.find(Submit.class,no);
     }
 
+
     public int getSolvedProblem(String userId) {
         return ((Number) em.createQuery("SELECT COUNT(DISTINCT s.problem.id) FROM Submit s " +
                         "WHERE s.user.id = :userId AND s.correct = true")
@@ -42,4 +42,16 @@ public class SubmitRepository {
                 .getSingleResult()).intValue();
     }
 
+    public boolean canReview(String userId, Long problemId) {
+        Long count = (Long) em.createQuery(
+                        "SELECT COUNT(s) FROM Submit s WHERE s.user.id = :userId AND s.problem.id = :problemId"
+                )
+                .setParameter("userId", userId)
+                .setParameter("problemId", problemId)
+                .getSingleResult();
+
+        System.out.println("COUNT : "  + count);
+
+        return count >= 3;
+    }
 }

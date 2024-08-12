@@ -80,13 +80,15 @@ public class SubmitRestController {
             //add hidden input value
         }
 
+
+
+        long time = sProblem.getTime();
+        long memory = sProblem.getMemory();
+
         System.out.println("INPUT");
         for(int idx : finput.keySet()){
             System.out.println(idx +" : " + finput.get(idx));
         }
-
-        long time = sProblem.getTime();
-        long memory = sProblem.getMemory();
 
         CompileRequestDTO compileRequest = new CompileRequestDTO(
                 language,
@@ -98,7 +100,6 @@ public class SubmitRestController {
         );
         Map<Integer,String> coutput = apiConnection.compileCode(compileRequest,submitRequestDTO.getIsSubmit()==1);
         //apiConnection
-
 
 
         System.out.println("OUTPUT");
@@ -175,6 +176,11 @@ public class SubmitRestController {
     @GetMapping
     public int getSolved(@RequestParam String userId){
         return submitService.getSolvedProblem(userId);
+    }
+
+    @GetMapping("/view")
+    public boolean canReview(@RequestParam String userId, @RequestParam Long problemId){
+        return submitService.isReview(userId,problemId);
     }
 
 

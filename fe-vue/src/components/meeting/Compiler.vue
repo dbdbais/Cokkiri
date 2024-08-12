@@ -114,46 +114,46 @@ const runCode = async () => {
   const language = selectedLanguage.value;
   userCode.value[language] = code;
 
-  axios({
-    method: "POST",
-    url: "http://192.168.30.188:8080/api/compiler/run",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    data: {
-      language: language,
-      code: code,
-      ipt: inputText.value,
-      inputOutput: {
-        1000: 13,
-        123: 133,
-      },
-      time: 1,
-      memory: 100,
-    },
-  })
-    .then((res) => {
-      if (inputText.value === "") {
-        console.log(res.data);
-        let outPutData = "";
-        Object.keys(res.data).forEach((key) => {
-          outPutData += key + "\n";
-          if (res.data[key] === "correct") {
-            outPutData += "정답!\n";
-          } else {
-            outPutData += "오답.\n";
-          }
-          outPutData += "\n";
-        });
-        outputText.value = outPutData;
-      } else {
-        console.log(res.data);
-        outputText.value = res.data.output;
-      }
-    })
-    .catch((err) => {
-      console.log(err);
-    });
+  // axios({
+  //   method: "POST",
+  //   url: "http://192.168.30.188:8080/api/compiler/run",
+  //   headers: {
+  //     "Content-Type": "application/json",
+  //   },
+  //   data: {
+  //     language: language,
+  //     code: code,
+  //     ipt: inputText.value,
+  //     inputOutput: {
+  //       1000: 13,
+  //       123: 133,
+  //     },
+  //     time: 1,
+  //     memory: 100,
+  //   },
+  // })
+  //   .then((res) => {
+  //     if (inputText.value === "") {
+  //       console.log(res.data);
+  //       let outPutData = "";
+  //       Object.keys(res.data).forEach((key) => {
+  //         outPutData += key + "\n";
+  //         if (res.data[key] === "correct") {
+  //           outPutData += "정답!\n";
+  //         } else {
+  //           outPutData += "오답.\n";
+  //         }
+  //         outPutData += "\n";
+  //       });
+  //       outputText.value = outPutData;
+  //     } else {
+  //       console.log(res.data);
+  //       outputText.value = res.data.output;
+  //     }
+  //   })
+  //   .catch((err) => {
+  //     console.log(err);
+  //   });
 };
 
 const resetCode = () => {

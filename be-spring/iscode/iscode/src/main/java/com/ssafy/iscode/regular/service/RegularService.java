@@ -215,6 +215,30 @@ public class RegularService {
         }
     }
 
+    public List<RegularResponseDto> getRanking() {
+        List<RegularDto> regularDtos = regularRepository.getRanking();
+
+        List<RegularResponseDto> regularResponseDtos = new ArrayList<>();
+
+        for(RegularDto regularDto: regularDtos) {
+            regularResponseDtos.add(new RegularResponseDto(
+                    regularDto.getId(),
+                    regularDto.getName(),
+                    null,
+                    null,
+                    null,
+                    0,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null
+            ));
+        }
+
+        return regularResponseDtos;
+    }
+
     public RegularResponseDto getRegular(Long sessionId) {
         RegularDto regularDto = regularRepository.findById(sessionId);
 

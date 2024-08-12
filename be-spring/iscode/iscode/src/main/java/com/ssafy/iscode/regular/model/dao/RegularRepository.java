@@ -47,6 +47,16 @@ public class RegularRepository {
                 .getResultList();
     }
 
+    public List<RegularDto> getRanking() {
+        String query = "SELECT r FROM RegularDto r " +
+                "JOIN r.users ru " +
+                "GROUP BY r.id " +
+                "ORDER BY SUM(ru.user.score) DESC";
+
+        return em.createQuery(query, RegularDto.class)
+                .getResultList();
+    }
+
     public List<RegularDto> findAll(int offset){
         String query = "SELECT r FROM RegularDto r " +
                 "WHERE r.end IS NULL";

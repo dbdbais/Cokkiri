@@ -22,6 +22,10 @@ const nextPage = function () {
 const setTotalPage = function (total) {
   totalPage.value = total;
 };
+
+const clearPage = function () {
+  currentPage.value = 1;
+};
 </script>
 
 <template>
@@ -31,7 +35,7 @@ const setTotalPage = function (total) {
       <span class="title">문제 목록</span>
     </div>
     <div class="problem-con box-col">
-      <ProblemSearch />
+      <ProblemSearch @clear-page="clearPage" />
       <ProblemList :current-page="currentPage" @emit-total-page="setTotalPage" />
       <div class="btn-con">
         <button class="btn-prev" @click="prevPage">◀</button>

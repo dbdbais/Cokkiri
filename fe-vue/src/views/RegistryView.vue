@@ -2,6 +2,7 @@
 import { onMounted, ref, watch } from "vue";
 import { register, getAllUser } from "@/api/user";
 import { useRouter } from "vue-router";
+import { registerSend, mailCheck } from "@/api/mail";
 import "@/assets/css/home.css";
 // import { re } from "@/api/openvidu-browser-2.30.0";
 
@@ -9,11 +10,15 @@ const router = useRouter();
 const userData = ref({});
 const allUser = ref([]);
 const userId = ref("");
+const email = ref("");
+const emailConfirm = ref("");
 const password = ref("");
 const passwordConfirm = ref("");
 const nickname = ref("");
 
 const userIdCheck = ref(true);
+const emailCheck = ref(true);
+const emailConfirmCheck = ref(true);
 const nicknameCheck = ref(true);
 
 onMounted(() => {
@@ -78,10 +83,17 @@ const nicknameCheckFun = function () {
 };
 
 const submitForm = async () => {
-  if (nicknameCheck.value || userIdCheck.value) {
+  if (nicknameCheck.value) {
     Swal.fire({
       icon: "warning",
       title: "중복확인을 진행해주세요!",
+    });
+    return;
+  }
+  if (emailConfirmCheck.value) {
+    Swal.fire({
+      icon: "warning",
+      title: "이메일 인증을 진행해주세요!",
     });
     return;
   }
@@ -95,7 +107,7 @@ const submitForm = async () => {
 
   try {
     userData.value = {
-      id: userId.value,
+      id: email.value,
       password: password.value,
       passwordConfirm: passwordConfirm.value,
       nickname: nickname.value,
@@ -115,6 +127,56 @@ const submitForm = async () => {
     });
   }
 };
+
+const emailCheckFun = async () => {
+  try {
+    const response = await registerSend(email.value);
+    console.log(response);
+    if (response.data.success === true) {
+      // emailCheck.value = false;
+      Swal.fire({
+        icon: "success",
+        title: "인증번호가 전송되었습니다.",
+      });
+    } else {
+      Swal.fire({
+        icon: "error",
+        title: "인증번호 전송에 실패했습니다.",
+      });
+    }
+  } catch (e) {
+    console.error(e);
+    Swal.fire({
+      icon: "error",
+      title: "인증번호 전송에 실패했습니다.",
+    });
+  }
+}
+
+const emailConfirmCheckFun = async () => {
+  try {
+    const response = await mailCheck(email.value, emailConfirm.value);
+    console.log(response);
+    if (response.data === true) {
+      emailConfirmCheck.value = false;
+      Swal.fire({
+        icon: "success",
+        title: "이메일이 확인되었습니다.",
+      });
+    } else {
+      Swal.fire({
+        icon: "error",
+        title: "인증번호가 올바르지 않습니다.",
+      });
+    }
+  } catch (e) {
+    console.error(e);
+    Swal.fire({
+      icon: "error",
+      title: "이메일 확인에 실패했습니다.",
+    });
+  }
+}
 </script>
 
 <template>
@@ -122,7 +184,7 @@ const submitForm = async () => {
     <div class="signup-box">
       <div class="form box-col">
         <img class="signup-img" src="@/assets/login_elephant.svg" alt="" />
-        <div class="input-group box-col id-group">
+        <!-- <div class="input-group box-col id-group">
           <label for="username" class="title lbl-id">아이디 </label>
           <div>
             <input type="text" id="username" v-model="userId" />
@@ -131,8 +193,27 @@ const submitForm = async () => {
             </button>
             <span v-else class="check">중복확인</span>
           </div>
-        </div>
+        </div> -->
 
+        <div class="input-group box-col id-group">
+          <label for="username" class="title lbl-id">이메일 </label>
+          <div>
+            <input type="text" id="email" v-model="email" />
+            <button v-if="emailCheck" type="button" class="check-btn email-check" @click="emailCheckFun">
+              요청
+            </button>
+            <span v-else class="check">요청</span>
+          </div>
+        </div>
+        <div class="input-group box-col id-group">
+          <div>
+            <input type="text" id="email-verify" v-model="emailConfirm" />
+            <button v-if="emailConfirmCheck" type="button" class="check-btn email-check" @click="emailConfirmCheckFun">
+              확인
+            </button>
+            <span v-else class="check">확인</span>
+          </div>
+        </div>
         <div class="input-group box-col name-group">
           <label for="nickname" class="title lbl-name" id="name">닉네임 </label>
           <div>
@@ -264,6 +345,10 @@ input {
 .check-btn:hover,
 .verify-btn:hover {
   background-color: #6a6aff;
+}
+
+.email-check {
+  background-color: blue;
 }
 
 .signup-btn {

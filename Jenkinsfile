@@ -14,7 +14,7 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git branch: 'develop',
+                git branch: 'develop_final',
                     url: 'https://lab.ssafy.com/s11-webmobile1-sub2/S11P12E108.git',
                     credentialsId: 'Be' // Jenkins 자격 증명 ID
             }

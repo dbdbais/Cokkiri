@@ -1,17 +1,37 @@
 services:
   db:
     image: mysql:8.0
-    container_name: compiler_mysql_test
+    container_name: mysql
     environment:
       MYSQL_ROOT_PASSWORD: 1sC0de!
       MYSQL_DATABASE: ssafy
     volumes:
       # - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql
-      - compiler_mysql_test_data:/var/lib/mysql
+      - mysql_develop_data:/var/lib/mysql
     ports:
-      - "3307:3306"
+      - "3306:3306"
     networks:
-      - Compiler-test-Network
+      - Cokkiri-develop-Network
+
+  backend:
+    image: ohuggy/cokkiri_develop_be
+    container_name: Cokkiri-springboot
+    ports:
+      - "8085:8080"
+    depends_on:
+      - db
+    networks:
+      - Cokkiri-develop-Network
+
+  frontend:   # 'frontend' 서비스 들여쓰기 수정
+    image: ohuggy/cokkiri_develop_fe
+    container_name: vuejs
+    ports:
+      - "8086:80"
+    depends_on:
+      - backend
+    networks:
+      - Cokkiri-develop-Network
 
   complier:
     image: be-compiler
@@ -20,15 +40,11 @@ services:
       - "8087:8080"
     privileged: true
     networks:
-      - Compiler-test-Network
-
-
+      - Cokkiri-develop-Network
 
 volumes:
-  compiler_mysql_test_data:
+  mysql_develop_data:
 
 networks:
-  Compiler-test-Network:
+  Cokkiri-develop-Network:
     driver: bridge
-
-

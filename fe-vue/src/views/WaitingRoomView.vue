@@ -156,6 +156,15 @@ onMounted(async () => {
 });
 
 const startStudy = function () {
+  if (roomData.value.isGame) {
+    if (problemList.value.length === 0) {
+      Swal.fire({
+        icon: "error",
+        title: "문제를 선택해주세요!",
+      });
+      return;
+    }
+  }
   ws.send("|@|");
 };
 

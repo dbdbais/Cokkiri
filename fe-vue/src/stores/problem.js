@@ -6,20 +6,7 @@ export const problemStore = defineStore(
   () => {
     const problems = ref([]);
     const selectedProblemList = ref([]);
-    const currentProblemNum = ref(1);
-    const beforeProblemNum = ref(0);
     const userCodeList = ref({});
-
-    function changeProblem(num) {
-      beforeProblemNum.value = currentProblemNum.value;
-      currentProblemNum.value = num;
-      console.log(
-        "현재:",
-        currentProblemNum.value,
-        "이전",
-        beforeProblemNum.value
-      );
-    }
 
     function setProblems(newProblems) {
       problems.value = newProblems;
@@ -28,6 +15,7 @@ export const problemStore = defineStore(
 
     function select(problemList) {
       selectedProblemList.value = [];
+      userCodeList.value = {};
       let num = 1;
       problemList.forEach((element) => {
         element["num"] = num;
@@ -53,16 +41,13 @@ export const problemStore = defineStore(
     return {
       problems,
       selectedProblemList,
-      beforeProblemNum,
-      currentProblemNum,
       userCodeList,
       setProblems,
       select,
-      changeProblem,
       getProblem,
     };
   },
   {
-    // persist: true,
+    persist: true,
   }
 );

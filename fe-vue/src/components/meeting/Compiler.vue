@@ -144,7 +144,7 @@ const runCode = async () => {
     language: userCodeList.value[tStore.currentProblemNum].language,
     submit_code: userCodeList.value[tStore.currentProblemNum].code,
     ipt: null,
-    isSubmit: 1,
+    isSubmit: 0,
   };
 
   insert(data).then((res) => {

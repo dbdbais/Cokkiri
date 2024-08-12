@@ -6,6 +6,7 @@ import {
   changeVideo,
   joinSession,
   leaveSession,
+  removeUserRequest,
   publishScreenShare,
 } from "@/api/webRTC";
 import Member from "@/components/meeting/Member.vue";
@@ -25,14 +26,14 @@ onMounted(async () => {
   try {
     joinSession(route.params.roomId, user.user.nickname);
     const response = await getWaitingRoom();
-    console.log("=====MeetingView Page=====")
-    console.log("roomInfo")
+    console.log("=====MeetingView Page=====");
+    console.log("roomInfo");
     console.log(response);
   } catch (e) {
     console.error(e);
   }
-  window.addEventListener("beforeunload", leaveSession);
-  window.addEventListener("popstate", leaveSession);
+  // window.addEventListener("beforeunload", leaveSession);
+  // window.addEventListener("popstate", leaveSession);
 });
 
 const route = useRoute();
@@ -51,37 +52,50 @@ const videoOnOff = function () {
   changeVideo(video.value);
 };
 
-
-
 const exitRoom = function () {
-  leaveSession();
   router.replace({ name: "home" });
 };
+
+const member = ref(null);
+console.log(member.value);
+
+onUnmounted(() => {
+  console.log("미팅 종료");
+  removeUserRequest();
+  leaveSession();
+});
 </script>
 <template>
   <div class="meeting-room">
     <Chat v-if="chatOnOff" />
-    <div class="members box-main-con flex-align" id="members"></div>
-    <!-- <button
-      class="chat-btn set-btn"
-      @click="
-        () => {
-          chatOnOff = true;
-        }
-      "
-    >
-      chat
-    </button> -->
+    <div
+      ref="member"
+      class="members box-main-con flex-align"
+      id="members"
+    ></div>
+
     <button class="set-btn hint" @click="openModal">
-      <img v-if="video" src="/src/assets/meeting/video-on.svg" alt="비디오 on" />
+      <img
+        v-if="video"
+        src="/src/assets/meeting/video-on.svg"
+        alt="비디오 on"
+      />
       <img v-else src="/src/assets/meeting/video-off.svg" alt="비디오 off" />
     </button>
     <button id="myVideo" class="set-btn" @click="videoOnOff">
-      <img v-if="video" src="/src/assets/meeting/video-on.svg" alt="비디오 on" />
+      <img
+        v-if="video"
+        src="/src/assets/meeting/video-on.svg"
+        alt="비디오 on"
+      />
       <img v-else src="/src/assets/meeting/video-off.svg" alt="비디오 off" />
     </button>
     <button id="myAudio" class="set-btn" @click="audioOnOff">
-      <img v-if="audio" src="/src/assets/meeting/audio-on.svg" alt="마이크 on" />
+      <img
+        v-if="audio"
+        src="/src/assets/meeting/audio-on.svg"
+        alt="마이크 on"
+      />
       <img v-else src="/src/assets/meeting/audio-off.svg" alt="마이크 off" />
     </button>
     <div id="exit" class="room-exit bold-text md" @click="exitRoom">
@@ -137,11 +151,11 @@ const exitRoom = function () {
 }
 
 .members {
-  width: 1500px;
+  width: 1460px;
   height: 180px;
 
   margin: 20px;
-  justify-content: space-around;
+  /* justify-content: space-around; */
 }
 
 .main {
@@ -159,7 +173,7 @@ button {
 }
 
 video {
-  border-radius: 20%;
+  margin-left: 20px;
 }
 
 .set-btn {

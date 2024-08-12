@@ -86,7 +86,7 @@ function joinSession(roomId, userName) {
           videoSource: undefined, // 비디오 설정 - 기본값 카메라
           publishAudio: true, // 오디오 on / off
           publishVideo: true, // 비디오 on / off
-          resolution: "200x150", // 해상도 설정
+          resolution: "220x130", // 해상도 설정
           frameRate: 30, // 프레임 설정
           insertMode: "APPEND", // 카메라 영역에 추가하는 방법 - 현재 맨뒤에 추가하는 방식
           mirror: false, // 좌우 반전 설정
@@ -287,11 +287,11 @@ function appendUserData(videoElement, connection) {
     nodeId = connection.connectionId;
   }
   // index.html에 정보 추가
-  var dataNode = document.createElement("div");
-  dataNode.className = "data-node";
-  dataNode.id = "data-" + nodeId;
-  dataNode.innerHTML = "<p>" + userData + "</p>";
-  videoElement.parentNode.insertBefore(dataNode, videoElement.nextSibling);
+  // var dataNode = document.createElement("div");
+  // dataNode.className = "data-node";
+  // dataNode.id = "data-" + nodeId;
+  // dataNode.innerHTML = "<p>" + userData + "</p>";
+  // videoElement.parentNode.insertBefore(dataNode, videoElement.nextSibling);
   // addClickListener(videoElement, userData);
 }
 
@@ -302,35 +302,37 @@ function removeUserData(connection) {
   );
   if (dataNodeToRemove) {
     dataNodeToRemove.parentNode.removeChild(dataNodeToRemove);
-
-    // 카메라 세션에서 token 제거
-    httpRequest(
-      "POST",
-      `${process.env.VITE_VUE_API_URL}session/remove-user`,
-      {
-        sessionId: mySessionId,
-        token: token,
-      },
-      "User couldn't be removed from session",
-      (res) => {
-        console.warn("You have been removed from session " + mySessionId);
-      }
-    );
-
-    // 화면 세션에서 token 제거
-    httpRequest(
-      "POST",
-      `${process.env.VITE_VUE_API_URL}session/remove-user`,
-      {
-        sessionId: mySessionIdScreen,
-        token: tokenScreen,
-      },
-      "User couldn't be removed from session",
-      (res) => {
-        console.warn("You have been removed from session " + mySessionIdScreen);
-      }
-    );
   }
+}
+
+function removeUserRequest() {
+  // 카메라 세션에서 token 제거
+  httpRequest(
+    "POST",
+    `${process.env.VITE_VUE_API_URL}api/session/remove-user`,
+    {
+      sessionId: mySessionId,
+      token: token,
+    },
+    "User couldn't be removed from session",
+    (res) => {
+      console.warn("You have been removed from session " + mySessionId);
+    }
+  );
+
+  // 화면 세션에서 token 제거
+  httpRequest(
+    "POST",
+    `${process.env.VITE_VUE_API_URL}api/session/remove-user`,
+    {
+      sessionId: mySessionIdScreen,
+      token: tokenScreen,
+    },
+    "User couldn't be removed from session",
+    (res) => {
+      console.warn("You have been removed from session " + mySessionIdScreen);
+    }
+  );
 }
 
 // 비디오 클릭시 이벤트 함수 (클릭시 메인 비디오 화면 변경)
@@ -469,6 +471,7 @@ export {
   joinSession,
   publishScreenShare,
   leaveSession,
+  removeUserRequest,
   sendChat,
   changeVideo,
   changeAudio,

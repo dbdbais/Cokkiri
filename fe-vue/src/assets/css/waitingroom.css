@@ -1,0 +1,22 @@
+.rule-container,
+.member-container,
+.chat-container,
+.problem-container,
+.problem-list {
+  background-color: #c191ff;
+  margin: 10px 0px;
+}
+.box {
+  border: 5px solid #3b72ff;
+  border-radius: 10px;
+}
+
+.rule-box,
+.chat-box,
+.problem-list-box {
+  background-color: #d9bbff;
+}
+
+.problem-item {
+  background-color: #dbe7ff;
+}

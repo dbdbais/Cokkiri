@@ -1,23 +1,96 @@
+/* =============================
+            Variables
+   ============================= */
+
+:root {
+  --primary-fill-color: #c191ff;
+  --secondary-fill-color: #dbe7ff;
+  --third-fill-color: #cadcff;
+}
+
+/* =============================
+            Global CSS
+   ============================= */
+
 * {
   margin: 0;
   padding: 0;
-  cursor: url(./src/assets/cursor.svg) 4 5, auto;
+  cursor: url(@/assets/cursor.svg) 4 5, auto;
   box-sizing: border-box;
 }
 
-html,
 body {
   background-color: #cadcff;
+  overflow-x: hidden;
 }
+
+/* =============================
+              Font
+   ============================= */
 
 /* 링크 (스터디 모집 게시판, 문제 목록) */
 a {
   color: white;
   text-decoration: none;
-  /* 폰트 */
   font-size: 30px;
   font-family: "RixInooAriDuriR";
   -webkit-text-stroke: 1px black;
+}
+
+.font-main-pagi {
+  font-family: "RixInooAriDuriR";
+  color: #ccff61;
+  -webkit-text-stroke: 1px #378705;
+}
+
+/* 제목 글자 */
+.title {
+  /* 폰트 */
+  color: white;
+  font-family: "RixInooAriDuriR";
+
+  -webkit-text-stroke: 1.5px black;
+  background-color: transparent;
+}
+
+.main-title {
+  font-size: 30px;
+}
+
+.sub-title {
+  font-size: 40px;
+  margin-bottom: 5px;
+  margin-left: 5px;
+}
+
+.content-title {
+  font-size: 20px;
+  margin-bottom: 5px;
+  margin-left: 15px;
+
+  background-color: transparent;
+}
+
+/* 글자 중앙 정렬 */
+.md {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* 퍼플 글자 */
+.text-p {
+  color: #3b72ff;
+  font-family: "yg-jalnan";
+  font-size: 18px;
+}
+
+/* =============================
+            Box Layout
+   ============================= */
+
+.box-in {
+  display: inline-block;
 }
 
 .box-row {
@@ -30,44 +103,97 @@ a {
   flex-direction: column;
 }
 
-/* 퍼플-블루 박스 */
-.box-p {
+/* =============================
+            Box Style
+   ============================= */
+
+/* 메인 페이지 컨테이너 박스 */
+.box-main-con {
   border: 5px solid #3b72ff;
   border-radius: 10px;
-  background-color: #c191ff;
+  /* background-color: #c191ff; */
+  background-color: ##a6c9ff;
 }
 
-/* 화이트블루-스카이블루 박스 */
-.box-wb {
-  border: 5px solid #81c3ff;
-  border-radius: 1px;
-  background-color: #dbe7ff;
-}
-/* 퍼블-스카이블루 박스 */
-.box-sp {
+/* 퍼블(purple)-스카이블루(skyblue) 박스 */
+.box-psb {
   border: 5px solid #3b72ff;
   border-radius: 10px;
   background-color: #dbe7ff;
 }
 
-/* 블루-스카이블루 박스 */
-.box-sb {
-  border: 5px solid #3b72ff;
-  border-radius: 10px;
-  background-color: #9fbaff;
-}
-/* 퍼블-찐한 블루 박스 */
-.box-pb {
+/* 퍼블(purple)-찐한 블루(deep blue) 박스 */
+.box-pdb {
   border: 5px solid #84a5f8;
   border-radius: 10px;
   background-color: #8220ff;
 }
 
-/* 화이트-청록색 박스 */
-.box-w {
+/* 메인 페이지 exp 박스 */
+.box-main-exp {
+  border: 5px solid #81c3ff;
+  border-radius: 10px;
+  background-color: #dbe7ff;
+}
+
+/* 메인 페이지 친구추가 박스 */
+.box-main-plus {
+  border: 5px solid 9fbaff;
+  border-radius: 10px;
+  background-color: #dbe7ff;
+}
+
+/* 메인 페이지 룸 타이틀 박스 */
+.box-main-title {
+  border: 5px solid #3b72ff;
+  border-radius: 10px;
+  background-color: #81c3ff;
+}
+
+.box-main-create-room {
+  border: 5px solid #3b72ff;
+  border-radius: 10px;
+  background-color: #8cb3ff;
+}
+
+/* 메인 페이지 룸 번호 박스 */
+.box-main-num {
+  border: 5px solid #c191ff;
+  border-radius: 10px;
+  background-color: #dbe7ff;
+}
+
+/* 메인 페이지 그룹, OO 페이지 ?? 박스 */
+.box-main-group {
+  border: 5px solid #3b72ff;
+  border-radius: 10px;
+  background-color: #9fbaff;
+}
+
+/* 메인 페이지 알림 박스 */
+.box-main-noti {
+  color: #5bb5d9;
   border: 5px solid #5bb5d9;
   border-radius: 10px;
   background-color: #f6f6f6;
+}
+
+/* 메인 페이지 룸 필터 박스 */
+.box-main-filter {
+  color: #e1ffa1;
+  -webkit-text-stroke: 1px #70a401;
+  border: 5px solid #beff33;
+  border-radius: 10px;
+  background-color: #bfdc83;
+}
+
+/* 메인 페이지 룸 필터 선택 박스 */
+.box-main-filter-selected {
+  color: #ccff61;
+  -webkit-text-stroke: 1px #70a401;
+  border: 5px solid #beff33;
+  border-radius: 10px;
+  background-color: #eeffca;
 }
 
 /* 빨강-버튼 */
@@ -76,51 +202,10 @@ a {
   border-radius: 10px;
   background-color: #ff4d4d;
 }
-/* 퍼플 글자 */
-.text-p {
-  color: #3b72ff;
-  font-family: "yg-jalnan";
-  font-size: 18px;
-}
-/* 글자 중앙 정렬 */
-.md {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-/* 제목 글자 */
-.title {
-  /* 폰트 */
-  color: white;
-  font-family: "RixInooAriDuriR";
-
-  -webkit-text-stroke: 1px black;
-  background-color: transparent;
-}
-.main-title {
-  font-size: 30px;
-}
-.sub-title {
-  font-size: 25px;
-  margin-bottom: 5px;
-  margin-left: 5px;
-}
-.content-title {
-  font-size: 20px;
-  margin-bottom: 5px;
-  margin-left: 15px;
-
-  background-color: transparent;
-}
-/* 로고 위치 */
-.logo {
-  margin-top: 15px;
-  margin-left: 30px;
-}
 
 /* 정기 게시판 제출 버튼 */
 .board-btn {
-  width: 100%;
+  width: 620px;
   height: 60px;
 
   font-size: 25px;
@@ -130,14 +215,40 @@ a {
   border-radius: 10px;
 
   color: white;
+  background-color: #ff4d4d;
 }
-.content {
+.nomal-text {
   font-family: "yg-jalnan";
   /* background-color: transparent; */
+}
+.flex-align {
+  display: flex;
+  align-items: center;
+}
+/* 세로 가운데 정렬 */
+.md-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 .rank {
   background-color: transparent;
 }
+
+.category {
+  background-color: #e5ffad;
+  border: 7px solid #87aa3d;
+  border-radius: 20px;
+  color: #beff33;
+  -webkit-text-stroke: 1px #87aa3d;
+}
+
+.text-font {
+  font-family: "Black Han Sans", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
 @font-face {
   font-family: "RixInooAriDuriR";
   src: url("https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2207-01@1.0/RixInooAriDuriR.woff2")
@@ -151,4 +262,61 @@ a {
     format("woff");
   font-weight: normal;
   font-style: normal;
+}
+
+@font-face {
+  font-family: "Pretendard-Regular";
+  src: url("https://fastly.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff")
+    format("woff");
+  font-weight: 400;
+  font-style: normal;
+}
+/* =============================
+               보류
+   ============================= */
+
+/* 로고 위치 */
+.logo {
+  margin-top: 15px;
+  margin-left: 30px;
+}
+
+/* =============================
+            Modal Style
+   ============================= */
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.4);
+  width: 1920px;
+  height: 1080px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+/* =============================
+            scroll bar
+   ============================= */
+::-webkit-scrollbar {
+  width: 20px;
+}
+::-webkit-scrollbar-track {
+  background-color: #dbe7ff;
+  border-radius: 5px;
+}
+::-webkit-scrollbar-thumb {
+  background-color: #3b72ff;
+}
+::-webkit-scrollbar-button {
+  display: none;
+}
+
+/* 코너에 라운드 효과 */
+::-webkit-scrollbar-thumb {
+  border-radius: 5px;
 }

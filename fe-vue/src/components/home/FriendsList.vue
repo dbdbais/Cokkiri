@@ -1,27 +1,58 @@
 <template>
-    <div class="box-p">
-        <div id="add-friend-container" class="box-wb box-row">
-            <img src="@/assets/friend-plus.svg" alt="add-friend" class="icon" />
-            <div id="add-friend-btn" class="title main-title">친구 추가</div>
-        </div>
-        <Accordion />
-    </div>
+  <div class="box-main-con box-col friend-con">
+    <button class="add-friend-con box-row">
+      <img src="@/assets/friend-plus.svg" alt="add-friend" class="icon" />
+      <div class="title main-title btn-add-friend" @click="openModal">
+        친구 추가
+      </div>
+    </button>
+    <Accordion class="friend-list" />
+    <AddFriend v-if="isModalOpen" @close="closeModal" />
+  </div>
 </template>
 
 <script setup>
-import Accordion from "@/components/home/Accordion.vue"
+import Accordion from "@/components/home/Accordion.vue";
+import AddFriend from "@/components/home/modal/AddFriend.vue";
+import { useModal } from "@/composables/useModal";
+import { ref } from "vue";
 
+const { isModalOpen, openModal, closeModal } = useModal();
 </script>
 
 <style scoped>
-#add-friend-container {
-    width: 200px;
-    margin-bottom: 5px;
-    padding: 5px 25px;
+.friend-con {
+  align-items: center;
 }
 
-#add-friend-btn {
-    margin-left: 12px;
-    font-size: 25px;
+.add-friend-con {
+  justify-content: center;
+  align-items: center;
+  width: 95%;
+  padding: 5px 10px;
+  background-color: #81c3ff;
+  border-width: 5px;
+  border-radius: 10px;
+  border-color: #b8cffe;
+}
+
+.btn-add-friend {
+  margin-left: 12px;
+  font-size: 40px;
+}
+
+.add-friend-con:hover {
+  background-color: #5a88fd;
+  border-color: #3b72ff;
+}
+
+.icon {
+  width: 60px;
+  height: 60px;
+}
+
+.friend-list {
+  width: 280px;
+  margin-top: 15px;
 }
 </style>

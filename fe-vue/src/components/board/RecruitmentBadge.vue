@@ -5,20 +5,23 @@ defineProps({
 </script>
 
 <template>
-  <div class="recruitment-badge content" :class="groupBadge ? 'open' : 'close'">
-    {{ groupBadge ? "모집중" : "종료" }}
+  <div
+    class="recruitment-badge nomal-text"
+    :class="groupBadge ? 'open' : 'close'"
+  >
+    {{ groupBadge ? "모집중" : "모집완료" }}
   </div>
 </template>
 
 <style scoped>
 .recruitment-badge {
   /* 크기 */
-  width: 80px;
-  height: 40px;
+  width: 130px;
+  height: 50px;
   /* 폰트, 테두리 */
   border: 5px solid;
   border-radius: 10px;
-  font-size: 15px;
+  font-size: 25px;
   /* 배치 */
   display: flex;
   justify-content: center;

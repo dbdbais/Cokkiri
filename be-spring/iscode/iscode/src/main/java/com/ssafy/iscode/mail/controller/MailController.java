@@ -2,6 +2,8 @@ package com.ssafy.iscode.mail.controller;
 
 
 import com.ssafy.iscode.mail.service.MailService;
+import com.ssafy.iscode.user.model.dto.User;
+import com.ssafy.iscode.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,10 +15,12 @@ import java.util.HashMap;
 public class MailController {
 
     private final MailService mailService;
+    private final UserService userService;
 
     @Autowired
-    public MailController(MailService mailService) {
+    public MailController(MailService mailService, UserService userService) {
         this.mailService = mailService;
+        this.userService = userService;
     }
 
     // send register E-MAIL
@@ -53,7 +57,21 @@ public class MailController {
         return map;
     }
 
-    // 인증번호 일치여부 확인
+    @GetMapping("/reset")
+    public int resetPW(@RequestParam String mail){
+        User aUser = userService.getUser(mail);
+        //get User
+        if(aUser == null){
+            return 0;
+        }
+        else{
+            String resetPassword = userService.resetPassword(aUser);
+            mailService.resetPW(mail,resetPassword);
+            return 1;
+        }
+    }
+
+    // authenticate
     @GetMapping("/check")
     public ResponseEntity<?> mailCheck(@RequestParam String mail, @RequestParam String userNumber) {
 

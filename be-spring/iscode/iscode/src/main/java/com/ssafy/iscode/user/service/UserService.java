@@ -14,10 +14,8 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.security.SecureRandom;
+import java.util.*;
 
 @Service
 public class UserService {
@@ -116,6 +114,34 @@ public class UserService {
         //ENCRYPT PW
         return userRepository.modify(user);
     }
+
+    public String resetPassword(User user){
+        // 비밀번호 길이 설정
+        int passwordLength = 12; // 원하는 비밀번호 길이
+
+        // 비밀번호 생성기 초기화
+        String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+        Random random = new SecureRandom(); // 보안적으로 더 안전한 랜덤 생성기
+        StringBuilder sb = new StringBuilder(passwordLength);
+
+        for (int i = 0; i < passwordLength; i++) {
+            int index = random.nextInt(characters.length());
+            sb.append(characters.charAt(index));
+        }
+
+        String rawPassword = sb.toString();
+
+        String encryptedPassword = passwordEncoder.encode(rawPassword);
+
+
+
+        user.setPassword(encryptedPassword);
+
+        userRepository.modify(user);
+
+        return rawPassword;
+    }
+
     public int deleteUser(String id){
         reviewRepository.makeUserNull(id);
         //make all review by user NULL

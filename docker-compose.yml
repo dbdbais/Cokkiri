@@ -33,9 +33,9 @@ services:
     networks:
       - Cokkiri-develop-Network
 
-  complier:
+  complier_1:
     image: be-compiler
-    container_name: compiler_server_test
+    container_name: compiler_server_1
     ports: 
       - "8087:8080"
     privileged: true

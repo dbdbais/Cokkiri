@@ -2,7 +2,6 @@
 import { ref } from "vue";
 import { useModal } from "@/composables/useModal";
 import ProblemDetail from "@/components/problem/modal/ProblemDetail.vue";
-import ProblemReview from "@/components/problem/modal/ProblemReview.vue";
 import { getAllReviews } from "@/api/review";
 
 const { isModalOpen: isDetailModalOpen, openModal: openDetailModal, closeModal: closeDetailModal } = useModal();
@@ -37,14 +36,14 @@ const tierImg = () => {
 };
 
 const reviews = async () => {
-  try {
-    const response = await getAllReviews(props.problemData.no);
-    console.log(response);
-    reviewData.value = response.data;
-    openReviewModal();
-  } catch (error) {
-    console.log(error);
-  }
+  // try {
+  //   const response = await getAllReviews(props.problemData.no);
+  //   console.log(response);
+  //   reviewData.value = response.data;
+  openReviewModal();
+  // } catch (error) {
+  //   console.log(error);
+  // }
 };
 </script>
 
@@ -57,10 +56,11 @@ const reviews = async () => {
     <td>
       <img :src="tierImg()" alt="티어" />
     </td>
-    <td>{{ props.problemData.algoPercent }}</td>
+    <td>{{ props.problemData.algoPercent.toFixed(2) }}%</td>
     <td>
-      <span class="btn-review" @click="reviews">
-        리뷰
+      <!-- <span class="btn-review" @click="reviews"> -->
+      <span class="btn-review" @click="openDetailModal">
+        확인하기
       </span>
     </td>
     <!-- <td v-if="problemData.review.result === 1">리뷰보기</td>
@@ -68,7 +68,7 @@ const reviews = async () => {
     <td v-else>{{ problemData.review.try }} / 3 회 도전</td> -->
   </tr>
   <ProblemDetail v-if="isDetailModalOpen" @close="closeDetailModal" :problemData="problemData" />
-  <ProblemReview v-if="isReviewModalOpen" @close="closeReviewModal" :reviewData="reviewData" />
+  <!-- <ProblemReview v-if="isReviewModalOpen" @close="closeReviewModal" :reviewData="reviewData" /> -->
 </template>
 
 <style scoped>

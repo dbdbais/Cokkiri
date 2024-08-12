@@ -6,16 +6,70 @@ import Comment from '@/components/problem/Comment.vue';
 const props = defineProps({
     review: Object,
 });
-const commentData = ref([]);
+const commentData = ref([
+    {
+        "userId": "user1234",
+        "reviewId": 1,
+        "content": "부모댓글",
+        "children": [
+            {
+                "userId": "user1234",
+                "reviewId": 1,
+                "content": "자식댓글",
+                "children": []
+            }
+        ]
+    },
+    {
+        "userId": "user1234",
+        "reviewId": 1,
+        "content": "부모댓글",
+        "children": [
+            {
+                "userId": "user1234",
+                "reviewId": 1,
+                "content": "자식댓글",
+                "children": [
+                    {
+                        "userId": "user1234",
+                        "reviewId": 1,
+                        "content": "손자댓글",
+                        "children": [
+                            {
+                                "userId": "user1234",
+                                "reviewId": 1,
+                                "content": "증손자댓글",
+                                "children": []
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "userId": "user1234",
+        "reviewId": 1,
+        "content": "부모댓글",
+        "children": [
+            {
+                "userId": "user1234",
+                "reviewId": 1,
+                "content": "자식댓글",
+                "children": []
+            }
+        ]
+    }
+]);
 
 onMounted(async () => {
-    try {
-        const response = await getAllComment(props.review.rid);
-        commentData.value = response.data;
-        console.log(commentData);
-    } catch (error) {
-        console.error(error);
-    }
+    // try {
+    //     const response = await getAllComment(props.review.rid);
+    //     commentData.value = response.data;
+    //     console.log(commentData);
+    // } catch (error) {
+    //     console.error(error);
+    // }
 });
 
 const openIndex = ref(false);
@@ -36,7 +90,7 @@ const toggle = () => {
         <div v-if="openIndex" class="review-content">
             <div class=" code">
                 <span class="title">코드</span>
-                <span class="normal-text inner-text">code</span>
+                <span class="normal-text inner-text">{{ props.review.code }}</span>
             </div>
             <div class="review">
                 <span class="title">코드 리뷰</span>

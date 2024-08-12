@@ -6,10 +6,15 @@ export const problemStore = defineStore(
   () => {
     const problems = ref([]);
     const selectedProblemList = ref([]);
+    const selectedProblem = ref();
 
     function setProblems(newProblems) {
       problems.value = newProblems;
       console.log(problems.value);
+    }
+
+    function setSelectedProblem(problem) {
+      selectedProblem.value = problem;
     }
 
     function select(problemList) {
@@ -33,7 +38,9 @@ export const problemStore = defineStore(
     return {
       problems,
       selectedProblemList,
+      selectedProblem,
       setProblems,
+      setSelectedProblem,
       select,
       getProblem,
     };

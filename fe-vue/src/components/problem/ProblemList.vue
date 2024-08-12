@@ -36,7 +36,7 @@ onMounted(() => {
           <th>문제</th>
           <th>난이도</th>
           <th>정답률</th>
-          <th>리뷰 보기</th>
+          <th>문제상세 및 리뷰</th>
         </tr>
       </thead>
       <tbody>

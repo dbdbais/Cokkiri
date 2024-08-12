@@ -87,6 +87,10 @@ ws.onmessage = function (event) {
     } else if (event === "SMALL") {
       console.log("작게");
       gameStore.smallFontFun();
+    } else if (event === "EXIT") {
+      const userName = data[1];
+      // 아이콘 빼기
+      gameStore.smallFontFun();
     }
   }
 };
@@ -172,7 +176,15 @@ const close = () => {
     />
     <div class="game-prog-con box-col">
       <RouterLink :to="{ name: 'home' }">
-        <img src="@/assets/room_exit.svg" class="exit-icon" />
+        <img
+          src="@/assets/room_exit.svg"
+          class="exit-icon"
+          @click="
+            () => {
+              ws.close();
+            }
+          "
+        />
       </RouterLink>
       <img src="@/assets/timer_temp.svg" class="timer" />
       <div class="game-header box-row box-sb">

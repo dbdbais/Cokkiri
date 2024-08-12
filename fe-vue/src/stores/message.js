@@ -40,11 +40,16 @@ export const useMessageStore = defineStore("message", () => {
     unReadNoti.value = 0;
   }
 
+  function resetRoomInvite() {
+    noti.value.room = [];
+  }
+
   return {
     noti,
     unReadNoti,
     receiveNoti,
     receiveInvite,
+    resetRoomInvite,
     readNoti,
   };
 });

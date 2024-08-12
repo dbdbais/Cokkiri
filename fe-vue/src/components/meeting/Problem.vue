@@ -3,20 +3,25 @@ import { problemStore } from "@/stores/problem";
 import { onMounted, ref } from "vue";
 import { useMeetingStore } from "@/stores/meeting";
 import { getHint } from "@/api/problem";
+import { useTriggerStore } from "@/stores/trigger";
 
 defineProps({
   blind: Number,
 });
 
 const useProblemStore = problemStore();
+const tStore = useTriggerStore();
 const mStore = useMeetingStore();
 const problemList = useProblemStore.selectedProblemList;
 const currentProblem = ref(1);
+
 const getProblem = (no) => {
   return useProblemStore.getProblem(no);
 };
+
 const showProblem = (no) => {
   currentProblem.value = no;
+  tStore.changeProblem(no);
 };
 
 const fetchHint = async () => {
@@ -36,11 +41,21 @@ const fetchHint = async () => {
 <template>
   <div class="md">
     <div class="problem-content box-w">
-      <button class="btn-hint" :class="{ disabledHint: mStore.storedHintNo.includes(currentProblem) }"
-        @click="fetchHint">힌트 생성</button>
+      <button
+        class="btn-hint"
+        :class="{ disabledHint: mStore.storedHintNo.includes(currentProblem) }"
+        @click="fetchHint"
+      >
+        힌트 생성
+      </button>
       <div class="flex-align problem-category">
-        <div class="bold-text box-sb md problem" v-for="problem in problemList" :key="problem.num"
-          :class="{ active: currentProblem === problem.num }" @click="showProblem(problem.num)">
+        <div
+          class="bold-text box-sb md problem"
+          v-for="problem in problemList"
+          :key="problem.num"
+          :class="{ active: currentProblem === problem.num }"
+          @click="showProblem(problem.num)"
+        >
           문제 {{ problem.num }}
         </div>
       </div>
@@ -185,7 +200,8 @@ code {
 
 @font-face {
   font-family: "goorm-sans-code";
-  src: url("https://fastly.jsdelivr.net/gh/projectnoonnu/2408@1.0/goorm-sans-code.woff2") format("woff2");
+  src: url("https://fastly.jsdelivr.net/gh/projectnoonnu/2408@1.0/goorm-sans-code.woff2")
+    format("woff2");
   font-weight: normal;
   font-style: normal;
 }

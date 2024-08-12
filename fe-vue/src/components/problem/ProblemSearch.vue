@@ -4,7 +4,7 @@ import { getAllProblems, filterSearch, conditionSearch } from "@/api/problem";
 import { problemStore } from "@/stores/problem";
 
 const store = problemStore();
-
+const emit = defineEmits(["clear-page"]);
 const keyword = ref("");
 const selectedTier = ref(0);
 
@@ -44,6 +44,7 @@ const callFilterSearch = async () => {
       const response = await filterSearch(selectedTier.value);
       store.setProblems(response.data);
     }
+    emit("clear-page");
     console.log(response);
   } catch (error) {
     console.log(error);

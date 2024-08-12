@@ -6,7 +6,12 @@ import "ace-builds/src-noconflict/mode-python";
 import "ace-builds/src-noconflict/mode-java";
 import "ace-builds/src-noconflict/mode-c_cpp";
 import "ace-builds/src-noconflict/theme-monokai";
+import { insert } from "@/api/submit";
+
 import { useGameStore } from "@/stores/game";
+import { problemStore } from "@/stores/problem";
+import { useTriggerStore } from "@/stores/trigger";
+import { userStore } from "@/stores/user";
 
 defineProps({
   bigfont: Boolean,
@@ -18,24 +23,47 @@ const editor = ref(null);
 const selectedLanguage = ref("python");
 const inputText = ref("");
 const outputText = ref("");
-const fontReduceVal = ref(false);
-const fontIncreaseVal = ref(false);
+const uStore = userStore();
+const pStore = problemStore();
+const tStore = useTriggerStore();
 const editorFontSize = ref(18);
+const userCodeList = ref(pStore.userCodeList);
 
 const defaultCode = {
-  python: 'print("Hello, World!")',
-  java: 'public class Temp {\n    public static void main(String[] args) {\n        System.out.println("Hello, World!");\n    }\n}',
+  python: 'print("Hello, Python!")',
+  java: 'public class Temp {\n    public static void main(String[] args) {\n        System.out.println("Hello, Java!");\n    }\n}',
   c: '#include <stdio.h>\nint main() {\n    printf("Hello, World!");\n    return 0;\n}',
-  cpp: '#include <iostream>\nint main() {\n    std::cout << "Hello, World!" << std::endl;\n    return 0;\n}',
+  cpp: '#include <iostream>\nint main() {\n    std::cout << "Hello, C++!" << std::endl;\n    return 0;\n}',
 };
 
 const userCode = ref({ ...defaultCode });
 
-const initializeEditor = (val) => {
+function getInit() {
+  initializeEditor(
+    userCodeList.value[tStore.currentProblemNum].code,
+    userCodeList.value[tStore.currentProblemNum].language
+  );
+  console.log(userCodeList.value);
+}
+
+watch(tStore, () => {
+  console.log("문제 변경!");
+  // console.log(userCodeList.value[pStore.beforeProblemNum]);
+  // console.log(userCodeList.value[pStore.currentProblemNum]);
+  // console.log(editor.value.getValue());
+  userCodeList.value[tStore.beforeProblemNum].code = editor.value.getValue();
+  userCodeList.value[tStore.beforeProblemNum].language = selectedLanguage.value;
+  // console.log(userCodeList.value[pStore.beforeProblemNum].code);
+  // console.log(userCodeList.value[pStore.beforeProblemNum]);
+  getInit();
+});
+
+const initializeEditor = (val, language) => {
   editor.value = ace.edit("editor");
   editor.value.setTheme("ace/theme/chrome");
-  editor.value.session.setMode("ace/mode/python");
-  editor.value.setValue(val ? val : defaultCode.python);
+  editor.value.session.setMode(`ace/mode/${language}`);
+  selectedLanguage.value = language;
+  editor.value.setValue(val ? val : defaultCode.language);
   editor.value.setFontSize(editorFontSize.value); // Set the desired font size here
 };
 
@@ -86,8 +114,7 @@ watch(gameStore, () => {
 });
 
 onMounted(() => {
-  initializeEditor();
-
+  getInit();
   watch(selectedLanguage, (newLang) => {
     const currentMode = editor.value.session.getMode().$id;
     const currentLanguage = currentMode.includes("python")
@@ -95,15 +122,11 @@ onMounted(() => {
       : currentMode.includes("java")
       ? "java"
       : currentMode.includes("c_cpp")
-      ? editor.value.getValue().includes("#include <stdio.h>")
-        ? "c"
-        : "cpp"
+      ? "cpp"
       : "python";
 
     userCode.value[currentLanguage] = editor.value.getValue();
-    editor.value.session.setMode(
-      "ace/mode/" + (newLang === "cpp" || newLang === "c" ? "c_cpp" : newLang)
-    );
+    editor.value.session.setMode("ace/mode/" + newLang);
     editor.value.setValue(userCode.value[newLang] || defaultCode[newLang]);
   });
   document.getElementById("language").dispatchEvent(new Event("change"));
@@ -113,50 +136,65 @@ const runCode = async () => {
   const code = editor.value.getValue();
   const language = selectedLanguage.value;
   userCode.value[language] = code;
+  userCodeList.value[tStore.currentProblemNum].code = editor.value.getValue();
 
-  axios({
-    method: "POST",
-    url: "http://192.168.30.188:8080/api/compiler/run",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    data: {
-      language: language,
-      code: code,
-      ipt: inputText.value,
-      inputOutput: {
-        1000: 13,
-        123: 133,
-      },
-      time: 1,
-      memory: 100,
-    },
-  })
-    .then((res) => {
-      if (inputText.value === "") {
-        console.log(res.data);
-        let outPutData = "";
-        Object.keys(res.data).forEach((key) => {
-          outPutData += key + "\n";
-          if (res.data[key] === "correct") {
-            outPutData += "정답!\n";
-          } else {
-            outPutData += "오답.\n";
-          }
-          outPutData += "\n";
-        });
-        outputText.value = outPutData;
-      } else {
-        console.log(res.data);
-        outputText.value = res.data.output;
-      }
-    })
-    .catch((err) => {
-      console.log(err);
-    });
+  const data = {
+    algo_num: userCodeList.value[tStore.currentProblemNum].no,
+    user_id: uStore.user.id,
+    language: userCodeList.value[tStore.currentProblemNum].language,
+    submit_code: userCodeList.value[tStore.currentProblemNum].code,
+    ipt: null,
+    isSubmit: 1,
+  };
+
+  insert(data).then((res) => {
+    console.log(res.data);
+  });
+
+  // axios({
+  //   method: "POST",
+  //   url: "http://192.168.30.188:8080/api/compiler/run",
+  //   headers: {
+  //     "Content-Type": "application/json",
+  //   },
+  //   data: {
+  //     language: language,
+  //     code: code,
+  //     ipt: inputText.value,
+  //     inputOutput: {
+  //       1000: 13,
+  //       123: 133,
+  //     },
+  //     time: 1,
+  //     memory: 100,
+  //   },
+  // })
+  //   .then((res) => {
+  //     if (inputText.value === "") {
+  //       console.log(res.data);
+  //       let outPutData = "";
+  //       Object.keys(res.data).forEach((key) => {
+  //         outPutData += key + "\n";
+  //         if (res.data[key] === "correct") {
+  //           outPutData += "정답!\n";
+  //         } else {
+  //           outPutData += "오답.\n";
+  //         }
+  //         outPutData += "\n";
+  //       });
+  //       outputText.value = outPutData;
+  //     } else {
+  //       console.log(res.data);
+  //       outputText.value = res.data.output;
+  //     }
+  //   })
+  //   .catch((err) => {
+  //     console.log(err);
+  //   });
 };
 
 const resetCode = () => {
+  console.log("언어 교체");
   const language = selectedLanguage.value;
   editor.value.setValue(defaultCode[language]);
 };
@@ -174,11 +212,12 @@ const clearInput = () => {
           id="language"
           class="box language bold-text"
           v-model="selectedLanguage"
+          @change="resetCode"
         >
           <option value="python">Python</option>
           <option value="java">Java</option>
           <option value="cpp">C++</option>
-          <option value="c">C</option>
+          <!-- <option value="c">C</option> -->
         </select>
 
         <div id="editor"></div>

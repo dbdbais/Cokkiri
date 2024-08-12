@@ -1,14 +1,32 @@
 <template>
   <header>
     <nav id="header-first" class="title main-title">
-      <div id="quick-start" class="box-main-con box-in nav-btn" @click="$emit('go-room')">
+      <div
+        id="quick-start"
+        class="box-main-con box-in nav-btn"
+        @click="$emit('go-room')"
+      >
         바로가기
       </div>
-      <div id="create-room" class="box-main-con box-in nav-btn" @click="openCreateModal">
+      <div
+        id="create-room"
+        class="box-main-con box-in nav-btn"
+        @click="openCreateModal"
+      >
         방만들기
       </div>
-      <RouterLink id="router-regular" class="header-router" :to="{ name: 'studyBoard' }">스터디 모집 게시판</RouterLink>
-      <RouterLink id="router-problem" class="header-router" :to="{ name: 'problem' }">문제 목록</RouterLink>
+      <RouterLink
+        id="router-regular"
+        class="header-router"
+        :to="{ name: 'studyBoard' }"
+        >스터디 모집 게시판</RouterLink
+      >
+      <RouterLink
+        id="router-problem"
+        class="header-router"
+        :to="{ name: 'problem' }"
+        >문제 목록</RouterLink
+      >
     </nav>
     <div id="header-second" class="box-row">
       <div id="search-container" class="box-row box-main-con">
@@ -25,11 +43,18 @@
         </div>
         <div class="box-main-noti noti-btn" @click="openModal('noti')">
           <img id="mail-icon" src="@/assets/mail.svg" />
+          <div class="noti-unread bold-text md" v-if="mStore.unReadNoti > 0">
+            {{ mStore.unReadNoti }}
+          </div>
           우편함
         </div>
       </div>
     </div>
-    <CreateRoom v-if="isCreateModalOpen" @close="closeCreateModal" @create="$emit('create')" />
+    <CreateRoom
+      v-if="isCreateModalOpen"
+      @close="closeCreateModal"
+      @create="$emit('create')"
+    />
     <Notification v-if="isNotiModalOpen" @close="closeModal('noti')" />
     <Mission v-if="isMissionModalOpen" @close="closeModal('mission')" />
   </header>
@@ -41,10 +66,12 @@ import Notification from "@/components/home/modal/Notification.vue";
 import Mission from "@/components/home/modal/Mission.vue";
 import { useModal } from "@/composables/useModal";
 import { ref } from "vue";
+import { useMessageStore } from "@/stores/message";
 
 const emit = defineEmits(["create", "search"]);
 const searchText = ref("");
 const restrictModal = ref(false);
+const mStore = useMessageStore();
 
 const searchList = function () {
   emit("search", searchText.value);
@@ -76,13 +103,13 @@ const openModal = (selectedModal) => {
     openNotiModal();
   }
   restrictModal.value = true;
-}
+};
 
 const closeModal = (selectedModal) => {
   restrictModal.value = false;
   closeMissionModal();
   closeNotiModal();
-}
+};
 </script>
 
 <style scoped>
@@ -128,11 +155,13 @@ const closeModal = (selectedModal) => {
   height: 1px;
   /* background: black; */
   /* transform: skewY(-10deg); */
-  background: repeating-linear-gradient(to right,
-      black,
-      black 2px,
-      transparent 2px,
-      transparent 4px);
+  background: repeating-linear-gradient(
+    to right,
+    black,
+    black 2px,
+    transparent 2px,
+    transparent 4px
+  );
 }
 
 .header-router:hover {
@@ -193,6 +222,7 @@ const closeModal = (selectedModal) => {
   height: 70px;
   margin-top: 30px;
   border-radius: 25px;
+  position: relative;
   color: #5bb5d9;
   font-size: 20px;
   font-family: yg-jalnan;
@@ -213,5 +243,15 @@ const closeModal = (selectedModal) => {
   width: 30px;
   height: 30px;
   margin-right: 5px;
+}
+.noti-unread {
+  width: 35px;
+  height: 35px;
+  background-color: #f55252;
+  border: 4px solid red;
+  border-radius: 50%;
+  position: absolute;
+  top: -15px;
+  right: -25px;
 }
 </style>

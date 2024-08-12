@@ -166,19 +166,7 @@ function joinSession(roomId, userName) {
         );
       });
   });
-
-  // sessionCamera.on("connectionCreated", (event) => {
-  //   console.log("connectionCreated", event);
-  //   listConnectedUsers();
-  // });
 }
-
-// function listConnectedUsers() {
-//   const connections = sessionCamera.connections;
-//   connections.forEach((connection) => {
-//     console.log("connectionCreated", connection);
-//   });
-// }
 
 // 화면 공유 기능
 function publishScreenShare() {
@@ -441,21 +429,6 @@ function sendChat() {
       data: myUserName + ": " + text, // Any string (optional)
       to: [], // Array of Connection objects (optional. Broadcast to everyone if empty)
       type: "myChat", // The type of message (optional)
-    })
-    .then(() => {
-      console.log("Message successfully sent");
-    })
-    .catch((error) => {
-      console.error(error);
-    });
-}
-
-function sendHint() {
-  sessionCamera
-    .signal({
-      data: "hint", // Any string (optional)
-      to: [], // Array of Connection objects (optional. Broadcast to everyone if empty)
-      type: "hint", // The type of message (optional)
     })
     .then(() => {
       console.log("Message successfully sent");

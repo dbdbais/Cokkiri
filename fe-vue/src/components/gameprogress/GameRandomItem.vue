@@ -5,19 +5,12 @@ defineProps({
   items: Array,
   userItem: Array,
 });
-
 const emit = defineEmits(["close"]);
 const getItem = ref(false);
 const random = ref("");
 const item1 = ref("");
 const item2 = ref("");
-const itemText = {
-  blind: "화면 가리기",
-  minimum: "제출 축소",
-  prevent: "제출 방해",
-  fontBig: "폰트 크게",
-  fontSmall: "폰트 작게",
-};
+
 const stopBtn = (userItem, get) => {
   if (get) {
     emit("close");
@@ -35,33 +28,15 @@ const stopBtn = (userItem, get) => {
     <div class="items flex-align">
       <div class="item box md">
         <div class="item-con box-col" :class="item1">
-          <div
-            class="item-box box-col md bold-text"
-            v-for="item in items"
-            :key="item.index"
-          >
-            <img
-              alt="아이템"
-              :src="'/src/assets/item/' + item + '.svg'"
-              style="margin-bottom: 10px"
-            />
-            {{ itemText[item] }}
+          <div class="item-box md" v-for="item in items" :key="item.index">
+            <img alt="아이템" :src="'/src/assets/item/' + item + '.svg'" />
           </div>
         </div>
       </div>
       <div class="item box md">
         <div class="item-con box-col" :class="item2">
-          <div
-            class="item-box md box-col md bold-text"
-            v-for="item in items"
-            :key="item.index"
-          >
-            <img
-              alt="아이템"
-              :src="'/src/assets/item/' + item + '.svg'"
-              style="margin-bottom: 10px"
-            />
-            {{ itemText[item] }}
+          <div class="item-box md" v-for="item in items" :key="item.index">
+            <img alt="아이템" :src="'/src/assets/item/' + item + '.svg'" />
           </div>
         </div>
       </div>
@@ -120,7 +95,7 @@ const stopBtn = (userItem, get) => {
 
 .item-btn {
   width: 150px;
-  height: 80px;
+  height: 100px;
   font-size: 25px;
 
   background-color: #ff8e8e;

@@ -10,8 +10,6 @@ import { useGameStore } from "@/stores/game";
 
 defineProps({
   bigfont: Boolean,
-  minimum: Number,
-  prevent: Boolean,
 });
 
 const editor = ref(null);
@@ -33,7 +31,7 @@ const userCode = ref({ ...defaultCode });
 
 const initializeEditor = (val) => {
   editor.value = ace.edit("editor");
-  editor.value.setTheme("ace/theme/chrome");
+  editor.value.setTheme("ace/theme/Dawn");
   editor.value.session.setMode("ace/mode/python");
   editor.value.setValue(val ? val : defaultCode.python);
   editor.value.setFontSize(editorFontSize.value); // Set the desired font size here
@@ -52,6 +50,7 @@ const fontReduce = () => {
       editorFontSize.value -= 1;
       initializeEditor(saveVal);
     }
+    // console.log(editorFontSize.value);
   }, 200);
   setTimeout(() => {
     clearInterval(timerId);
@@ -93,12 +92,12 @@ onMounted(() => {
     const currentLanguage = currentMode.includes("python")
       ? "python"
       : currentMode.includes("java")
-      ? "java"
-      : currentMode.includes("c_cpp")
-      ? editor.value.getValue().includes("#include <stdio.h>")
-        ? "c"
-        : "cpp"
-      : "python";
+        ? "java"
+        : currentMode.includes("c_cpp")
+          ? editor.value.getValue().includes("#include <stdio.h>")
+            ? "c"
+            : "cpp"
+          : "python";
 
     userCode.value[currentLanguage] = editor.value.getValue();
     editor.value.session.setMode(
@@ -170,11 +169,7 @@ const clearInput = () => {
   <div>
     <div class="editor-con box-w">
       <div id="editor-container">
-        <select
-          id="language"
-          class="box language bold-text"
-          v-model="selectedLanguage"
-        >
+        <select id="language" class="box language bold-text" v-model="selectedLanguage">
           <option value="python">Python</option>
           <option value="java">Java</option>
           <option value="cpp">C++</option>
@@ -183,16 +178,7 @@ const clearInput = () => {
 
         <div id="editor"></div>
         <button class="run-btn bold-text" @click="runCode">실행</button>
-        <button
-          class="submit-btn bold-text"
-          :style="{ scale: minimum * 0.01 }"
-          :class="{
-            prevent: prevent,
-          }"
-          :disabled="prevent"
-        >
-          제출
-        </button>
+        <button class="submit-btn bold-text">제출</button>
       </div>
     </div>
     <div class="input-con box-w">
@@ -205,13 +191,7 @@ const clearInput = () => {
             </button>
           </p>
 
-          <textarea
-            id="inputText"
-            class="nomal-text"
-            v-model="inputText"
-            rows="10"
-            cols="30"
-          ></textarea>
+          <textarea id="inputText" class="nomal-text" v-model="inputText" rows="10" cols="30"></textarea>
         </div>
         <div id="output">
           <p class="bold-text">Output</p>
@@ -273,7 +253,6 @@ option {
   width: 80px;
   height: 40px;
   margin-top: 10px;
-  transition: all 0.5s ease-in-out;
 }
 
 .submit-btn {
@@ -330,12 +309,8 @@ textarea,
   border: 2px solid black;
   width: 90%;
   overflow: auto;
-
+  /* Enable scrolling */
   white-space: pre-wrap;
-}
-.prevent {
-  background-color: rgb(117, 117, 117);
-  border-color: gray;
-  color: gray;
+  /* Preserve whitespace and wrap long lines */
 }
 </style>

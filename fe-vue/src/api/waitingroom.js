@@ -3,27 +3,14 @@ import { localAxios } from "@/utils/request";
 const axios = localAxios();
 
 export const getWaitingRoom = (roomId, success, fail) => {
-  axios.get(`/waitingroom/${roomId}`).then(success).catch(fail);
+  console.log("get Study Room");
+  axios.get(`waitingroom/${roomId}`).then(success).catch(fail);
 };
 
 export const getWaitingRoomList = (params, success, fail) => {
-  axios.get("/waitingroom?", { params: params }).then(success).catch(fail);
+  console.log("get Study Room List");
+  axios.get("waitingroom?", { params: params }).then(success).catch(fail);
 };
-
-export function selectedProblem(problemList, roomId) {
-  return axios({
-    url: `/waitingroom/problem`,
-    method: "post",
-    data: { problems: problemList, sessionId: roomId },
-  });
-}
-
-export function getProblemList(roomId) {
-  return axios({
-    url: `/waitingroom/problem/${roomId}`,
-    method: "get",
-  });
-}
 
 export const goWaitingRoom = (user, success, fail) => {
   console.log("go Study Room");
@@ -41,20 +28,7 @@ export const createWaitingRoom = (roomData, success, fail) => {
     .catch(fail);
 };
 
-export const exitWaitingRoom = (roomData) => {
+export const exitWaitingRoom = (roomData, success, fail) => {
   console.log("exit Waiting Room");
-  return axios({
-    url: "waitingroom/quit-room",
-    method: "post",
-    data: roomData,
-  });
-};
-
-export const getGameProblem = (data) => {
-  console.log("exit Waiting Room");
-  return axios({
-    url: "game/update",
-    method: "post",
-    data: data,
-  });
+  axios.post("waitingroom/quit-room", JSON.stringify(roomData), success, fail);
 };

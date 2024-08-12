@@ -37,15 +37,12 @@
         </button>
       </div>
       <div class="notifications box-row">
-        <div class="box-main-noti noti-btn" @click="openModal('mission')">
+        <div class="box-main-noti noti-btn">
           <img id="mission-icon" src="@/assets/elephant-circus.svg" />
           일일미션
         </div>
-        <div class="box-main-noti noti-btn" @click="openModal('noti')">
+        <div class="box-main-noti noti-btn" @click="openNotiModal">
           <img id="mail-icon" src="@/assets/mail.svg" />
-          <div class="noti-unread bold-text md" v-if="mStore.unReadNoti > 0">
-            {{ mStore.unReadNoti }}
-          </div>
           우편함
         </div>
       </div>
@@ -55,23 +52,18 @@
       @close="closeCreateModal"
       @create="$emit('create')"
     />
-    <Notification v-if="isNotiModalOpen" @close="closeModal('noti')" />
-    <Mission v-if="isMissionModalOpen" @close="closeModal('mission')" />
+    <Notification v-if="isNotiModalOpen" @close="closeNotiModal" />
   </header>
 </template>
 
 <script setup>
 import CreateRoom from "@/components/home/modal/CreateRoom.vue";
 import Notification from "@/components/home/modal/Notification.vue";
-import Mission from "@/components/home/modal/Mission.vue";
 import { useModal } from "@/composables/useModal";
 import { ref } from "vue";
-import { useMessageStore } from "@/stores/message";
 
 const emit = defineEmits(["create", "search"]);
 const searchText = ref("");
-const restrictModal = ref(false);
-const mStore = useMessageStore();
 
 const searchList = function () {
   emit("search", searchText.value);
@@ -89,27 +81,6 @@ const {
   openModal: openNotiModal,
   closeModal: closeNotiModal,
 } = useModal();
-
-const {
-  isModalOpen: isMissionModalOpen,
-  openModal: openMissionModal,
-  closeModal: closeMissionModal,
-} = useModal();
-
-const openModal = (selectedModal) => {
-  if (selectedModal === "mission" && restrictModal.value === false) {
-    openMissionModal();
-  } else if (selectedModal === "noti" && restrictModal.value === false) {
-    openNotiModal();
-  }
-  restrictModal.value = true;
-};
-
-const closeModal = (selectedModal) => {
-  restrictModal.value = false;
-  closeMissionModal();
-  closeNotiModal();
-};
 </script>
 
 <style scoped>
@@ -222,7 +193,6 @@ const closeModal = (selectedModal) => {
   height: 70px;
   margin-top: 30px;
   border-radius: 25px;
-  position: relative;
   color: #5bb5d9;
   font-size: 20px;
   font-family: yg-jalnan;
@@ -243,15 +213,5 @@ const closeModal = (selectedModal) => {
   width: 30px;
   height: 30px;
   margin-right: 5px;
-}
-.noti-unread {
-  width: 35px;
-  height: 35px;
-  background-color: #f55252;
-  border: 4px solid red;
-  border-radius: 50%;
-  position: absolute;
-  top: -15px;
-  right: -25px;
 }
 </style>

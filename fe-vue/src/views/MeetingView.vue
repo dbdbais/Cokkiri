@@ -11,34 +11,28 @@ import {
 import Member from "@/components/meeting/Member.vue";
 import Main from "@/components/meeting/Main.vue";
 import Chat from "@/components/meeting/Chat.vue";
-import { ref, onMounted, onUnmounted } from "vue";
+import { ref, onMounted } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import { getProblemList, getWaitingRoom } from "@/api/waitingroom";
-import HintView from "@/components/meeting/modal/HintView.vue";
-import { useModal } from "@/composables/useModal";
 
 const user = userStore();
-const problemList = ref([]);
-const { isModalOpen, openModal, closeModal } = useModal();
 
-onMounted(async () => {
-  try {
-    joinSession(route.params.roomId, user.user.nickname);
-    const response = await getWaitingRoom();
-    console.log("=====MeetingView Page=====")
-    console.log("roomInfo")
-    console.log(response);
-  } catch (e) {
-    console.error(e);
-  }
-  window.addEventListener("beforeunload", leaveSession);
-  window.addEventListener("popstate", leaveSession);
+onMounted(() => {
+  joinSession(route.params.roomId, user.user.nickname);
 });
 
 const route = useRoute();
 const router = useRouter();
 const audio = ref(true);
 const video = ref(true);
+
+const members = ref([
+  { num: "member_1" },
+  { num: "member_2" },
+  { num: "member_3" },
+  { num: "member_4" },
+  { num: "member_5" },
+  { num: "member_6" },
+]);
 
 const chatOnOff = ref(false);
 
@@ -51,8 +45,6 @@ const videoOnOff = function () {
   changeVideo(video.value);
 };
 
-
-
 const exitRoom = function () {
   leaveSession();
   router.replace({ name: "home" });
@@ -62,8 +54,8 @@ const exitRoom = function () {
   <div class="meeting-room">
     <Chat v-if="chatOnOff" />
     <div class="members box-main-con flex-align" id="members"></div>
-    <!-- <button
-      class="chat-btn set-btn"
+    <button
+      class="chat-btn"
       @click="
         () => {
           chatOnOff = true;
@@ -71,31 +63,19 @@ const exitRoom = function () {
       "
     >
       chat
-    </button> -->
-    <button class="set-btn hint" @click="openModal">
-      <img v-if="video" src="/src/assets/meeting/video-on.svg" alt="비디오 on" />
-      <img v-else src="/src/assets/meeting/video-off.svg" alt="비디오 off" />
     </button>
-    <button id="myVideo" class="set-btn" @click="videoOnOff">
-      <img v-if="video" src="/src/assets/meeting/video-on.svg" alt="비디오 on" />
-      <img v-else src="/src/assets/meeting/video-off.svg" alt="비디오 off" />
+    <button id="myVideo" @click="videoOnOff">
+      video [{{ video ? "ON" : "OFF" }}]
     </button>
-    <button id="myAudio" class="set-btn" @click="audioOnOff">
-      <img v-if="audio" src="/src/assets/meeting/audio-on.svg" alt="마이크 on" />
-      <img v-else src="/src/assets/meeting/audio-off.svg" alt="마이크 off" />
+    <button id="myAudio" @click="audioOnOff">
+      audio [{{ audio ? "ON" : "OFF" }}]
     </button>
-    <div id="exit" class="room-exit bold-text md" @click="exitRoom">
-      <img src="/src/assets/exit_room.svg" alt="방나가기" />
-      나가기
-    </div>
-    <button id="video-share" class="set-btn" @click="publishScreenShare">
-      <img src="/src/assets/meeting/share.svg" alt="화면공유" />
-    </button>
+    <button id="exit" @click="exitRoom">exit</button>
+    <button id="video-share" @click="publishScreenShare">화면 공유</button>
     <div class="main box-main-con">
       <Main />
     </div>
   </div>
-  <HintView v-if="isModalOpen" @close="closeModal" />
 </template>
 
 <style scoped>
@@ -110,30 +90,19 @@ const exitRoom = function () {
 #video-share,
 .chat-btn {
   position: absolute;
+  top: 0;
 }
-
 #video-share {
-  top: 90px;
-  right: 190px;
+  right: 350px;
 }
-
 #myAudio {
-  top: 90px;
-  right: 20px;
+  right: 180px;
 }
-
-#myVideo {
-  top: 90px;
-  right: 105px;
-}
-
 #exit {
-  top: 20px;
-  right: 20px;
+  right: 300px;
 }
-
 .chat-btn {
-  right: 200px;
+  right: 80px;
 }
 
 .members {
@@ -160,29 +129,5 @@ button {
 
 video {
   border-radius: 20%;
-}
-
-.set-btn {
-  width: 70px;
-  height: 70px;
-  border-radius: 10px;
-  border-width: 5px;
-  border-color: #5bb5d9;
-  background-color: #a8dcf0;
-}
-
-.room-exit {
-  width: 120px;
-  height: 50px;
-  background-color: #ff6b6b;
-  border: 3px solid white;
-  border-radius: 10px;
-  padding-right: 7px;
-  font-size: 22px;
-}
-
-.hint {
-  top: 90px;
-  right: 280px;
 }
 </style>

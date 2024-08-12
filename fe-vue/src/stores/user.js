@@ -11,16 +11,8 @@ export const userStore = defineStore(
       percent: 0,
     });
 
-    const userNickname = ref({});
     function setUser(newUser) {
       user.value = newUser;
-    }
-
-    async function setUserNickName(allUser) {
-      userNickname.value = {};
-      await allUser.forEach((user) => {
-        userNickname.value[user.id] = user.nickname;
-      });
     }
 
     function logout() {
@@ -34,13 +26,11 @@ export const userStore = defineStore(
 
     return {
       user,
-      userNickname,
       setUser,
       logout,
-      setUserNickName,
     };
   },
   {
-    // persist: true,
+    persist: true,
   }
 );

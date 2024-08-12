@@ -3,26 +3,18 @@ import { defineStore } from "pinia";
 import { getWaitingRoom } from "@/api/waitingroom";
 
 export const useMessageStore = defineStore("message", () => {
-  const unReadNoti = ref(0);
-
   const noti = ref({
     room: [],
     friend: [],
     regular: [],
   });
 
-  const receiveNoti = function (param) {
-    unReadNoti.value += 1;
-    console.log(unReadNoti.value);
-    if (param === ".") {
-      console.log("친구추가");
-      // receiveFriend();
-    } else if (param > 0) {
-      console.log("방초대");
-      receiveInvite(param);
-    } else {
-      console.log("정기 스터디 초대");
-    }
+  const resetNoti = function () {
+    noti.value = {
+      room: [],
+      friend: [],
+      regular: [],
+    };
   };
 
   const receiveInvite = function (message) {
@@ -36,15 +28,16 @@ export const useMessageStore = defineStore("message", () => {
     getWaitingRoom(message, success, fail);
   };
 
-  function readNoti() {
-    unReadNoti.value = 0;
-  }
-
+  const receiveFriend = function (message) {
+    noti.value.friend = [];
+    message.forEach((element) => {
+      noti.value.friend.push(element);
+    });
+  };
   return {
     noti,
-    unReadNoti,
-    receiveNoti,
     receiveInvite,
-    readNoti,
+    receiveFriend,
+    resetNoti,
   };
 });

@@ -23,20 +23,14 @@ import Header from "@/components/home/Header.vue";
 import Profile from "@/components/home/Profile.vue";
 import FriendsList from "@/components/home/FriendsList.vue";
 import MainContent from "@/components/home/MainContent.vue";
-
 import { getWaitingRoomList, goWaitingRoom } from "@/api/waitingroom";
-import { getAllUser, getFriends } from "@/api/user";
-import { insertClass } from "@/api/problem";
+import { insertClass } from "@/api/problem"
 import { ref, onMounted, onUnmounted } from "vue";
 import { useRouter } from "vue-router";
 import { userStore } from "@/stores/user";
 import { useMessageStore } from "@/stores/message";
-import { useMeetingStore } from "@/stores/meeting";
-import { friendStore } from "@/stores/friend";
 
 const uStore = userStore();
-const mStore = useMeetingStore();
-const fStore = friendStore();
 const lobby = new WebSocket(
   `${process.env.VITE_VUE_SOCKET_URL}socket/lobby/${uStore.user.nickname}`
 );
@@ -116,21 +110,6 @@ const goRoom = function (id) {
   );
 };
 
-async function addFriendFun() {
-  await getAllUser().then((res) => {
-    console.log("유저 닉네임 가져오기 (2)");
-    uStore.setUserNickName(res.data);
-  });
-  console.log("친구 목록 가져오기 (3)");
-  const time = new Date();
-  console.log("시간: " + time);
-  setTimeout(() => {
-    getFriends(uStore.user.id).then((res) => {
-      fStore.setFriends(res.data);
-    });
-  }, 3000);
-}
-
 lobby.onmessage = function (event) {
   let data = event.data.split("|!|");
   console.log(data);
@@ -139,11 +118,7 @@ lobby.onmessage = function (event) {
     let param = data[3];
     if (event === "NOTI") {
       console.log(event, param);
-      messageStore.receiveNoti(param);
       messageStore.receiveInvite(param);
-    } else if (event === "FRIADD") {
-      console.log("친구 신청 완료! (1)");
-      addFriendFun();
     }
   }
 };
@@ -162,13 +137,13 @@ const getRoomList = function (params) {
     console.log(err);
   };
 
+  console.log(params);
   getWaitingRoomList(params, success, fail);
 };
 
 onMounted(() => {
   getRoomList();
   callInsertClass();
-  mStore.clearHint();
 });
 
 onUnmounted(() => {
@@ -196,7 +171,7 @@ const callInsertClass = async () => {
   } catch (e) {
     console.log(e);
   }
-};
+}
 
 const logout = function () {
   uStore.logout();

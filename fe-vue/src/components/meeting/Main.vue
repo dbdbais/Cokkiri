@@ -2,9 +2,9 @@
 import Problem from "@/components/meeting/Problem.vue";
 import Compiler from "@/components/meeting/Compiler.vue";
 import SubmitList from "@/components/meeting/SubmitList.vue";
-import Hint from "@/components/meeting/Hint.vue";
 
 import { ref } from "vue";
+import { RouterView } from "vue-router";
 
 defineProps({
   blind: Number,
@@ -16,7 +16,6 @@ defineProps({
 const main = ref(null);
 const resizer = ref(null);
 const problemWidth = ref(1000);
-const selectedButton = ref("compiler");
 const compiler = ref(true);
 
 const initResize = (e) => {
@@ -29,8 +28,8 @@ const startResize = (e) => {
   problemWidth.value = e.clientX - mainRect.left;
   if (problemWidth.value < 500) {
     problemWidth.value = 500;
-  } else if (problemWidth.value > 1300) {
-    problemWidth.value = 1300;
+  } else if (problemWidth.value > 1500) {
+    problemWidth.value = 1500;
   }
 };
 
@@ -38,39 +37,56 @@ const stopResize = () => {
   window.removeEventListener("mousemove", startResize);
   window.removeEventListener("mouseup", stopResize);
 };
-
-const selectButton = (button) => {
-  selectedButton.value = button;
-};
 </script>
 
 <template>
   <div ref="main" class="flex-align main-content">
-    <div :style="{
-      width: problemWidth + 'px',
-    }" class="problem box-sb">
+    <div
+      :style="{
+        width: problemWidth + 'px',
+      }"
+      class="problem box-sb"
+    >
       <Problem :blind="blind" />
     </div>
     <button ref="resizer" class="resizer" @mousedown="initResize"></button>
-    <div class="compiler box-sb" :style="{
-      flex: 1,
-    }">
+    <div
+      class="compiler box-sb"
+      :style="{
+        flex: 1,
+      }"
+    >
+      <button
+        v-if="false"
+        class="submit bold-text"
+        :style="{ scale: minimum * 0.01 }"
+        :class="{
+          prevent: prevent,
+        }"
+        :disabled="prevent"
+        @click="console.log('제출')"
+      >
+        제출하기
+      </button>
+
       <div class="flex-align btn-box">
-        <div class="compiler-btn bold-text md" :class="{ active: selectedButton === 'compiler' }"
-          @click="selectButton('compiler')">
+        <div
+          class="compiler-btn bold-text md"
+          :class="{ active: compiler }"
+          @click="compiler = true"
+        >
           에디터
         </div>
-        <div class="submit-btn bold-text md" :class="{ active: selectedButton === 'submit' }"
-          @click="selectButton('submit')">
+        <div
+          class="submit-btn bold-text md"
+          :class="{ active: !compiler }"
+          @click="compiler = false"
+        >
           제출 목록
         </div>
-        <div class="hint-btn bold-text md" :class="{ active: selectedButton === 'hint' }" @click="selectButton('hint')">
-          힌트
-        </div>
       </div>
-      <Compiler v-if="selectedButton === 'compiler'" :bigfont="bigfont" :minimum="minimum" :prevent="prevent" />
-      <SubmitList v-else-if="selectedButton === 'submit'" />
-      <Hint v-else-if="selectedButton === 'hint'" />
+      <Compiler v-if="compiler" :bigfont="bigfont" />
+      <SubmitList v-else />
     </div>
   </div>
 </template>
@@ -93,21 +109,17 @@ const selectButton = (button) => {
   top: 10px;
   right: 20px;
 }
-
 .editor-box {
   position: relative;
 }
-
 .compiler-btn,
-.submit-btn,
-.hint-btn {
+.submit-btn {
   width: 120px;
   height: 50px;
   border: 5px solid #3b72ff;
   font-size: 25px;
   border-radius: 10px 10px 0 0;
 }
-
 .submit {
   width: 120px;
   height: 60px;
@@ -120,27 +132,28 @@ const selectButton = (button) => {
   background-color: #c191ff;
   border-color: #3b72ff;
 }
-
 .compiler {
   height: 800px;
   padding: 20px;
   position: relative;
 }
-
 .btn-box {
   position: absolute;
   top: 25px;
 }
-
 .active {
   background-color: blue;
 }
-
 .resizer {
   width: 20px;
   height: 800px;
   background-color: skyblue;
   border-color: white;
   cursor: url(/src/assets/drag.svg) 20 20, pointer;
+}
+.prevent {
+  background-color: rgb(117, 117, 117);
+  border-color: gray;
+  color: gray;
 }
 </style>

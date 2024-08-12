@@ -8,10 +8,6 @@ const maxLevel = ref(9);
 const minLevel = ref(1);
 const selectedProblemList = ref({});
 
-defineProps({
-  roomData: Object,
-});
-
 onMounted(() => {
   getProblemsList();
 });
@@ -73,13 +69,13 @@ watch([minLevel, maxLevel], () => {
         <div class="badge md">LEVEL {{ problem.level }}</div>
         <span class="no">NO.{{ String(problem.no).padStart(5, "0") }}</span><span class="dash nomal-text">-</span>
         <span class="name">{{ problem.title }}</span>
-        <button v-if="!roomData.isGame" class="select-btn bold-text"
-          :class="{ selected: selectedProblemList[problem.no] }" @click="selectedProblem(problem.no)">
+        <button class="select-btn bold-text" :class="{ selected: selectedProblemList[problem.no] }"
+          @click="selectedProblem(problem.no)">
           {{ selectedProblemList[problem.no] ? "취소" : "선택" }}
         </button>
       </div>
     </div>
-    <button class="selected-btn bold-text" @click="$emit('problem-select', selectProblem, minLevel, maxLevel)">
+    <button class="selected-btn bold-text" @click="$emit('problem-select', selectProblem)">
       선택 완료
     </button>
   </div>

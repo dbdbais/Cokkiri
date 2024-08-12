@@ -40,10 +40,3 @@ export function conditionSearch(keyword) {
     },
   });
 }
-
-export function getHint(pId) {
-  return axios({
-    url: `${baseURL}/hint/${pId}`,
-    method: "get",
-  });
-}

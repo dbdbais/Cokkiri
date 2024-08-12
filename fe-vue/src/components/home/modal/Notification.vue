@@ -10,7 +10,6 @@ import { useModal } from "@/composables/useModal";
 import { userStore } from "@/stores/user";
 import { useMessageStore } from "@/stores/message";
 import { useRouter } from "vue-router";
-import { friendStore } from "@/stores/friend";
 
 const { isModalOpen, openModal, closeModal } = useModal();
 const store = userStore();
@@ -33,55 +32,65 @@ function getNotiData() {
     notiRequest.value.room.push(room);
   });
 
-  // receiveRegular({ userName: store.user.nickname })
-  //   .then((res) => {
-  //     console.log(res.data);
-  //     res.data.forEach((element) => {
-  //       notiRequest.value.regular.push(element);
-  //     });
-  //   })
-  //   .catch((err) => console.log(err));
-  messageStore.noti.friend.forEach((friend) => {
-    notiRequest.value.friends.push(friend);
-  });
-  getFriends(store.user.id).then((res) => {
-    res.data.forEach((element) => {
-      if (element.status === "SELECT") {
-        console.log(element);
-        notiRequest.value.friends.push(element.friendUserId);
-      }
+  receiveRegular({ userName: store.user.nickname })
+    .then((res) => {
+      console.log(res.data);
+      res.data.forEach((element) => {
+        notiRequest.value.regular.push(element);
+      });
+    })
+    .catch((err) => console.log(err));
+  getFriends(store.user.id)
+    .then((res) => {
+      res.data.forEach((friend) => {
+        if (friend.status === "SELECT") {
+          getUser(friend.friendUserId)
+            .then((res) => {
+              // console.log(res.data);
+              if (
+                !notiRequest.value.friends.some((element) => {
+                  // console.log(element);
+                  element.nickname === res.data.nickname;
+                  return true;
+                })
+              ) {
+                notiRequest.value.friends.push(res.data);
+              }
+              console.log(notiRequest.value.friends);
+            })
+            .catch((err) => {
+              console.log(err);
+            });
+        }
+      });
+      console.log(notiRequest.value.friends);
+    })
+    .catch((err) => {
+      console.log(err);
     });
-  });
 }
 
 onMounted(() => {
   getNotiData();
-  messageStore.readNoti();
 });
 
 const router = useRouter();
 const isSelected = ref("announ");
 const announ = ref(announcement);
-const fStore = friendStore();
+const noti = ref([]);
+const roomInvite = ref([]);
 const selectedAnnoun = ref(null);
 
-async function addFriend(friendUserId) {
-  await acceptFriend(store.user.id, friendUserId)
+const addFriend = function (friendUserId) {
+  acceptFriend(store.user.id, friendUserId)
     .then((res) => {
       console.log(res.data);
+      getNotiData();
     })
     .catch((err) => {
       console.log(err);
     });
-  // setTimeout(
-  //   getFriends(store.user.id).then((res) => {
-  //     fStore.setFriends(res.data);
-  //   }),
-  //   1000
-  // );
-
-  getNotiData();
-}
+};
 
 const acceptRegular = function (sessionId, userName) {
   acceptRegularJoin({ sessionId: sessionId, userName: userName })
@@ -117,113 +126,72 @@ const goRoom = function (roomId) {
 </script>
 
 <template>
-  <!-- <div class="modal-overlay"> -->
-  <div class="modal-content box-col slideLeft">
-    <div class="modal-header box-row">
-      <img src="@/assets/mail2.svg" alt="mail-icon" class="mail-icon" />
-      <span>우편함</span>
-      <img
-        src="@/assets/mail-close.svg"
-        alt="close-icon"
-        class="close-icon"
-        @click="$emit('close')"
-      />
-    </div>
-    <div class="type-con box-row">
-      <input
-        id="announ-in"
-        type="radio"
-        name="type"
-        value="announ"
-        v-model="isSelected"
-      />
-      <label for="announ-in">공지</label>
-      <input
-        id="noti-in"
-        type="radio"
-        name="type"
-        value="noti"
-        v-model="isSelected"
-      />
-      <label for="noti-in">알림</label>
-    </div>
-    <div class="content-con">
-      <div v-if="isSelected == 'announ'">
-        <div
-          v-for="(item, index) in announ"
-          :key="index"
-          class="box-row announ-con"
-        >
-          <span>{{ item.title }}</span>
-          <div class="btn-detail">
-            <span @click="openAnnounceModal(item.content)">자세히</span>
-          </div>
-        </div>
+  <div class="modal-overlay">
+    <div class="modal-content box-col slideLeft">
+      <div class="modal-header box-row">
+        <img src="@/assets/mail2.svg" alt="mail-icon" class="mail-icon" />
+        <span>우편함</span>
+        <img src="@/assets/mail-close.svg" alt="close-icon" class="close-icon" @click="$emit('close')" />
       </div>
-      <div v-if="isSelected == 'noti'">
-        <div class="room-con box">
-          <span>방 초대</span>
-          <div
-            v-for="(item, index) in notiRequest.room"
-            :key="index"
-            class="box-row announ-con"
-          >
-            <span>{{ item.userName }}님이 초대하였습니다.</span>
-            <div class="box-row">
-              <button class="btn-accept bold-text" @click="goRoom(item.roomId)">
-                수락
-              </button>
-              <button class="btn-reject bold-text">거절</button>
+      <div class="type-con box-row">
+        <input id="announ-in" type="radio" name="type" value="announ" v-model="isSelected" />
+        <label for="announ-in">공지</label>
+        <input id="noti-in" type="radio" name="type" value="noti" v-model="isSelected" />
+        <label for="noti-in">알림</label>
+      </div>
+      <div class="content-con">
+        <div v-if="isSelected == 'announ'">
+          <div v-for="(item, index) in announ" :key="index" class="box-row announ-con">
+            <span>{{ item.title }}</span>
+            <div class="btn-detail">
+              <span @click="openAnnounceModal(item.content)">자세히</span>
             </div>
           </div>
         </div>
-        <div class="friend-con box">
-          <span>친구 신청</span>
-          <div
-            v-for="(item, index) in notiRequest.friends"
-            :key="index"
-            class="box-row announ-con"
-          >
-            <!-- <span>{{ store.userNickname[item] }}</span> -->
-            <span>{{ item }}</span>
-            <div class="box-row">
-              <button class="btn-accept bold-text" @click="addFriend(item)">
-                수락
-              </button>
-              <button class="btn-reject bold-text">거절</button>
-            </div>
-          </div>
-        </div>
-        <div class="regular-con box">
-          <span>정기 스터디 (닉네임 [스터디 명])</span>
-          <div v-for="(regular, index) in notiRequest.regular" :key="index">
-            <div
-              v-for="(user, index) in regular.users"
-              :key="index"
-              class="box-row announ-con"
-            >
-              <span>{{ user }} [{{ regular.regularName }}]</span>
+        <div v-if="isSelected == 'noti'">
+          <div class="room-con box">
+            <span>방 초대</span>
+            <div v-for="(item, index) in notiRequest.room" :key="index" class="box-row announ-con">
+              <span>{{ item.userName }}님이 초대하였습니다.</span>
               <div class="box-row">
-                <button
-                  class="btn-accept bold-text"
-                  @click="acceptRegular(regular.sessionId, user)"
-                >
+                <button class="btn-accept bold-text" @click="goRoom(item.roomId)">
                   수락
                 </button>
                 <button class="btn-reject bold-text">거절</button>
               </div>
             </div>
           </div>
+          <div class="friend-con box">
+            <span>친구 신청</span>
+            <div v-for="(item, index) in notiRequest.friends" :key="index" class="box-row announ-con">
+              <span>{{ item.nickname }}</span>
+              <div class="box-row">
+                <button class="btn-accept bold-text" @click="addFriend(item.id)">
+                  수락
+                </button>
+                <button class="btn-reject bold-text">거절</button>
+              </div>
+            </div>
+          </div>
+          <div class="regular-con box">
+            <span>정기 스터디 (닉네임 [스터디 명])</span>
+            <div v-for="(regular, index) in notiRequest.regular" :key="index">
+              <div v-for="(user, index) in regular.users" :key="index" class="box-row announ-con">
+                <span>{{ user }} [{{ regular.regularName }}]</span>
+                <div class="box-row">
+                  <button class="btn-accept bold-text" @click="acceptRegular(regular.sessionId, user)">
+                    수락
+                  </button>
+                  <button class="btn-reject bold-text">거절</button>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
+    <AnnounceDetail v-if="isModalOpen" @close="closeModal" :announce="selectedAnnoun" />
   </div>
-  <AnnounceDetail
-    v-if="isModalOpen"
-    @close="closeModal"
-    :announce="selectedAnnoun"
-  />
-  <!-- </div> -->
 </template>
 
 <style scoped>
@@ -244,7 +212,6 @@ div {
   border-radius: 10px;
   background-color: #cadcff;
   padding: 20px 25px;
-  z-index: 1000;
 }
 
 /* header */
@@ -279,7 +246,7 @@ div {
   appearance: none;
 }
 
-.type-con input + label {
+.type-con input+label {
   border: 3px solid #3b72ff;
   border-radius: 6px 6px 0 0;
   background-color: #dbe7ff;
@@ -287,7 +254,7 @@ div {
   font-size: 25px;
 }
 
-.type-con input:checked + label {
+.type-con input:checked+label {
   border: 3px solid #3b72ff;
   background-color: #c191ff;
 }
@@ -312,7 +279,7 @@ div {
   background-color: #dbe7ff;
 }
 
-.announ-con > span {
+.announ-con>span {
   font-size: 22px;
 }
 
@@ -336,9 +303,9 @@ div {
   overflow-y: auto;
 }
 
-.room-con > span,
-.friend-con > span,
-.regular-con > span {
+.room-con>span,
+.friend-con>span,
+.regular-con>span {
   font-size: 25px;
 }
 

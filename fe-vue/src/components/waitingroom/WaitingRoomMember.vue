@@ -25,14 +25,15 @@ const animamteSpeed = [
     <div class="member box md-col" v-for="user in users" :key="user.index">
       <div class="bold-text name" :class="user.rank">
         {{ user.nickname }}
+        {{ console.log(user) }}
       </div>
       <img
         :src="imgUrl + user.tier + '.svg'"
         alt="티어"
         class="rank animate__animated animate__bounce animate__infinite"
         :class="[
-          animateDelay + (user.num % 4) + 's',
-          animamteSpeed[user.num % 5],
+          animateDelay + (user.id % 4) + 's',
+          animamteSpeed[user.id % 5],
         ]"
       />
     </div>

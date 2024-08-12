@@ -1,18 +1,14 @@
 <script setup>
-import { ref } from "vue";
-import { infoSplit } from "@/utils/parse-problem";
+import { ref, onMounted } from "vue";
 import { useModal } from "@/composables/useModal";
 import { getSolved } from "@/api/submit"
 import { userStore } from "@/stores/user";
-// import WriteReview from "@/components/problem/modal/WriteReview.vue";
 import SubmitList from "@/components/problem/modal/SubmitList.vue";
+import ReviewItem from "@/components/problem/ReviewItem.vue";
 
 const uStore = userStore();
 const submitData = ref({});
 const { isModalOpen, openModal, closeModal } = useModal();
-defineProps({
-    problemData: Object
-});
 
 const fetchSubmit = async () => {
     try {
@@ -24,38 +20,81 @@ const fetchSubmit = async () => {
         console.error(error);
     }
 };
+
+
+const props = defineProps({
+    problemData: Object,
+    reviewData: Object
+});
+
+const tmpReviewData = ref([
+    {
+        "id": 1,
+        "user": {
+            "nickname": "user1234"
+        },
+        "content": "리뷰내용",
+        "code": "print('hello, world')",
+    },
+    {
+        "id": 2,
+        "user": {
+            "nickname": "user1234"
+        },
+        "content": "리뷰내용",
+        "code": "print('hello, world')",
+    },
+    {
+        "id": 3,
+        "user": {
+            "nickname": "user1234"
+        },
+        "content": "리뷰내용",
+        "code": "print('hello, world')",
+    }
+]);
+
+onMounted(() => {
+    tmpReviewData.value = tmpReviewData.value.map((item) => {
+        item.code = "문제를 해결하거나 3회 이상 코드를 제출해야 확인할 수 있습니다."
+        item.content = "문제를 해결하거나 3회 이상 코드를 제출해야 확인할 수 있습니다."
+    });
+})
 </script>
 
 <template>
     <div class="modal-overlay">
-        <div class="main-con box-col">
+        <div class="modal-con">
             <div class="modal-header box-row">
                 <div>
                     <span class="title header-span">{{ problemData.no + ". " }}</span>
                     <span class="title header-span">{{ problemData.title }}</span>
                 </div>
                 <div class="box-row">
-                    <div>
-                    </div>
                     <img src="@/assets/exit.svg" alt="close" class="icon-close" @click="$emit('close')" />
                 </div>
             </div>
-            <div class="modal-content">
-                <div class="left-content">
-                    <div class="problem-con">
-                        <span v-html="problemData.info"></span>
-                        <!-- <span class="content">{{ infoSplit(problemData.info) }}</span> -->
-                    </div>
+            <div class="modal-content box-grid">
+                <div class="left-con">
+                    <span v-html="problemData.info"></span>
                 </div>
-            </div>
-            <div class="btn-con">
-                <div class="btn-review" @click="fetchSubmit">
-                    <span class="title main-title">리뷰하기</span>
+                <!-- <div class="btn-con">
+                        <div class="btn-review" @click="fetchSubmit">
+                            <span class="title main-title">리뷰하기</span>
+                        </div>
+                    </div> -->
+                <div class="right-con">
+                    <div class="overlay">
+                        <span>문제를 해결하거나 3회 이상 제출해야합니다.</span>
+                    </div>
+                    <div v-for="review in tmpReviewData" :key="review.id">
+                        <ReviewItem :review="review" />
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-    <SubmitList v-if="isModalOpen" @close="closeModal" :problem-id="problemData.no" :submit-data="submitData" />
+    <!-- <SubmitList v-if="isModalOpen" @close="closeModal" :problem-id="problemData.no" :submit-data="submitData" /> -->
 </template>
 
 <style scoped>
@@ -66,18 +105,12 @@ const fetchSubmit = async () => {
     font-size: 35px;
 }
 
-.content {
-    color: black;
-    font-family: "RixInooAriDuriR";
-    -webkit-text-stroke: 1px white;
-}
-
-.main-con {
+.modal-con {
     position: absolute;
-    top: 150px;
-    left: 20px;
-    width: 850px;
-    height: 800px;
+    top: 60px;
+    left: 180px;
+    width: 1600px;
+    height: 980px;
     border: 5px solid #3B72FF;
     border-radius: 10px;
     background-color: #DBE7FF;
@@ -91,6 +124,12 @@ const fetchSubmit = async () => {
 
 .header-span {
     font-size: 55px;
+    text-align: center;
+}
+
+.icon-close {
+    width: 60px;
+    margin-left: 20px;
 }
 
 .modal-content {
@@ -99,69 +138,46 @@ const fetchSubmit = async () => {
     height: 100%;
 }
 
-.left-content {
-    width: 100%;
-    height: 100%;
-}
-
-.right-content {
-    width: 100%;
-    height: 100%;
-}
-
-.right-grid {
+.box-grid {
     display: grid;
-    grid-template-rows: 2fr 2fr 1.5fr 1.25fr 1fr;
-    gap: 10px;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr;
+    gap: 20px;
 }
 
-.problem-con,
-.input-con,
-.output-con,
-.restrict-con,
-.category-con {
+.left-con {
     width: 100%;
+    height: 800px;
     border: 5px solid #3B72FF;
-    /* border-radius: 10px; */
+    border-radius: 10px;
     background-color: white;
     padding: 10px;
     overflow: auto;
 }
 
-.problem-con {
-    height: 560px;
+.right-con {
+    position: relative;
+    width: 100%;
+    height: 800px;
 }
 
-.btn-con {
+.overlay {
+    position: absolute;
+    color: white;
+    top: 0;
+    left: 00px;
+    width: 755px;
+    height: 800px;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+}
+
+.overlay>span {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
     text-align: center;
-}
 
-.btn-review {
-    border: 5px solid #1959FF;
-    border-radius: 10px;
-    background-color: #C191FF;
-    padding: 10px;
-}
-
-.btn-like {
-    border: 5px solid #7FB115;
-    border-radius: 10px;
-    background-color: #CCFF61;
-    padding: 10px;
-}
-
-.btn-review img {
-    width: 50px;
-    height: 50px;
-}
-
-.btn-like img {
-    width: 50px;
-    height: 50px;
-}
-
-.icon-close {
-    width: 60px;
-    margin-left: 20px;
 }
 </style>

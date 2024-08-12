@@ -5,7 +5,8 @@ import { userStore } from "@/stores/user";
 import { auto } from "@/api/review"
 
 const props = defineProps({
-    problemId: Number
+    problemId: Number,
+    submit: Object
 });
 
 const codeSelected = ref(false);
@@ -63,67 +64,44 @@ const fetchAuto = async () => {
         console.error(e);
     }
 };
+
+const toggle = () => {
+    codeSelected.value = !codeSelected.value;
+};
 </script>
 
 <template>
-    <div class="modal-overlay">
-        <div class="modal-con">
-            <div class="modal-header box-row">
-                <span class="title main-title">리뷰작성</span>
-                <img src="@/assets/exit.svg" alt="close" class="icon-close" @click="$emit('close')" />
+    <div>
+        <div class="code-header box-row" @click="toggle">
+            <span class="title main-title">{{ props.submit.submit_id }}번</span>
+            <span class="title main-title">{{ props.submit.created_time }}</span>
+        </div>
+    </div>
+    <div v-if="codeSelected">
+        <div class="input-con code-con">
+            <span class="title">코드</span><br />
+            <div class="code">
+                <highlightjs language="python" :code="props.submit.code"></highlightjs>
             </div>
-            <div class="modal-content">
-                <div v-if="codeSelected">
-
-                </div>
-                <div v-else>
-                    <div class="input-con code-con">
-                        <span class="title">코드</span><br />
-                        <div class="code">
-                            <highlightjs language="python" :code="tmpCode"></highlightjs>
-                        </div>
-                    </div>
-                    <div class=" input-con review-con">
-                        <span class="title">리뷰내용</span><br />
-                        <textarea v-model="reviewContent"></textarea>
-                    </div>
-                    <div class="box-row btn-con">
-                        <div class="btn" @click="fetchAuto">
-                            <span class="title">자동작성</span>
-                        </div>
-                        <div class="btn" @click="writeReview">
-                            <span class="title">작성하기</span>
-                        </div>
-                    </div>
-                </div>
+        </div>
+        <div class=" input-con review-con">
+            <span class="title">리뷰내용</span><br />
+            <textarea v-model="reviewContent"></textarea>
+        </div>
+        <div class="box-row btn-con">
+            <div class="btn" @click="fetchAuto">
+                <span class="title">자동작성</span>
+            </div>
+            <div class="btn" @click="writeReview">
+                <span class="title">작성하기</span>
             </div>
         </div>
     </div>
 </template>
 
 <style scoped>
-.modal-overlay {
-    background-color: rgba(0, 0, 0, 0);
-}
-
-.modal-con {
-    position: absolute;
-    right: 30px;
-    width: 800px;
-    height: 660px;
-    border: 5px solid #3B72FF;
-    border-radius: 10px;
-    background-color: #DBE7FF;
-    padding: 20px 30px 0 20px;
-}
-
-.modal-header {
+.code-header {
     justify-content: space-between;
-    align-items: center;
-}
-
-.modal-content {
-    margin-top: 20px;
 }
 
 .icon-close {

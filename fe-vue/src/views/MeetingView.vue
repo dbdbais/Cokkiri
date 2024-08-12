@@ -12,23 +12,33 @@ import {
 import Member from "@/components/meeting/Member.vue";
 import Main from "@/components/meeting/Main.vue";
 import Chat from "@/components/meeting/Chat.vue";
+import ShareCodeDetail from "@/components/meeting/modal/ShareCodeDetail.vue";
 import { ref, onMounted, onUnmounted } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { getProblemList, getWaitingRoom } from "@/api/waitingroom";
 import HintView from "@/components/meeting/modal/HintView.vue";
 import { useModal } from "@/composables/useModal";
+import { useSubmitStore } from "@/stores/submit";
 
 const user = userStore();
 const problemList = ref([]);
+const roomData = ref([]);
+const shareCode = ref(true);
+const roomUser = ref({});
+
 const { isModalOpen, openModal, closeModal } = useModal();
 
 onMounted(async () => {
+  const shareData = [];
+  localStorage.setItem("shareData", JSON.stringify(shareData));
   try {
     joinSession(route.params.roomId, user.user.nickname);
-    const response = await getWaitingRoom();
-    console.log("=====MeetingView Page=====");
-    console.log("roomInfo");
-    console.log(response);
+    getWaitingRoom(route.params.roomId, (res) => {
+      roomData.value = res.data;
+      submitStore.setRoomUser(res.data);
+
+      console.log(roomData.value);
+    });
   } catch (e) {
     console.error(e);
   }
@@ -38,6 +48,7 @@ onMounted(async () => {
 
 const route = useRoute();
 const router = useRouter();
+const submitStore = useSubmitStore();
 const audio = ref(true);
 const video = ref(true);
 
@@ -68,6 +79,7 @@ onUnmounted(() => {
 <template>
   <div class="meeting-room">
     <Chat v-if="chatOnOff" />
+    <ShareCodeDetail v-if="submitStore.showDetail" />
     <div
       ref="member"
       class="members box-main-con flex-align"
@@ -106,7 +118,7 @@ onUnmounted(() => {
       <img src="/src/assets/meeting/share.svg" alt="화면공유" />
     </button>
     <div class="main box-main-con">
-      <Main />
+      <Main :room-data="roomData" />
     </div>
   </div>
   <HintView v-if="isModalOpen" @close="closeModal" />

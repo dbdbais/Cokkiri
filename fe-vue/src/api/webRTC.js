@@ -102,8 +102,24 @@ function joinSession(roomId, userName) {
         // 카메라 세션에 자신의 카메라 데이터 전송
         sessionCamera.publish(publisher);
 
-        sessionCamera.on("signal:myChat", (event) => {
-          console.log(event.data);
+        sessionCamera.on("signal:submit", (event) => {
+          const singalData = event.data.split("|!|");
+          const problemNo = singalData[0];
+          const user = singalData[1];
+          const language = singalData[2];
+          const code = singalData[3];
+          const userCnt = singalData[4];
+          const shareData = JSON.parse(localStorage.getItem("shareData"));
+          console.log(singalData);
+          shareData.push({
+            problemNo,
+            user,
+            language,
+            code,
+            userCnt,
+          });
+          localStorage.setItem("shareData", JSON.stringify(shareData));
+          console.log(shareData);
         });
       })
       .catch((error) => {
@@ -435,14 +451,14 @@ function changeAudio(audio) {
   publisher.publishAudio(audio);
 }
 
-function sendChat() {
-  let text = document.querySelector("#chatText").value;
+function sendSubmit(data) {
+  // let text = document.querySelector("#chatText").value;
 
   sessionCamera
     .signal({
-      data: myUserName + ": " + text, // Any string (optional)
+      data: data,
       to: [], // Array of Connection objects (optional. Broadcast to everyone if empty)
-      type: "myChat", // The type of message (optional)
+      type: "submit", // The type of message (optional)
     })
     .then(() => {
       console.log("Message successfully sent");
@@ -472,7 +488,8 @@ export {
   publishScreenShare,
   leaveSession,
   removeUserRequest,
-  sendChat,
+  // sendChat,
+  sendSubmit,
   changeVideo,
   changeAudio,
 };

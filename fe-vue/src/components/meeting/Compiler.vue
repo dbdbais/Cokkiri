@@ -11,12 +11,17 @@ import { useGameStore } from "@/stores/game";
 import { problemStore } from "@/stores/problem";
 import { useTriggerStore } from "@/stores/trigger";
 import { userStore } from "@/stores/user";
+import { sendSubmit } from "@/api/webRTC";
+import { useSubmitStore } from "@/stores/submit";
 
 defineProps({
   bigfont: Boolean,
   minimum: Number,
   prevent: Boolean,
+  roomData: Object,
+  userCnt: Number,
 });
+const emit = defineEmits(["upCnt"]);
 
 const editor = ref(null);
 const selectedLanguage = ref("python");
@@ -25,6 +30,7 @@ const outputText = ref("");
 const uStore = userStore();
 const pStore = problemStore();
 const tStore = useTriggerStore();
+const submitStore = useSubmitStore();
 const editorFontSize = ref(18);
 const userCodeList = ref(pStore.userCodeList);
 
@@ -132,11 +138,11 @@ watch(selectedLanguage, (newLang) => {
   userCode.value[currentLanguage] = editor.value.getValue();
   editor.value.session.setMode("ace/mode/" + newLang);
   editor.value.setValue(userCode.value[newLang] || defaultCode[newLang]);
+  resetCode();
 });
 
 onMounted(() => {
   getInit();
-
   document.getElementById("language").dispatchEvent(new Event("change"));
 });
 
@@ -186,7 +192,24 @@ const runCode = async (isSubmit) => {
     }
   });
 };
-const submitCode = () => {};
+
+const language = ref(null);
+
+const shareCode = (userCnt) => {
+  const code = editor.value.getValue();
+  const language = selectedLanguage.value;
+
+  userCodeList.value[tStore.currentProblemNum].code = code;
+  userCodeList.value[tStore.currentProblemNum].language = language;
+  const data = `${userCodeList.value[tStore.currentProblemNum].no}|!|${
+    uStore.user.nickname
+  }|!|${userCodeList.value[tStore.currentProblemNum].language}|!|${
+    userCodeList.value[tStore.currentProblemNum].code
+  }|!|${userCnt}`;
+  sendSubmit(data);
+  emit("upCnt");
+  console.log(userCnt);
+};
 
 const resetCode = () => {
   console.log("언어 교체");
@@ -205,9 +228,9 @@ const clearInput = () => {
       <div id="editor-container">
         <select
           id="language"
+          ref="language"
           class="box language bold-text"
           v-model="selectedLanguage"
-          @change="resetCode"
         >
           <option value="python">Python</option>
           <option value="java">Java</option>
@@ -227,6 +250,13 @@ const clearInput = () => {
           @click="runCode(1)"
         >
           제출
+        </button>
+        <button
+          v-if="!roomData.isGame"
+          class="share-btn bold-text"
+          @click="shareCode(userCnt)"
+        >
+          공유
         </button>
       </div>
     </div>
@@ -296,6 +326,7 @@ option {
 
 .run-btn,
 .submit-btn,
+.share-btn,
 .clear-btn {
   border-width: 5px;
   border-radius: 10px;
@@ -304,11 +335,18 @@ option {
 }
 
 .run-btn,
+.share-btn,
 .submit-btn {
   width: 80px;
   height: 40px;
   margin-top: 10px;
   transition: all 0.5s ease-in-out;
+}
+
+.share-btn {
+  position: absolute;
+  bottom: -50px;
+  right: 0;
 }
 
 .submit-btn {

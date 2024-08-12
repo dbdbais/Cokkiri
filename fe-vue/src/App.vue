@@ -1,6 +1,6 @@
 <script setup>
 import { RouterView } from "vue-router";
-import { useLodingStore } from "./stores/loading";
+import { useLodingStore } from "@/stores/loading";
 import Loading from "./components/common/Loading.vue";
 
 const loadingStore = useLodingStore();

@@ -19,13 +19,30 @@ public class MailController {
         this.mailService = mailService;
     }
 
-    // 인증 이메일 전송
-    @PostMapping("/send")
-    public HashMap<String, Object> mailSend( @RequestParam String mail) {
+    // send register E-MAIL
+    @PostMapping("/register")
+    public HashMap<String, Object> registerSend( @RequestParam String mail) {
         HashMap<String, Object> map = new HashMap<>();
 
         try {
-            mailService.sendMail(mail);
+            mailService.sendRMail(mail);
+
+            map.put("success", Boolean.TRUE);
+        } catch (Exception e) {
+            map.put("success", Boolean.FALSE);
+            map.put("error", e.getMessage());
+        }
+
+        return map;
+    }
+
+    // send password E-MAIL
+    @PostMapping("/password")
+    public HashMap<String, Object> passwordSend( @RequestParam String mail) {
+        HashMap<String, Object> map = new HashMap<>();
+
+        try {
+            mailService.sendPMail(mail);
 
             map.put("success", Boolean.TRUE);
         } catch (Exception e) {

@@ -93,12 +93,12 @@ onMounted(() => {
     const currentLanguage = currentMode.includes("python")
       ? "python"
       : currentMode.includes("java")
-      ? "java"
-      : currentMode.includes("c_cpp")
-      ? editor.value.getValue().includes("#include <stdio.h>")
-        ? "c"
-        : "cpp"
-      : "python";
+        ? "java"
+        : currentMode.includes("c_cpp")
+          ? editor.value.getValue().includes("#include <stdio.h>")
+            ? "c"
+            : "cpp"
+          : "python";
 
     userCode.value[currentLanguage] = editor.value.getValue();
     editor.value.session.setMode(
@@ -170,11 +170,7 @@ const clearInput = () => {
   <div>
     <div class="editor-con box-w">
       <div id="editor-container">
-        <select
-          id="language"
-          class="box language bold-text"
-          v-model="selectedLanguage"
-        >
+        <select id="language" class="box language bold-text" v-model="selectedLanguage">
           <option value="python">Python</option>
           <option value="java">Java</option>
           <option value="cpp">C++</option>
@@ -183,14 +179,9 @@ const clearInput = () => {
 
         <div id="editor"></div>
         <button class="run-btn bold-text" @click="runCode">실행</button>
-        <button
-          class="submit-btn bold-text"
-          :style="{ scale: minimum * 0.01 }"
-          :class="{
-            prevent: prevent,
-          }"
-          :disabled="prevent"
-        >
+        <button class="submit-btn bold-text" :style="{ scale: minimum * 0.01 }" :class="{
+          prevent: prevent,
+        }" :disabled="prevent">
           제출
         </button>
       </div>
@@ -205,13 +196,7 @@ const clearInput = () => {
             </button>
           </p>
 
-          <textarea
-            id="inputText"
-            class="nomal-text"
-            v-model="inputText"
-            rows="10"
-            cols="30"
-          ></textarea>
+          <textarea id="inputText" class="nomal-text" v-model="inputText" rows="10" cols="30"></textarea>
         </div>
         <div id="output">
           <p class="bold-text">Output</p>
@@ -333,6 +318,7 @@ textarea,
 
   white-space: pre-wrap;
 }
+
 .prevent {
   background-color: rgb(117, 117, 117);
   border-color: gray;

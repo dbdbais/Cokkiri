@@ -3,9 +3,12 @@ import { ref } from "vue";
 import { login, getUser } from "@/api/user";
 import { userStore } from "@/stores/user";
 import { useRouter } from "vue-router";
+import { useModal } from "@/composables/useModal";
+import FindPw from "@/components/login/modal/FindPw.vue";
 
 const router = useRouter();
 const store = userStore();
+const { isModalOpen, openModal, closeModal } = useModal();
 
 const userData = ref({
   id: "",
@@ -15,7 +18,15 @@ const userData = ref({
 const submitForm = async () => {
   try {
     const response = await login(userData.value);
-    getUserData();
+    if (response.data === 0) {
+      Swal.fire({
+        icon: "error",
+        title: "아이디 또는 비밀번호가 틀렸습니다.",
+      });
+    } else {
+      store.setUser(response.data);
+      getUserData();
+    }
     console.log(response);
   } catch (e) {
     console.log(e);
@@ -57,6 +68,7 @@ const getUserData = async () => {
         <RouterLink :to="{ name: 'registry' }">
           <a href="#" class="register-link">처음이신가요? 회원가입</a>
         </RouterLink>
+        <span class="forgot" @click="openModal">비밀번호를 잃어버리셨나요?</span>
         <button id="submit" type="submit" class="title">로그인</button>
       </form>
       <!-- <button class="google-login">
@@ -65,6 +77,7 @@ const getUserData = async () => {
       </button> -->
     </div>
   </div>
+  <FindPw v-if="isModalOpen" @close="closeModal" />
 </template>
 
 <style scoped>
@@ -180,6 +193,17 @@ button:hover {
 
 .register-link:hover {
   color: #0073e6;
+}
+
+.forgot {
+  font-family: "RixInooAriDuriR";
+  margin-top: 10px;
+  font-size: 25px;
+  color: red;
+}
+
+.forgot:hover {
+  color: black;
 }
 
 .google-login {

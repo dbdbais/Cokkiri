@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted, ref } from "vue";
+import { onMounted, onUnmounted, ref } from "vue";
 import announcement from "@/assets/data/announcement.json";
 import notification from "@/assets/data/notification.json";
 import AnnounceDetail from "@/components/home/modal/AnnounceDetail.vue";
@@ -57,6 +57,10 @@ function getNotiData() {
 onMounted(() => {
   getNotiData();
   messageStore.readNoti();
+});
+
+onUnmounted(() => {
+  messageStore.resetRoomInvite();
 });
 
 const router = useRouter();

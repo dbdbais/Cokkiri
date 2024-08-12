@@ -127,7 +127,7 @@ public class SubmitRestController {
                 }
                 
                 SubmitResponseDTO submitResponseDTO = new SubmitResponseDTO();
-                submitResponseDTO.setTcOutput(foutput);
+                submitResponseDTO.setTcOutput(coutput);
                 submitResponseDTO.setResult(cResult);
                 return submitResponseDTO;
             } else {

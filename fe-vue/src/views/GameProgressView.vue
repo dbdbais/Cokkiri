@@ -109,7 +109,13 @@ const itemList = [
   "fontSmall",
 ];
 const userItem = ref([]);
-
+const itemText = {
+  blind: "화면 가리기",
+  minimum: "제출 축소",
+  prevent: "제출 방해",
+  fontBig: "폰트 크게",
+  fontSmall: "폰트 작게",
+};
 const showItemFun = function () {
   if (!getItem.value) {
     showitem.value = true;
@@ -202,7 +208,14 @@ const close = () => {
               :disabled="!items[key]"
               @click="useItemFun(key)"
             >
-              <img :src="'/src/assets/item/' + key + '.svg'" alt="아이템" />
+              <div class="box-col item-img md">
+                <img
+                  :src="'/src/assets/item/' + key + '.svg'"
+                  alt="아이템"
+                  style="margin-bottom: 10px"
+                />
+                {{ itemText[key] }}
+              </div>
             </button>
 
             <!-- <button
@@ -272,6 +285,10 @@ const close = () => {
   border-width: 5px;
   border-color: #3b72ff;
   background-color: #dbe7ff;
+  font-size: 15px;
+}
+.item-img {
+  width: 100%;
 }
 
 .user-btn {

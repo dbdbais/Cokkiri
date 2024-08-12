@@ -41,6 +41,12 @@ export function getUser(id) {
   });
 }
 
+export function getUserName(name) {
+  return axios({
+    url: `${baseURL}/name/${name}`,
+    method: "get",
+  });
+}
 export function modifyUser(data) {
   return axios({
     url: `${baseURL}`,

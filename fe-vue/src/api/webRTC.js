@@ -166,7 +166,19 @@ function joinSession(roomId, userName) {
         );
       });
   });
+
+  // sessionCamera.on("connectionCreated", (event) => {
+  //   console.log("connectionCreated", event);
+  //   listConnectedUsers();
+  // });
 }
+
+// function listConnectedUsers() {
+//   const connections = sessionCamera.connections;
+//   connections.forEach((connection) => {
+//     console.log("connectionCreated", connection);
+//   });
+// }
 
 // 화면 공유 기능
 function publishScreenShare() {
@@ -294,7 +306,7 @@ function removeUserData(connection) {
     // 카메라 세션에서 token 제거
     httpRequest(
       "POST",
-      `${process.env.VITE_VUE_API_URL}api/session/remove-user`,
+      `${process.env.VITE_VUE_API_URL}session/remove-user`,
       {
         sessionId: mySessionId,
         token: token,
@@ -308,7 +320,7 @@ function removeUserData(connection) {
     // 화면 세션에서 token 제거
     httpRequest(
       "POST",
-      `${process.env.VITE_VUE_API_URL}api/session/remove-user`,
+      `${process.env.VITE_VUE_API_URL}session/remove-user`,
       {
         sessionId: mySessionIdScreen,
         token: tokenScreen,
@@ -429,6 +441,21 @@ function sendChat() {
       data: myUserName + ": " + text, // Any string (optional)
       to: [], // Array of Connection objects (optional. Broadcast to everyone if empty)
       type: "myChat", // The type of message (optional)
+    })
+    .then(() => {
+      console.log("Message successfully sent");
+    })
+    .catch((error) => {
+      console.error(error);
+    });
+}
+
+function sendHint() {
+  sessionCamera
+    .signal({
+      data: "hint", // Any string (optional)
+      to: [], // Array of Connection objects (optional. Broadcast to everyone if empty)
+      type: "hint", // The type of message (optional)
     })
     .then(() => {
       console.log("Message successfully sent");

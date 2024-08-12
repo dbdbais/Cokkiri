@@ -2,6 +2,7 @@
 import { ref } from "vue";
 import { create } from "@/api/review";
 import { userStore } from "@/stores/user";
+import { auto } from "@/api/review"
 
 const props = defineProps({
     problemId: Number
@@ -50,7 +51,18 @@ const writeReview = async () => {
             title: "리뷰 작성에 실패했습니다.",
         });
     }
-};  
+};
+
+const fetchAuto = async () => {
+    try {
+        console.log(tmpCode.value);
+        const response = await auto(tmpCode.value);
+        console.log(response);
+        reviewContent.value = response.data;
+    } catch (e) {
+        console.error(e);
+    }
+};
 </script>
 
 <template>
@@ -66,17 +78,22 @@ const writeReview = async () => {
                 </div>
                 <div v-else>
                     <div class="input-con code-con">
-                        <span class="title">코드 히스토리</span><br />
+                        <span class="title">코드</span><br />
                         <div class="code">
                             <highlightjs language="python" :code="tmpCode"></highlightjs>
                         </div>
                     </div>
                     <div class=" input-con review-con">
-                        <span class="title">리뷰</span><br />
+                        <span class="title">리뷰내용</span><br />
                         <textarea v-model="reviewContent"></textarea>
                     </div>
-                    <div class="btn-con" @click="writeReview">
-                        <span class="title">작성하기</span>
+                    <div class="box-row btn-con">
+                        <div class="btn" @click="fetchAuto">
+                            <span class="title">자동작성</span>
+                        </div>
+                        <div class="btn" @click="writeReview">
+                            <span class="title">작성하기</span>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -85,6 +102,10 @@ const writeReview = async () => {
 </template>
 
 <style scoped>
+.modal-overlay {
+    background-color: rgba(0, 0, 0, 0);
+}
+
 .modal-con {
     position: absolute;
     right: 30px;
@@ -137,14 +158,33 @@ textarea {
 }
 
 .btn-con {
+    justify-content: space-between;
+}
+
+.btn {
     width: 120px;
     padding: 10px 0;
     text-align: center;
     border-radius: 10px;
+}
+
+.btn:nth-child(1) {
+    background-color: #69f0aa;
+}
+
+.btn:nth-child(1):hover {
+    background-color: #5be09c;
+}
+
+.btn:nth-child(2) {
     background-color: #6969f0;
 }
 
-.btn-con span {
+.btn:nth-child(2):hover {
+    background-color: #5b5be0;
+}
+
+.btn span {
     font-size: 25px;
 }
 </style>

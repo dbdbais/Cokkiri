@@ -8,12 +8,20 @@
         </button>
       </div>
       <div class="accordion-item" :class="isOpen(index) ? 'open' : ''">
-        <div v-for="friend in friends" :key="friend.index" class="box-main-exp box-content">
+        <div
+          v-for="friend in fStore.friendList"
+          :key="friend"
+          class="box-main-exp box-content"
+        >
           <img class="friend-profile" src="@/assets/elephant-profile2.svg" />
           <slot :name="`content-${friend}`" class="title-member">
             <span class="title friend-name">{{ friend }}</span>
           </slot>
-          <img src="@/assets/message.svg" class="message-icon" @click="openModal(member)" />
+          <img
+            src="@/assets/message.svg"
+            class="message-icon"
+            @click="openModal(member)"
+          />
         </div>
       </div>
     </div>
@@ -43,65 +51,39 @@
         </div>
       </div> -->
     <!-- </div> -->
-    <Chat v-if="isModalOpen" @close="closeModal" :selectedMember="selectedMember" />
+    <Chat
+      v-if="isModalOpen"
+      @close="closeModal"
+      :selectedMember="selectedMember"
+    />
   </div>
 </template>
 
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, onMounted, watch } from "vue";
 import { useModal } from "@/composables/useModal";
-import { getFriends, getUser } from "@/api/user";
+import { getFriends, getAllUser } from "@/api/user";
 import { userStore } from "@/stores/user";
 import { friendStore } from "@/stores/friend";
 import Chat from "@/components/home/modal/Chat.vue";
-
-const items = ref([]);
-const friends = ref([]);
 const uStore = userStore();
 const fStore = friendStore();
 
 onMounted(async () => {
-  const response = await getFriends(uStore.user.id);
-  fStore.setAllRelationships(response.data);
-  console.log(response);
-  response.data.forEach((element) => {
-    console.log(element);
-    if (element.status === "ACCEPT") {
-      items.value.push({ title: "친구", member: [element.friendUserId] });
-      getUser(element.friendUserId)
-        .then((res) => {
-          friends.value.push(res.data.nickname);
-        })
-        .catch((err) => console.log(err));
-    }
+  await getAllUser().then((res) => {
+    uStore.setUserNickName(res.data);
   });
-
-  console.log(items.value);
-  // response.data.studyList.forEach(study => {
-  //     items.value.push({
-  //         title: study.title,
-  //         member: study.member
-  //     })
-  // });
+  await getFriends(uStore.user.id).then((res) => {
+    console.log(res.data);
+    fStore.setFriends(res.data);
+  });
 });
-
-// items.value.push({
-//     title: "친구",
-//     member: friendList.friendList.member
-// });
-
-// friendList.studyList.forEach(study => {
-//     items.value.push({
-//         title: study.title,
-//         member: study.member
-//     })
-// });
 
 const openIndex = ref([]);
 
-for (let i = 0; i < items.value.length; i++) {
-  openIndex.value.push(null);
-}
+// for (let i = 0; i < items.value.length; i++) {
+//   openIndex.value.push(null);
+// }
 
 const toggle = (index) => {
   openIndex.value[index] = openIndex.value[index] === index ? null : index;

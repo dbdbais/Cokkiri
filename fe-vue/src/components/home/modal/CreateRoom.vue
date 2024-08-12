@@ -56,6 +56,13 @@ const deleterule = (index) => {
 };
 
 const createRoom = function () {
+    if (roomName.value === "") {
+        Swal.fire({
+      icon: "error",
+      title: "방 제목을 입력해주세요!",
+    });
+    return
+    }
     const success = (res) => {
         console.log(res.data)
         router.push({ name: "waitingRoom", params: { roomId: res.data } });

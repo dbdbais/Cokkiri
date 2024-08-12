@@ -41,6 +41,8 @@ pipeline {
                 dir("fe-vue"){
                     script{
                         // Node.js 설치 확인 및 종속성 설치
+                        sh 'rm -rf node_modules/.vite'
+                        sh 'rm -rf node_modules'
                         sh 'node -v'
                         sh 'npm -v'
                         sh 'npm install'
@@ -73,6 +75,7 @@ pipeline {
                 dir('fe-vue') {
                     script {
                         // .env 파일을 로드하여 환경 변수를 설정합니다.
+
                         sh 'npm install @rollup/rollup-linux-x64-gnu --save-optional'
                         sh 'npm run build'
                         sh 'cat .env'

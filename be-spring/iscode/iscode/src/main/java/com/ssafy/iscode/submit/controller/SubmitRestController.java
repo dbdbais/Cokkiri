@@ -4,10 +4,7 @@ import com.ssafy.iscode.problem.model.dto.Problem;
 import com.ssafy.iscode.problem.service.ProblemService;
 import com.ssafy.iscode.study.model.dto.StudyDto;
 import com.ssafy.iscode.study.service.StudyService;
-import com.ssafy.iscode.submit.model.dto.CompileRequestDTO;
-import com.ssafy.iscode.submit.model.dto.Submit;
-import com.ssafy.iscode.submit.model.dto.SubmitRequestDTO;
-import com.ssafy.iscode.submit.model.dto.SubmitResponseDTO;
+import com.ssafy.iscode.submit.model.dto.*;
 import com.ssafy.iscode.submit.service.SubmitService;
 import com.ssafy.iscode.user.model.dto.User;
 import com.ssafy.iscode.user.service.UserService;
@@ -16,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -172,6 +170,14 @@ public class SubmitRestController {
         }
     }
 
+    @GetMapping("/filter")
+    public List<SCodeResponseDTO> getFilteredSubmit(String userId, Long problemId){
+        List<SCodeResponseDTO> lst = submitService.getSubmitList(userId,problemId);
+        for(SCodeResponseDTO s: lst){
+            System.out.println(s);
+        }
+        return lst;
+    }
 
     @GetMapping
     public int getSolved(@RequestParam String userId){

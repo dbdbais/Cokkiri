@@ -22,11 +22,11 @@ public class Submit {
     @Column(name="submit_id")
     private Long no;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "algo_num")
     private Problem problem;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name="user_id")
     private User user;
 
@@ -48,5 +48,17 @@ public class Submit {
         this.user = user;
         this.submit_code = submit_code;
         this.correct = correct;
+    }
+
+    @Override
+    public String toString() {
+        return "Submit{" +
+                "no=" + no +
+                ", problem=" + problem +
+                ", user=" + user +
+                ", submit_code='" + submit_code + '\'' +
+                ", correct=" + correct +
+                ", createdTime=" + createdTime +
+                '}';
     }
 }

@@ -148,6 +148,7 @@ pipeline {
                         sh 'docker push ${DOCKER_IMAGE_FE}'
                         // 컴파일러 이미지 푸시
                         sh 'docker push ${DOCKER_IMAGE_COM}'
+                        sh 'docker push ${DOCKER_IMAGE_NGINX}'
                     }
                     
                 }

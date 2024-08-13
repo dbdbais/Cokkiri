@@ -5,11 +5,13 @@ import GameRamdomItem from "@/components/gameprogress/GameRandomItem.vue";
 import { onMounted, ref } from "vue";
 import { useRoute } from "vue-router";
 import { userStore } from "@/stores/user";
+import { getUserName } from "@/api/user";
 import { getWaitingRoom } from "@/api/waitingroom";
 import { useGameStore } from "@/stores/game";
 import { useSubmitStore } from "@/stores/submit";
 import { onUnmounted } from "vue";
 import router from "@/router";
+import { useTriggerStore } from "@/stores/trigger";
 
 const enemyCharacter = "/src/assets/game-character.svg";
 const myCharacter = "/src/assets/game-character.svg";
@@ -35,6 +37,8 @@ const showitem = ref(false);
 const getItem = ref(false);
 const useItem = ref(false);
 const pickItem = ref("");
+const tStore = useTriggerStore();
+
 const useItemFun = function (item) {
   useItem.value = true;
   pickItem.value = item;
@@ -166,7 +170,12 @@ onMounted(() => {
   const success = (res) => {
     console.log(res.data);
     roomData.value = res.data;
-    users.value = res.data.users;
+
+    res.data.users.forEach((user) => {
+      getUserName(user).then((res) => {
+        users.value.push(res.data);
+      });
+    });
   };
   const fail = (err) => {
     console.log(err);
@@ -177,6 +186,7 @@ onMounted(() => {
 
 onUnmounted(() => {
   ws.close();
+  tStore.resetProblem();
 });
 
 function closeRoom() {
@@ -209,16 +219,17 @@ const close = () => {
       </div>
       <img src="@/assets/timer_temp.svg" class="timer" />
       <div class="game-header box-row box-sb">
-        <!-- <div class="prog-gui-con box-row">
-                <BattleStatus :url="myCharacter" class="myStatus" />
-                <BattleStatus :url="enemyCharacter" class="enemyStatus" />
-    </div> -->
         <div
-          class="user bold-text box md"
+          class="user bold-text box box-col"
           v-for="(user, index) in users"
           :key="index"
         >
-          {{ user }}
+          <img
+            class="tier"
+            :src="'/src/assets/rank/' + user.tier + '.svg'"
+            alt="티어"
+          />
+          {{ user.nickname }}
         </div>
         <div class="box user-btn box-row" v-if="useItem">
           <div>
@@ -295,7 +306,11 @@ const close = () => {
   position: absolute;
   bottom: -70px;
 }
-
+.tier {
+  width: 80px;
+  margin-bottom: 20px;
+  margin-left: 5px;
+}
 .user-btn {
   width: 990px;
   left: 440px;
@@ -324,6 +339,9 @@ const close = () => {
 .user {
   width: 210px;
   height: 170px;
+  align-items: center;
+  font-size: 25px;
+  padding: 20px 60px;
   background-color: white;
 }
 .item {

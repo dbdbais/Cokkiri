@@ -17,7 +17,12 @@ export const useTriggerStore = defineStore(
         beforeProblemNum.value
       );
     }
-    return { currentProblemNum, beforeProblemNum, changeProblem };
+
+    function resetProblem() {
+      beforeProblemNum.value = 1;
+      currentProblemNum.value = 1;
+    }
+    return { currentProblemNum, beforeProblemNum, changeProblem, resetProblem };
   },
   { persist: true }
 );

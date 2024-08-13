@@ -19,16 +19,16 @@ export function modify(data) {
   });
 }
 
-export function deleteComment(cId) {
+export function deleteComment(cid) {
   return axios({
-    url: `${baseURL}/${cId}`,
+    url: `${baseURL}/${cid}`,
     method: "delete",
   });
 }
 
-export function getAllComment(rId) {
+export function getListByReviewId(rid) {
   return axios({
-    url: `${baseURL}/${rId}`,
+    url: `${baseURL}/${rid}`,
     method: "get",
   });
 }

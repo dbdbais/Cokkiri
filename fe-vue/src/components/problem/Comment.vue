@@ -46,27 +46,28 @@ const imageSrc = computed(() => {
 </script>
 
 <template>
-    <div>
-        <div class="box-row comment" :style="{ marginLeft: props.commentDepth * 40 + 'px' }">
-            <div class="box-row comment-left">
-                <img id="rank-img" :src="imageSrc" alt="rank" class="rank" />
-                <div class="box-col comment-text">
-                    <div class="box-row comment-text-top">
-                        <span>{{ props.comment.userId }}</span>
-                    </div>
-                    <span>{{ props.comment.content }}</span>
+    <div class="box-row comment"
+        :style="{ marginLeft: (props.commentDepth * 40 > 120 ? 120 : props.commentDepth * 40) + 'px' }">
+        <div class="box-row comment-left">
+            <img id="rank-img" :src="imageSrc" alt="rank" class="rank" />
+            <div class="box-col comment-text">
+                <div class="box-row comment-text-top">
+                    <span>{{ props.comment.userId }}</span>
+                    <span class="reply" @click="$emit('selectedReply', comment.id)">답글</span>
                 </div>
-            </div>
-            <div class="comment-right">
-                <button v-if="props.comment.children.length && commentDepth === 0" @click="toggleChildren"
-                    class="btn-expand">
-                    {{ showChildren ? '더 보기' : '숨기기' }}
-                </button>
+                <span>{{ props.comment.content }}</span>
             </div>
         </div>
-        <Comment v-if="showChildren" v-for="child in props.comment.children" :key="child.id" :comment="child"
-            :comment-depth="commentDepth + 1" />
+        <div class="comment-right">
+            <button v-if="props.comment.children.length && commentDepth === 0" @click="toggleChildren"
+                class="btn-expand">
+                {{ showChildren ? '숨기기' : '더보기' }}
+            </button>
+            <div v-else class="expand-blank"></div>
+        </div>
     </div>
+    <Comment v-if="showChildren" v-for="child in props.comment.children" :key="child.id" :comment="child"
+        :comment-depth="commentDepth + 1" @selected-Reply="(id) => $emit('selectedReply', id)" />
 </template>
 
 <style scoped>
@@ -77,10 +78,9 @@ const imageSrc = computed(() => {
     align-items: center;
 }
 
-.user-profile {
-    align-items: center;
+.comment-left {
+    width: 100%;
 }
-
 
 .rank {
     width: 50px;
@@ -93,11 +93,17 @@ const imageSrc = computed(() => {
 }
 
 .comment-text {
+    width: 100%;
     margin-left: 5px;
 }
 
 .comment-text-top {
+    width: 100%;
     justify-content: space-between;
+}
+
+.reply {
+    font-weight: 800;
 }
 
 .btn-expand {
@@ -107,5 +113,10 @@ const imageSrc = computed(() => {
     border: 1px solid white;
     border-radius: 10px;
     background-color: hsl(223, 61%, 68%);
+}
+
+.expand-blank {
+    width: 65px;
+    height: 35px;
 }
 </style>

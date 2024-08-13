@@ -1,38 +1,51 @@
 <script setup>
-import { ref } from "vue";
-import WriteReview from "@/components/problem/WriteReview.vue";
+import { ref, onMounted } from "vue";
+import { getFilteredSubmit } from "@/api/submit";
+import { userStore } from "@/stores/user";
+import WriteReview from "@/components/home/WriteReview.vue";
 
 const props = defineProps({
     problemId: Number,
-    submitData: Object
 });
+const submitData = ref();
+const uStore = userStore();
 
-const tmpSubmitData = ref([
-    {
-        submit_id: 1,
-        correct: 1,
-        created_time: "2021-10-10",
-        code: "print('hello, world')",
-        algo_num: 1000,
-        user_id: "ssafy"
-    },
-    {
-        submit_id: 2,
-        correct: 1,
-        created_time: "2021-10-10",
-        code: "print('hello, world')",
-        algo_num: 1000,
-        user_id: "ssafy"
-    },
-    {
-        submit_id: 3,
-        correct: 1,
-        created_time: "2021-10-10",
-        code: "print('hello, world')",
-        algo_num: 1000,
-        user_id: "ssafy"
+onMounted(async () => {
+    try {
+        const response = await getFilteredSubmit(uStore.user.id, props.problemId);
+        console.log(response);
+        submitData.value = response.data;
+    } catch (error) {
+        console.error(error);
     }
-]);
+})
+
+// const tmpSubmitData = ref([
+//     {
+//         submit_id: 1,
+//         correct: 1,
+//         created_time: "2021-10-10",
+//         code: "print('hello, world')",
+//         algo_num: 1000,
+//         user_id: "ssafy"
+//     },
+//     {
+//         submit_id: 2,
+//         correct: 1,
+//         created_time: "2021-10-10",
+//         code: "print('hello, world')",
+//         algo_num: 1000,
+//         user_id: "ssafy"
+//     },
+//     {
+//         submit_id: 3,
+//         correct: 1,
+//         created_time: "2021-10-10",
+//         code: "print('hello, world')",
+//         algo_num: 1000,
+//         user_id: "ssafy"
+//     }
+// ]);
 
 </script>
 
@@ -44,7 +57,8 @@ const tmpSubmitData = ref([
                 <img src="@/assets/exit.svg" alt="close" class="icon-close" @click="$emit('close')" />
             </div>
             <div class="modal-content">
-                <WriteReview v-for="submit in tmpSubmitData" :submit="submit" />
+                <WriteReview v-for="(submit, index) in submitData" :problem-id="problemId" :submit="submit"
+                    :index="index + 1" />
             </div>
         </div>
     </div>

@@ -1,74 +1,30 @@
 <script setup>
 import { ref, onMounted, computed } from "vue";
-import { useModal } from "@/composables/useModal";
-import { getSolved } from "@/api/submit"
-import { userStore } from "@/stores/user";
-import SubmitList from "@/components/problem/modal/SubmitList.vue";
+import { getAllReviews } from "@/api/review";
 import ReviewItem from "@/components/problem/ReviewItem.vue";
 
-const uStore = userStore();
-const submitData = ref({});
-const { isModalOpen, openModal, closeModal } = useModal();
-
-const fetchSubmit = async () => {
-    try {
-        const response = await getSolved(uStore.user.id);
-        console.log(response);
-        submitData.value = response.data;
-        openModal();
-    } catch (error) {
-        console.error(error);
-    }
-};
-
+const props = defineProps({
+    problemData: Object
+});
+const reviewData = ref();
 const currentPage = ref(1);
 
-const props = defineProps({
-    problemData: Object,
-    reviewData: Object
-});
-
-const tmpReviewData = ref([
-    {
-        "id": 1,
-        "user": {
-            "nickname": "user1",
-            "tier": "DURIAN"
-        },
-        "content": "리뷰내용",
-        "code": "print('hello, world')",
-        "created_time": "2021-09-01 12:00:00"
-    },
-    {
-        "id": 2,
-        "user": {
-            "nickname": "ssafy",
-            "tier": "SEED"
-        },
-        "content": "리뷰내용",
-        "code": "print('hello, world')",
-        "created_time": "2021-10-01 12:00:00"
-    },
-    {
-        "id": 3,
-        "user": {
-            "nickname": "ssafy2",
-            "tier": "ORANGE"
-        },
-        "content": "리뷰내용",
-        "code": "print('hello, world')",
-        "created_time": "2021-11-01 12:00:00"
+onMounted(async () => {
+    try {
+        const response = await getAllReviews(props.problemData.no);
+        console.log(response);
+        reviewData.value = response.data;
+    } catch (e) {
+        console.error(e);
     }
-]);
 
-onMounted(() => {
-    tmpReviewData.value = tmpReviewData.value.map((item) => {
-        return {
-            ...item,
-            code: "문제를 해결하거나 3회 이상 코드를 제출해야 확인할 수 있습니다.",
-            content: "문제를 해결하거나 3회 이상 코드를 제출해야 확인할 수 있습니다."
-        }
-    });
+    // tmpReviewData.value = tmpReviewData.value.map((item) => {
+    //     return {
+    //         ...item,
+    //         code: "문제를 해결하거나 3회 이상 코드를 제출해야 확인할 수 있습니다.",
+    //         content: "문제를 해결하거나 3회 이상 코드를 제출해야 확인할 수 있습니다."
+    //     }
+    // });
 })
 
 const prevPage = function () {
@@ -78,13 +34,14 @@ const prevPage = function () {
 };
 
 const nextPage = function () {
-    if (currentPage.value < tmpReviewData.value.length) {
+    if (currentPage.value < reviewData.value.length) {
         currentPage.value += 1;
     }
 };
 
 const currentReview = computed(() => {
-    return tmpReviewData.value[currentPage.value - 1];
+    if (!reviewData.value || reviewData.value.length <= 0) return null;
+    return reviewData.value[currentPage.value - 1];
 });
 
 const changeIndex = (index) => {
@@ -117,15 +74,15 @@ const changeIndex = (index) => {
                     <!-- <div class="overlay">
                         <span>문제를 해결하거나 3회 이상 제출해야합니다.</span>
                     </div> -->
-                    <div v-if="!tmpReviewData" class="">
+                    <!-- <div v-if="!tmpReviewData" class="">
                         <span>아직 등록된 리뷰가 없습니다.</span>
-                    </div>
+                    </div> -->
                     <!-- <div v-for="review in tmpReviewData" :key="review.id"> -->
-                    <ReviewItem :review="currentReview" />
+                    <ReviewItem v-if="currentReview" :review="currentReview" />
                     <!-- </div> -->
                     <div class="btn-pagi box-row">
                         <div class="btn-prev" @click="prevPage">◀</div>
-                        <span v-for="i in tmpReviewData.length" style="font-size: 35px; font-weight: 800"
+                        <span v-if="reviewData" v-for="i in reviewData.length" style="font-size: 35px; font-weight: 800"
                             :class="{ currentIndex: i === currentPage }" @click="changeIndex(i)"> {{
                                 i
                             }} </span>
@@ -135,7 +92,6 @@ const changeIndex = (index) => {
             </div>
         </div>
     </div>
-    <!-- <SubmitList v-if="isModalOpen" @close="closeModal" :problem-id="problemData.no" :submit-data="submitData" /> -->
 </template>
 
 <style scoped>

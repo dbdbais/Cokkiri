@@ -4,6 +4,7 @@
     <div id="main-left" class="box-col">
       <div class="box-row profile-header">
         <div class="btn-profile title main-title">개인 프로필</div>
+        <img class="myprofile-icon" src="@/assets/myprofile-smile.svg" @click="openModal" />
       </div>
       <Profile class="profile" />
       <FriendsList id="friends-list" />
@@ -14,6 +15,7 @@
         @go-room="goRoom" @change-page="pageChange" @is-game="categoryList" />
     </div>
   </div>
+  <MyProfile v-if="isModalOpen" @close="closeModal" />
 </template>
 
 <script setup>
@@ -23,6 +25,7 @@ import Header from "@/components/home/Header.vue";
 import Profile from "@/components/home/Profile.vue";
 import FriendsList from "@/components/home/FriendsList.vue";
 import MainContent from "@/components/home/MainContent.vue";
+import MyProfile from "@/components/home/modal/MyProfile.vue";
 
 import { getWaitingRoomList, goWaitingRoom } from "@/api/waitingroom";
 import { getAllUser, getFriends } from "@/api/user";
@@ -30,6 +33,7 @@ import { insertClass } from "@/api/problem";
 import { ref, onMounted, onUnmounted } from "vue";
 import { useRouter } from "vue-router";
 import { userStore } from "@/stores/user";
+import { useModal } from "@/composables/useModal";
 import { useMessageStore } from "@/stores/message";
 import { useMeetingStore } from "@/stores/meeting";
 import { friendStore } from "@/stores/friend";
@@ -50,6 +54,7 @@ const categoryObj = ref({
   game: false,
   study: false,
 });
+const { isModalOpen, openModal, closeModal } = useModal();
 
 const searchList = function (roomName) {
   getRoomList({ roomName: roomName });
@@ -221,6 +226,20 @@ const logout = function () {
   /* text-align: center; */
   margin-top: 150px;
   font-size: 40px;
+}
+
+.myprofile-icon {
+  width: 40px;
+  height: 40px;
+  border: 5px solid hsl(223, 100%, 72%);
+  border-radius: 10px;
+  background-color: hsl(223, 100%, 72%);
+  margin-right: 10px;
+}
+
+.myProfile-icon:hover {
+  border: 5px solid hsl(223, 100%, 92%);
+  background-color: hsl(223, 100%, 92%);
 }
 
 .profile {

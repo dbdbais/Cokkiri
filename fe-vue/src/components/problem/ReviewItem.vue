@@ -84,6 +84,7 @@ const toggle = () => {
     <div class="review-con">
         <div class="review-header box-row">
             <span class="title">{{ props.review.user.nickname }}</span>
+            <span class="title">{{ props.review.createdTime.split("T").join(" ") }}</span>
             <span class="nomal-text md" @click="toggle()">
                 {{ openIndex === false ? '▼' : '▲' }}
             </span>

@@ -10,11 +10,11 @@
 import { computed } from 'vue';
 const props = defineProps({
     percentage: Number,
-    grade: Number
+    tier: Number
 });
 
 const pgbarColor = computed(() => {
-    switch (props.grade) {
+    switch (props.tier) {
         case 0:
             return '#ff9e3b';
         case 1:
@@ -34,7 +34,7 @@ const pgbarColor = computed(() => {
 
 
 const pgColor = computed(() => {
-    switch (props.grade) {
+    switch (props.tier) {
         case 0:
             return '#ff9e3b';
         case 1:

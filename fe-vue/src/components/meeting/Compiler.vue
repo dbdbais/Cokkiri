@@ -132,7 +132,7 @@ const fontReduce = () => {
   console.log("폰트 작게!");
   let timerId = setInterval(() => {
     console.log("작아지는 중!");
-    if (editorFontSize.value > 9) {
+    if (editorFontSize.value > 12) {
       editorFontSize.value -= 5;
       initializeEditor(saveVal, selectedLanguage.value);
     }

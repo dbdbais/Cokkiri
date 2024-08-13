@@ -98,8 +98,6 @@ watch(tStore, () => {
   setTimeout(() => {
     trigger.value = false;
   }, 500);
-  // console.log(userCodeList.value[pStore.beforeProblemNum].code);
-  // console.log(userCodeList.value[pStore.beforeProblemNum]);
   getInit();
 });
 
@@ -124,7 +122,7 @@ const fontReduce = () => {
     console.log("작아지는 중!");
     if (editorFontSize.value > 9) {
       editorFontSize.value -= 1;
-      initializeEditor(saveVal);
+      initializeEditor(saveVal, selectedLanguage.value);
     }
   }, 200);
   setTimeout(() => {
@@ -141,7 +139,7 @@ const fontIncrease = () => {
     console.log("커지는 중!");
     if (editorFontSize.value < 40) {
       editorFontSize.value += 2;
-      initializeEditor(saveVal);
+      initializeEditor(saveVal, selectedLanguage.value);
     }
     // console.log(editorFontSize.value);
   }, 200);

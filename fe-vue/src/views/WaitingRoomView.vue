@@ -73,7 +73,7 @@ ws.onmessage = function (event) {
       case "START":
         let time;
         if (store.user.nickname !== roomData.value.hostName) {
-          time = 1000;
+          time = 300;
         } else {
           time = 0;
         }

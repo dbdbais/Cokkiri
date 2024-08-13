@@ -29,8 +29,8 @@ const initResize = (e) => {
 const startResize = (e) => {
   const mainRect = main.value.getBoundingClientRect();
   problemWidth.value = e.clientX - mainRect.left;
-  if (problemWidth.value < 500) {
-    problemWidth.value = 500;
+  if (problemWidth.value < 800) {
+    problemWidth.value = 800;
   } else if (problemWidth.value > 1100) {
     problemWidth.value = 1100;
   }

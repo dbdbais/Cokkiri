@@ -103,7 +103,7 @@ defineProps({
 .study-group::before {
   position: absolute;
   top: 0;
-  left: -85px;
+  left: -95px;
   content: "";
   display: block;
   width: 65px;

@@ -4,7 +4,7 @@ import announcement from "@/assets/data/announcement.json";
 import notification from "@/assets/data/notification.json";
 import AnnounceDetail from "@/components/home/modal/AnnounceDetail.vue";
 import { getWaitingRoom, goWaitingRoom } from "@/api/waitingroom";
-import { getFriends, getUser, acceptFriend } from "@/api/user";
+import { getFriends, getUser, acceptFriend, getAllUser } from "@/api/user";
 import { receiveRegular, acceptRegularJoin } from "@/api/board";
 import { useModal } from "@/composables/useModal";
 import { userStore } from "@/stores/user";
@@ -55,6 +55,9 @@ function getNotiData() {
 }
 
 onMounted(() => {
+  getAllUser().then((res) => {
+    store.setUserNickName(res.data);
+  });
   getNotiData();
   messageStore.readNoti();
 });
@@ -85,6 +88,20 @@ async function addFriend(friendUserId) {
   // );
 
   getNotiData();
+}
+
+function requestReject(group, item) {
+  if (group === "friend") {
+    notiRequest.value.friends = notiRequest.value.friends.filter((user) => {
+      console.log(item, user);
+      return item !== user;
+    });
+  } else if (group === "room") {
+    notiRequest.value.room = notiRequest.value.room.filter((room) => {
+      console.log(item, room);
+      return item.roomId !== room.roomId;
+    });
+  }
 }
 
 const acceptRegular = function (sessionId, userName) {
@@ -177,7 +194,12 @@ const goRoom = function (roomId) {
               <button class="btn-accept bold-text" @click="goRoom(item.roomId)">
                 수락
               </button>
-              <button class="btn-reject bold-text">거절</button>
+              <button
+                class="btn-reject bold-text"
+                @click="requestReject('room', item)"
+              >
+                거절
+              </button>
             </div>
           </div>
         </div>
@@ -189,12 +211,17 @@ const goRoom = function (roomId) {
             class="box-row announ-con"
           >
             <!-- <span>{{ store.userNickname[item] }}</span> -->
-            <span>{{ item }}</span>
+            <span>{{ store.userNickname[item] }}</span>
             <div class="box-row">
               <button class="btn-accept bold-text" @click="addFriend(item)">
                 수락
               </button>
-              <button class="btn-reject bold-text">거절</button>
+              <button
+                class="btn-reject bold-text"
+                @click="requestReject('friend', item)"
+              >
+                거절
+              </button>
             </div>
           </div>
         </div>
@@ -340,6 +367,7 @@ div {
 .room-con {
   height: 200px;
   padding: 10px;
+  background-color: #d9bbff;
   overflow-y: auto;
 }
 

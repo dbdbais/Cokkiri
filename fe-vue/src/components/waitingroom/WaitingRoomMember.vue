@@ -9,7 +9,7 @@ defineProps({
 
 // imgUrl 함수로 변경하여 import.meta를 사용하여 이미지 파일을 가져옴
 const getImgUrl = (tier) => {
-  return new URL(`../assets/rank/${tier}.svg`, import.meta.url).href;
+  return new URL(`/src/assets/rank/${tier}.svg`, import.meta.url).href;
 };
 
 const roomUsers = ref(false);

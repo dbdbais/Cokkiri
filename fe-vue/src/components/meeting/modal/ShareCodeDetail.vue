@@ -7,22 +7,25 @@ const submitStore = useSubmitStore();
 </script>
 
 <template>
-  <div class="box share-box box-col bold-text slideDown">
+  <div class="box share-box box-col slideDown">
     <img
       src="/src/assets/exit.svg"
       alt="닫기"
       class="exit"
       @click="submitStore.close()"
     />
-    <div class="user-name">
+    <div class="user-name bold-text">
       {{ submitStore.codeData.user }}
     </div>
     <div class="box share-content box-col">
       <div class="box-row top">
-        <div class="problem-no box md">
-          {{ submitStore.codeData.problemNo }}번
+        <div class="problem-no box md bold-text">
+          {{ submitStore.codeData.problemNo
+          }}{{ submitStore.codeData.problemNo === "문제 없음" ? "" : 번 }}
         </div>
-        <div class="lang box md">{{ submitStore.codeData.language }}</div>
+        <div class="lang box md bold-text">
+          {{ submitStore.codeData.language }}
+        </div>
       </div>
       <div class="box code">
         <highlightjs

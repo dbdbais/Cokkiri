@@ -192,8 +192,12 @@ const close = () => {
                 <BattleStatus :url="myCharacter" class="myStatus" />
                 <BattleStatus :url="enemyCharacter" class="enemyStatus" />
     </div> -->
-        <div class="user bold-text">
-          {{ users }}
+        <div
+          class="user bold-text box md"
+          v-for="(user, index) in users"
+          :key="index"
+        >
+          {{ user }}
         </div>
         <div class="box user-btn box-row" v-if="useItem">
           <div>
@@ -251,6 +255,7 @@ const close = () => {
       </div>
       <div class="game-content box-row">
         <Main
+          :roomData="roomData"
           :blind="useBlind"
           :minimum="useMinimum"
           :prevent="usePrevernt"
@@ -287,7 +292,11 @@ const close = () => {
   height: 100px;
   z-index: 1;
 }
-
+.user {
+  width: 210px;
+  height: 170px;
+  background-color: white;
+}
 .item {
   width: 100px;
   height: 100px;
@@ -328,7 +337,9 @@ const close = () => {
 
 .game-header {
   display: flex;
-  width: 100%;
+  align-items: center;
+  width: 1400px;
+  padding-left: 20px;
   height: 240px;
   margin-bottom: 20px;
 }

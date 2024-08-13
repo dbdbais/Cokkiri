@@ -57,15 +57,10 @@ function getInit() {
 
 watch(tStore, () => {
   console.log("문제 변경!");
-  // console.log(userCodeList.value[pStore.beforeProblemNum]);
-  // console.log(userCodeList.value[pStore.currentProblemNum]);
-  // console.log(editor.value.getValue());
   userCodeList.value[tStore.beforeProblemNum].code = editor.value.getValue();
   userCodeList.value[tStore.beforeProblemNum].language = selectedLanguage.value;
   outputText.value = "";
   inputText.value = "";
-  // console.log(userCodeList.value[pStore.beforeProblemNum].code);
-  // console.log(userCodeList.value[pStore.beforeProblemNum]);
   getInit();
 });
 
@@ -167,7 +162,6 @@ const runCode = async (isSubmit) => {
     if (isSubmit === 0) {
       if (inputText.value === "") {
         let outPut = "";
-
         Object.keys(res.data.tcOutput).forEach((key) => {
           outPut += `예제 입력 ${key}\n${res.data.tcOutput[key]}\n`;
           outPut += res.data.result[key] ? "정답입니다!" : "틀렸습니다.";
@@ -189,6 +183,13 @@ const runCode = async (isSubmit) => {
           title: `${res.data.accuracy * 100}점 입니다..`,
         });
       }
+      const submitData = {
+        algo_num: userCodeList.value[tStore.currentProblemNum].no,
+        user_nickname: uStore.user.nickname,
+        correct: res.data.correct,
+      };
+
+      submitStore.submit(submitData);
     }
   });
 };
@@ -198,7 +199,6 @@ const language = ref(null);
 const shareCode = (userCnt) => {
   const code = editor.value.getValue();
   const language = selectedLanguage.value;
-
   userCodeList.value[tStore.currentProblemNum].code = code;
   userCodeList.value[tStore.currentProblemNum].language = language;
   const data = `${userCodeList.value[tStore.currentProblemNum].no}|!|${

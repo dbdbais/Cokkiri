@@ -5,12 +5,7 @@ export const useSubmitStore = defineStore("submit", () => {
   const roomUser = ref({});
   const codeData = ref("");
   const showDetail = ref(false);
-  const setRoomUser = (roomData) => {
-    roomData.users.forEach((element) => {
-      console.log(element);
-      roomUser.value[element] = 1;
-    });
-  };
+  const submitCodeList = ref([]);
 
   const close = () => {
     showDetail.value = false;
@@ -22,19 +17,17 @@ export const useSubmitStore = defineStore("submit", () => {
     showDetail.value = true;
   };
 
-  const upSubmit = (user) => {
-    console.log(roomUser.value);
-    roomUser.value[user] += 1;
-    console.log(roomUser.value);
+  const submit = (submitData) => {
+    submitCodeList.value.push(submitData);
   };
 
   return {
     roomUser,
     codeData,
     showDetail,
-    setRoomUser,
-    upSubmit,
+    submitCodeList,
     setCodeData,
+    submit,
     close,
   };
 });

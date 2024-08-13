@@ -32,26 +32,32 @@ const tmpReviewData = ref([
     {
         "id": 1,
         "user": {
-            "nickname": "user1"
+            "nickname": "user1",
+            "tier": "DURIAN"
         },
         "content": "리뷰내용",
         "code": "print('hello, world')",
+        "created_time": "2021-09-01 12:00:00"
     },
     {
         "id": 2,
         "user": {
-            "nickname": "user2"
+            "nickname": "ssafy",
+            "tier": "SEED"
         },
         "content": "리뷰내용",
         "code": "print('hello, world')",
+        "created_time": "2021-10-01 12:00:00"
     },
     {
         "id": 3,
         "user": {
-            "nickname": "user3"
+            "nickname": "ssafy2",
+            "tier": "ORANGE"
         },
         "content": "리뷰내용",
         "code": "print('hello, world')",
+        "created_time": "2021-11-01 12:00:00"
     }
 ]);
 
@@ -80,6 +86,10 @@ const nextPage = function () {
 const currentReview = computed(() => {
     return tmpReviewData.value[currentPage.value - 1];
 });
+
+const changeIndex = (index) => {
+    currentPage.value = index;
+};
 </script>
 
 <template>
@@ -115,9 +125,10 @@ const currentReview = computed(() => {
                     <!-- </div> -->
                     <div class="btn-pagi box-row">
                         <div class="btn-prev" @click="prevPage">◀</div>
-                        <span v-for="i in tmpReviewData.length" :style="{ active: i === currentPage }"
-                            style="font-size: 35px; font-weight: 800">{{ i
-                            }}</span>
+                        <span v-for="i in tmpReviewData.length" style="font-size: 35px; font-weight: 800"
+                            :class="{ currentIndex: i === currentPage }" @click="changeIndex(i)"> {{
+                                i
+                            }} </span>
                         <div class="btn-next" @click="nextPage">▶</div>
                     </div>
                 </div>
@@ -211,7 +222,7 @@ const currentReview = computed(() => {
 
 }
 
-.active {
+.currentIndex {
     color: #3B72FF;
 }
 

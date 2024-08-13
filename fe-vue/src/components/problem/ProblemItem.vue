@@ -68,7 +68,6 @@ const reviews = async () => {
     <td v-else>{{ problemData.review.try }} / 3 회 도전</td> -->
   </tr>
   <ProblemDetail v-if="isDetailModalOpen" @close="closeDetailModal" :problemData="problemData" />
-  <!-- <ProblemReview v-if="isReviewModalOpen" @close="closeReviewModal" :reviewData="reviewData" /> -->
 </template>
 
 <style scoped>

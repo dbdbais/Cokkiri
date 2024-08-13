@@ -11,7 +11,6 @@ export const problemStore = defineStore(
 
     function setProblems(newProblems) {
       problems.value = newProblems;
-      console.log(problems.value);
     }
 
     function setSelectedProblem(problem) {

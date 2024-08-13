@@ -5,8 +5,8 @@
       <img class="logout" src="@/assets/logout2.svg" @click="logout" />
     </div>
     <div class="rank-con box-row box-main-exp" style="align-items: center">
-      <img id="rank-img" :src="imageSrc" alt="rank" class="rank" />
-      <Exp id="rank-exp" :grade="grade" :percentage="uStore.user.percent"></Exp>
+      <img :src="imageSrc" alt="rank" class="rank-img" />
+      <Exp :tier="tier" :percentage="uStore.user.percent" class="rank-exp"></Exp>
     </div>
   </div>
 </template>
@@ -19,10 +19,10 @@ import { useRouter } from "vue-router";
 
 const uStore = userStore();
 const router = useRouter();
-const grade = uStore.user.tier;
+const tier = uStore.user.tier;
 
 const imageSrc = computed(() => {
-  switch (grade) {
+  switch (tier) {
     case 0:
       return new URL("@/assets/rank/seed.svg", import.meta.url).href;
     case 1:
@@ -52,13 +52,13 @@ const logout = function () {
   font-size: 30px;
 }
 
-#rank-img {
+.rank-img {
   width: 40px;
   height: 40px;
   margin: 10px 10px;
 }
 
-#rank-exp {
+.rank-exp {
   height: 30px;
   margin: 10px 10px;
 }

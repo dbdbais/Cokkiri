@@ -8,12 +8,12 @@ const props = defineProps({
 });
 const commentData = ref([
     {
-        "userId": "user1234",
+        "userId": "user1",
         "reviewId": 1,
-        "content": "부모댓글",
+        "content": "부모댓글부모댓글부모댓글부모댓글부모댓글부모댓글부모댓글부모댓글부모댓글부모댓글부모댓글부모댓글부모댓글부모댓글부모댓글부모댓글부모댓글부모댓글부모댓글부모댓글부모댓글부모댓글부모댓글부모댓글부모댓글부모댓글부모댓글",
         "children": [
             {
-                "userId": "user1234",
+                "userId": "user1",
                 "reviewId": 1,
                 "content": "자식댓글",
                 "children": []
@@ -21,24 +21,24 @@ const commentData = ref([
         ]
     },
     {
-        "userId": "user1234",
+        "userId": "ssafy",
         "reviewId": 1,
         "content": "부모댓글",
         "children": [
             {
-                "userId": "user1234",
+                "userId": "ssafy",
                 "reviewId": 1,
                 "content": "자식댓글",
                 "children": [
                     {
-                        "userId": "user1234",
+                        "userId": "user1",
                         "reviewId": 1,
                         "content": "손자댓글",
                         "children": [
                             {
-                                "userId": "user1234",
+                                "userId": "ssafy",
                                 "reviewId": 1,
-                                "content": "증손자댓글",
+                                "content": "증손자댓글증손자댓글증손자댓글증손자댓글증손자댓글증손자댓글증손자댓글증손자댓글증손자댓글증손자댓글증손자댓글증손자댓글증손자댓글증손자댓글증손자댓글증손자댓글",
                                 "children": []
                             }
                         ]
@@ -48,12 +48,12 @@ const commentData = ref([
         ]
     },
     {
-        "userId": "user1234",
+        "userId": "ssafy",
         "reviewId": 1,
         "content": "부모댓글",
         "children": [
             {
-                "userId": "user1234",
+                "userId": "ssafy",
                 "reviewId": 1,
                 "content": "자식댓글",
                 "children": []
@@ -72,7 +72,8 @@ onMounted(async () => {
     // }
 });
 
-const openIndex = ref(false);
+const openIndex = ref(true);
+const commentDepth = ref(0);
 
 const toggle = () => {
     openIndex.value = openIndex.value === true ? false : true;
@@ -83,20 +84,34 @@ const toggle = () => {
     <div class="review-con">
         <div class="review-header box-row">
             <span class="title">{{ props.review.user.nickname }}</span>
+            <span class="title">{{ props.review.createdTime.split("T").join(" ") }}</span>
             <span class="nomal-text md" @click="toggle()">
                 {{ openIndex === false ? '▼' : '▲' }}
             </span>
         </div>
         <div v-if="openIndex" class="review-content">
-            <div class=" code">
+            <div class="code-box">
                 <span class="title">코드</span>
-                <span class="normal-text inner-text">{{ props.review.code }}</span>
+                <div class=" code">
+                    <span class="normal-text inner-text">{{ props.review.code }}</span>
+                </div>
             </div>
-            <div class="review">
-                <span class="title">코드 리뷰</span>
-                <span class="normal-text inner-text">{{ props.review.content }}</span>
+            <div class="review-box">
+                <span class="title">리뷰</span>
+                <div class="review">
+                    <span class="normal-text inner-text">{{ props.review.content }}</span>
+                </div>
             </div>
-            <Comment v-for="comment in commentData" :key="comment.id" :comment="comment" />
+            <div class="divider"></div>
+            <div class="comment-box">
+                <span class="title">댓글</span>
+                <div class="input-comment-con">
+                    <input type="text" placeholder="댓글을 입력하세요." class="input-comment" />
+                    <img class="comment-submit-img" src="@/assets/send_blue.svg" />
+                </div>
+                <Comment v-for="comment in commentData" :key="comment.id" :comment="comment"
+                    :comment-depth="commentDepth" />
+            </div>
         </div>
     </div>
 </template>
@@ -104,9 +119,12 @@ const toggle = () => {
 <style scoped>
 .review-con {
     margin-bottom: 25px;
+    width: 100%;
+    height: 100%;
 }
 
 .review-header {
+    height: 72px;
     justify-content: space-between;
     align-items: center;
     border: 3px solid #3B72FF;
@@ -125,11 +143,11 @@ const toggle = () => {
 
 .review-content {
     width: 100%;
-    height: 360px;
+    height: 660px;
     border: 3px solid #3B72FF;
     border-radius: 10px;
-    background-color: #C191FF;
-    padding: 10px;
+    background-color: white;
+    padding: 20px;
     overflow: auto;
 }
 
@@ -137,18 +155,53 @@ const toggle = () => {
     font-size: 30px;
 }
 
+.review-box,
+.comment-box {
+    margin-top: 20px;
+}
+
+.divider {
+    margin-top: 20px;
+    border-top: 5px dashed #3B72FF;
+    border-radius: 8px;
+}
+
 .code,
 .review {
     min-height: 180px;
     border: 5px solid #3B72FF;
     border-radius: 10px;
-    background-color: #FFFFFF;
+    background-color: #dbe7ff;
     padding: 10px;
+    margin-top: 5px;
 }
 
-.review {
-    margin-top: 15px;
+.comment-box>span {
+    display: block;
+    margin-bottom: 10px;
 }
+
+.input-comment-con {
+    position: relative;
+    margin-bottom: 10px;
+}
+
+.comment-submit-img {
+    position: absolute;
+    width: 40px;
+    top: 0;
+    right: 2px;
+}
+
+.input-comment {
+    width: 100%;
+    height: 40px;
+    border: 3px solid #3B72FF;
+    border-radius: 10px;
+    padding: 5px;
+    margin-right: 10px;
+}
+
 
 .inner-text {
     display: block;

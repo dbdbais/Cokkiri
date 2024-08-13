@@ -22,3 +22,11 @@ export function getSolved(userId) {
     params: { userId },
   });
 }
+
+export function getFilteredSubmit(userId, problemId) {
+  return axios({
+    url: `${baseURL}/filter`,
+    method: "get",
+    params: { userId, problemId },
+  });
+}

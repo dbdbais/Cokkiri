@@ -1,0 +1,215 @@
+<script setup>
+import { ref, computed, onMounted } from "vue"
+import { userStore } from "@/stores/user"
+import { useModal } from "@/composables/useModal"
+import { getSolved, getFilteredSubmit } from "@/api/submit"
+import { problemStore } from "@/stores/problem"
+import Exp from "@/components/home/Exp.vue"
+import SubmitList from "@/components/home/modal/SubmitList.vue"
+
+const uStore = userStore()
+const pStore = problemStore()
+const solvedCnt = ref(0)
+const solvedProblems = ref()
+const selectedNo = ref(0)
+const { isModalOpen, openModal, closeModal } = useModal()
+
+const imageSrc = computed(() => {
+    switch (uStore.user.tier) {
+        case 0:
+            return new URL("@/assets/rank/seed.svg", import.meta.url).href;
+        case 1:
+            return new URL("@/assets/rank/kiwi.svg", import.meta.url).href;
+        case 2:
+            return new URL("@/assets/rank/apple.svg", import.meta.url).href;
+        case 3:
+            return new URL("@/assets/rank/orange.svg", import.meta.url).href;
+        case 4:
+            return new URL("@/assets/rank/koreamelon.svg", import.meta.url).href;
+        case 5:
+            return new URL("@/assets/rank/durian.svg", import.meta.url).href;
+        default:
+            return new URL("@/assets/rank/seed.svg", import.meta.url).href;
+    }
+});
+
+onMounted(async () => {
+    fetchSolvedCount()
+    fetchSolvedList()
+})
+
+const fetchSolvedCount = async () => {
+    try {
+        const response = await getSolved(uStore.user.id)
+        console.log(response)
+        solvedProblems.value = response.data
+    } catch (error) {
+        console.error(error)
+    }
+}
+
+const fetchSolvedList = async () => {
+    try {
+        // const response = await getFilteredSubmit(uStore.user.id,)
+        // console.log(response)
+
+        solvedProblems.value = solvedProblems.value.find(findItem => {
+            return {
+                no: findItem,
+                level: pStore.problems.find(item => item.no === findItem).level
+            }
+        })
+        console.log(solvedProblems.value)
+    } catch (error) {
+        console.error(error)
+    }
+}
+
+const openSubmitListModal = (problem) => {
+    selectedNo.value = problem
+    openModal()
+}
+</script>
+
+<template>
+    <div class="modal-overlay">
+        <div class="modal-con">
+            <div class="modal-header box-row">
+                <span class="title main-title header-text">마이프로필</span>
+                <img src="@/assets/exit.svg" @click="$emit('close')">
+            </div>
+            <div class="box-row modal-content">
+                <div class="box-col modal-content-left">
+                    <div class="box-row left-name-box">
+                        <span>{{ uStore.user.nickname }}</span>
+                    </div>
+                    <div class="box-col left-tier-box">
+                        <img id="rank-img" :src="imageSrc" alt="rank" class="rank-img" />
+                        <Exp :tier="uStore.user.tier" :percentage="uStore.user.percent" class="rank-exp" />
+                    </div>
+                    <div class="box-row left-count-box">
+                        <span>푼 문제 수 : {{ solvedCnt }}</span>
+                    </div>
+                </div>
+                <div class="modal-content-right">
+                    <span>푼 문제</span>
+                    <div class="right-solved-box">
+                        <div v-for="problem in solvedProblems" :key="problem.no" class="solved-box">
+                            <span @click="openSubmitListModal(problem)">{{ problem }}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <SubmitList v-if="isModalOpen" @close="closeModal" :problem-id="selectedNo" />
+</template>
+
+<style scoped>
+.modal-overlay {
+    background-color: rgba(0, 0, 0, 0.6);
+}
+
+.modal-con {
+    position: absolute;
+    width: 1000px;
+    height: 500px;
+    border: 5px solid #3B72FF;
+    border-radius: 10px;
+    background-color: #DBE7FF;
+    padding: 20px 30px;
+}
+
+.modal-header {
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.header-text {
+    font-size: 50px;
+}
+
+.modal-content {
+    width: 930px;
+    height: 350px;
+    gap: 20px;
+}
+
+.modal-content-left {
+    width: 350px;
+    height: 100%;
+    justify-content: space-between;
+    align-items: center;
+    border: 5px solid #3B72FF;
+    background-color: #C191FF;
+    border-radius: 10px;
+    padding: 10px;
+}
+
+.left-name-box,
+.left-tier-box,
+.left-count-box {
+    width: 280px;
+    border: 5px solid #81C3FF;
+    border-radius: 10px;
+    background-color: #DBE7FF;
+    text-align: center;
+    font-size: 30px;
+    -webkit-text-stroke: 1px black;
+}
+
+.left-name-box {
+    height: 60px;
+    justify-content: center;
+    align-items: center;
+}
+
+.left-tier-box {
+    height: 180px;
+    justify-content: center;
+    align-items: center;
+}
+
+.rank-img {
+    width: 70px;
+    height: 70px;
+    margin: 10px 10px;
+}
+
+.rank-exp {
+    width: 220px;
+    height: 35px;
+    margin: 10px 10px;
+}
+
+.left-count-box {
+    height: 60px;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content-right {
+    width: 580px;
+    border: 5px solid #3B72FF;
+    background-color: #C191FF;
+    border-radius: 10px;
+    height: 100%;
+    font-size: 30px;
+    padding: 10px 20px;
+    -webkit-text-stroke: 1px black;
+}
+
+.right-solved-box {
+    width: 100%;
+    height: 270px;
+    border: 3px solid #81C3FF;
+    border-radius: 10px;
+    background-color: #DBE7FF;
+    margin-top: 10px;
+    overflow: auto;
+}
+
+.solved-box {
+    padding: 10px 20px;
+}
+</style>

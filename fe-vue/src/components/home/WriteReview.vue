@@ -6,38 +6,20 @@ import { auto } from "@/api/review"
 
 const props = defineProps({
     problemId: Number,
-    submit: Object
+    submit: Object,
+    index: Number
 });
 
 const codeSelected = ref(false);
-const tmpCode = ref(`print('hello, world')
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-`);
-
-const reviewCode = ref("");
 const reviewContent = ref("");
 const uStore = userStore();
 
 const writeReview = async () => {
     try {
-        console.log(uStore.user.id + " " + props.problemId + " " + reviewCode.value + " " + reviewContent.value);
         const response = await create({
             user: uStore.user.id,
             problem: props.problemId,
-            code: reviewCode.value,
+            code: props.submit.code,
             content: reviewContent.value
         });
         console.log(response);
@@ -45,6 +27,7 @@ const writeReview = async () => {
             icon: "success",
             title: "리뷰 작성이 완료되었습니다.",
         });
+        reviewContent.value = "";
     } catch (error) {
         console.error(error);
         Swal.fire({
@@ -73,8 +56,8 @@ const toggle = () => {
 <template>
     <div>
         <div class="code-header box-row" @click="toggle">
-            <span class="title main-title">{{ props.submit.submit_id }}번</span>
-            <span class="title main-title">{{ props.submit.created_time }}</span>
+            <span class="title main-title">{{ props.index }}번 코드</span>
+            <span class="title main-title">{{ props.submit.createdTime.split("T").join(" ") }}</span>
         </div>
     </div>
     <div v-if="codeSelected">

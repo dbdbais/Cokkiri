@@ -6,8 +6,26 @@ defineProps({
   users: Array,
 });
 
-const imgUrl = "/src/assets/rank/";
-
+// const imgUrl = "/src/assets/rank/";
+const imageSrc = (grade) => {
+  console.log(grade);
+  switch (grade) {
+    case 'SEED':
+      return new URL("@/assets/rank/seed.svg", import.meta.url).href;
+    case 'KIWI':
+      return new URL("@/assets/rank/kiwi.svg", import.meta.url).href;
+    case 'APPLE':
+      return new URL("@/assets/rank/apple.svg", import.meta.url).href;
+    case 'ORANGE':
+      return new URL("@/assets/rank/orange.svg", import.meta.url).href;
+    case 'KOREAMELON':
+      return new URL("@/assets/rank/koreamelon.svg", import.meta.url).href;
+    case 'DURIAN':
+      return new URL("@/assets/rank/durian.svg", import.meta.url).href;
+    default:
+      return new URL("@/assets/rank/seed.svg", import.meta.url).href;
+  }
+};
 const roomUsers = ref(false);
 
 const animateDelay = "animate__delay-";
@@ -27,7 +45,7 @@ const animamteSpeed = [
         {{ user.nickname }}
       </div>
       <img
-        :src="imgUrl + user.tier + '.svg'"
+        :src="imageSrc(user.tier)"
         alt="티어"
         class="rank animate__animated animate__bounce animate__infinite"
         :class="[

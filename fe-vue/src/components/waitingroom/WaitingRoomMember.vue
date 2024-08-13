@@ -9,6 +9,7 @@ defineProps({
 });
 // const grade = uStore.user.tier;
 const imageSrc = (grade) => {
+  console.log(grade);
   switch (grade) {
     case 0:
       return new URL("@/assets/rank/seed.svg", import.meta.url).href;

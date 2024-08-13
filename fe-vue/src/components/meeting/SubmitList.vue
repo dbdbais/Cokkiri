@@ -31,6 +31,7 @@ onMounted(() => {
         </div>
       </div>
     </div>
+
     <div class="box-w submit-con box-col" v-else>
       <div
         class="box submit-item flex-align"
@@ -39,9 +40,9 @@ onMounted(() => {
       >
         <div class="box-row">
           <div class="problem-num bold-text box md">
-            {{ submit.algo_num }}
+            {{ submit.problemNum }}번 문제
           </div>
-          <span class="bold-text name">{{ submit.user_nickname }}</span>
+          <span class="bold-text name">{{ submit.nickname }}</span>
         </div>
         <span
           class="correct bold-text"

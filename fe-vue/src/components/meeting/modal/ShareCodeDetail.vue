@@ -20,8 +20,11 @@ const submitStore = useSubmitStore();
     <div class="box share-content box-col">
       <div class="box-row top">
         <div class="problem-no box md bold-text">
-          {{ submitStore.codeData.problemNo
-          }}{{ submitStore.codeData.problemNo === "문제 없음" ? "" : 번 }}
+          {{
+            submitStore.codeData.problemNo === "문제 없음"
+              ? "문제 없음"
+              : `문제 ${submitStore.codeData.problemNo}번`
+          }}
         </div>
         <div class="lang box md bold-text">
           {{ submitStore.codeData.language }}

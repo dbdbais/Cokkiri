@@ -1,10 +1,12 @@
 <script setup>
 import { ref, onMounted, watch, onUnmounted } from "vue";
 import ace from "ace-builds";
+import "ace-builds/src-noconflict/ext-language_tools";
 import "ace-builds/src-noconflict/mode-python";
 import "ace-builds/src-noconflict/mode-java";
 import "ace-builds/src-noconflict/mode-c_cpp";
-import "ace-builds/src-noconflict/theme-monokai";
+import "ace-builds/src-noconflict/theme-chrome";
+import "ace-builds/src-noconflict/ext-options";
 import { insert } from "@/api/submit";
 
 import { useGameStore } from "@/stores/game";
@@ -108,6 +110,15 @@ const initializeEditor = (val, language) => {
   editor.value.session.setMode(`ace/mode/${language}`);
   editor.value.setValue(val ? val : defaultCode[language]);
   editor.value.setFontSize(editorFontSize.value);
+  editor.value.setOptions({
+    enableBasicAutocompletion: true,
+    enableLiveAutocompletion: true,
+  });
+
+  editor.setOptions = {
+    enableBasicAutocompletion: true,
+    enableLiveAutocompletion: true,
+  };
   // Set the desired font size here
 };
 
@@ -208,6 +219,11 @@ const runCode = async (isSubmit) => {
         outputText.value = res.data.opt;
       }
     } else {
+      submitStore.submit({
+        problemNum: tStore.currentProblemNum,
+        nickname: uStore.user.nickname,
+        correct: res.data.correct,
+      });
       if (res.data.correct) {
         Swal.fire({
           icon: "success",
@@ -229,11 +245,13 @@ const shareCode = (userCnt) => {
 
   userCodeList.value[tStore.currentProblemNum].code = code;
   userCodeList.value[tStore.currentProblemNum].language = language;
-  const data = `${userCodeList.value[tStore.currentProblemNum].no}|!|${
-    uStore.user.nickname
-  }|!|${userCodeList.value[tStore.currentProblemNum].language}|!|${
-    userCodeList.value[tStore.currentProblemNum].code
-  }|!|${userCnt}`;
+  const problemNum =
+    pStore.selectedProblemList.length === 0
+      ? "문제 없음"
+      : tStore.currentProblemNum;
+  const data = `${problemNum}|!|${uStore.user.nickname}|!|${
+    userCodeList.value[tStore.currentProblemNum].language
+  }|!|${userCodeList.value[tStore.currentProblemNum].code}|!|${userCnt}`;
   sendSubmit(data);
   emit("upCnt");
   console.log(userCnt);

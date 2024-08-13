@@ -9,6 +9,7 @@ import {
   removeUserRequest,
   publishScreenShare,
 } from "@/api/webRTC";
+
 import Member from "@/components/meeting/Member.vue";
 import Main from "@/components/meeting/Main.vue";
 import Chat from "@/components/meeting/Chat.vue";
@@ -29,8 +30,6 @@ const roomUser = ref({});
 const { isModalOpen, openModal, closeModal } = useModal();
 
 onMounted(async () => {
-  const shareData = [];
-  localStorage.setItem("shareData", JSON.stringify(shareData));
   try {
     joinSession(route.params.roomId, user.user.nickname);
     getWaitingRoom(route.params.roomId, (res) => {
@@ -42,8 +41,8 @@ onMounted(async () => {
   } catch (e) {
     console.error(e);
   }
-  // window.addEventListener("beforeunload", leaveSession);
-  // window.addEventListener("popstate", leaveSession);
+  window.addEventListener("beforeunload", leaveSession);
+  window.addEventListener("popstate", leaveSession);
 });
 
 const route = useRoute();

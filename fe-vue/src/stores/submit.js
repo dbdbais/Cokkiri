@@ -4,9 +4,18 @@ import { defineStore } from "pinia";
 export const useSubmitStore = defineStore("submit", () => {
   const roomUser = ref({});
   const codeData = ref("");
-  const showDetail = ref(false);
   const submitCodeList = ref([]);
+  const showDetail = ref(false);
+  const setRoomUser = (roomData) => {
+    roomData.users.forEach((element) => {
+      console.log(element);
+      roomUser.value[element] = 1;
+    });
+  };
 
+  const submit = (data) => {
+    submitCodeList.value.push(data);
+  };
   const close = () => {
     showDetail.value = false;
   };
@@ -17,17 +26,14 @@ export const useSubmitStore = defineStore("submit", () => {
     showDetail.value = true;
   };
 
-  const submit = (submitData) => {
-    submitCodeList.value.push(submitData);
-  };
-
   return {
     roomUser,
     codeData,
     showDetail,
     submitCodeList,
-    setCodeData,
     submit,
+    setRoomUser,
+    setCodeData,
     close,
   };
 });

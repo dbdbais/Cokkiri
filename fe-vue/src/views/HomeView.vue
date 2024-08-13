@@ -9,9 +9,22 @@
       <FriendsList id="friends-list" />
     </div>
     <div id="main-right" class="box-col">
-      <Header id="header" class="box-col" @create="getRoomList" @search="searchList" @go-room="goRightNow" />
-      <MainContent id="main-content" :rooms="rooms" :current-page="currentPage" :category-obj="categoryObj"
-        @go-room="goRoom" @change-page="pageChange" @is-game="categoryList" />
+      <Header
+        id="header"
+        class="box-col"
+        @create="getRoomList"
+        @search="searchList"
+        @go-room="goRightNow"
+      />
+      <MainContent
+        id="main-content"
+        :rooms="rooms"
+        :current-page="currentPage"
+        :category-obj="categoryObj"
+        @go-room="goRoom"
+        @change-page="pageChange"
+        @is-game="categoryList"
+      />
     </div>
   </div>
 </template>
@@ -168,6 +181,8 @@ const getRoomList = function (params) {
 onMounted(() => {
   getRoomList();
   callInsertClass();
+  const shareData = [];
+  localStorage.setItem("shareData", JSON.stringify(shareData));
   mStore.clearHint();
 });
 

@@ -169,7 +169,7 @@ pipeline {
                     sh 'docker rm -f mysql'
                     sh 'docker rm -f vuejs'
                     sh 'docker rm -f Cokkiri-springboot'
-                    sh 'docker rm -f Cokkiri-compiler'
+                    sh 'docker rm -f Cokkiri-compiler_1'
                     sh 'docker-compose down'
                     // Docker Compose를 사용하여 서비스 빌드 및 실행
                     sh 'docker-compose up --build -d'

@@ -3,7 +3,9 @@ package com.ssafy.iscode.mail.service;
 import com.ssafy.iscode.mail.model.dto.VerificationCode;
 import jakarta.activation.DataHandler;
 import jakarta.activation.DataSource;
-import jakarta.activation.FileDataSource;
+// import jakarta.activation.FileDataSource;
+// ByteArrayDataSource로 변경됨
+import javax.mail.util.ByteArrayDataSource;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeBodyPart;
 import jakarta.mail.internet.MimeMessage;
@@ -15,6 +17,7 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.time.LocalDateTime;
 import java.util.HashMap;
@@ -66,10 +69,11 @@ public class MailService {
             // 이미지 파일 추가 (상대 경로로 지정)
             MimeBodyPart imagePart = new MimeBodyPart();
             ClassPathResource resource = new ClassPathResource("static/img/logo.png");
-            DataSource fds = new FileDataSource(resource.getInputStream());
+            InputStream inputstream = resource.getInputStream();
+            DataSource fds = new ByteArrayDataSource(inputstream, "image/png");
             imagePart.setDataHandler(new DataHandler(fds));
             imagePart.setHeader("Content-ID", "<elephantImage>");
-            imagePart.setFileName(MimeUtility.encodeText(fds.getName(), "UTF-8", null));
+            imagePart.setFileName(MimeUtility.encodeText("logo.png", "UTF-8", null));
 
             // 본문과 이미지를 하나의 Multipart로 합침
             MimeMultipart multipart = new MimeMultipart();
@@ -117,10 +121,12 @@ public class MailService {
             // 이미지 파일 추가 (상대 경로로 지정)
             MimeBodyPart imagePart = new MimeBodyPart();
             ClassPathResource resource = new ClassPathResource("static/img/logo.png");
-            DataSource fds = new FileDataSource(resource.getInputStream());
+            // DataSource fds = new FileDataSource(resource.getInputStream());
+            InputStream inputstream = resource.getInputStream();
+            DataSource fds = new ByteArrayDataSource(inputstream, "image/png");
             imagePart.setDataHandler(new DataHandler(fds));
             imagePart.setHeader("Content-ID", "<elephantImage>");
-            imagePart.setFileName(MimeUtility.encodeText(fds.getName(), "UTF-8", null));
+            imagePart.setFileName(MimeUtility.encodeText("logo.png", "UTF-8", null));
 
             // 본문과 이미지를 하나의 Multipart로 합침
             MimeMultipart multipart = new MimeMultipart();
@@ -163,11 +169,15 @@ public class MailService {
 
             // 이미지 파일 추가 (상대 경로로 지정)
             MimeBodyPart imagePart = new MimeBodyPart();
+
             ClassPathResource resource = new ClassPathResource("static/img/logo.png");
-            DataSource fds = new FileDataSource(resource.getInputStream());
+            // DataSource fds = new FileDataSource(resource.getInputStream());
+            InputStream inputstream = resource.getInputStream();
+            DataSource fds = new ByteArrayDataSource(inputstream, "image/png");
+
             imagePart.setDataHandler(new DataHandler(fds));
             imagePart.setHeader("Content-ID", "<elephantImage>");
-            imagePart.setFileName(MimeUtility.encodeText(fds.getName(), "UTF-8", null));
+            imagePart.setFileName(MimeUtility.encodeText("logo.png", "UTF-8", null));
 
             // 본문과 이미지를 하나의 Multipart로 합침
             MimeMultipart multipart = new MimeMultipart();

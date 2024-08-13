@@ -2,7 +2,6 @@
 import RecruitmentBadge from "./RecruitmentBadge.vue";
 import { joinStudy } from "@/api/board";
 import { userStore } from "@/stores/user";
-import { userStore } from "@/stores/user";
 const uStore = userStore();
 defineProps({
   detailData: Object,

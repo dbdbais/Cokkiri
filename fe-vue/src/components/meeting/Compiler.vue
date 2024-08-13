@@ -42,34 +42,33 @@ const defaultCode = {
 };
 
 const userCode = ref({ ...defaultCode });
+console.log(userCode);
 
 onMounted(async () => {
-  selectedLanguage.value = "java";
+  // selectedLanguage.value = "java";
   getInit();
-  await setTimeout(() => {}, 1000);
-  document.getElementById("language").dispatchEvent(new Event("change"));
+  // document.getElementById("language").dispatchEvent(new Event("change"));
   window.addEventListener("beforeunload", saveData);
 });
 
 function saveData() {
+  localStorage.setItem("save", editor.value.getValue());
   (userCodeList.value[tStore.currentProblemNum].code = editor.value.getValue()),
     (userCodeList.value[tStore.currentProblemNum].language =
       selectedLanguage.value);
 }
 
 function getInit() {
-  console.log(
+  // console.log(
+  //   userCodeList.value[tStore.currentProblemNum].code,
+  //   userCodeList.value[tStore.currentProblemNum].language
+  // );
+
+  initializeEditor(
     userCodeList.value[tStore.currentProblemNum].code,
     userCodeList.value[tStore.currentProblemNum].language
   );
-  if (pStore.selectedProblemList.length === 0) {
-    initializeEditor(null, "python");
-  } else {
-    initializeEditor(
-      userCodeList.value[tStore.currentProblemNum].code,
-      userCodeList.value[tStore.currentProblemNum].language
-    );
-  }
+
   console.log(userCodeList.value);
 }
 
@@ -92,9 +91,8 @@ const initializeEditor = (val, language) => {
   editor.value = ace.edit("editor");
   editor.value.setTheme("ace/theme/chrome");
   editor.value.session.setMode(`ace/mode/${language}`);
-  editor.value.setValue(val ? val : defaultCode.language);
+  editor.value.setValue(val ? val : defaultCode[language]);
   editor.value.setFontSize(editorFontSize.value);
-
   // Set the desired font size here
 };
 
@@ -144,22 +142,32 @@ watch(gameStore, () => {
   }
 });
 
-watch(selectedLanguage, (newLang) => {
-  console.log(selectedLanguage.value);
-  const currentMode = editor.value.session.getMode().$id;
-  const currentLanguage = currentMode.includes("python")
-    ? "python"
-    : currentMode.includes("java")
-    ? "java"
-    : currentMode.includes("c_cpp")
-    ? "cpp"
-    : "python";
-
-  userCode.value[currentLanguage] = editor.value.getValue();
-  editor.value.session.setMode("ace/mode/" + newLang);
-  editor.value.setValue(userCode.value[newLang] || defaultCode[newLang]);
-  resetCode();
+watch(selectedLanguage, (newLang, oldLang) => {
+  // console.log(selectedLanguage.value);
+  // const currentMode = editor.value.session.getMode().$id;
+  // const currentLanguage = currentMode.includes("python")
+  //   ? "python"
+  //   : currentMode.includes("java")
+  //   ? "java"
+  //   : currentMode.includes("c_cpp")
+  //   ? "cpp"
+  //   : "python";
+  // userCode.value[currentLanguage] = editor.value.getValue();
+  // editor.value.session.setMode("ace/mode/" + newLang);
+  // editor.value.setValue(userCode.value[newLang] || defaultCode[newLang]);
+  initializeEditor(null, newLang);
+  // resetCode();
 });
+
+// watch(selectedLanguage, (newLang, oldLang) => {
+//   // 이전 언어의 코드를 저장
+//   userCode.value[oldLang] = editor.value.getValue();
+
+//   // 새로운 언어의 코드 로드
+//   editor.value.session.setMode("ace/mode/" + newLang);
+//   editor.value.setValue(userCode.value[newLang] || defaultCode[newLang]);
+//   resetCode();
+// });
 
 const runCode = async (isSubmit) => {
   const code = editor.value.getValue();

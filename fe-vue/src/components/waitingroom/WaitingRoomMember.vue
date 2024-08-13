@@ -2,9 +2,12 @@
 import { useLodingStore } from "@/stores/loading";
 import "animate.css";
 import { ref, computed } from "vue";
+import { userStore } from "@/stores/user";
+const uStore = userStore();
 defineProps({
   users: Array,
 });
+const grade = uStore.user.tier;
 
 const imageSrc = computed(() => {
   switch (grade) {

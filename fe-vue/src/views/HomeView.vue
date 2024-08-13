@@ -37,10 +37,12 @@ import { useModal } from "@/composables/useModal";
 import { useMessageStore } from "@/stores/message";
 import { useMeetingStore } from "@/stores/meeting";
 import { friendStore } from "@/stores/friend";
+import { useSubmitStore } from "@/stores/submit";
 
 const uStore = userStore();
 const mStore = useMeetingStore();
 const fStore = friendStore();
+const submitStore = useSubmitStore();
 const lobby = new WebSocket(
   `${process.env.VITE_VUE_SOCKET_URL}lobby/${uStore.user.nickname}`
 );
@@ -173,6 +175,7 @@ const getRoomList = function (params) {
 onMounted(() => {
   getRoomList();
   callInsertClass();
+  submitStore.resetSubmitList();
   const shareData = [];
   localStorage.setItem("shareData", JSON.stringify(shareData));
   mStore.clearHint();

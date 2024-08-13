@@ -18,12 +18,10 @@ import WaitingRoomSetting from "@/components/waitingroom/WaitingRoomSetting.vue"
 import WaitingRoomProblem from "@/components/waitingroom/WaitingRoomProblem.vue";
 import WaitingRoomProblemList from "@/components/waitingroom/WaitingRoomProblemList.vue";
 import { userStore } from "@/stores/user";
-
 import { ref, onMounted } from "vue";
 import { useLodingStore } from "@/stores/loading";
 import { useChatStore } from "@/stores/chat";
 import { getProblem } from "@/api/problem";
-
 import { problemStore } from "@/stores/problem";
 
 const store = userStore();
@@ -74,6 +72,7 @@ ws.onmessage = function (event) {
         let time;
         if (store.user.nickname !== roomData.value.hostName) {
           time = 300;
+          loadingStore.loading();
         } else {
           time = 0;
         }
@@ -98,6 +97,7 @@ ws.onmessage = function (event) {
               params: { roomId: route.params.roomId },
             });
           }
+          loadingStore.loadingSuccess();
         }, time);
 
         break;
@@ -144,6 +144,7 @@ onMounted(async () => {
   }, 1000);
 
   const route = useRoute();
+
   const success = (res) => {
     roomData.value = res.data;
   };
@@ -202,12 +203,17 @@ const sendChat = (chatData) => {
   ws.send(chatData);
 };
 
-const exitRoom = function () {
+const exitRoom = async function () {
   ws.close();
-  exitWaitingRoom({
+  loadingStore.loading();
+  await exitWaitingRoom({
     sessionId: route.params.roomId,
     userName: store.user.nickname,
   });
+
+  setTimeout(() => {
+    loadingStore.loadingSuccess();
+  }, 1000);
   router.replace({ name: "home" });
 };
 </script>

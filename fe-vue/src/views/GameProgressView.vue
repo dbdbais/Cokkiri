@@ -5,13 +5,19 @@ import GameRamdomItem from "@/components/gameprogress/GameRandomItem.vue";
 import { onMounted, ref } from "vue";
 import { useRoute } from "vue-router";
 import { userStore } from "@/stores/user";
+import { getUserName } from "@/api/user";
 import { getWaitingRoom } from "@/api/waitingroom";
 import { useGameStore } from "@/stores/game";
+import { useSubmitStore } from "@/stores/submit";
+import { onUnmounted } from "vue";
+import router from "@/router";
+import { useTriggerStore } from "@/stores/trigger";
 
 const enemyCharacter = "/src/assets/game-character.svg";
 const myCharacter = "/src/assets/game-character.svg";
 const store = userStore();
 const gameStore = useGameStore();
+const submitStore = useSubmitStore();
 const route = useRoute();
 const roomData = ref([]);
 const users = ref([]);
@@ -31,6 +37,8 @@ const showitem = ref(false);
 const getItem = ref(false);
 const useItem = ref(false);
 const pickItem = ref("");
+const tStore = useTriggerStore();
+
 const useItemFun = function (item) {
   useItem.value = true;
   pickItem.value = item;
@@ -57,41 +65,51 @@ const ws = new WebSocket(
   `${process.env.VITE_VUE_SOCKET_URL}game/${route.params.gameId}/${store.user.nickname}`
 );
 
-ws.onmessage = function (event) {
-  let data = event.data.split("|!|");
+ws.onmessage = function (e) {
+  let data = e.data.split("|!|");
   console.log(data);
-  if (data.length === 2) {
-    let event = data[0];
 
-    if (event === "BLIND") {
-      console.log("문제 가리기");
-      useBlind.value += 680;
-      setTimeout(() => {
-        useBlind.value = 0;
-      }, 10000);
-    } else if (event === "SIZE") {
-      console.log("버튼 크기 작게");
-      if (useMinimum.value > 20) {
-        useMinimum.value -= 40;
-      }
-      console.log(useMinimum.value);
-    } else if (event === "PREVENT") {
-      console.log("제출 방해");
-      usePrevernt.value = true;
-      setTimeout(() => {
-        usePrevernt.value = false;
-      }, 10000);
-    } else if (event === "BIG") {
-      console.log("크게");
-      gameStore.bigFontFun();
-    } else if (event === "SMALL") {
-      console.log("작게");
-      gameStore.smallFontFun();
-    } else if (event === "EXIT") {
-      const userName = data[1];
-      // 아이콘 빼기
-      gameStore.smallFontFun();
+  let event = data[0];
+
+  if (event === "BLIND") {
+    console.log("문제 가리기");
+    useBlind.value += 680;
+    setTimeout(() => {
+      useBlind.value = 0;
+    }, 10000);
+  } else if (event === "SIZE") {
+    console.log("버튼 크기 작게");
+    if (useMinimum.value > 20) {
+      useMinimum.value -= 40;
     }
+    console.log(useMinimum.value);
+  } else if (event === "PREVENT") {
+    console.log("제출 방해");
+    usePrevernt.value = true;
+    setTimeout(() => {
+      usePrevernt.value = false;
+    }, 10000);
+  } else if (event === "BIG") {
+    console.log("크게");
+    gameStore.bigFontFun();
+  } else if (event === "SMALL") {
+    console.log("작게");
+    gameStore.smallFontFun();
+  } else if (event === "EXIT") {
+    const userName = data[1];
+    // 아이콘 빼기
+    gameStore.smallFontFun();
+  } else if (event === "SUBMIT") {
+    console.log("코드 제출");
+    const userName = data[1];
+    const problemNum = data[2];
+    const correct = data[3];
+
+    submitStore.submit({
+      userName,
+      problemNum,
+      correct,
+    });
   }
 };
 
@@ -130,6 +148,12 @@ const hideItmeFun = function () {
   showitem.value = false;
 };
 
+const submitCode = (data) => {
+  const sendData = `|@||!|${data.username}|!|${data.problemNum}|!|${data.correct}`;
+  console.log(sendData);
+  ws.send(sendData);
+};
+
 onMounted(() => {
   getItem.value = true;
   for (let i = 0; i < 2; i++) {
@@ -146,7 +170,12 @@ onMounted(() => {
   const success = (res) => {
     console.log(res.data);
     roomData.value = res.data;
-    users.value = res.data.users;
+
+    res.data.users.forEach((user) => {
+      getUserName(user).then((res) => {
+        users.value.push(res.data);
+      });
+    });
   };
   const fail = (err) => {
     console.log(err);
@@ -154,6 +183,15 @@ onMounted(() => {
 
   getWaitingRoom(route.params.gameId, success, fail);
 });
+
+onUnmounted(() => {
+  ws.close();
+  tStore.resetProblem();
+});
+
+function closeRoom() {
+  router.replace({ name: "home" });
+}
 
 function getRandomIntInclusive(min, max) {
   const minCeiled = Math.ceil(min);
@@ -175,29 +213,23 @@ const close = () => {
       @close="close"
     />
     <div class="game-prog-con box-col">
-      <RouterLink :to="{ name: 'home' }">
-        <img
-          src="@/assets/room_exit.svg"
-          class="exit-icon"
-          @click="
-            () => {
-              ws.close();
-            }
-          "
-        />
-      </RouterLink>
+      <div class="exit box bold-text md" @click="closeRoom">
+        <img src="/src/assets/exit_room.svg" alt="나가기" />
+        나가기
+      </div>
       <img src="@/assets/timer_temp.svg" class="timer" />
       <div class="game-header box-row box-sb">
-        <!-- <div class="prog-gui-con box-row">
-                <BattleStatus :url="myCharacter" class="myStatus" />
-                <BattleStatus :url="enemyCharacter" class="enemyStatus" />
-    </div> -->
         <div
-          class="user bold-text box md"
+          class="user bold-text box box-col"
           v-for="(user, index) in users"
           :key="index"
         >
-          {{ user }}
+          <img
+            class="tier"
+            :src="'/src/assets/rank/' + user.tier + '.svg'"
+            alt="티어"
+          />
+          {{ user.nickname }}
         </div>
         <div class="box user-btn box-row" v-if="useItem">
           <div>
@@ -205,9 +237,9 @@ const close = () => {
               class="item bold-text"
               v-for="user in users"
               :key="user.index"
-              @click="userUseItem(user)"
+              @click="userUseItem(user.nickname)"
             >
-              {{ user }}
+              {{ user.nickname }}
             </button>
           </div>
           <button class="item bold-text close" @click="useItem = false">
@@ -260,6 +292,7 @@ const close = () => {
           :minimum="useMinimum"
           :prevent="usePrevernt"
           :bigfont="useBigFont"
+          @submit-code="submitCode"
         />
       </div>
     </div>
@@ -273,7 +306,11 @@ const close = () => {
   position: absolute;
   bottom: -70px;
 }
-
+.tier {
+  width: 80px;
+  margin-bottom: 20px;
+  margin-left: 5px;
+}
 .user-btn {
   width: 990px;
   left: 440px;
@@ -285,7 +322,14 @@ const close = () => {
   background-color: #9fbaff;
   z-index: 2;
 }
-
+.exit {
+  font-size: 25px;
+  padding: 5px 10px;
+  top: 0;
+  right: 0;
+  border: 3px solid white;
+  background-color: #ff6b6b;
+}
 .item-guide {
   left: 890px;
   width: 200px;
@@ -295,6 +339,9 @@ const close = () => {
 .user {
   width: 210px;
   height: 170px;
+  align-items: center;
+  font-size: 25px;
+  padding: 20px 60px;
   background-color: white;
 }
 .item {

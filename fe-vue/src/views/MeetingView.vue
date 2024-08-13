@@ -17,9 +17,9 @@ import ShareCodeDetail from "@/components/meeting/modal/ShareCodeDetail.vue";
 import { ref, onMounted, onUnmounted } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { getProblemList, getWaitingRoom } from "@/api/waitingroom";
-import HintView from "@/components/meeting/modal/HintView.vue";
 import { useModal } from "@/composables/useModal";
 import { useSubmitStore } from "@/stores/submit";
+import { useTriggerStore } from "@/stores/trigger";
 
 const user = userStore();
 const problemList = ref([]);
@@ -48,6 +48,7 @@ onMounted(async () => {
 const route = useRoute();
 const router = useRouter();
 const submitStore = useSubmitStore();
+const tStore = useTriggerStore();
 const audio = ref(true);
 const video = ref(true);
 
@@ -73,6 +74,7 @@ onUnmounted(() => {
   console.log("미팅 종료");
   removeUserRequest();
   leaveSession();
+  tStore.resetProblem();
 });
 </script>
 <template>
@@ -85,14 +87,6 @@ onUnmounted(() => {
       id="members"
     ></div>
 
-    <button class="set-btn hint" @click="openModal">
-      <img
-        v-if="video"
-        src="/src/assets/meeting/video-on.svg"
-        alt="비디오 on"
-      />
-      <img v-else src="/src/assets/meeting/video-off.svg" alt="비디오 off" />
-    </button>
     <button id="myVideo" class="set-btn" @click="videoOnOff">
       <img
         v-if="video"
@@ -113,9 +107,6 @@ onUnmounted(() => {
       <img src="/src/assets/exit_room.svg" alt="방나가기" />
       나가기
     </div>
-    <button id="video-share" class="set-btn" @click="publishScreenShare">
-      <img src="/src/assets/meeting/share.svg" alt="화면공유" />
-    </button>
     <div class="main box-main-con">
       <Main :room-data="roomData" />
     </div>

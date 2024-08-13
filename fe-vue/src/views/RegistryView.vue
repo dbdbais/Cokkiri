@@ -151,7 +151,7 @@ const emailCheckFun = async () => {
       title: "인증번호 전송에 실패했습니다.",
     });
   }
-}
+};
 
 const emailConfirmCheckFun = async () => {
   try {
@@ -176,7 +176,7 @@ const emailConfirmCheckFun = async () => {
       title: "이메일 확인에 실패했습니다.",
     });
   }
-}
+};
 </script>
 
 <template>
@@ -198,17 +198,39 @@ const emailConfirmCheckFun = async () => {
         <div class="input-group box-col id-group">
           <label for="username" class="title lbl-id">이메일 </label>
           <div>
-            <input type="text" id="email" v-model="email" />
-            <button v-if="emailCheck" type="button" class="check-btn email-check" @click="emailCheckFun">
+            <input
+              type="text"
+              id="email"
+              class="nomal-text"
+              v-model="email"
+              placeholder="example@ssafy.com"
+            />
+            <button
+              v-if="emailCheck"
+              type="button"
+              class="check-btn email-check"
+              @click="emailCheckFun"
+            >
               요청
             </button>
             <span v-else class="check">요청</span>
           </div>
         </div>
-        <div class="input-group box-col id-group">
+        <div class="input-group box-col id-group" style="margin-top: 10px">
           <div>
-            <input type="text" id="email-verify" v-model="emailConfirm" />
-            <button v-if="emailConfirmCheck" type="button" class="check-btn email-check" @click="emailConfirmCheckFun">
+            <input
+              type="text"
+              id="email-verify"
+              class="nomal-text"
+              v-model="emailConfirm"
+              placeholder="인증번호"
+            />
+            <button
+              v-if="emailConfirmCheck"
+              type="button"
+              class="check-btn email-check"
+              @click="emailConfirmCheckFun"
+            >
               확인
             </button>
             <span v-else class="check">확인</span>
@@ -217,8 +239,19 @@ const emailConfirmCheckFun = async () => {
         <div class="input-group box-col name-group">
           <label for="nickname" class="title lbl-name" id="name">닉네임 </label>
           <div>
-            <input type="text" id="nickname" v-model="nickname" />
-            <button v-if="nicknameCheck" type="button" class="verify-btn" @click="nicknameCheckFun">
+            <input
+              type="text"
+              id="nickname"
+              class="nomal-text"
+              v-model="nickname"
+              placeholder="닉네임"
+            />
+            <button
+              v-if="nicknameCheck"
+              type="button"
+              class="verify-btn"
+              @click="nicknameCheckFun"
+            >
               중복확인
             </button>
             <span v-else class="check">중복확인</span>
@@ -231,15 +264,17 @@ const emailConfirmCheckFun = async () => {
         </div>
 
         <div class="input-group box-col pass-group">
-          <label for="passwordconfirm" class="title lbl-pass-chk">비밀번호확인
+          <label for="passwordconfirm" class="title lbl-pass-chk"
+            >비밀번호확인
           </label>
-          <input type="password" id="passwordconfirm" v-model="passwordConfirm" />
+          <input
+            type="password"
+            id="passwordconfirm"
+            v-model="passwordConfirm"
+          />
         </div>
-
       </div>
-      <button class="signup-btn" @click="submitForm">
-        회원가입
-      </button>
+      <button class="signup-btn" @click="submitForm">회원가입</button>
     </div>
   </div>
 </template>
@@ -258,7 +293,7 @@ const emailConfirmCheckFun = async () => {
 .signup-box {
   position: relative;
   width: 680px;
-  height: 830px;
+  height: 890px;
   padding: 50px;
   border-radius: 20px;
   /* box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); */
@@ -285,7 +320,7 @@ const emailConfirmCheckFun = async () => {
 .input-group {
   align-items: start;
   font-size: 38px;
-  -webkit-text-stroke: 1px black;
+  /* -webkit-text-stroke: 1px black; */
 }
 
 .lbl-id,
@@ -315,11 +350,12 @@ label {
 
 input {
   width: 360px;
+  text-align: center;
   height: 64px;
   padding: 15px;
   border: 5px solid black;
   border-radius: 5px;
-  font-size: 30px;
+  font-size: 25px;
   border-radius: 10px;
 }
 

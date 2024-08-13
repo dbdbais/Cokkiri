@@ -8,13 +8,13 @@ import "ace-builds/src-noconflict/mode-c_cpp";
 import "ace-builds/src-noconflict/theme-chrome";
 import "ace-builds/src-noconflict/ext-options";
 import { insert } from "@/api/submit";
-
 import { useGameStore } from "@/stores/game";
 import { problemStore } from "@/stores/problem";
 import { useTriggerStore } from "@/stores/trigger";
 import { userStore } from "@/stores/user";
 import { sendSubmit } from "@/api/webRTC";
 import { useSubmitStore } from "@/stores/submit";
+import { useItemStore } from "@/stores/item";
 
 defineProps({
   bigfont: Boolean,
@@ -26,15 +26,17 @@ defineProps({
 const emit = defineEmits(["submit-code"]);
 
 const editor = ref(null);
+const iStore = useItemStore();
 const selectedLanguage = ref("python");
 const inputText = ref("");
 const outputText = ref("");
 const uStore = userStore();
 const pStore = problemStore();
 const tStore = useTriggerStore();
+const gameStore = useGameStore();
 const submitStore = useSubmitStore();
 const trigger = ref(false);
-const editorFontSize = ref(18);
+const editorFontSize = ref(iStore.currentFontSize);
 const userCodeList = ref(pStore.userCodeList);
 
 const defaultCode = {
@@ -49,8 +51,6 @@ const userCode = ref({ ...defaultCode });
 
 onMounted(async () => {
   // selectedLanguage.value = "java";
-  console.log(editorFontSize.value);
-  editorFontSize.value = localStorage.getItem("fontSize");
   trigger.value = true;
   setTimeout(() => {
     trigger.value = false;
@@ -72,7 +72,6 @@ function saveData() {
   (userCodeList.value[tStore.currentProblemNum].code = editor.value.getValue()),
     (userCodeList.value[tStore.currentProblemNum].language =
       selectedLanguage.value);
-  localStorage.setItem("fontSize", editorFontSize.value);
 }
 
 function getInit() {
@@ -134,30 +133,30 @@ const fontReduce = () => {
   let timerId = setInterval(() => {
     console.log("작아지는 중!");
     if (editorFontSize.value > 9) {
-      editorFontSize.value -= 2;
+      editorFontSize.value -= 5;
       initializeEditor(saveVal, selectedLanguage.value);
     }
-  }, 200);
+  }, 100);
   setTimeout(() => {
     clearInterval(timerId);
+    iStore.setFontSize(editorFontSize.value);
   }, 1000);
 };
-
-const gameStore = useGameStore();
 
 const fontIncrease = () => {
   const saveVal = editor.value.getValue();
   console.log("폰트 크게!");
   let timerId = setInterval(() => {
     console.log("커지는 중!");
-    if (editorFontSize.value < 40) {
-      editorFontSize.value += 2;
+    if (editorFontSize.value < 60) {
+      editorFontSize.value += 5;
       initializeEditor(saveVal, selectedLanguage.value);
     }
     // console.log(editorFontSize.value);
-  }, 200);
+  }, 100);
   setTimeout(() => {
     clearInterval(timerId);
+    iStore.setFontSize(editorFontSize.value);
   }, 1000);
 };
 

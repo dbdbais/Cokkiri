@@ -237,9 +237,9 @@ const close = () => {
               class="item bold-text"
               v-for="user in users"
               :key="user.index"
-              @click="userUseItem(user)"
+              @click="userUseItem(user.nickname)"
             >
-              {{ user }}
+              {{ user.nickname }}
             </button>
           </div>
           <button class="item bold-text close" @click="useItem = false">

@@ -2,10 +2,15 @@
 import RecruitmentBadge from "./RecruitmentBadge.vue";
 import { joinStudy } from "@/api/board";
 import { userStore } from "@/stores/user";
+import { ref, computed } from "vue";
 const uStore = userStore();
 defineProps({
   detailData: Object,
 });
+
+const emit = defineEmits(["close"]);
+const store = userStore();
+const rankImgUrl = "/src/assets/rank/";
 
 const grade = uStore.user.tier;
 const imageSrc = computed(() => {
@@ -27,9 +32,6 @@ const imageSrc = computed(() => {
   }
 });
 
-const emit = defineEmits(["close"]);
-const store = userStore();
-const rankImgUrl = "/src/assets/rank/";
 
 const closeBtn = function () {
   emit("close");

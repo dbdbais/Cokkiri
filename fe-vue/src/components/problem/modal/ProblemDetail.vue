@@ -1,15 +1,15 @@
 <script setup>
-import { ref, onMounted, computed } from "vue";
+import { ref, onBeforeMount, computed } from "vue";
 import { getAllReviews } from "@/api/review";
 import ReviewItem from "@/components/problem/ReviewItem.vue";
 
 const props = defineProps({
     problemData: Object
 });
-const reviewData = ref();
+const reviewData = ref([]);
 const currentPage = ref(1);
 
-onMounted(async () => {
+onBeforeMount(async () => {
     try {
         const response = await getAllReviews(props.problemData.no);
         console.log(response);
@@ -82,7 +82,7 @@ const changeIndex = (index) => {
                     <!-- </div> -->
                     <div class="btn-pagi box-row">
                         <div class="btn-prev" @click="prevPage">◀</div>
-                        <span v-if="reviewData" v-for="i in reviewData.length" style="font-size: 35px; font-weight: 800"
+                        <span v-for="i in reviewData.length" style="font-size: 35px; font-weight: 800"
                             :class="{ currentIndex: i === currentPage }" @click="changeIndex(i)"> {{
                                 i
                             }} </span>
@@ -143,7 +143,7 @@ const changeIndex = (index) => {
 }
 
 .left-con {
-    width: 100%;
+    width: 755px;
     height: 800px;
     border: 5px solid #3B72FF;
     border-radius: 10px;
@@ -154,7 +154,7 @@ const changeIndex = (index) => {
 
 .right-con {
     position: relative;
-    width: 100%;
+    width: 755px;
     height: 800px;
 }
 

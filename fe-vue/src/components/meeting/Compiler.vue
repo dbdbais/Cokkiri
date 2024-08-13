@@ -31,6 +31,7 @@ const uStore = userStore();
 const pStore = problemStore();
 const tStore = useTriggerStore();
 const submitStore = useSubmitStore();
+const trigger = ref(false);
 const editorFontSize = ref(18);
 const userCodeList = ref(pStore.userCodeList);
 
@@ -42,17 +43,29 @@ const defaultCode = {
 };
 
 const userCode = ref({ ...defaultCode });
-console.log(userCode);
+// console.log(userCode);
 
 onMounted(async () => {
   // selectedLanguage.value = "java";
+
+  trigger.value = true;
+  setTimeout(() => {
+    trigger.value = false;
+  }, 500);
+  // initializeEditor(
+  //   userCodeList.value[tStore.currentProblemNum].code,
+  //   userCodeList.value[tStore.currentProblemNum].language
+  // );
   getInit();
   // document.getElementById("language").dispatchEvent(new Event("change"));
   window.addEventListener("beforeunload", saveData);
 });
 
+onUnmounted(() => {
+  saveData();
+});
+
 function saveData() {
-  localStorage.setItem("save", editor.value.getValue());
   (userCodeList.value[tStore.currentProblemNum].code = editor.value.getValue()),
     (userCodeList.value[tStore.currentProblemNum].language =
       selectedLanguage.value);
@@ -81,6 +94,10 @@ watch(tStore, () => {
   userCodeList.value[tStore.beforeProblemNum].language = selectedLanguage.value;
   outputText.value = "";
   inputText.value = "";
+  trigger.value = true;
+  setTimeout(() => {
+    trigger.value = false;
+  }, 500);
   // console.log(userCodeList.value[pStore.beforeProblemNum].code);
   // console.log(userCodeList.value[pStore.beforeProblemNum]);
   getInit();
@@ -155,19 +172,11 @@ watch(selectedLanguage, (newLang, oldLang) => {
   // userCode.value[currentLanguage] = editor.value.getValue();
   // editor.value.session.setMode("ace/mode/" + newLang);
   // editor.value.setValue(userCode.value[newLang] || defaultCode[newLang]);
-  initializeEditor(null, newLang);
-  // resetCode();
+
+  if (!trigger.value) {
+    initializeEditor(null, newLang);
+  }
 });
-
-// watch(selectedLanguage, (newLang, oldLang) => {
-//   // 이전 언어의 코드를 저장
-//   userCode.value[oldLang] = editor.value.getValue();
-
-//   // 새로운 언어의 코드 로드
-//   editor.value.session.setMode("ace/mode/" + newLang);
-//   editor.value.setValue(userCode.value[newLang] || defaultCode[newLang]);
-//   resetCode();
-// });
 
 const runCode = async (isSubmit) => {
   const code = editor.value.getValue();
@@ -216,8 +225,6 @@ const runCode = async (isSubmit) => {
   });
 };
 
-const language = ref(null);
-
 const shareCode = (userCnt) => {
   const code = editor.value.getValue();
   const language = selectedLanguage.value;
@@ -232,13 +239,6 @@ const shareCode = (userCnt) => {
   sendSubmit(data);
   emit("upCnt");
   console.log(userCnt);
-};
-
-const resetCode = () => {
-  console.log("언어 교체");
-  const language = selectedLanguage.value;
-  editor.value.setValue(defaultCode[language]);
-  saveData();
 };
 
 const clearInput = () => {

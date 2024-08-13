@@ -13,7 +13,7 @@ const useProblemStore = problemStore();
 const tStore = useTriggerStore();
 const mStore = useMeetingStore();
 const problemList = useProblemStore.selectedProblemList;
-const currentProblem = ref(1);
+const currentProblem = ref(tStore.currentProblemNum);
 
 const getProblem = (no) => {
   return useProblemStore.getProblem(no);

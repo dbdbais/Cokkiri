@@ -145,8 +145,8 @@ public class APIConnection {
     }
 
     public Map<Integer,String> compileCode(CompileRequestDTO compileRequestDTO,boolean sbmit){
-        String url = "https://i11e108.p.ssafy.io/compiler/";
-        // String url = "http://nginx:8082/";
+        // String url = "https://i11e108.p.ssafy.io/compiler/";
+        String url = "http://nginx/";
         if(sbmit){
             url += "submit";
         }

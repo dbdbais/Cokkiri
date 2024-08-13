@@ -72,6 +72,8 @@ services:
       - complier_1
       - complier_2
       - complier_3
+    networks:
+      - Cokkiri-develop-Network
 
 volumes:
   mysql_develop_data:

@@ -2,9 +2,30 @@
 import RecruitmentBadge from "./RecruitmentBadge.vue";
 import { joinStudy } from "@/api/board";
 import { userStore } from "@/stores/user";
-
+import { userStore } from "@/stores/user";
+const uStore = userStore();
 defineProps({
   detailData: Object,
+});
+
+const grade = uStore.user.tier;
+const imageSrc = computed(() => {
+  switch (grade) {
+    case 0:
+      return new URL("@/assets/rank/seed.svg", import.meta.url).href;
+    case 1:
+      return new URL("@/assets/rank/kiwi.svg", import.meta.url).href;
+    case 2:
+      return new URL("@/assets/rank/apple.svg", import.meta.url).href;
+    case 3:
+      return new URL("@/assets/rank/orange.svg", import.meta.url).href;
+    case 4:
+      return new URL("@/assets/rank/koreamelon.svg", import.meta.url).href;
+    case 5:
+      return new URL("@/assets/rank/durian.svg", import.meta.url).href;
+    default:
+      return new URL("@/assets/rank/seed.svg", import.meta.url).href;
+  }
 });
 
 const emit = defineEmits(["close"]);
@@ -48,7 +69,7 @@ const sendJoin = function (sessionId) {
             :key="tier.index"
             class="rank md"
           >
-            <img :src="rankImgUrl + tier + '.svg'" alt="등급" />
+            <img :src="imageSrc" alt="등급" />
             <span style="margin-left: 8px">{{ cnt }}명</span>
           </div>
         </div>

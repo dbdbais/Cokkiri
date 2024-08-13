@@ -42,12 +42,12 @@ onMounted(() => {
           <div class="problem-num bold-text box md">
             {{ submit.problemNum }}번 문제
           </div>
-          <span class="bold-text name">{{ submit.nickname }}</span>
+          <span class="bold-text name">{{ submit.userName }}</span>
         </div>
         <span
           class="correct bold-text"
-          :class="submit.correct ? 'success' : 'fail'"
-          >{{ submit.correct ? "성공" : "실패" }}</span
+          :class="submit.correct === '1' ? 'success' : 'fail'"
+          >{{ submit.correct === "1" ? "성공" : "실패" }}</span
         >
       </div>
     </div>

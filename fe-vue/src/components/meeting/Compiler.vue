@@ -23,7 +23,7 @@ defineProps({
   roomData: Object,
   userCnt: Number,
 });
-const emit = defineEmits(["upCnt"]);
+const emit = defineEmits(["submit-code"]);
 
 const editor = ref(null);
 const selectedLanguage = ref("python");
@@ -219,11 +219,13 @@ const runCode = async (isSubmit) => {
         outputText.value = res.data.opt;
       }
     } else {
-      submitStore.submit({
+      console.log(res.data);
+      emit("submit-code", {
+        username: uStore.user.nickname,
         problemNum: tStore.currentProblemNum,
-        nickname: uStore.user.nickname,
-        correct: res.data.correct,
+        correct: res.data.correct ? 1 : 0,
       });
+
       if (res.data.correct) {
         Swal.fire({
           icon: "success",
@@ -232,7 +234,7 @@ const runCode = async (isSubmit) => {
       } else {
         Swal.fire({
           icon: "error",
-          title: `${res.data.accuracy * 100}점 입니다..`,
+          title: `${Math.ceil(res.data.accuracy * 100)}점 입니다..`,
         });
       }
     }
@@ -253,7 +255,6 @@ const shareCode = (userCnt) => {
     userCodeList.value[tStore.currentProblemNum].language
   }|!|${userCodeList.value[tStore.currentProblemNum].code}|!|${userCnt}`;
   sendSubmit(data);
-  emit("upCnt");
   console.log(userCnt);
 };
 

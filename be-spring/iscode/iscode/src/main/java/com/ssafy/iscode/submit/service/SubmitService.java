@@ -24,7 +24,7 @@ public class SubmitService {
         return submitRepository.save(submit);
     }
 
-    public int getSolvedProblem(String userId){
+    public List<Long> getSolvedProblem(String userId){
         return submitRepository.getSolvedProblem(userId);
     }
 

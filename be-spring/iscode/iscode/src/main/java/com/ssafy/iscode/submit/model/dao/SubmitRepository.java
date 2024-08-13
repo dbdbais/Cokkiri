@@ -63,11 +63,11 @@ public class SubmitRepository {
     }
 
 
-    public int getSolvedProblem(String userId) {
-        return ((Number) em.createQuery("SELECT COUNT(DISTINCT s.problem.id) FROM Submit s " +
-                        "WHERE s.user.id = :userId AND s.correct = true")
+    public List<Long> getSolvedProblem(String userId) {
+        return em.createQuery("SELECT DISTINCT s.problem.id FROM Submit s " +
+                        "WHERE s.user.id = :userId AND s.correct = true", Long.class)
                 .setParameter("userId", userId)
-                .getSingleResult()).intValue();
+                .getResultList();
     }
 
     public boolean canReview(String userId, Long problemId) {

@@ -180,7 +180,7 @@ public class SubmitRestController {
     }
 
     @GetMapping
-    public int getSolved(@RequestParam String userId){
+    public List<Long> getSolved(@RequestParam String userId){
         return submitService.getSolvedProblem(userId);
     }
 

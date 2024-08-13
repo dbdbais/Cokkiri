@@ -1,32 +1,14 @@
 <template>
   <header>
     <nav id="header-first" class="title main-title">
-      <div
-        id="quick-start"
-        class="box-main-con box-in nav-btn"
-        @click="$emit('go-room')"
-      >
+      <div id="quick-start" class="box-main-con box-in nav-btn" @click="$emit('go-room')">
         바로가기
       </div>
-      <div
-        id="create-room"
-        class="box-main-con box-in nav-btn"
-        @click="openCreateModal"
-      >
+      <div id="create-room" class="box-main-con box-in nav-btn" @click="openCreateModal">
         방만들기
       </div>
-      <RouterLink
-        id="router-regular"
-        class="header-router"
-        :to="{ name: 'studyBoard' }"
-        >스터디 모집 게시판</RouterLink
-      >
-      <RouterLink
-        id="router-problem"
-        class="header-router"
-        :to="{ name: 'problem' }"
-        >문제 목록</RouterLink
-      >
+      <RouterLink id="router-regular" class="header-router" :to="{ name: 'studyBoard' }">스터디 모집 게시판</RouterLink>
+      <RouterLink id="router-problem" class="header-router" :to="{ name: 'problem' }">문제 목록</RouterLink>
     </nav>
     <div id="header-second" class="box-row">
       <div id="search-container" class="box-row box-main-con">
@@ -50,13 +32,9 @@
         </div>
       </div>
     </div>
-    <CreateRoom
-      v-if="isCreateModalOpen"
-      @close="closeCreateModal"
-      @create="$emit('create')"
-    />
-    <Notification v-if="isNotiModalOpen" @close="closeModal('noti')" />
-    <Mission v-if="isMissionModalOpen" @close="closeModal('mission')" />
+    <CreateRoom v-if="isCreateModalOpen" @close="closeCreateModal" @create="$emit('create')" />
+    <Notification v-if="isNotiModalOpen" @close="closeNotiModal" />
+    <Mission v-if="isMissionModalOpen" @close="closeMissionModal" />
   </header>
 </template>
 
@@ -70,7 +48,7 @@ import { useMessageStore } from "@/stores/message";
 
 const emit = defineEmits(["create", "search"]);
 const searchText = ref("");
-const restrictModal = ref(false);
+const currentModal = ref("");
 const mStore = useMessageStore();
 
 const searchList = function () {
@@ -97,18 +75,19 @@ const {
 } = useModal();
 
 const openModal = (selectedModal) => {
-  if (selectedModal === "mission" && restrictModal.value === false) {
+  if (selectedModal === "mission") {
+    if (currentModal.value === "noti") {
+      closeNotiModal();
+    }
     openMissionModal();
-  } else if (selectedModal === "noti" && restrictModal.value === false) {
+    currentModal.value = "mission";
+  } else if (selectedModal === "noti") {
+    if (currentModal.value === "mission") {
+      closeMissionModal();
+    }
     openNotiModal();
+    currentModal.value = "noti";
   }
-  restrictModal.value = true;
-};
-
-const closeModal = (selectedModal) => {
-  restrictModal.value = false;
-  closeMissionModal();
-  closeNotiModal();
 };
 </script>
 
@@ -155,13 +134,11 @@ const closeModal = (selectedModal) => {
   height: 1px;
   /* background: black; */
   /* transform: skewY(-10deg); */
-  background: repeating-linear-gradient(
-    to right,
-    black,
-    black 2px,
-    transparent 2px,
-    transparent 4px
-  );
+  background: repeating-linear-gradient(to right,
+      black,
+      black 2px,
+      transparent 2px,
+      transparent 4px);
 }
 
 .header-router:hover {
@@ -244,6 +221,7 @@ const closeModal = (selectedModal) => {
   height: 30px;
   margin-right: 5px;
 }
+
 .noti-unread {
   width: 35px;
   height: 35px;

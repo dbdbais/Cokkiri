@@ -10,22 +10,9 @@
       <FriendsList id="friends-list" />
     </div>
     <div id="main-right" class="box-col">
-      <Header
-        id="header"
-        class="box-col"
-        @create="getRoomList"
-        @search="searchList"
-        @go-room="goRightNow"
-      />
-      <MainContent
-        id="main-content"
-        :rooms="rooms"
-        :current-page="currentPage"
-        :category-obj="categoryObj"
-        @go-room="goRoom"
-        @change-page="pageChange"
-        @is-game="categoryList"
-      />
+      <Header id="header" class="box-col" @create="getRoomList" @search="searchList" @go-room="goRightNow" />
+      <MainContent id="main-content" :rooms="rooms" :current-page="currentPage" :category-obj="categoryObj"
+        @go-room="goRoom" @change-page="pageChange" @is-game="categoryList" />
     </div>
   </div>
   <MyProfile v-if="isModalOpen" @close="closeModal" />
@@ -244,17 +231,18 @@ const logout = function () {
 }
 
 .myprofile-icon {
-  width: 40px;
-  height: 40px;
-  border: 5px solid hsl(223, 100%, 72%);
+  width: 50px;
+  height: 50px;
+  border: 5px solid hsl(223, 60%, 50%);
   border-radius: 10px;
-  background-color: hsl(223, 100%, 72%);
-  margin-right: 10px;
+  padding: 3px;
+  background-color: hsl(223, 100%, 80%);
+  margin-right: 11px;
 }
 
-.myProfile-icon:hover {
-  border: 5px solid hsl(223, 100%, 92%);
-  background-color: hsl(223, 100%, 92%);
+.myprofile-icon:hover {
+  border: 5px solid hsl(223, 80%, 50%);
+  background-color: hsl(223, 100%, 90%);
 }
 
 .profile {

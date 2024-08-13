@@ -52,7 +52,7 @@ const add = async (friendId, index) => {
 
 <template>
     <div class="modal-overlay">
-        <div class="modal-content box-main-group">
+        <div class="modal-content box-main-group slideRight">
             <div class="modal-header box-row">
                 <span class="title main-title">친구 추가</span>
                 <div>
@@ -80,7 +80,7 @@ const add = async (friendId, index) => {
                             <img v-else src="@/assets/check_green.svg" class="friend-plus">
                         </div>
                     </div>
-                    <div class="box-row pagi-con">
+                    <!-- <div class="box-row pagi-con">
                         <div class="box-row">
                             <div class="arrow-container">
                                 <img class="arrow arrow-b" src="@/assets/arrow_left.svg"></img>
@@ -90,7 +90,7 @@ const add = async (friendId, index) => {
                                 <img class="arrow arrow-f" src="@/assets/arrow_right.svg"></img>
                             </div>
                         </div>
-                    </div>
+                    </div> -->
                 </div>
             </div>
         </div>
@@ -104,7 +104,7 @@ const add = async (friendId, index) => {
     position: absolute;
     width: 550px;
     bottom: 30px;
-    left: 400px;
+    left: 20px;
     padding: 15px 20px;
 }
 
@@ -161,6 +161,7 @@ const add = async (friendId, index) => {
     margin-top: 20px;
     padding: 10px;
     height: 380px;
+    overflow: auto;
 }
 
 .grid-container {

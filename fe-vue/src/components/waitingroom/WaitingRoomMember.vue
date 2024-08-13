@@ -7,9 +7,8 @@ const uStore = userStore();
 defineProps({
   users: Array,
 });
-const grade = uStore.user.tier;
-
-const imageSrc = computed(() => {
+// const grade = uStore.user.tier;
+const imageSrc = (grade) => {
   switch (grade) {
     case 0:
       return new URL("@/assets/rank/seed.svg", import.meta.url).href;
@@ -26,7 +25,7 @@ const imageSrc = computed(() => {
     default:
       return new URL("@/assets/rank/seed.svg", import.meta.url).href;
   }
-});
+};
 
 const roomUsers = ref(false);
 
@@ -47,7 +46,7 @@ const animamteSpeed = [
         {{ user.nickname }}
       </div>
       <img
-        :src="imageSrc"
+        :src="imageSrc(user.tier)"
         alt="티어"
         class="rank animate__animated animate__bounce animate__infinite"
         :class="[

@@ -89,10 +89,19 @@ public class GameWebSocketHandler extends TextWebSocketHandler {
                         }
                     }
                 }
-            } else {
+            } else if (m.length == 2){
                 roomPrices.remove(roomId);
 
                 String content = "END|!|.";
+
+                Set<WebSocketSession> sessions = roomSessions.get(roomId);
+                if (sessions != null) {
+                    for (WebSocketSession webSocketSession : sessions) {
+                        webSocketSession.sendMessage(new TextMessage(content));
+                    }
+                }
+            } else {
+                String content = "SUBMIT|!|" + m[1] + "|!|" + m[2] + "|!|" + m[3];
 
                 Set<WebSocketSession> sessions = roomSessions.get(roomId);
                 if (sessions != null) {

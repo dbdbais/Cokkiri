@@ -144,6 +144,7 @@ onMounted(async () => {
   }, 1000);
 
   const route = useRoute();
+
   const success = (res) => {
     roomData.value = res.data;
   };
@@ -202,12 +203,17 @@ const sendChat = (chatData) => {
   ws.send(chatData);
 };
 
-const exitRoom = function () {
+const exitRoom = async function () {
   ws.close();
-  exitWaitingRoom({
+  loadingStore.loading();
+  await exitWaitingRoom({
     sessionId: route.params.roomId,
     userName: store.user.nickname,
   });
+
+  setTimeout(() => {
+    loadingStore.loadingSuccess();
+  }, 1000);
   router.replace({ name: "home" });
 };
 </script>

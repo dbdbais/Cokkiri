@@ -199,14 +199,17 @@ const goRoom = function (roomId) {
           </div>
         </div>
         <div class="regular-con box">
-          <span>정기 스터디 (닉네임 [스터디 명])</span>
+          <span>정기 스터디</span>
           <div v-for="(regular, index) in notiRequest.regular" :key="index">
             <div
               v-for="(user, index) in regular.users"
               :key="index"
               class="box-row announ-con"
             >
-              <span>{{ user }} [{{ regular.regularName }}]</span>
+              <div class="flex-align">
+                <div class="badge box md">{{ regular.regularName }}</div>
+                <span style="margin-left: 10px">{{ user }}</span>
+              </div>
               <div class="box-row">
                 <button
                   class="btn-accept bold-text"
@@ -344,6 +347,12 @@ div {
 .friend-con > span,
 .regular-con > span {
   font-size: 25px;
+}
+.badge {
+  padding: 5px 10px;
+  border: 2px solid;
+
+  background-color: #c191ff;
 }
 
 .btn-accept,

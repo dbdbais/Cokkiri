@@ -31,8 +31,22 @@ pipeline {
                         sh 'cp $properties be-spring/iscode/iscode/src/main/resources/application.properties'
                         sh 'ls'
                     }
+                }
+                withCredentials([file(credentialsId: 'Cokkiri-docker-compose', variable: 'compose')]){
+                    script {
+                        // 현재 작업 디렉토리 출력
+                        sh 'pwd'
+
+                        // 작업 디렉토리의 파일 목록 출력
+                        sh 'ls'
+
+                        // Docker Compose 파일을 프로젝트 루트로 복사 (여기서 목적지 경로를 명시)
+                        sh "cp $compose ."
+
+                        // 복사 후 작업 디렉토리의 파일 목록 출력
+                        sh 'ls'
                     }
-                    
+                }
             }
         }
 

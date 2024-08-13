@@ -66,7 +66,7 @@ public class MailService {
             // 이미지 파일 추가 (상대 경로로 지정)
             MimeBodyPart imagePart = new MimeBodyPart();
             ClassPathResource resource = new ClassPathResource("static/img/logo.png");
-            DataSource fds = new FileDataSource(resource.getFile());
+            DataSource fds = new FileDataSource(resource.getInputStream());
             imagePart.setDataHandler(new DataHandler(fds));
             imagePart.setHeader("Content-ID", "<elephantImage>");
             imagePart.setFileName(MimeUtility.encodeText(fds.getName(), "UTF-8", null));
@@ -117,7 +117,7 @@ public class MailService {
             // 이미지 파일 추가 (상대 경로로 지정)
             MimeBodyPart imagePart = new MimeBodyPart();
             ClassPathResource resource = new ClassPathResource("static/img/logo.png");
-            DataSource fds = new FileDataSource(resource.getFile());
+            DataSource fds = new FileDataSource(resource.getInputStream());
             imagePart.setDataHandler(new DataHandler(fds));
             imagePart.setHeader("Content-ID", "<elephantImage>");
             imagePart.setFileName(MimeUtility.encodeText(fds.getName(), "UTF-8", null));
@@ -164,7 +164,7 @@ public class MailService {
             // 이미지 파일 추가 (상대 경로로 지정)
             MimeBodyPart imagePart = new MimeBodyPart();
             ClassPathResource resource = new ClassPathResource("static/img/logo.png");
-            DataSource fds = new FileDataSource(resource.getFile());
+            DataSource fds = new FileDataSource(resource.getInputStream());
             imagePart.setDataHandler(new DataHandler(fds));
             imagePart.setHeader("Content-ID", "<elephantImage>");
             imagePart.setFileName(MimeUtility.encodeText(fds.getName(), "UTF-8", null));

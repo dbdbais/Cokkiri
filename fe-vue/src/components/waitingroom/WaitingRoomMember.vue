@@ -11,17 +11,17 @@ defineProps({
 const imageSrc = (grade) => {
   console.log(grade);
   switch (grade) {
-    case 0:
+    case 'SEED':
       return new URL("@/assets/rank/seed.svg", import.meta.url).href;
-    case 1:
+    case 'KIWI':
       return new URL("@/assets/rank/kiwi.svg", import.meta.url).href;
-    case 2:
+    case 'APPLE':
       return new URL("@/assets/rank/apple.svg", import.meta.url).href;
-    case 3:
+    case 'ORANGE':
       return new URL("@/assets/rank/orange.svg", import.meta.url).href;
-    case 4:
+    case 'KOREAMELON':
       return new URL("@/assets/rank/koreamelon.svg", import.meta.url).href;
-    case 5:
+    case 'DURIAN':
       return new URL("@/assets/rank/durian.svg", import.meta.url).href;
     default:
       return new URL("@/assets/rank/seed.svg", import.meta.url).href;

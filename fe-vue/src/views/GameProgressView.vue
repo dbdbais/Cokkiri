@@ -21,6 +21,7 @@ const items = ref({
   prevent: false,
   fontBig: false,
   fontSmall: false,
+  
 });
 
 const useBlind = ref(0);
@@ -255,6 +256,7 @@ const close = () => {
           :minimum="useMinimum"
           :prevent="usePrevernt"
           :bigfont="useBigFont"
+          :roomData="roomData"
         />
       </div>
     </div>

@@ -2,11 +2,15 @@
 import { useLodingStore } from "@/stores/loading";
 import "animate.css";
 import { ref } from "vue";
+
 defineProps({
   users: Array,
 });
 
-const imgUrl = "/src/assets/rank/";
+// imgUrl 함수로 변경하여 import.meta를 사용하여 이미지 파일을 가져옴
+const getImgUrl = (tier) => {
+  return new URL(`../assets/rank/${tier}.svg`, import.meta.url).href;
+};
 
 const roomUsers = ref(false);
 
@@ -27,7 +31,7 @@ const animamteSpeed = [
         {{ user.nickname }}
       </div>
       <img
-        :src="imgUrl + user.tier + '.svg'"
+        :src="getImgUrl(user.tier)"
         alt="티어"
         class="rank animate__animated animate__bounce animate__infinite"
         :class="[

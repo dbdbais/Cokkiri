@@ -189,7 +189,12 @@ const goRoom = function (roomId) {
             :key="index"
             class="box-row announ-con"
           >
-            <span>{{ item.userName }}님이 초대하였습니다.</span>
+            <div class="flex-align">
+              <span class="badge box">
+                {{ item.roomId }}
+              </span>
+              {{ item.userName }}
+            </div>
             <div class="box-row">
               <button class="btn-accept bold-text" @click="goRoom(item.roomId)">
                 수락
@@ -379,7 +384,7 @@ div {
 .badge {
   padding: 5px 10px;
   border: 2px solid;
-
+  margin-right: 10px;
   background-color: #c191ff;
 }
 

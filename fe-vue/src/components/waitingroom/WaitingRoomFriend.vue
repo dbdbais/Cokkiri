@@ -1,5 +1,5 @@
 <script setup>
-import { getFriends } from "@/api/user";
+import { getAllUser, getFriends } from "@/api/user";
 import { inviteFriend } from "@/api/friend";
 import { getUser } from "@/api/user";
 import { onMounted, ref } from "vue";
@@ -8,6 +8,7 @@ import { userStore } from "@/stores/user";
 const store = userStore();
 
 onMounted(() => {
+  // getAllUser().then((res) => {});
   getFriends(store.user.id).then((res) => {
     console.log(res.data);
     friendList.value = res.data;
@@ -59,7 +60,7 @@ const friendList = ref([]);
         v-for="friend in friendList"
         :key="friend.id"
       >
-        {{ friend.friendUserId }}
+        {{ store.userNickname[friend.friendUserId] }}
         <button
           class="plus bold-text"
           @click="friendInvite(friend.friendUserId, roomId)"

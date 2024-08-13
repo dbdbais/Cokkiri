@@ -49,7 +49,8 @@ const userCode = ref({ ...defaultCode });
 
 onMounted(async () => {
   // selectedLanguage.value = "java";
-
+  console.log(editorFontSize.value);
+  editorFontSize.value = localStorage.getItem("fontSize");
   trigger.value = true;
   setTimeout(() => {
     trigger.value = false;
@@ -71,6 +72,7 @@ function saveData() {
   (userCodeList.value[tStore.currentProblemNum].code = editor.value.getValue()),
     (userCodeList.value[tStore.currentProblemNum].language =
       selectedLanguage.value);
+  localStorage.setItem("fontSize", editorFontSize.value);
 }
 
 function getInit() {
@@ -132,7 +134,7 @@ const fontReduce = () => {
   let timerId = setInterval(() => {
     console.log("작아지는 중!");
     if (editorFontSize.value > 9) {
-      editorFontSize.value -= 1;
+      editorFontSize.value -= 2;
       initializeEditor(saveVal, selectedLanguage.value);
     }
   }, 200);

@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted, watch } from "vue";
+import { ref, onMounted, watch, onUnmounted } from "vue";
 import ace from "ace-builds";
 import "ace-builds/src-noconflict/mode-python";
 import "ace-builds/src-noconflict/mode-java";
@@ -43,7 +43,25 @@ const defaultCode = {
 
 const userCode = ref({ ...defaultCode });
 
+onMounted(async () => {
+  selectedLanguage.value = "java";
+  getInit();
+  await setTimeout(() => {}, 1000);
+  document.getElementById("language").dispatchEvent(new Event("change"));
+  window.addEventListener("beforeunload", saveData);
+});
+
+function saveData() {
+  (userCodeList.value[tStore.currentProblemNum].code = editor.value.getValue()),
+    (userCodeList.value[tStore.currentProblemNum].language =
+      selectedLanguage.value);
+}
+
 function getInit() {
+  console.log(
+    userCodeList.value[tStore.currentProblemNum].code,
+    userCodeList.value[tStore.currentProblemNum].language
+  );
   if (pStore.selectedProblemList.length === 0) {
     initializeEditor(null, "python");
   } else {
@@ -57,20 +75,27 @@ function getInit() {
 
 watch(tStore, () => {
   console.log("문제 변경!");
+  // console.log(userCodeList.value[pStore.beforeProblemNum]);
+  // console.log(userCodeList.value[pStore.currentProblemNum]);
+  // console.log(editor.value.getValue());
   userCodeList.value[tStore.beforeProblemNum].code = editor.value.getValue();
   userCodeList.value[tStore.beforeProblemNum].language = selectedLanguage.value;
   outputText.value = "";
   inputText.value = "";
+  // console.log(userCodeList.value[pStore.beforeProblemNum].code);
+  // console.log(userCodeList.value[pStore.beforeProblemNum]);
   getInit();
 });
 
 const initializeEditor = (val, language) => {
+  selectedLanguage.value = language;
   editor.value = ace.edit("editor");
   editor.value.setTheme("ace/theme/chrome");
   editor.value.session.setMode(`ace/mode/${language}`);
-  selectedLanguage.value = language;
   editor.value.setValue(val ? val : defaultCode.language);
-  editor.value.setFontSize(editorFontSize.value); // Set the desired font size here
+  editor.value.setFontSize(editorFontSize.value);
+
+  // Set the desired font size here
 };
 
 // 2초 간격으로 메시지를 보여줌
@@ -136,11 +161,6 @@ watch(selectedLanguage, (newLang) => {
   resetCode();
 });
 
-onMounted(() => {
-  getInit();
-  document.getElementById("language").dispatchEvent(new Event("change"));
-});
-
 const runCode = async (isSubmit) => {
   const code = editor.value.getValue();
   const language = selectedLanguage.value;
@@ -162,6 +182,7 @@ const runCode = async (isSubmit) => {
     if (isSubmit === 0) {
       if (inputText.value === "") {
         let outPut = "";
+
         Object.keys(res.data.tcOutput).forEach((key) => {
           outPut += `예제 입력 ${key}\n${res.data.tcOutput[key]}\n`;
           outPut += res.data.result[key] ? "정답입니다!" : "틀렸습니다.";
@@ -183,13 +204,6 @@ const runCode = async (isSubmit) => {
           title: `${res.data.accuracy * 100}점 입니다..`,
         });
       }
-      const submitData = {
-        algo_num: userCodeList.value[tStore.currentProblemNum].no,
-        user_nickname: uStore.user.nickname,
-        correct: res.data.correct,
-      };
-
-      submitStore.submit(submitData);
     }
   });
 };
@@ -199,6 +213,7 @@ const language = ref(null);
 const shareCode = (userCnt) => {
   const code = editor.value.getValue();
   const language = selectedLanguage.value;
+
   userCodeList.value[tStore.currentProblemNum].code = code;
   userCodeList.value[tStore.currentProblemNum].language = language;
   const data = `${userCodeList.value[tStore.currentProblemNum].no}|!|${
@@ -215,6 +230,7 @@ const resetCode = () => {
   console.log("언어 교체");
   const language = selectedLanguage.value;
   editor.value.setValue(defaultCode[language]);
+  saveData();
 };
 
 const clearInput = () => {

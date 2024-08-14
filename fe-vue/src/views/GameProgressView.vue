@@ -2,6 +2,7 @@
 import Main from "@/components/meeting/Main.vue";
 import BattleStatus from "@/components/gameprogress/BattleStatus.vue";
 import GameRamdomItem from "@/components/gameprogress/GameRandomItem.vue";
+import GameResult from "@/components/gameprogress/GameResult.vue";
 import { onMounted, ref } from "vue";
 import { useRoute } from "vue-router";
 import { userStore } from "@/stores/user";
@@ -13,15 +14,19 @@ import { onUnmounted } from "vue";
 import router from "@/router";
 import { useTriggerStore } from "@/stores/trigger";
 import { compileScript } from "vue/compiler-sfc";
+import { problemStore } from "@/stores/problem";
 
 const enemyCharacter = "/src/assets/game-character.svg";
 const myCharacter = "/src/assets/game-character.svg";
 const store = userStore();
 const gameStore = useGameStore();
+const pStore = problemStore();
 const submitStore = useSubmitStore();
+const tStore = useTriggerStore();
 const route = useRoute();
 const roomData = ref([]);
 const users = ref([]);
+const showResult = ref(false);
 const items = ref({
   blind: false,
   minimum: false,
@@ -38,7 +43,6 @@ const showitem = ref(false);
 const getItem = ref(false);
 const useItem = ref(false);
 const pickItem = ref("");
-const tStore = useTriggerStore();
 
 const useItemFun = function (item) {
   useItem.value = true;
@@ -102,6 +106,9 @@ ws.onmessage = function (e) {
     gameStore.smallFontFun();
   } else if (event === "SUBMIT") {
     console.log("코드 제출");
+    if (pStore.correct()) {
+      ws.send("|@|");
+    }
     const userName = data[1];
     const problemNum = data[2];
     const correct = data[3];
@@ -111,6 +118,11 @@ ws.onmessage = function (e) {
       problemNum,
       correct,
     });
+  } else if (event === "END") {
+    console.log("끝!");
+    showResult.value = true;
+  } else if (event === "3") {
+    ws.send("|@||!|.");
   }
 };
 
@@ -187,6 +199,7 @@ onMounted(() => {
 
 onUnmounted(() => {
   ws.close();
+  pStore.resetCorrect();
   tStore.resetProblem();
 });
 
@@ -248,6 +261,7 @@ const imageItem = (item) => {
       :user-item="userItem"
       @close="close"
     />
+    <GameResult v-if="showResult" />
     <div class="game-prog-con box-col">
       <div class="exit box bold-text md" @click="closeRoom">
         <img src="@/assets/exit_room.svg" alt="나가기" />

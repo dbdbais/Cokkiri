@@ -387,7 +387,7 @@ const imageItem = (item) => {
   height: 170px;
   align-items: center;
   font-size: 25px;
-  padding: 20px 60px;
+  padding: 20px 0px;
   background-color: white;
 }
 .item {
@@ -429,11 +429,11 @@ const imageItem = (item) => {
 /* ============================ */
 
 .game-header {
-  display: flex;
   align-items: center;
   width: 1400px;
   padding-left: 20px;
   height: 240px;
+  gap: 20px;
   margin-bottom: 20px;
 }
 

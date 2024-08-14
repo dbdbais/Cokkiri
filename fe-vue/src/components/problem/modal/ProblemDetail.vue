@@ -1,6 +1,8 @@
 <script setup>
 import { ref, onBeforeMount, computed } from "vue";
+import { userStore } from "@/stores/user";
 import { getAllReviews } from "@/api/review";
+import { canReview } from "@/api/submit";
 import ReviewItem from "@/components/problem/ReviewItem.vue";
 
 const props = defineProps({
@@ -8,6 +10,8 @@ const props = defineProps({
 });
 const reviewData = ref([]);
 const currentPage = ref(1);
+const canViewReview = ref(false);
+const uStore = userStore();
 
 onBeforeMount(async () => {
     try {
@@ -18,13 +22,23 @@ onBeforeMount(async () => {
         console.error(e);
     }
 
-    // tmpReviewData.value = tmpReviewData.value.map((item) => {
-    //     return {
-    //         ...item,
-    //         code: "문제를 해결하거나 3회 이상 코드를 제출해야 확인할 수 있습니다.",
-    //         content: "문제를 해결하거나 3회 이상 코드를 제출해야 확인할 수 있습니다."
-    //     }
-    // });
+    try {
+        const response = await canReview(uStore.user.id, props.problemData.no);
+        console.log(response);
+        if (response.data === 1) {
+            canViewReview.value = true;
+        } else {
+            reviewData.value = reviewData.value.map((item) => {
+                return {
+                    ...item,
+                    code: "문제를 해결하거나 3회 이상 코드를 제출해야 확인할 수 있습니다.",
+                    content: "문제를 해결하거나 3회 이상 코드를 제출해야 확인할 수 있습니다."
+                }
+            })
+        }
+    } catch (e) {
+        console.error(e);
+    }
 })
 
 const prevPage = function () {
@@ -71,22 +85,24 @@ const changeIndex = (index) => {
                         </div>
                     </div> -->
                 <div class="right-con">
-                    <!-- <div class="overlay">
-                        <span>문제를 해결하거나 3회 이상 제출해야합니다.</span>
-                    </div> -->
-                    <!-- <div v-if="!tmpReviewData" class="">
+                    <div v-if="reviewData.length === 0" class="overlay">
                         <span>아직 등록된 리뷰가 없습니다.</span>
-                    </div> -->
-                    <!-- <div v-for="review in tmpReviewData" :key="review.id"> -->
-                    <ReviewItem v-if="currentReview" :review="currentReview" />
-                    <!-- </div> -->
-                    <div class="btn-pagi box-row">
-                        <div class="btn-prev" @click="prevPage">◀</div>
-                        <span v-for="i in reviewData.length" style="font-size: 35px; font-weight: 800"
-                            :class="{ currentIndex: i === currentPage }" @click="changeIndex(i)"> {{
-                                i
-                            }} </span>
-                        <div class="btn-next" @click="nextPage">▶</div>
+                    </div>
+                    <div v-else-if="!canViewReview" class="overlay">
+                        <span>문제를 해결하거나 3회 이상 제출해야합니다.</span>
+                    </div>
+                    <div v-else>
+                        <!-- <div v-for="review in tmpReviewData" :key="review.id"> -->
+                        <ReviewItem v-if="currentReview" :review="currentReview" />
+                        <!-- </div> -->
+                        <div class="btn-pagi box-row">
+                            <div class="btn-prev" @click="prevPage">◀</div>
+                            <span v-for="i in reviewData.length" style="font-size: 35px; font-weight: 800"
+                                :class="{ currentIndex: i === currentPage }" @click="changeIndex(i)"> {{
+                                    i
+                                }} </span>
+                            <div class="btn-next" @click="nextPage">▶</div>
+                        </div>
                     </div>
                 </div>
             </div>

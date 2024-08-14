@@ -10,69 +10,68 @@ const props = defineProps({
 const uStore = userStore();
 const commentDto = ref({
     userId: uStore.user.id,
-    id: props.review.rid,
-    parentId: null,
+    reviewId: props.review.rid,
     content: ''
 })
-// const commentData = ref([]);
-const commentData = ref([
-    {
-        "userId": "user1",
-        "id": 1,
-        "content": "부모댓글부모댓글부모댓글부모댓글부모댓글부모댓글부모댓글부모댓글부모댓글부모댓글부모댓글부모댓글부모댓글부모댓글부모댓글부모댓글부모댓글부모댓글부모댓글부모댓글부모댓글부모댓글부모댓글부모댓글부모댓글부모댓글부모댓글",
-        "children": [
-            {
-                "userId": "user1",
-                "id": 2,
-                "content": "자식댓글",
-                "children": []
-            }
-        ]
-    },
-    {
-        "userId": "ssafy",
-        "id": 3,
-        "content": "부모댓글",
-        "children": [
-            {
-                "userId": "ssafy",
-                "id": 4,
-                "content": "자식댓글",
-                "children": [
-                    {
-                        "userId": "user1",
-                        "id": 5,
-                        "content": "손자댓글",
-                        "children": [
-                            {
-                                "userId": "ssafy",
-                                "id": 6,
-                                "content": "증손자댓글증손자댓글증손자댓글증손자댓글증손자댓글증손자댓글증손자댓글증손자댓글증손자댓글증손자댓글증손자댓글증손자댓글증손자댓글증손자댓글증손자댓글증손자댓글",
-                                "children": []
-                            }
-                        ]
-                    }
-                ]
-            }
-        ]
-    },
-    {
-        "userId": "ssafy",
-        "id": 7,
-        "content": "부모댓글",
-        "children": [
-            {
-                "userId": "ssafy",
-                "id": 8,
-                "content": "자식댓글",
-                "children": []
-            }
-        ]
-    }
-]);
+const commentData = ref([]);
+// const commentData = ref([
+//     {
+//         "userId": "user1",
+//         "id": 1,
+//         "content": "부모댓글부모댓글부모댓글부모댓글부모댓글부모댓글부모댓글부모댓글부모댓글부모댓글부모댓글부모댓글부모댓글부모댓글부모댓글부모댓글부모댓글부모댓글부모댓글부모댓글부모댓글부모댓글부모댓글부모댓글부모댓글부모댓글부모댓글",
+//         "children": [
+//             {
+//                 "userId": "user1",
+//                 "id": 2,
+//                 "content": "자식댓글",
+//                 "children": []
+//             }
+//         ]
+//     },
+//     {
+//         "userId": "ssafy",
+//         "id": 3,
+//         "content": "부모댓글",
+//         "children": [
+//             {
+//                 "userId": "ssafy",
+//                 "id": 4,
+//                 "content": "자식댓글",
+//                 "children": [
+//                     {
+//                         "userId": "user1",
+//                         "id": 5,
+//                         "content": "손자댓글",
+//                         "children": [
+//                             {
+//                                 "userId": "ssafy",
+//                                 "id": 6,
+//                                 "content": "증손자댓글증손자댓글증손자댓글증손자댓글증손자댓글증손자댓글증손자댓글증손자댓글증손자댓글증손자댓글증손자댓글증손자댓글증손자댓글증손자댓글증손자댓글증손자댓글",
+//                                 "children": []
+//                             }
+//                         ]
+//                     }
+//                 ]
+//             }
+//         ]
+//     },
+//     {
+//         "userId": "ssafy",
+//         "id": 7,
+//         "content": "부모댓글",
+//         "children": [
+//             {
+//                 "userId": "ssafy",
+//                 "id": 8,
+//                 "content": "자식댓글",
+//                 "children": []
+//             }
+//         ]
+//     }
+// ]);
 
 onBeforeMount(async () => {
-    // fetchGetListByReviewId
+    fetchGetListByReviewId()
 });
 
 const openIndex = ref(true);
@@ -86,6 +85,10 @@ const toggle = () => {
 const requestInsert = async () => {
     console.log(commentDto.value);
     try {
+        if (selectedReplyId.value > 0) {
+            commentDto.value.parentId = selectedReplyId.value;
+        }
+        console.log(commentDto.value);
         const response = await insert(commentDto.value);
         console.log(response);
         if (response.data === 1) {
@@ -93,7 +96,8 @@ const requestInsert = async () => {
                 title: '댓글이 등록되었습니다.',
                 icon: 'success',
             });
-            // fetchGetListByReviewId
+            commentDto.value.content = '';
+            fetchGetListByReviewId()
         } else {
             Swal.fire({
                 title: '댓글 등록에 실패했습니다.',
@@ -109,7 +113,7 @@ const fetchGetListByReviewId = async () => {
     try {
         const response = await getListByReviewId(props.review.rid);
         commentData.value = response.data;
-        console.log(commentData);
+        console.log(response);
     } catch (error) {
         console.error(error);
     }

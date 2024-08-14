@@ -30,3 +30,11 @@ export function getFilteredSubmit(userId, problemId) {
     params: { userId, problemId },
   });
 }
+
+export function canReview(userId, problemId) {
+  return axios({
+    url: `${baseURL}/view`,
+    method: "get",
+    params: { userId, problemId },
+  });
+}

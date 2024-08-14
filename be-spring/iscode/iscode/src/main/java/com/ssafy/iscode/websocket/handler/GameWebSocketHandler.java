@@ -74,13 +74,13 @@ public class GameWebSocketHandler extends TextWebSocketHandler {
 
                     GameDto gameDto = gameService.getGame(Long.parseLong(roomId));
 
-                    gameService.inputRankUser(Long.parseLong(roomId), userName, gameDto.getPrizes().size() + 1, diff);
-
                     Map<String, Long> input = new HashMap<>();
                     input.put(userName, diff);
 
                     roomPrices.get(roomId).add(input);
                     String content = roomPrices.get(roomId).size() + "|!|" + userName + "|!|" + diff;
+
+                    gameService.inputRankUser(Long.parseLong(roomId), userName, roomPrices.get(roomId).size() + 1, diff);
 
                     Set<WebSocketSession> sessions = roomSessions.get(roomId);
                     if (sessions != null) {

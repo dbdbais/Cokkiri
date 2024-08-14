@@ -107,6 +107,11 @@ public class UserRestController {
         return userService.modifyUser(user);
     }
 
+    @PutMapping("/password")
+    public int setModPassword(@RequestParam String userId, @RequestParam String password){
+        return userService.setPassword(userId,password);
+    }
+
     @DeleteMapping("/delete/{id}")
     public int delUser(@PathVariable String id){
         return userService.deleteUser(id);

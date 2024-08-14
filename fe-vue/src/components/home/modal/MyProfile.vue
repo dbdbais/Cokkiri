@@ -6,12 +6,14 @@ import { getSolved } from "@/api/submit"
 import { problemStore } from "@/stores/problem"
 import Exp from "@/components/home/Exp.vue"
 import SubmitList from "@/components/home/modal/SubmitList.vue"
+import PasswordReset from "@/components/home/modal/PasswordReset.vue"
 
 const uStore = userStore()
 const pStore = problemStore()
 const solvedProblems = ref([])
 const selectedNo = ref(0)
-const { isModalOpen, openModal, closeModal } = useModal()
+const { isModalOpen: isSubmitModalOpen, openModal: openSubmitModal, closeModal: closeSubmitModal } = useModal()
+const { isModalOpen: isResetModalOpen, openModal: openResetModal, closeModal: closeResetModal } = useModal()
 
 const imageSrc = computed(() => {
     switch (uStore.user.tier) {
@@ -61,9 +63,9 @@ const processData = () => {
     return solvedList
 }
 
-const openSubmitListModal = (problem) => {
-    selectedNo.value = problem
-    openModal()
+const openSubmitListModal = (problemId) => {
+    selectedNo.value = problemId
+    openSubmitModal()
 }
 
 const tier = (level) => {
@@ -89,10 +91,13 @@ const tier = (level) => {
 
 <template>
     <div class="modal-overlay">
-        <div class="modal-con">
+        <div class="modal-con" :class="{ shifed: isResetModalOpen || isSubmitModalOpen }">
             <div class="modal-header box-row">
                 <span class="title main-title header-text">마이프로필</span>
-                <img src="@/assets/exit.svg" @click="$emit('close')">
+                <div class="modal-header-right box-row">
+                    <span class="reset-pw" @click="openSubmitModal">비밀번호 변경</span>
+                    <img class="close-icon" src="@/assets/exit.svg" @click="$emit('close')">
+                </div>
             </div>
             <div class="box-row modal-content">
                 <div class="box-col modal-content-left">
@@ -111,7 +116,7 @@ const tier = (level) => {
                     <span class="title main-title">푼 문제</span>
                     <div class="right-solved-box">
                         <div v-for="problem in solvedProblems" :key="problem.no" class="solved-box">
-                            <span :class="tier(problem.level)" @click="openSubmitListModal(problem)">{{ problem.no
+                            <span :class="tier(problem.level)" @click="openSubmitListModal(problem.no)">{{ problem.no
                                 }}</span>
                         </div>
                     </div>
@@ -119,7 +124,10 @@ const tier = (level) => {
             </div>
         </div>
     </div>
-    <SubmitList v-if="isModalOpen" @close="closeModal" :problem-id="selectedNo" />
+    <div class="box-modal-bind">
+        <PasswordReset v-if="isResetModalOpen" @close="closeResetModal" />
+        <SubmitList v-if="isSubmitModalOpen" @close="closeSubmitModal" :problem-id="selectedNo" />
+    </div>
 </template>
 
 <style scoped>
@@ -137,9 +145,39 @@ const tier = (level) => {
     padding: 20px 30px;
 }
 
+.shifed {
+    transition: transform 0.4s ease-in-out;
+    transform: translate(-35%, 0);
+}
+
 .modal-header {
     justify-content: space-between;
+    align-items: center;
     margin-bottom: 20px;
+}
+
+.modal-header-right {
+    justify-content: space-between;
+    align-items: center;
+}
+
+.reset-pw {
+    margin-right: 20px;
+    font-size: 20px;
+    font-weight: 800;
+    border-radius: 5px;
+    background-color: #3B72FF;
+    color: white;
+    padding: 10px;
+}
+
+.reset-pw:hover {
+    background-color: #81C3FF;
+}
+
+.close-icon {
+    width: 45px;
+    height: 45px;
 }
 
 .header-text {
@@ -257,5 +295,11 @@ const tier = (level) => {
     border: 5px solid #B69E21;
     background-color: #FFD700;
     color: #B69E21;
+}
+
+.box-modal-bind {
+    position: absolute;
+    top: 0;
+    left: 0;
 }
 </style>

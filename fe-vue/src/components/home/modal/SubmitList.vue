@@ -74,7 +74,7 @@ onMounted(async () => {
     right: 30px;
     width: 800px;
     height: 660px;
-    border: 5px solid #3B72FF;
+    border: 3px solid #3B72FF;
     border-radius: 10px;
     background-color: #DBE7FF;
     padding: 20px 30px 0 20px;

@@ -195,8 +195,8 @@ public class APIConnection {
         System.out.println("run : 1 or submit : 2");
         int pos = Integer.parseInt(in.readLine());
 
-        String url = "https://i11e108.p.ssafy.io/compiler/";
-        ///String url = "http://nginx:8082/";
+        //String url = "https://i11e108.p.ssafy.io/compiler/";
+        String url = "http://nginx/";
 
         if(pos == 1){
             url += "run";

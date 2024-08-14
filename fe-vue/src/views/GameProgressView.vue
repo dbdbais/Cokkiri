@@ -82,6 +82,7 @@ const ws = new WebSocket(
 
 ws.onmessage = function (e) {
   let data = e.data.split("|!|");
+  console.log(data);
 
   let event = data[0];
 
@@ -129,12 +130,10 @@ ws.onmessage = function (e) {
   } else if (event === "END") {
     console.log("끝!");
     showResult.value = true;
+  } else if (event === "3") {
+    ws.send("|@||!|.");
   } else {
-    cStore.userCorrect(data);
-
-    if (event === "3") {
-      ws.send("|@||!|.");
-    }
+    console.log(data);
   }
 };
 

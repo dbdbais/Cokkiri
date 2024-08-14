@@ -48,7 +48,7 @@ public class UserService {
 
     // Schedule to run at midnight every day
     @Transactional
-    //@Scheduled(cron = "0 0 0 * * ?") //for real
+    @Scheduled(cron = "0 0 0 * * ?") //for real
     //@Scheduled(cron = "0 */2 * * * *")  // 매 2분마다 실행
     public void assignDailyMissions() {
         System.out.println("dailyMission Generated");
@@ -70,8 +70,8 @@ public class UserService {
     }
 
     @Transactional
-    //@Scheduled(cron = "0 0/30 * * * ?") //for real
-    @Scheduled(cron = "0 * * * * *")  // 매 1분마다 실행
+    @Scheduled(cron = "0 0/30 * * * ?") //for real
+    //@Scheduled(cron = "0 * * * * *")  // 매 1분마다 실행
     public void isMissionAccomplished(){
         System.out.println("mission accomplished? ");
         List<User> users = userRepository.findAllWithIncompleteMissions();
@@ -115,6 +115,10 @@ public class UserService {
         return userRepository.modify(user);
     }
 
+    public int setPassword(String userId, String password){
+        return userRepository.modPassword(userId,passwordEncoder.encode(password));
+    }
+
     public String resetPassword(User user){
         // 비밀번호 길이 설정
         int passwordLength = 12; // 원하는 비밀번호 길이
@@ -132,8 +136,6 @@ public class UserService {
         String rawPassword = sb.toString();
 
         String encryptedPassword = passwordEncoder.encode(rawPassword);
-
-
 
         user.setPassword(encryptedPassword);
 

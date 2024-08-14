@@ -25,10 +25,7 @@ public class UserRepository {
     @Transactional
     public int save(User user) {
         try {
-
             if(findById(user.getId()) == null){
-
-
                 em.persist(user);
             }
             else{
@@ -39,6 +36,28 @@ public class UserRepository {
             e.printStackTrace();
             return 0; // failed
         }
+    }
+
+    @Transactional
+    public int modPassword(String userId, String password){
+        User pUser = findById(userId);
+
+        try{
+            if(pUser != null){
+                pUser.setPassword(password);
+                em.merge(pUser);
+            }
+            else{
+                return 0;
+            }
+
+            return 1;
+
+        }catch(Exception e){
+            e.printStackTrace();
+            return 0;
+        }
+
     }
 
     @Transactional

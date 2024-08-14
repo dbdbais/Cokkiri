@@ -4,15 +4,32 @@
     <div id="main-left" class="box-col">
       <div class="box-row profile-header">
         <div class="btn-profile title main-title">개인 프로필</div>
-        <img class="myprofile-icon" src="@/assets/myprofile-smile.svg" @click="openModal" />
+        <img
+          class="myprofile-icon"
+          src="@/assets/myprofile-smile.svg"
+          @click="openModal"
+        />
       </div>
       <Profile class="profile" />
       <FriendsList id="friends-list" />
     </div>
     <div id="main-right" class="box-col">
-      <Header id="header" class="box-col" @create="getRoomList" @search="searchList" @go-room="goRightNow" />
-      <MainContent id="main-content" :rooms="rooms" :current-page="currentPage" :category-obj="categoryObj"
-        @go-room="goRoom" @change-page="pageChange" @is-game="categoryList" />
+      <Header
+        id="header"
+        class="box-col"
+        @create="getRoomList"
+        @search="searchList"
+        @go-room="goRightNow"
+      />
+      <MainContent
+        id="main-content"
+        :rooms="rooms"
+        :current-page="currentPage"
+        :category-obj="categoryObj"
+        @go-room="goRoom"
+        @change-page="pageChange"
+        @is-game="categoryList"
+      />
     </div>
   </div>
   <MyProfile v-if="isModalOpen" @close="closeModal" />
@@ -38,10 +55,12 @@ import { useMessageStore } from "@/stores/message";
 import { useMeetingStore } from "@/stores/meeting";
 import { friendStore } from "@/stores/friend";
 import { useSubmitStore } from "@/stores/submit";
+import { useItemStore } from "@/stores/item";
 
 const uStore = userStore();
 const mStore = useMeetingStore();
 const fStore = friendStore();
+const iStore = useItemStore();
 const submitStore = useSubmitStore();
 const lobby = new WebSocket(
   `${process.env.VITE_VUE_SOCKET_URL}lobby/${uStore.user.nickname}`
@@ -174,8 +193,10 @@ const getRoomList = function (params) {
 onMounted(() => {
   getRoomList({ page: currentPage.value });
   callInsertClass();
+  iStore.setFontSize(20);
   submitStore.resetSubmitList();
   const shareData = [];
+
   localStorage.setItem("shareData", JSON.stringify(shareData));
   mStore.clearHint();
 });

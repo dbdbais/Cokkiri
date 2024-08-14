@@ -103,7 +103,6 @@ ws.onmessage = function (e) {
   } else if (event === "EXIT") {
     const userName = data[1];
     // 아이콘 빼기
-    gameStore.smallFontFun();
   } else if (event === "SUBMIT") {
     console.log("코드 제출");
     if (pStore.correct()) {
@@ -217,7 +216,6 @@ const close = () => {
   getItem.value = false;
 };
 const imageTier = (grade) => {
-  console.log(grade);
   switch (grade) {
     case "SEED":
       return new URL("@/assets/rank/seed.svg", import.meta.url).href;
@@ -237,7 +235,6 @@ const imageTier = (grade) => {
 };
 
 const imageItem = (item) => {
-  console.log(item);
   switch (item) {
     case "blind":
       return new URL("@/assets/item/blind.svg", import.meta.url).href;

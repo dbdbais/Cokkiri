@@ -60,10 +60,10 @@ const sendJoin = function (sessionId) {
       <div class="top">
         <div class="box-psb text-p md member">
           <div v-for="(cnt, tier) in detailData.tiers" :key="tier.index" class="rank md">
-            <<<<<<< HEAD <img :src="imageSrc" alt="등급" />
-            =======
+            <img :src="imageSrc" alt="등급" />
+            
             <img :src="imageSrc(tier)" alt="등급" />
-            >>>>>>> fe
+            
             <span style="margin-left: 8px">{{ cnt }}명</span>
           </div>
         </div>

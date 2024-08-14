@@ -12,7 +12,7 @@ const uStore = userStore();
 
 onMounted(async () => {
     try {
-        const response = await getFilteredSubmit(uStore.user.id, props.problemId);
+        const response = await getFilteredSubmit(uStore.user.id, props.problemId.no);
         console.log(response);
         submitData.value = response.data;
     } catch (error) {

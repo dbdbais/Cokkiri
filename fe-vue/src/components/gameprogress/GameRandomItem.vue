@@ -29,7 +29,6 @@ const stopBtn = (userItem, get) => {
 };
 
 const imageItem = (item) => {
-  console.log(item);
   switch (item) {
     case "blind":
       return new URL("@/assets/item/blind.svg", import.meta.url).href;

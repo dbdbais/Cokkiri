@@ -2,21 +2,22 @@ import { ref } from "vue";
 import { defineStore } from "pinia";
 
 export const useGameStore = defineStore("game", () => {
-  const bigFont = ref(false)
-    const smallFont = ref(false)
+  const bigFont = ref(false);
+  const smallFont = ref(false);
+
   const bigFontFun = () => {
-    bigFont.value = true
+    bigFont.value = true;
     setTimeout(() => {
-        bigFont.value = false
-    }, 1200)
-  }
+      bigFont.value = false;
+    }, 1200);
+  };
+
   const smallFontFun = () => {
-    smallFont.value = true
+    smallFont.value = true;
     setTimeout(() => {
-        smallFont.value = false
-    }, 1200)
-  }
+      smallFont.value = false;
+    }, 1200);
+  };
 
-
-  return { bigFont, smallFont, bigFontFun, smallFontFun};
+  return { bigFont, smallFont, bigFontFun, smallFontFun };
 });

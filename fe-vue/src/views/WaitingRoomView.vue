@@ -104,8 +104,9 @@ ws.onmessage = function (event) {
       case "ADD":
         problemList.value = [];
         problemListNum.value = [];
-
+        console.log(data);
         for (let i = 3; i < data.length; i++) {
+          console.log(data[i]);
           problemListNum.value.push(Number(data[i]));
           console.log(data[i]);
           getProblem(data[i])
@@ -194,7 +195,11 @@ const selectProblem = async (problems, minLevel, maxLevel) => {
   // send 보내야함
   let sendData = "|%|";
   problemList.value.forEach((problem) => {
-    sendData += "|!|" + problem.no;
+    if (roomData.value.isGame) {
+      sendData += "|!|" + problem.no;
+    } else {
+      sendData += "|!|" + problem;
+    }
   });
   ws.send(sendData);
   problemModal.value = false;

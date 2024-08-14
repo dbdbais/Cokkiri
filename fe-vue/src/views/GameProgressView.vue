@@ -15,12 +15,14 @@ import router from "@/router";
 import { useTriggerStore } from "@/stores/trigger";
 import { compileScript } from "vue/compiler-sfc";
 import { problemStore } from "@/stores/problem";
+import { useCorrectStore } from "@/stores/correct";
 
 const enemyCharacter = "/src/assets/game-character.svg";
 const myCharacter = "/src/assets/game-character.svg";
 const store = userStore();
 const gameStore = useGameStore();
 const pStore = problemStore();
+const cStore = useCorrectStore();
 const submitStore = useSubmitStore();
 const tStore = useTriggerStore();
 const route = useRoute();
@@ -66,6 +68,13 @@ const userUseItem = function (user) {
   ws.send(data);
 };
 
+function correctCheck() {
+  if (cStore.correctCheck()) {
+    console.log("끝!!!!!!!!!!!!!!!!!!!");
+    ws.send("|@|");
+  }
+}
+
 const ws = new WebSocket(
   `${process.env.VITE_VUE_SOCKET_URL}game/${route.params.gameId}/${store.user.nickname}`
 );
@@ -103,12 +112,11 @@ ws.onmessage = function (e) {
   } else if (event === "EXIT") {
     const userName = data[1];
     // 아이콘 빼기
-    gameStore.smallFontFun();
   } else if (event === "SUBMIT") {
     console.log("코드 제출");
-    if (pStore.correct()) {
-      ws.send("|@|");
-    }
+    // if (pStore.correct()) {
+    //   ws.send("|@|");
+    // }
     const userName = data[1];
     const problemNum = data[2];
     const correct = data[3];
@@ -123,6 +131,8 @@ ws.onmessage = function (e) {
     showResult.value = true;
   } else if (event === "3") {
     ws.send("|@||!|.");
+  } else {
+    console.log(data);
   }
 };
 
@@ -163,7 +173,7 @@ const hideItmeFun = function () {
 
 const submitCode = (data) => {
   const sendData = `|@||!|${data.username}|!|${data.problemNum}|!|${data.correct}`;
-  console.log(sendData);
+  // console.log(sendData);
   ws.send(sendData);
 };
 
@@ -199,7 +209,6 @@ onMounted(() => {
 
 onUnmounted(() => {
   ws.close();
-  pStore.resetCorrect();
   tStore.resetProblem();
 });
 
@@ -217,7 +226,6 @@ const close = () => {
   getItem.value = false;
 };
 const imageTier = (grade) => {
-  console.log(grade);
   switch (grade) {
     case "SEED":
       return new URL("@/assets/rank/seed.svg", import.meta.url).href;
@@ -237,7 +245,6 @@ const imageTier = (grade) => {
 };
 
 const imageItem = (item) => {
-  console.log(item);
   switch (item) {
     case "blind":
       return new URL("@/assets/item/blind.svg", import.meta.url).href;
@@ -339,6 +346,7 @@ const imageItem = (item) => {
           :prevent="usePrevernt"
           :bigfont="useBigFont"
           @submit-code="submitCode"
+          @correct="correctCheck"
         />
       </div>
     </div>

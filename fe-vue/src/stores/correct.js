@@ -9,7 +9,6 @@ export const useCorrectStore = defineStore(
       2: false,
     });
 
-    const userRankList = ref([]);
     const isCorrect = ref(false);
 
     function correct(no) {
@@ -37,28 +36,15 @@ export const useCorrectStore = defineStore(
       }
     }
 
-    function userCorrect(data) {
-      console.log(data);
-      const userRank = data[0];
-      const username = data[1];
-      const userTime = data[2];
-      userRankList.value.push({
-        userRank,
-        username,
-        userTime,
-      });
-    }
-
     function resetCorrect() {
       correctCnt.value = {
         1: false,
         2: false,
       };
-      userRankList.value = [];
       isCorrect.value = false;
     }
 
-    return { userRankList, correct, correctCheck, resetCorrect, userCorrect };
+    return { correct, correctCheck, resetCorrect };
   },
   { persist: true }
 );

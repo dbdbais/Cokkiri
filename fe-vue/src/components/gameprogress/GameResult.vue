@@ -1,11 +1,12 @@
 <script setup>
-import { useCorrectStore } from "@/stores/correct";
-import { onUnmounted, ref } from "vue";
-import { useRouter } from "vue-router";
+import { ref } from "vue";
 
-const cStore = useCorrectStore();
-const ranking = ref(cStore.userRankList);
-const router = useRouter();
+const ranking = ref([
+  { rank: "1", username: "어지민", resultTime: "12:12" },
+  { rank: "2", username: "어지민", resultTime: "12:12" },
+  { rank: "3", username: "어지민", resultTime: "12:12" },
+]);
+
 function rankCheck(rank) {
   switch (rank) {
     case "1":
@@ -16,43 +17,29 @@ function rankCheck(rank) {
       return "three";
   }
 }
-
-function closeRoom() {
-  router.replace({ name: "home" });
-}
 </script>
 
 <template>
-  <div class="modal-overlay">
-    <div class="result-con box box-col slideDown">
-      <span class="bold-text result-title">게임 결과</span>
-      <div class="result-list box">
-        <div
-          class="result-item box flex-align"
-          v-for="user in ranking"
-          :key="user.userRank"
-        >
-          <span class="rank bold-text" :class="rankCheck(user.userRank)">
-            {{ user.userRank }}
-          </span>
-          <span class="name bold-text">
-            {{ user.username }}
-          </span>
-          <div class="time bold-text md box">
-            {{
-              String(
-                Math.floor(Math.floor(user.userTime * 0.001) / 60)
-              ).padStart(2, "0")
-            }}
-            :
-            {{
-              String(Math.floor(user.userTime * 0.001) % 60).padStart(2, "0")
-            }}
-          </div>
+  <div class="result-con box box-col slideDown">
+    <span class="bold-text result-title">게임 결과</span>
+    <div class="result-list box">
+      <div
+        class="result-item box flex-align"
+        v-for="user in ranking"
+        :key="user.rank"
+      >
+        <span class="rank bold-text" :class="rankCheck(user.rank)">
+          {{ user.rank }}
+        </span>
+        <span class="name bold-text">
+          {{ user.username }}
+        </span>
+        <div class="time bold-text md box">
+          {{ user.resultTime }}
         </div>
       </div>
-      <button class="exit-btn bold-text" @click="closeRoom">나가기</button>
     </div>
+    <button class="exit-btn bold-text">나가기</button>
   </div>
 </template>
 
@@ -103,7 +90,6 @@ function closeRoom() {
 }
 .time {
   position: absolute;
-  width: 120px;
   right: 50px;
   padding: 5px 10px;
   background-color: #dbe7ff;

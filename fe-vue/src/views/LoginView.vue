@@ -24,6 +24,7 @@ const submitForm = async () => {
         title: "아이디 또는 비밀번호가 틀렸습니다.",
       });
     } else {
+      store.setUser(response.data);
       getUserData();
     }
     console.log(response);
@@ -36,7 +37,6 @@ const getUserData = async () => {
   try {
     const response = await getUser(userData.value.id);
     store.setUser(response.data);
-    console.log("사용자 계정")
     console.log(response);
     if (response.data === "") {
       Swal.fire({
@@ -68,7 +68,9 @@ const getUserData = async () => {
         <RouterLink :to="{ name: 'registry' }">
           <a href="#" class="register-link">처음이신가요? 회원가입</a>
         </RouterLink>
-        <span class="forgot" @click="openModal">비밀번호를 잃어버리셨나요?</span>
+        <span class="forgot" @click="openModal"
+          >비밀번호를 잃어버리셨나요?</span
+        >
         <button id="submit" type="submit" class="title">로그인</button>
       </form>
       <!-- <button class="google-login">

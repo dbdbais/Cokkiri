@@ -46,14 +46,11 @@ export function getUserName(name) {
     method: "get",
   });
 }
-export function setModPassword(data) {
+export function modifyUser(data) {
   return axios({
-    url: `${baseURL}/modify`,
+    url: `${baseURL}`,
     method: "put",
-    params: {
-      userId: data.id,
-      password: data.password,
-    },
+    data,
   });
 }
 

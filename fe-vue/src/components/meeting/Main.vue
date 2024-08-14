@@ -14,6 +14,8 @@ defineProps({
   roomData: Object,
 });
 
+const emit = defineEmits(["submit-code"]);
+
 const main = ref(null);
 const resizer = ref(null);
 const problemWidth = ref(1000);
@@ -25,12 +27,15 @@ const initResize = (e) => {
   window.addEventListener("mousemove", startResize);
   window.addEventListener("mouseup", stopResize);
 };
-
+const submitCode = (data) => {
+  console.log(data);
+  emit("submit-code", data);
+};
 const startResize = (e) => {
   const mainRect = main.value.getBoundingClientRect();
   problemWidth.value = e.clientX - mainRect.left;
-  if (problemWidth.value < 500) {
-    problemWidth.value = 500;
+  if (problemWidth.value < 800) {
+    problemWidth.value = 800;
   } else if (problemWidth.value > 1100) {
     problemWidth.value = 1100;
   }
@@ -102,7 +107,7 @@ const selectButton = (button) => {
         :prevent="prevent"
         :room-data="roomData"
         :user-cnt="userCnt"
-        @up-cnt="userCnt += 1"
+        @submit-code="submitCode"
       />
       <SubmitList
         v-else-if="selectedButton === 'submit'"

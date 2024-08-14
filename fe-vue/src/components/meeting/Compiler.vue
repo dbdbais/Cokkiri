@@ -1,18 +1,20 @@
 <script setup>
-import { ref, onMounted, watch } from "vue";
+import { ref, onMounted, watch, onUnmounted } from "vue";
 import ace from "ace-builds";
+import "ace-builds/src-noconflict/ext-language_tools";
 import "ace-builds/src-noconflict/mode-python";
 import "ace-builds/src-noconflict/mode-java";
 import "ace-builds/src-noconflict/mode-c_cpp";
-import "ace-builds/src-noconflict/theme-monokai";
+import "ace-builds/src-noconflict/theme-chrome";
+import "ace-builds/src-noconflict/ext-options";
 import { insert } from "@/api/submit";
-
 import { useGameStore } from "@/stores/game";
 import { problemStore } from "@/stores/problem";
 import { useTriggerStore } from "@/stores/trigger";
 import { userStore } from "@/stores/user";
 import { sendSubmit } from "@/api/webRTC";
 import { useSubmitStore } from "@/stores/submit";
+import { useItemStore } from "@/stores/item";
 
 defineProps({
   bigfont: Boolean,
@@ -21,17 +23,20 @@ defineProps({
   roomData: Object,
   userCnt: Number,
 });
-const emit = defineEmits(["upCnt"]);
+const emit = defineEmits(["submit-code"]);
 
 const editor = ref(null);
+const iStore = useItemStore();
 const selectedLanguage = ref("python");
 const inputText = ref("");
 const outputText = ref("");
 const uStore = userStore();
 const pStore = problemStore();
 const tStore = useTriggerStore();
+const gameStore = useGameStore();
 const submitStore = useSubmitStore();
-const editorFontSize = ref(18);
+const trigger = ref(false);
+const editorFontSize = ref(iStore.currentFontSize);
 const userCodeList = ref(pStore.userCodeList);
 
 const defaultCode = {
@@ -42,16 +47,45 @@ const defaultCode = {
 };
 
 const userCode = ref({ ...defaultCode });
+// console.log(userCode);
+
+onMounted(async () => {
+  // selectedLanguage.value = "java";
+  trigger.value = true;
+  setTimeout(() => {
+    trigger.value = false;
+  }, 500);
+  // initializeEditor(
+  //   userCodeList.value[tStore.currentProblemNum].code,
+  //   userCodeList.value[tStore.currentProblemNum].language
+  // );
+  getInit();
+  // document.getElementById("language").dispatchEvent(new Event("change"));
+  window.addEventListener("beforeunload", saveData);
+});
+
+onUnmounted(() => {
+  saveData();
+  iStore.setFontSize(20)
+});
+
+function saveData() {
+  (userCodeList.value[tStore.currentProblemNum].code = editor.value.getValue()),
+    (userCodeList.value[tStore.currentProblemNum].language =
+      selectedLanguage.value);
+}
 
 function getInit() {
-  if (pStore.selectedProblemList.length === 0) {
-    initializeEditor(null, "python");
-  } else {
-    initializeEditor(
-      userCodeList.value[tStore.currentProblemNum].code,
-      userCodeList.value[tStore.currentProblemNum].language
-    );
-  }
+  // console.log(
+  //   userCodeList.value[tStore.currentProblemNum].code,
+  //   userCodeList.value[tStore.currentProblemNum].language
+  // );
+
+  initializeEditor(
+    userCodeList.value[tStore.currentProblemNum].code,
+    userCodeList.value[tStore.currentProblemNum].language
+  );
+
   console.log(userCodeList.value);
 }
 
@@ -64,18 +98,30 @@ watch(tStore, () => {
   userCodeList.value[tStore.beforeProblemNum].language = selectedLanguage.value;
   outputText.value = "";
   inputText.value = "";
-  // console.log(userCodeList.value[pStore.beforeProblemNum].code);
-  // console.log(userCodeList.value[pStore.beforeProblemNum]);
+  trigger.value = true;
+  setTimeout(() => {
+    trigger.value = false;
+  }, 500);
   getInit();
 });
 
 const initializeEditor = (val, language) => {
+  selectedLanguage.value = language;
   editor.value = ace.edit("editor");
   editor.value.setTheme("ace/theme/chrome");
   editor.value.session.setMode(`ace/mode/${language}`);
-  selectedLanguage.value = language;
-  editor.value.setValue(val ? val : defaultCode.language);
-  editor.value.setFontSize(editorFontSize.value); // Set the desired font size here
+  editor.value.setValue(val ? val : defaultCode[language]);
+  editor.value.setFontSize(editorFontSize.value);
+  editor.value.setOptions({
+    enableBasicAutocompletion: true,
+    enableLiveAutocompletion: true,
+  });
+
+  editor.setOptions = {
+    enableBasicAutocompletion: true,
+    enableLiveAutocompletion: true,
+  };
+  // Set the desired font size here
 };
 
 // 2초 간격으로 메시지를 보여줌
@@ -87,31 +133,31 @@ const fontReduce = () => {
   console.log("폰트 작게!");
   let timerId = setInterval(() => {
     console.log("작아지는 중!");
-    if (editorFontSize.value > 9) {
-      editorFontSize.value -= 1;
-      initializeEditor(saveVal);
+    if (editorFontSize.value > 12) {
+      editorFontSize.value -= 5;
+      initializeEditor(saveVal, selectedLanguage.value);
     }
-  }, 200);
+  }, 100);
   setTimeout(() => {
     clearInterval(timerId);
+    iStore.setFontSize(editorFontSize.value);
   }, 1000);
 };
-
-const gameStore = useGameStore();
 
 const fontIncrease = () => {
   const saveVal = editor.value.getValue();
   console.log("폰트 크게!");
   let timerId = setInterval(() => {
     console.log("커지는 중!");
-    if (editorFontSize.value < 40) {
-      editorFontSize.value += 2;
-      initializeEditor(saveVal);
+    if (editorFontSize.value < 60) {
+      editorFontSize.value += 5;
+      initializeEditor(saveVal, selectedLanguage.value);
     }
     // console.log(editorFontSize.value);
-  }, 200);
+  }, 100);
   setTimeout(() => {
     clearInterval(timerId);
+    iStore.setFontSize(editorFontSize.value);
   }, 1000);
 };
 
@@ -124,26 +170,23 @@ watch(gameStore, () => {
   }
 });
 
-watch(selectedLanguage, (newLang) => {
-  console.log(selectedLanguage.value);
-  const currentMode = editor.value.session.getMode().$id;
-  const currentLanguage = currentMode.includes("python")
-    ? "python"
-    : currentMode.includes("java")
-      ? "java"
-      : currentMode.includes("c_cpp")
-        ? "cpp"
-        : "python";
+watch(selectedLanguage, (newLang, oldLang) => {
+  // console.log(selectedLanguage.value);
+  // const currentMode = editor.value.session.getMode().$id;
+  // const currentLanguage = currentMode.includes("python")
+  //   ? "python"
+  //   : currentMode.includes("java")
+  //   ? "java"
+  //   : currentMode.includes("c_cpp")
+  //   ? "cpp"
+  //   : "python";
+  // userCode.value[currentLanguage] = editor.value.getValue();
+  // editor.value.session.setMode("ace/mode/" + newLang);
+  // editor.value.setValue(userCode.value[newLang] || defaultCode[newLang]);
 
-  userCode.value[currentLanguage] = editor.value.getValue();
-  editor.value.session.setMode("ace/mode/" + newLang);
-  editor.value.setValue(userCode.value[newLang] || defaultCode[newLang]);
-  resetCode();
-});
-
-onMounted(() => {
-  getInit();
-  document.getElementById("language").dispatchEvent(new Event("change"));
+  if (!trigger.value) {
+    initializeEditor(null, newLang);
+  }
 });
 
 const runCode = async (isSubmit) => {
@@ -178,6 +221,13 @@ const runCode = async (isSubmit) => {
         outputText.value = res.data.opt;
       }
     } else {
+      console.log(res.data);
+      emit("submit-code", {
+        username: uStore.user.nickname,
+        problemNum: tStore.currentProblemNum,
+        correct: res.data.correct ? 1 : 0,
+      });
+
       if (res.data.correct) {
         Swal.fire({
           icon: "success",
@@ -186,14 +236,12 @@ const runCode = async (isSubmit) => {
       } else {
         Swal.fire({
           icon: "error",
-          title: `${res.data.accuracy * 100}점 입니다..`,
+          title: `${Math.ceil(res.data.accuracy * 100)}점 입니다..`,
         });
       }
     }
   });
 };
-
-const language = ref(null);
 
 const shareCode = (userCnt) => {
   const code = editor.value.getValue();
@@ -201,18 +249,14 @@ const shareCode = (userCnt) => {
 
   userCodeList.value[tStore.currentProblemNum].code = code;
   userCodeList.value[tStore.currentProblemNum].language = language;
-  const data = `${userCodeList.value[tStore.currentProblemNum].no}|!|${uStore.user.nickname
-    }|!|${userCodeList.value[tStore.currentProblemNum].language}|!|${userCodeList.value[tStore.currentProblemNum].code
-    }|!|${userCnt}`;
+  const problemNum =
+    pStore.selectedProblemList.length === 0
+      ? "문제 없음"
+      : tStore.currentProblemNum;
+  const data = `${problemNum}|!|${uStore.user.nickname}|!|${userCodeList.value[tStore.currentProblemNum].language
+    }|!|${userCodeList.value[tStore.currentProblemNum].code}|!|${userCnt}`;
   sendSubmit(data);
-  emit("upCnt");
   console.log(userCnt);
-};
-
-const resetCode = () => {
-  console.log("언어 교체");
-  const language = selectedLanguage.value;
-  editor.value.setValue(defaultCode[language]);
 };
 
 const clearInput = () => {

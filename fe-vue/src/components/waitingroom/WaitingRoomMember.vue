@@ -7,7 +7,7 @@ const uStore = userStore();
 defineProps({
   users: Array,
 });
-// const grade = uStore.user.tier;
+
 const imageSrc = (grade) => {
   console.log(grade);
   switch (grade) {
@@ -46,15 +46,10 @@ const animamteSpeed = [
       <div class="bold-text name" :class="user.rank">
         {{ user.nickname }}
       </div>
-      <img
-        :src="imageSrc(user.tier)"
-        alt="티어"
-        class="rank animate__animated animate__bounce animate__infinite"
-        :class="[
-          animateDelay + (user.num % 4) + 's',
-          animamteSpeed[user.num % 5],
-        ]"
-      />
+      <img :src="imageSrc(user.tier)" alt="티어" class="rank animate__animated animate__bounce animate__infinite" :class="[
+        animateDelay + (user.num % 4) + 's',
+        animamteSpeed[user.num % 5],
+      ]" />
     </div>
   </div>
 </template>
@@ -77,9 +72,11 @@ const animamteSpeed = [
   flex-direction: column;
   padding: 10px;
 }
+
 .name {
   font-size: 30px;
 }
+
 .rank {
   margin-top: 50px;
   width: 40%;
@@ -89,22 +86,27 @@ const animamteSpeed = [
   color: #a4c400;
   -webkit-text-stroke: 1px #5a461e;
 }
+
 .orange {
   color: #f9973e;
   -webkit-text-stroke: 1px #ad5c26;
 }
+
 .kiwi {
   color: #cf8c5d;
   -webkit-text-stroke: 1px #5a461e;
 }
+
 .durian {
   color: #29a780;
   -webkit-text-stroke: 1px #175b45;
 }
+
 .koreamelon {
   color: #e8e290;
   -webkit-text-stroke: 1px #8b753d;
 }
+
 .apple {
   color: #ff8e9e;
   -webkit-text-stroke: 1px #aa4252;

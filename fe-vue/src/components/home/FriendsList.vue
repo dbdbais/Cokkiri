@@ -15,7 +15,7 @@
 import Accordion from "@/components/home/Accordion.vue";
 import AddFriend from "@/components/home/modal/AddFriend.vue";
 import { useModal } from "@/composables/useModal";
-import { ref } from "vue";
+
 
 const { isModalOpen, openModal, closeModal } = useModal();
 </script>

@@ -11,7 +11,6 @@ export const problemStore = defineStore(
 
     function setProblems(newProblems) {
       problems.value = newProblems;
-      console.log(problems.value);
     }
 
     function setSelectedProblem(problem) {
@@ -22,6 +21,15 @@ export const problemStore = defineStore(
       selectedProblemList.value = [];
       userCodeList.value = {};
       let num = 1;
+      console.log(problemList.length);
+      if (problemList.length === 0) {
+        userCodeList.value[num] = {
+          no: "문제 없음",
+          code: 'print("Hello, World!")',
+          language: "python",
+          ipt: "",
+        };
+      }
       problemList.forEach((element) => {
         element["num"] = num;
         selectedProblemList.value.push(element);

@@ -68,7 +68,9 @@ const getUserData = async () => {
         <RouterLink :to="{ name: 'registry' }">
           <a href="#" class="register-link">처음이신가요? 회원가입</a>
         </RouterLink>
-        <span class="forgot" @click="openModal">비밀번호를 잃어버리셨나요?</span>
+        <span class="forgot" @click="openModal"
+          >비밀번호를 잃어버리셨나요?</span
+        >
         <button id="submit" type="submit" class="title">로그인</button>
       </form>
       <!-- <button class="google-login">
@@ -94,7 +96,7 @@ const getUserData = async () => {
 .login-box {
   position: relative;
   width: 760px;
-  height: 480px;
+  height: 500px;
   padding: 50px;
   border-radius: 20px;
   /* box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); */

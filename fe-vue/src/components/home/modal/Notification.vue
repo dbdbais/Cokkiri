@@ -4,7 +4,7 @@ import announcement from "@/assets/data/announcement.json";
 import notification from "@/assets/data/notification.json";
 import AnnounceDetail from "@/components/home/modal/AnnounceDetail.vue";
 import { getWaitingRoom, goWaitingRoom } from "@/api/waitingroom";
-import { getFriends, getUser, acceptFriend } from "@/api/user";
+import { getFriends, getUser, acceptFriend, getAllUser } from "@/api/user";
 import { receiveRegular, acceptRegularJoin } from "@/api/board";
 import { useModal } from "@/composables/useModal";
 import { userStore } from "@/stores/user";
@@ -55,6 +55,9 @@ function getNotiData() {
 }
 
 onMounted(() => {
+  getAllUser().then((res) => {
+    store.setUserNickName(res.data);
+  });
   getNotiData();
   messageStore.readNoti();
 });
@@ -85,6 +88,20 @@ async function addFriend(friendUserId) {
   // );
 
   getNotiData();
+}
+
+function requestReject(group, item) {
+  if (group === "friend") {
+    notiRequest.value.friends = notiRequest.value.friends.filter((user) => {
+      console.log(item, user);
+      return item !== user;
+    });
+  } else if (group === "room") {
+    notiRequest.value.room = notiRequest.value.room.filter((room) => {
+      console.log(item, room);
+      return item.roomId !== room.roomId;
+    });
+  }
 }
 
 const acceptRegular = function (sessionId, userName) {
@@ -126,38 +143,17 @@ const goRoom = function (roomId) {
     <div class="modal-header box-row">
       <img src="@/assets/mail2.svg" alt="mail-icon" class="mail-icon" />
       <span>우편함</span>
-      <img
-        src="@/assets/mail-close.svg"
-        alt="close-icon"
-        class="close-icon"
-        @click="$emit('close')"
-      />
+      <img src="@/assets/mail-close.svg" alt="close-icon" class="close-icon" @click="$emit('close')" />
     </div>
     <div class="type-con box-row">
-      <input
-        id="announ-in"
-        type="radio"
-        name="type"
-        value="announ"
-        v-model="isSelected"
-      />
+      <input id="announ-in" type="radio" name="type" value="announ" v-model="isSelected" />
       <label for="announ-in">공지</label>
-      <input
-        id="noti-in"
-        type="radio"
-        name="type"
-        value="noti"
-        v-model="isSelected"
-      />
+      <input id="noti-in" type="radio" name="type" value="noti" v-model="isSelected" />
       <label for="noti-in">알림</label>
     </div>
     <div class="content-con">
       <div v-if="isSelected == 'announ'">
-        <div
-          v-for="(item, index) in announ"
-          :key="index"
-          class="box-row announ-con"
-        >
+        <div v-for="(item, index) in announ" :key="index" class="box-row announ-con">
           <span>{{ item.title }}</span>
           <div class="btn-detail">
             <span @click="openAnnounceModal(item.content)">자세히</span>
@@ -165,53 +161,53 @@ const goRoom = function (roomId) {
         </div>
       </div>
       <div v-if="isSelected == 'noti'">
-        <div class="room-con box">
-          <span>방 초대</span>
-          <div
-            v-for="(item, index) in notiRequest.room"
-            :key="index"
-            class="box-row announ-con"
-          >
-            <span>{{ item.userName }}님이 초대하였습니다.</span>
+        <span class="noti-title">방 초대</span>
+        <div class="announ-con box room-con">
+          <div v-for="(item, index) in notiRequest.room" :key="index" class="box-row noti-common-request-con">
+            <div v-if="index > 0" class="divider"></div>
+            <div class="flex-align">
+              <span class="badge box noti-common-request-text">
+                {{ item.roomId }}
+              </span>
+              {{ item.userName }}
+            </div>
             <div class="box-row">
               <button class="btn-accept bold-text" @click="goRoom(item.roomId)">
                 수락
               </button>
-              <button class="btn-reject bold-text">거절</button>
-            </div>
-          </div>
-        </div>
-        <div class="friend-con box">
-          <span>친구 신청</span>
-          <div
-            v-for="(item, index) in notiRequest.friends"
-            :key="index"
-            class="box-row announ-con"
-          >
-            <!-- <span>{{ store.userNickname[item] }}</span> -->
-            <span>{{ item }}</span>
-            <div class="box-row">
-              <button class="btn-accept bold-text" @click="addFriend(item)">
-                수락
+              <button class="btn-reject bold-text" @click="requestReject('room', item)">
+                거절
               </button>
-              <button class="btn-reject bold-text">거절</button>
             </div>
           </div>
         </div>
-        <div class="regular-con box">
-          <span>정기 스터디 (닉네임 [스터디 명])</span>
-          <div v-for="(regular, index) in notiRequest.regular" :key="index">
-            <div
-              v-for="(user, index) in regular.users"
-              :key="index"
-              class="box-row announ-con"
-            >
-              <span>{{ user }} [{{ regular.regularName }}]</span>
+        <span class="noti-title">친구 신청</span>
+        <div class="announ-con box friend-con">
+          <div v-for="(item, index) in notiRequest.friends" :key="index" class="box-col">
+            <div v-if="index > 0" class="divider"></div>
+            <div class="box-row noti-common-request-con">
+              <span class="noti-common-request-text">{{ store.userNickname[item] }}</span>
               <div class="box-row">
-                <button
-                  class="btn-accept bold-text"
-                  @click="acceptRegular(regular.sessionId, user)"
-                >
+                <button class="btn-accept bold-text" @click="addFriend(item)">
+                  수락
+                </button>
+                <button class="btn-reject bold-text" @click="requestReject('friend', item)">
+                  거절
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <span class="noti-title">정기 스터디</span>
+        <div class="announ-con box regular-con">
+          <div v-for="(regular, index) in notiRequest.regular" :key="index">
+            <div v-for="(user, index) in regular.users" :key="index" class="box-row noti-common-request-con">
+              <div class="flex-align">
+                <div class="badge box md">{{ regular.regularName }}</div>
+                <span style="margin-left: 10px" class="noti-common-request-text">{{ user }}</span>
+              </div>
+              <div class="box-row">
+                <button class="btn-accept bold-text" @click="acceptRegular(regular.sessionId, user)">
                   수락
                 </button>
                 <button class="btn-reject bold-text">거절</button>
@@ -222,11 +218,7 @@ const goRoom = function (roomId) {
       </div>
     </div>
   </div>
-  <AnnounceDetail
-    v-if="isModalOpen"
-    @close="closeModal"
-    :announce="selectedAnnoun"
-  />
+  <AnnounceDetail v-if="isModalOpen" @close="closeModal" :announce="selectedAnnoun" />
   <!-- </div> -->
 </template>
 
@@ -241,9 +233,9 @@ div {
 .modal-content {
   position: absolute;
   width: 600px;
-  height: 700px;
-  bottom: 50px;
-  right: 330px;
+  height: 1000px;
+  right: 20px;
+  bottom: 20px;
   border: 3px solid #3b72ff;
   border-radius: 10px;
   background-color: #cadcff;
@@ -271,7 +263,6 @@ div {
 .close-icon {
   position: absolute;
   right: 5px;
-  width: 45px;
 }
 
 /* type */
@@ -283,23 +274,23 @@ div {
   appearance: none;
 }
 
-.type-con input + label {
-  border: 3px solid #3b72ff;
+.type-con input+label {
+  border: 2px solid #3b72ff;
   border-radius: 6px 6px 0 0;
   background-color: #dbe7ff;
   padding: 10px 20px;
   font-size: 25px;
 }
 
-.type-con input:checked + label {
-  border: 3px solid #3b72ff;
+.type-con input:checked+label {
+  border: 2px solid #3b72ff;
   background-color: #c191ff;
 }
 
 /* content */
 .content-con {
-  height: 500px;
-  border: 3px solid #3b72ff;
+  height: 800px;
+  border: 2px solid #3b72ff;
   border-radius: 0 5px 5px 5px;
   background-color: #c191ff;
   padding: 10px 20px;
@@ -316,8 +307,14 @@ div {
   background-color: #dbe7ff;
 }
 
-.announ-con > span {
+.announ-con>span {
   font-size: 22px;
+}
+
+.noti-title {
+  display: block;
+  font-size: 25px;
+  margin-top: 10px;
 }
 
 .btn-detail {
@@ -337,32 +334,54 @@ div {
 .room-con {
   height: 200px;
   padding: 10px;
+  /* background-color: #d9bbff; */
   overflow-y: auto;
 }
 
-.room-con > span,
-.friend-con > span,
-.regular-con > span {
+.room-con>span,
+.friend-con>span,
+.regular-con>span {
   font-size: 25px;
+}
+
+.badge {
+  padding: 5px 10px;
+  border: 2px solid;
+  margin-right: 10px;
+  background-color: #c191ff;
 }
 
 .btn-accept,
 .btn-reject {
   color: white;
-  border-radius: 8px;
-  padding: 3px;
-  font-size: 22px;
-  border-width: 4px;
+  padding: 5px 10px;
+  font-size: 18px;
+}
+
+.noti-common-request-con {
+  justify-content: space-between;
+  align-items: center;
+}
+
+.noti-common-request-text {
+  font-size: 20px;
+  margin-left: 5px;
 }
 
 .btn-accept {
-  border-color: #81c3ff;
-  background-color: #3b72ff;
+  border: 2px solid hsl(209, 100%, 75%);
+  background-color: hsl(223, 100%, 62%);
   margin-right: 10px;
 }
 
 .btn-reject {
-  border-color: #fe9d9d;
-  background-color: #ff0000;
+  border-color: hsl(0, 51%, 80%);
+  background-color: hsl(0, 100%, 62%);
+}
+
+.divider {
+  border-bottom: 2px dashed hsl(209, 80%, 50%);
+  margin-top: 5px;
+  margin-bottom: 5px;
 }
 </style>

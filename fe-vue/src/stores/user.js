@@ -12,6 +12,7 @@ export const userStore = defineStore(
     });
 
     const userNickname = ref({});
+
     function setUser(newUser) {
       user.value = newUser;
     }

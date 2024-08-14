@@ -4,6 +4,7 @@
     <div id="main-left" class="box-col">
       <div class="box-row profile-header">
         <div class="btn-profile title main-title">개인 프로필</div>
+        <img class="myprofile-icon" src="@/assets/myprofile-smile.svg" @click="openModal" />
       </div>
       <Profile class="profile" />
       <FriendsList id="friends-list" />
@@ -14,6 +15,7 @@
         @go-room="goRoom" @change-page="pageChange" @is-game="categoryList" />
     </div>
   </div>
+  <MyProfile v-if="isModalOpen" @close="closeModal" />
 </template>
 
 <script setup>
@@ -23,6 +25,7 @@ import Header from "@/components/home/Header.vue";
 import Profile from "@/components/home/Profile.vue";
 import FriendsList from "@/components/home/FriendsList.vue";
 import MainContent from "@/components/home/MainContent.vue";
+import MyProfile from "@/components/home/modal/MyProfile.vue";
 
 import { getWaitingRoomList, goWaitingRoom } from "@/api/waitingroom";
 import { getAllUser, getFriends } from "@/api/user";
@@ -30,13 +33,16 @@ import { insertClass } from "@/api/problem";
 import { ref, onMounted, onUnmounted } from "vue";
 import { useRouter } from "vue-router";
 import { userStore } from "@/stores/user";
+import { useModal } from "@/composables/useModal";
 import { useMessageStore } from "@/stores/message";
 import { useMeetingStore } from "@/stores/meeting";
 import { friendStore } from "@/stores/friend";
+import { useSubmitStore } from "@/stores/submit";
 
 const uStore = userStore();
 const mStore = useMeetingStore();
 const fStore = friendStore();
+const submitStore = useSubmitStore();
 const lobby = new WebSocket(
   `${process.env.VITE_VUE_SOCKET_URL}lobby/${uStore.user.nickname}`
 );
@@ -50,6 +56,7 @@ const categoryObj = ref({
   game: false,
   study: false,
 });
+const { isModalOpen, openModal, closeModal } = useModal();
 
 const searchList = function (roomName) {
   getRoomList({ roomName: roomName });
@@ -140,7 +147,6 @@ lobby.onmessage = function (event) {
     if (event === "NOTI") {
       console.log(event, param);
       messageStore.receiveNoti(param);
-      messageStore.receiveInvite(param);
     } else if (event === "FRIADD") {
       console.log("친구 신청 완료! (1)");
       addFriendFun();
@@ -168,6 +174,9 @@ const getRoomList = function (params) {
 onMounted(() => {
   getRoomList();
   callInsertClass();
+  submitStore.resetSubmitList();
+  const shareData = [];
+  localStorage.setItem("shareData", JSON.stringify(shareData));
   mStore.clearHint();
 });
 
@@ -221,6 +230,21 @@ const logout = function () {
   /* text-align: center; */
   margin-top: 150px;
   font-size: 40px;
+}
+
+.myprofile-icon {
+  width: 50px;
+  height: 50px;
+  border: 5px solid hsl(223, 60%, 50%);
+  border-radius: 10px;
+  padding: 3px;
+  background-color: hsl(223, 100%, 80%);
+  margin-right: 11px;
+}
+
+.myprofile-icon:hover {
+  border: 5px solid hsl(223, 80%, 50%);
+  background-color: hsl(223, 100%, 90%);
 }
 
 .profile {

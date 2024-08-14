@@ -5,8 +5,8 @@
       <img class="logout" src="@/assets/logout2.svg" @click="logout" />
     </div>
     <div class="rank-con box-row box-main-exp" style="align-items: center">
-      <img id="rank-img" :src="imageSrc" alt="rank" class="rank" />
-      <Exp id="rank-exp" :grade="grade" :percentage="uStore.user.percent"></Exp>
+      <img :src="imageSrc" alt="rank" class="rank-img" />
+      <Exp :tier="tier" :percentage="uStore.user.percent" class="rank-exp"></Exp>
     </div>
   </div>
 </template>
@@ -14,26 +14,34 @@
 <script setup>
 import { computed } from "vue";
 import Exp from "@/components/home/Exp.vue";
+import { getUser } from "@/api/user";
 import { userStore } from "@/stores/user";
 import { useRouter } from "vue-router";
+import { onMounted } from "vue";
 
 const uStore = userStore();
 const router = useRouter();
+
+onMounted(() => {
+  getUser(uStore.user.id).then((res) => {
+    uStore.setUser(res.data);
+  });
+});
 const grade = uStore.user.tier;
 
 const imageSrc = computed(() => {
   switch (grade) {
-    case 0:
+    case "SEED":
       return new URL("@/assets/rank/seed.svg", import.meta.url).href;
-    case 1:
+    case "KIWI":
       return new URL("@/assets/rank/kiwi.svg", import.meta.url).href;
-    case 2:
+    case "APPLE":
       return new URL("@/assets/rank/apple.svg", import.meta.url).href;
-    case 3:
+    case "ORANGE":
       return new URL("@/assets/rank/orange.svg", import.meta.url).href;
-    case 4:
+    case "KOREAMELON":
       return new URL("@/assets/rank/koreamelon.svg", import.meta.url).href;
-    case 5:
+    case "DURIAN":
       return new URL("@/assets/rank/durian.svg", import.meta.url).href;
     default:
       return new URL("@/assets/rank/seed.svg", import.meta.url).href;
@@ -52,13 +60,13 @@ const logout = function () {
   font-size: 30px;
 }
 
-#rank-img {
+.rank-img {
   width: 40px;
   height: 40px;
   margin: 10px 10px;
 }
 
-#rank-exp {
+.rank-exp {
   height: 30px;
   margin: 10px 10px;
 }

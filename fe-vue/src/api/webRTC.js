@@ -116,7 +116,7 @@ function joinSession(roomId, userName) {
             user,
             language,
             code,
-            userCnt,
+            userCnt: shareData.length + 1,
           });
           localStorage.setItem("shareData", JSON.stringify(shareData));
           console.log(shareData);

@@ -13,7 +13,7 @@ const useProblemStore = problemStore();
 const tStore = useTriggerStore();
 const mStore = useMeetingStore();
 const problemList = useProblemStore.selectedProblemList;
-const currentProblem = ref(1);
+const currentProblem = ref(tStore.currentProblemNum);
 
 const getProblem = (no) => {
   return useProblemStore.getProblem(no);
@@ -42,7 +42,7 @@ const fetchHint = async () => {
   <div class="md">
     <div class="problem-content box-w">
       <button
-        class="btn-hint"
+        class="btn-hint bold-text box"
         :class="{ disabledHint: mStore.storedHintNo.includes(currentProblem) }"
         @click="fetchHint"
       >
@@ -78,14 +78,19 @@ const fetchHint = async () => {
 
 .btn-hint {
   position: absolute;
-  top: -50px;
+  top: -60px;
   right: 0;
-  background-color: #3b72ff;
+  background-color: #c191ff;
+
   color: white;
   border: none;
   border-radius: 5px;
   padding: 10px 20px;
   font-size: 20px;
+}
+
+.btn-hint:hover {
+  background-color: #8ab1ff;
 }
 
 .problem-box {

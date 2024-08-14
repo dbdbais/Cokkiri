@@ -35,35 +35,18 @@ onMounted(() => {
 <template>
   <div class="mission-con box slideLeft">
     <div class="bold-text mission-text flex-align">
-      <img
-        src="/src/assets/elephant-circus.svg"
-        alt="일일미션"
-        style="margin-right: 15px"
-      />
+      <img src="/src/assets/elephant-circus.svg" alt="일일미션" style="margin-right: 15px" />
       일일미션
+      <img src="@/assets/mail-close.svg" alt="close-icon" class="close-icon" @click="$emit('close')" />
     </div>
     <div class="mission-box bold-text">
       <div class="badge md nomal-text">
         오늘의 미션 완료 : {{ clearCnt }} / 3
       </div>
-      <div class="mission-content box box-col">
-        <img
-          src="@/assets/mail-close.svg"
-          alt="close-icon"
-          class="close-icon"
-          @click="$emit('close')"
-        />
-        <div
-          class="mission-item box flex-align"
-          v-for="mission in missionList"
-          :key="mission.mission"
-        >
+      <div class="box box-col mission-content">
+        <div class="box flex-align mission-item" v-for="mission in missionList" :key="mission.mission">
           {{ mission.mission }}
-          <input
-            type="checkbox"
-            class="mission-clear"
-            :checked="mission.clear"
-          />
+          <input type="checkbox" class="mission-clear" :checked="mission.clear" />
         </div>
       </div>
     </div>
@@ -73,58 +56,65 @@ onMounted(() => {
 <style scoped>
 .mission-con {
   width: 500px;
-  height: 700px;
+  height: 550px;
   position: absolute;
-  padding: 30px;
+  padding: 20px;
   background-color: #cadcff;
   right: 20px;
-  top: 330px;
+  bottom: 20px;
   z-index: 5;
-
-  border-width: 2px;
+  border-width: 3px;
 }
+
 .mission-text {
   font-size: 35px;
+  margin-bottom: 20px;
 }
-.mission-box {
-  padding-top: 20px;
-  position: relative;
-  font-size: 30px;
-}
-.mission-content {
-  height: 470px;
-  margin-top: 20px;
 
+.mission-box {
+  position: relative;
+  font-size: 20px;
+}
+
+.badge {
+  border: 2px solid #5bb5d9;
+  background-color: #f6f6f6;
+  padding: 10px;
+  border-radius: 10px;
+  color: #5bb5d9;
+  font-size: 22px;
+  -webkit-text-stroke: 0px;
+}
+
+.mission-content {
+  height: 360px;
+  margin-top: 20px;
   background-color: #c191ff;
+  justify-content: space-between;
+  border-width: 2px;
   align-items: center;
   padding: 20px;
 }
+
 .close-icon {
   position: absolute;
-  top: -75px;
-  right: -10px;
+  top: 15px;
+  right: 20px;
 }
-.badge {
-  border: 5px solid #5bb5d9;
-  background-color: #f6f6f6;
-  padding: 20px;
-  border-radius: 10px;
-  color: #5bb5d9;
-  font-size: 30px;
-  -webkit-text-stroke: 0px;
-}
+
 .mission-item {
-  width: 370px;
+  width: 420px;
   height: 90px;
   padding: 10px 20px;
-  margin-bottom: 20px;
+  font-size: 23px;
+  border-width: 2px;
   justify-content: space-between;
   background-color: #cadcff;
 }
+
 .mission-clear {
   width: 40px;
   height: 40px;
-
   pointer-events: none;
 }
 </style>

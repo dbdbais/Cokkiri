@@ -27,6 +27,22 @@ const stopBtn = (userItem, get) => {
     getItem.value = true;
   }
 };
+
+const imageItem = (item) => {
+  console.log(item);
+  switch (item) {
+    case "blind":
+      return new URL("@/assets/item/blind.svg", import.meta.url).href;
+    case "minimum":
+      return new URL("@/assets/item/minimum.svg", import.meta.url).href;
+    case "prevent":
+      return new URL("@/assets/item/prevent.svg", import.meta.url).href;
+    case "fontBig":
+      return new URL("@/assets/item/fontBig.svg", import.meta.url).href;
+    case "fontSmall":
+      return new URL("@/assets/item/fontSmall.svg", import.meta.url).href;
+  }
+};
 </script>
 
 <template>
@@ -42,7 +58,7 @@ const stopBtn = (userItem, get) => {
           >
             <img
               alt="아이템"
-              :src="'/src/assets/item/' + item + '.svg'"
+              :src="imageItem(item)"
               style="margin-bottom: 10px"
             />
             {{ itemText[item] }}
@@ -58,7 +74,7 @@ const stopBtn = (userItem, get) => {
           >
             <img
               alt="아이템"
-              :src="'/src/assets/item/' + item + '.svg'"
+              :src="imageItem(item)"
               style="margin-bottom: 10px"
             />
             {{ itemText[item] }}

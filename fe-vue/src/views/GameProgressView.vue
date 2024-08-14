@@ -2,6 +2,7 @@
 import Main from "@/components/meeting/Main.vue";
 import BattleStatus from "@/components/gameprogress/BattleStatus.vue";
 import GameRamdomItem from "@/components/gameprogress/GameRandomItem.vue";
+import GameResult from "@/components/gameprogress/GameResult.vue";
 import { onMounted, ref } from "vue";
 import { useRoute } from "vue-router";
 import { userStore } from "@/stores/user";
@@ -13,15 +14,21 @@ import { onUnmounted } from "vue";
 import router from "@/router";
 import { useTriggerStore } from "@/stores/trigger";
 import { compileScript } from "vue/compiler-sfc";
+import { problemStore } from "@/stores/problem";
+import { useCorrectStore } from "@/stores/correct";
 
 const enemyCharacter = "/src/assets/game-character.svg";
 const myCharacter = "/src/assets/game-character.svg";
 const store = userStore();
 const gameStore = useGameStore();
+const pStore = problemStore();
+const cStore = useCorrectStore();
 const submitStore = useSubmitStore();
+const tStore = useTriggerStore();
 const route = useRoute();
 const roomData = ref([]);
 const users = ref([]);
+const showResult = ref(false);
 const items = ref({
   blind: false,
   minimum: false,
@@ -39,7 +46,6 @@ const showitem = ref(false);
 const getItem = ref(false);
 const useItem = ref(false);
 const pickItem = ref("");
-const tStore = useTriggerStore();
 
 const useItemFun = function (item) {
   useItem.value = true;
@@ -62,6 +68,13 @@ const userUseItem = function (user) {
   const data = `|${itemText[pickItem.value]}||!|${user}`;
   ws.send(data);
 };
+
+function correctCheck() {
+  if (cStore.correctCheck()) {
+    console.log("끝!!!!!!!!!!!!!!!!!!!");
+    ws.send("|@|");
+  }
+}
 
 const ws = new WebSocket(
   `${process.env.VITE_VUE_SOCKET_URL}game/${route.params.gameId}/${store.user.nickname}`
@@ -100,9 +113,11 @@ ws.onmessage = function (e) {
   } else if (event === "EXIT") {
     const userName = data[1];
     // 아이콘 빼기
-    gameStore.smallFontFun();
   } else if (event === "SUBMIT") {
     console.log("코드 제출");
+    // if (pStore.correct()) {
+    //   ws.send("|@|");
+    // }
     const userName = data[1];
     const problemNum = data[2];
     const correct = data[3];
@@ -112,6 +127,13 @@ ws.onmessage = function (e) {
       problemNum,
       correct,
     });
+  } else if (event === "END") {
+    console.log("끝!");
+    showResult.value = true;
+  } else if (event === "3") {
+    ws.send("|@||!|.");
+  } else {
+    console.log(data);
   }
 };
 
@@ -152,7 +174,7 @@ const hideItmeFun = function () {
 
 const submitCode = (data) => {
   const sendData = `|@||!|${data.username}|!|${data.problemNum}|!|${data.correct}`;
-  console.log(sendData);
+  // console.log(sendData);
   ws.send(sendData);
 };
 
@@ -205,7 +227,6 @@ const close = () => {
   getItem.value = false;
 };
 const imageTier = (grade) => {
-  console.log(grade);
   switch (grade) {
     case "SEED":
       return new URL("@/assets/rank/seed.svg", import.meta.url).href;
@@ -225,7 +246,6 @@ const imageTier = (grade) => {
 };
 
 const imageItem = (item) => {
-  console.log(item);
   switch (item) {
     case "blind":
       return new URL("@/assets/item/blind.svg", import.meta.url).href;
@@ -244,6 +264,7 @@ const imageItem = (item) => {
 <template>
   <div class="md container">
     <GameRamdomItem v-if="getItem" :items="itemList" :user-item="userItem" @close="close" />
+    <GameResult v-if="showResult" />
     <div class="game-prog-con box-col">
       <div class="exit box bold-text md" @click="closeRoom">
         <img src="@/assets/exit_room.svg" alt="나가기" />
@@ -290,8 +311,12 @@ const imageItem = (item) => {
         </div>
       </div>
       <div class="game-content box-row">
+        <<<<<<< HEAD <Main :roomData="roomData" :blind="useBlind" :minimum="useMinimum" :prevent="usePrevernt"
+          :bigfont="useBigFont" @submit-code="submitCode" />
+        =======
         <Main :roomData="roomData" :blind="useBlind" :minimum="useMinimum" :prevent="usePrevernt" :bigfont="useBigFont"
-          @submit-code="submitCode" />
+          @submit-code="submitCode" @correct="correctCheck" />
+        >>>>>>> fe
       </div>
     </div>
   </div>
@@ -345,7 +370,7 @@ const imageItem = (item) => {
   height: 170px;
   align-items: center;
   font-size: 25px;
-  padding: 20px 60px;
+  padding: 20px 0px;
   background-color: white;
 }
 
@@ -389,11 +414,11 @@ const imageItem = (item) => {
 /* ============================ */
 
 .game-header {
-  display: flex;
   align-items: center;
   width: 1400px;
   padding-left: 20px;
   height: 240px;
+  gap: 20px;
   margin-bottom: 20px;
 }
 

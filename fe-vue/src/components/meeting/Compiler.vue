@@ -15,6 +15,7 @@ import { userStore } from "@/stores/user";
 import { sendSubmit } from "@/api/webRTC";
 import { useSubmitStore } from "@/stores/submit";
 import { useItemStore } from "@/stores/item";
+import { useCorrectStore } from "@/stores/correct";
 
 defineProps({
   bigfont: Boolean,
@@ -23,18 +24,19 @@ defineProps({
   roomData: Object,
   userCnt: Number,
 });
-const emit = defineEmits(["submit-code"]);
+const emit = defineEmits(["submit-code", "correct"]);
 
 const editor = ref(null);
-const iStore = useItemStore();
 const selectedLanguage = ref("python");
 const inputText = ref("");
 const outputText = ref("");
+const iStore = useItemStore();
 const uStore = userStore();
 const pStore = problemStore();
 const tStore = useTriggerStore();
 const gameStore = useGameStore();
 const submitStore = useSubmitStore();
+const cStore = useCorrectStore();
 const trigger = ref(false);
 const editorFontSize = ref(iStore.currentFontSize);
 const userCodeList = ref(pStore.userCodeList);
@@ -141,6 +143,19 @@ const fontReduce = () => {
   setTimeout(() => {
     clearInterval(timerId);
     iStore.setFontSize(editorFontSize.value);
+    setTimeout(() => {
+      let timerId = setInterval(() => {
+        console.log("커지는 중!");
+        if (editorFontSize.value < 20) {
+          editorFontSize.value += 5;
+          initializeEditor(saveVal, selectedLanguage.value);
+        }
+      }, 100);
+      setTimeout(() => {
+        clearInterval(timerId);
+        iStore.setFontSize(editorFontSize.value);
+      }, 1000);
+    }, 10000);
   }, 1000);
 };
 
@@ -153,7 +168,6 @@ const fontIncrease = () => {
       editorFontSize.value += 5;
       initializeEditor(saveVal, selectedLanguage.value);
     }
-    // console.log(editorFontSize.value);
   }, 100);
   setTimeout(() => {
     clearInterval(timerId);
@@ -171,25 +185,18 @@ watch(gameStore, () => {
 });
 
 watch(selectedLanguage, (newLang, oldLang) => {
-  // console.log(selectedLanguage.value);
-  // const currentMode = editor.value.session.getMode().$id;
-  // const currentLanguage = currentMode.includes("python")
-  //   ? "python"
-  //   : currentMode.includes("java")
-  //   ? "java"
-  //   : currentMode.includes("c_cpp")
-  //   ? "cpp"
-  //   : "python";
-  // userCode.value[currentLanguage] = editor.value.getValue();
-  // editor.value.session.setMode("ace/mode/" + newLang);
-  // editor.value.setValue(userCode.value[newLang] || defaultCode[newLang]);
-
   if (!trigger.value) {
     initializeEditor(null, newLang);
   }
 });
 
+const lodingSubmit = ref(false);
+
 const runCode = async (isSubmit) => {
+  if (isSubmit === 1) {
+    lodingSubmit.value = true;
+  }
+
   const code = editor.value.getValue();
   const language = selectedLanguage.value;
 
@@ -221,6 +228,7 @@ const runCode = async (isSubmit) => {
         outputText.value = res.data.opt;
       }
     } else {
+      lodingSubmit.value = false;
       console.log(res.data);
       emit("submit-code", {
         username: uStore.user.nickname,
@@ -229,6 +237,8 @@ const runCode = async (isSubmit) => {
       });
 
       if (res.data.correct) {
+        cStore.correct(tStore.currentProblemNum);
+        emit("correct");
         Swal.fire({
           icon: "success",
           title: "정답입니다!",
@@ -276,12 +286,16 @@ const clearInput = () => {
         </select>
 
         <div id="editor"></div>
-        <button class="run-btn bold-text" @click="runCode(0)">실행</button>
-        <button class="submit-btn bold-text" :style="{ scale: minimum * 0.01 }" :class="{
-          prevent: prevent,
-        }" :disabled="prevent" @click="runCode(1)">
-          제출
-        </button>
+        <div class="flex-align" style="position: relative">
+          <button class="run-btn bold-text" @click="runCode(0)">실행</button>
+          <button class="submit-btn bold-text" :style="{ scale: minimum * 0.01 }" :class="{
+            prevent: prevent,
+            loding: lodingSubmit,
+          }" :disabled="prevent" @click="runCode(1)">
+            {{ lodingSubmit ? "" : "제출" }}
+          </button>
+          <div class="dots-flow" v-if="lodingSubmit"></div>
+        </div>
         <button v-if="!roomData.isGame" class="share-btn bold-text" @click="shareCode(userCnt)">
           공유
         </button>
@@ -432,5 +446,85 @@ textarea,
   background-color: rgb(117, 117, 117);
   border-color: gray;
   color: gray;
+}
+
+.dots-flow {
+  scale: 0.6;
+}
+
+.dots-flow:before {
+  -webkit-animation: dots-flow 0.85s infinite ease;
+  animation: dots-flow 0.85s infinite ease;
+  border-radius: 100%;
+  content: "";
+  height: 16px;
+  position: absolute;
+  top: 5px;
+  left: -67px;
+  -webkit-transform: translate(-50%, -40px);
+  transform: translate(-50%, -40px);
+  width: 16px;
+}
+
+.loding {
+  background-color: gray;
+}
+
+@-webkit-keyframes dots-flow {
+
+  0%,
+  100% {
+    -webkit-box-shadow: -26px 32px 0px 0 white, 0px 32px 0 0 white,
+      26px 32px 0 0 white;
+    box-shadow: -26px 32px 0px 0 white, 0px 32px 0 0 white, 26px 32px 0 0 white;
+  }
+
+  35% {
+    -webkit-box-shadow: -26px 32px 0 4px purple, 0px 32px 0 0 white,
+      26px 32px 0 0 white;
+    box-shadow: -26px 32px 0 4px purple, 0px 32px 0 0 white, 26px 32px 0 0 white;
+  }
+
+  50% {
+    -webkit-box-shadow: -26px 32px 0 0 white, 0px 32px 0 4px purple,
+      26px 32px 0 0 white;
+    box-shadow: -26px 32px 0 0 white, 0px 32px 0 4px purple, 26px 32px 0 0 white;
+  }
+
+  65% {
+    -webkit-box-shadow: -26px 32px 0px 0 white, 0px 32px 0 0 white,
+      26px 32px 0 4px purple;
+    box-shadow: -26px 32px 0px 0 white, 0px 32px 0 0 white,
+      26px 32px 0 4px purple;
+  }
+}
+
+@keyframes dots-flow {
+
+  0%,
+  100% {
+    -webkit-box-shadow: -26px 32px 0px 0 white, 0px 32px 0 0 white,
+      26px 32px 0 0 white;
+    box-shadow: -26px 32px 0px 0 white, 0px 32px 0 0 white, 26px 32px 0 0 white;
+  }
+
+  35% {
+    -webkit-box-shadow: -26px 32px 0 4px purple, 0px 32px 0 0 white,
+      26px 32px 0 0 white;
+    box-shadow: -26px 32px 0 4px purple, 0px 32px 0 0 white, 26px 32px 0 0 white;
+  }
+
+  50% {
+    -webkit-box-shadow: -26px 32px 0 0 white, 0px 32px 0 4px purple,
+      26px 32px 0 0 white;
+    box-shadow: -26px 32px 0 0 white, 0px 32px 0 4px purple, 26px 32px 0 0 white;
+  }
+
+  65% {
+    -webkit-box-shadow: -26px 32px 0px 0 white, 0px 32px 0 0 white,
+      26px 32px 0 4px purple;
+    box-shadow: -26px 32px 0px 0 white, 0px 32px 0 0 white,
+      26px 32px 0 4px purple;
+  }
 }
 </style>

@@ -51,6 +51,13 @@ export const problemStore = defineStore(
       return selectedProblemList.value[idx];
     };
 
+    // function correct() {
+    //   correctProblem.value += 1;
+    //   if (correctProblem.value === 2) {
+    //     return true;
+    //   }
+    // }
+
     return {
       problems,
       selectedProblemList,

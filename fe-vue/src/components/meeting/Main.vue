@@ -108,6 +108,7 @@ const selectButton = (button) => {
         :room-data="roomData"
         :user-cnt="userCnt"
         @submit-code="submitCode"
+        @correct="$emit('correct')"
       />
       <SubmitList
         v-else-if="selectedButton === 'submit'"

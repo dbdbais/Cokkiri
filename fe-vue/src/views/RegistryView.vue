@@ -20,6 +20,7 @@ const userIdCheck = ref(true);
 const emailCheck = ref(true);
 const emailConfirmCheck = ref(true);
 const nicknameCheck = ref(true);
+const loding = ref(false);
 
 onMounted(() => {
   getAllUser()
@@ -129,16 +130,19 @@ const submitForm = async () => {
 };
 
 const emailCheckFun = async () => {
+  loding.value = true;
   try {
     const response = await registerSend(email.value);
     console.log(response);
     if (response.data.success === true) {
       // emailCheck.value = false;
+      loding.value = false;
       Swal.fire({
         icon: "success",
         title: "인증번호가 전송되었습니다.",
       });
     } else {
+      loding.value = false;
       Swal.fire({
         icon: "error",
         title: "인증번호 전송에 실패했습니다.",
@@ -197,7 +201,7 @@ const emailConfirmCheckFun = async () => {
 
         <div class="input-group box-col id-group">
           <label for="username" class="title lbl-id">이메일 </label>
-          <div>
+          <div class="flex-align" style="position: relative">
             <input
               type="text"
               id="email"
@@ -209,11 +213,13 @@ const emailConfirmCheckFun = async () => {
               v-if="emailCheck"
               type="button"
               class="check-btn email-check"
+              :class="{ loding: loding }"
               @click="emailCheckFun"
             >
-              요청
+              {{ loding ? "  " : "요청" }}
             </button>
             <span v-else class="check">요청</span>
+            <div class="dots-flow" v-if="loding"></div>
           </div>
         </div>
         <div class="input-group box-col id-group" style="margin-top: 10px">
@@ -377,13 +383,17 @@ input {
   -webkit-text-stroke: 1px black;
   border: 5px solid #0073e6;
 }
-
+.check-btn {
+  margin-top: 5px;
+}
 .check-btn:hover,
 .verify-btn:hover {
   background-color: #6a6aff;
 }
 
 .email-check {
+  width: 80px;
+  height: 50px;
   background-color: blue;
 }
 
@@ -409,5 +419,78 @@ input {
   background-color: gray;
   color: gainsboro;
   border-color: gainsboro;
+}
+/**
+  * Dots flow
+  *
+  * @author jh3y - jheytompkins.com
+*/
+.dots-flow {
+  scale: 0.8;
+}
+.dots-flow:before {
+  -webkit-animation: dots-flow 0.85s infinite ease;
+  animation: dots-flow 0.85s infinite ease;
+  border-radius: 100%;
+  content: "";
+  height: 16px;
+  position: absolute;
+  top: 2px;
+  right: 35px;
+  -webkit-transform: translate(-50%, -40px);
+  transform: translate(-50%, -40px);
+  width: 16px;
+}
+.loding {
+  background-color: #a6a6ff;
+}
+@-webkit-keyframes dots-flow {
+  0%,
+  100% {
+    -webkit-box-shadow: -26px 32px 0px 0 white, 0px 32px 0 0 white,
+      26px 32px 0 0 white;
+    box-shadow: -26px 32px 0px 0 white, 0px 32px 0 0 white, 26px 32px 0 0 white;
+  }
+  35% {
+    -webkit-box-shadow: -26px 32px 0 4px purple, 0px 32px 0 0 white,
+      26px 32px 0 0 white;
+    box-shadow: -26px 32px 0 4px purple, 0px 32px 0 0 white, 26px 32px 0 0 white;
+  }
+  50% {
+    -webkit-box-shadow: -26px 32px 0 0 white, 0px 32px 0 4px purple,
+      26px 32px 0 0 white;
+    box-shadow: -26px 32px 0 0 white, 0px 32px 0 4px purple, 26px 32px 0 0 white;
+  }
+  65% {
+    -webkit-box-shadow: -26px 32px 0px 0 white, 0px 32px 0 0 white,
+      26px 32px 0 4px purple;
+    box-shadow: -26px 32px 0px 0 white, 0px 32px 0 0 white,
+      26px 32px 0 4px purple;
+  }
+}
+
+@keyframes dots-flow {
+  0%,
+  100% {
+    -webkit-box-shadow: -26px 32px 0px 0 white, 0px 32px 0 0 white,
+      26px 32px 0 0 white;
+    box-shadow: -26px 32px 0px 0 white, 0px 32px 0 0 white, 26px 32px 0 0 white;
+  }
+  35% {
+    -webkit-box-shadow: -26px 32px 0 4px purple, 0px 32px 0 0 white,
+      26px 32px 0 0 white;
+    box-shadow: -26px 32px 0 4px purple, 0px 32px 0 0 white, 26px 32px 0 0 white;
+  }
+  50% {
+    -webkit-box-shadow: -26px 32px 0 0 white, 0px 32px 0 4px purple,
+      26px 32px 0 0 white;
+    box-shadow: -26px 32px 0 0 white, 0px 32px 0 4px purple, 26px 32px 0 0 white;
+  }
+  65% {
+    -webkit-box-shadow: -26px 32px 0px 0 white, 0px 32px 0 0 white,
+      26px 32px 0 4px purple;
+    box-shadow: -26px 32px 0px 0 white, 0px 32px 0 0 white,
+      26px 32px 0 4px purple;
+  }
 }
 </style>

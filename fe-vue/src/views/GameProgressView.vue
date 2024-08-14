@@ -311,12 +311,8 @@ const imageItem = (item) => {
         </div>
       </div>
       <div class="game-content box-row">
-        <<<<<<< HEAD <Main :roomData="roomData" :blind="useBlind" :minimum="useMinimum" :prevent="usePrevernt"
-          :bigfont="useBigFont" @submit-code="submitCode" />
-        =======
         <Main :roomData="roomData" :blind="useBlind" :minimum="useMinimum" :prevent="usePrevernt" :bigfont="useBigFont"
           @submit-code="submitCode" @correct="correctCheck" />
-        >>>>>>> fe
       </div>
     </div>
   </div>

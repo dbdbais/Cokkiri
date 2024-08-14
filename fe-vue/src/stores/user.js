@@ -4,13 +4,7 @@ import { defineStore } from "pinia";
 export const userStore = defineStore(
   "user",
   () => {
-    const user = ref({
-      id: "",
-      nickname: "",
-      tier: "",
-      percent: 0,
-    });
-
+    const user = ref({});
     const userNickname = ref({});
 
     function setUser(newUser) {
@@ -25,12 +19,8 @@ export const userStore = defineStore(
     }
 
     function logout() {
-      user.value = {
-        id: "",
-        nickname: "",
-        tier: "",
-        percent: 0,
-      };
+      user.value = {};
+      userNickname.value = {};
     }
 
     return {

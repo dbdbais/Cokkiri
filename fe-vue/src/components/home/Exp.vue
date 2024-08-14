@@ -1,16 +1,23 @@
 <template>
     <div class="progress-bar" :style="{ backgroundColor: pgbarColor }">
-        <span>{{ percentage }}%</span>
-        <div class="progress" :style="{ width: percentage + '%', backgroundColor: pgColor }">
+        <span>{{ score }}%</span>
+        <div class="progress" :style="{ width: score + '%', backgroundColor: pgColor }">
         </div>
     </div>
 </template>
 
 <script setup>
 import { computed } from 'vue';
+import { userStore } from '@/stores/user';
 const props = defineProps({
     percentage: Number,
     tier: Number
+});
+
+const uStore = userStore();
+
+const score = computed(() => {
+    return uStore.user.score % 100;
 });
 
 const pgbarColor = computed(() => {

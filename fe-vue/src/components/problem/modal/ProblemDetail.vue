@@ -25,7 +25,7 @@ onBeforeMount(async () => {
     try {
         const response = await canReview(uStore.user.id, props.problemData.no);
         console.log(response);
-        if (response.data === 1) {
+        if (response.data === true) {
             canViewReview.value = true;
         } else {
             reviewData.value = reviewData.value.map((item) => {

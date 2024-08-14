@@ -1,14 +1,5 @@
 <script setup>
-<<<<<<< HEAD
-import { ref, computed, onBeforeMount } from "vue";
-import { userStore } from "@/stores/user";
-import { useModal } from "@/composables/useModal";
-import { getSolved } from "@/api/submit";
-import { problemStore } from "@/stores/problem";
-import Exp from "@/components/home/Exp.vue";
-import SubmitList from "@/components/home/modal/SubmitList.vue";
-// import PasswordReset from "@/components/home/modal/PasswordReset.vue"
-=======
+
 import { ref, computed, onBeforeMount } from "vue"
 import { userStore } from "@/stores/user"
 import { useModal } from "@/composables/useModal"
@@ -17,7 +8,6 @@ import { problemStore } from "@/stores/problem"
 import Exp from "@/components/home/Exp.vue"
 import SubmitList from "@/components/home/modal/SubmitList.vue"
 import PasswordReset from "@/components/home/modal/PasswordReset.vue"
->>>>>>> feature-fe/main-page
 
 const uStore = userStore();
 const pStore = problemStore();

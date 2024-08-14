@@ -40,10 +40,10 @@ const editorFontSize = ref(iStore.currentFontSize);
 const userCodeList = ref(pStore.userCodeList);
 
 const defaultCode = {
-  python: 'print("Hello, Python!")',
-  java: 'public class Temp {\n    public static void main(String[] args) {\n        System.out.println("Hello, Java!");\n    }\n}',
-  c: '#include <stdio.h>\nint main() {\n    printf("Hello, World!");\n    return 0;\n}',
-  cpp: '#include <iostream>\nint main() {\n    std::cout << "Hello, C++!" << std::endl;\n    return 0;\n}',
+  python: "",
+  java: "import java.io.*;\nimport java.util.*;\n\npublic class Temp {\n    //do not change Class Name\n    static BufferedReader in = new BufferedReader(new InputStreamReader(System.in));\n    static StringTokenizer st;\n    public static void main(String[] args) throws IOException {\n        \n        \n    }}",
+  // c: '#include <stdio.h>\nint main() {\n    printf("Hello, World!");\n    return 0;\n}',
+  cpp: "#include <iostream>\nusing namespace std;\nint main() {\n    \n    return 0;\n}",
 };
 
 const userCode = ref({ ...defaultCode });

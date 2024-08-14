@@ -11,6 +11,26 @@ const emit = defineEmits(["close"]);
 const store = userStore();
 const rankImgUrl = "/src/assets/rank/";
 
+const imageSrc = (grade) => {
+  console.log(grade);
+  switch (grade) {
+    case "SEED":
+      return new URL("@/assets/rank/seed.svg", import.meta.url).href;
+    case "KIWI":
+      return new URL("@/assets/rank/kiwi.svg", import.meta.url).href;
+    case "APPLE":
+      return new URL("@/assets/rank/apple.svg", import.meta.url).href;
+    case "ORANGE":
+      return new URL("@/assets/rank/orange.svg", import.meta.url).href;
+    case "KOREAMELON":
+      return new URL("@/assets/rank/koreamelon.svg", import.meta.url).href;
+    case "DURIAN":
+      return new URL("@/assets/rank/durian.svg", import.meta.url).href;
+    default:
+      return new URL("@/assets/rank/seed.svg", import.meta.url).href;
+  }
+};
+
 const closeBtn = function () {
   emit("close");
 };
@@ -48,7 +68,7 @@ const sendJoin = function (sessionId) {
             :key="tier.index"
             class="rank md"
           >
-            <img :src="rankImgUrl + tier + '.svg'" alt="등급" />
+            <img :src="imageSrc(tier)" alt="등급" />
             <span style="margin-left: 8px">{{ cnt }}명</span>
           </div>
         </div>

@@ -156,8 +156,6 @@ const tier = (level) => {
             </div>
         </div>
     </div>
-    </div>
-    </div>
     <div class="box-modal-bind">
         <PasswordReset v-if="isResetModalOpen" @close="closeResetModal" />
         <SubmitList v-if="isSubmitModalOpen" @close="closeSubmitModal" :problem-id="selectedNo" />

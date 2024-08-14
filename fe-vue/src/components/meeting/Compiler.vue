@@ -15,6 +15,7 @@ import { userStore } from "@/stores/user";
 import { sendSubmit } from "@/api/webRTC";
 import { useSubmitStore } from "@/stores/submit";
 import { useItemStore } from "@/stores/item";
+import { useCorrectStore } from "@/stores/correct";
 
 defineProps({
   bigfont: Boolean,
@@ -23,18 +24,19 @@ defineProps({
   roomData: Object,
   userCnt: Number,
 });
-const emit = defineEmits(["submit-code"]);
+const emit = defineEmits(["submit-code", "correct"]);
 
 const editor = ref(null);
-const iStore = useItemStore();
 const selectedLanguage = ref("python");
 const inputText = ref("");
 const outputText = ref("");
+const iStore = useItemStore();
 const uStore = userStore();
 const pStore = problemStore();
 const tStore = useTriggerStore();
 const gameStore = useGameStore();
 const submitStore = useSubmitStore();
+const cStore = useCorrectStore();
 const trigger = ref(false);
 const editorFontSize = ref(iStore.currentFontSize);
 const userCodeList = ref(pStore.userCodeList);
@@ -140,6 +142,19 @@ const fontReduce = () => {
   setTimeout(() => {
     clearInterval(timerId);
     iStore.setFontSize(editorFontSize.value);
+    setTimeout(() => {
+      let timerId = setInterval(() => {
+        console.log("커지는 중!");
+        if (editorFontSize.value < 20) {
+          editorFontSize.value += 5;
+          initializeEditor(saveVal, selectedLanguage.value);
+        }
+      }, 100);
+      setTimeout(() => {
+        clearInterval(timerId);
+        iStore.setFontSize(editorFontSize.value);
+      }, 1000);
+    }, 10000);
   }, 1000);
 };
 
@@ -152,7 +167,6 @@ const fontIncrease = () => {
       editorFontSize.value += 5;
       initializeEditor(saveVal, selectedLanguage.value);
     }
-    // console.log(editorFontSize.value);
   }, 100);
   setTimeout(() => {
     clearInterval(timerId);
@@ -170,19 +184,6 @@ watch(gameStore, () => {
 });
 
 watch(selectedLanguage, (newLang, oldLang) => {
-  // console.log(selectedLanguage.value);
-  // const currentMode = editor.value.session.getMode().$id;
-  // const currentLanguage = currentMode.includes("python")
-  //   ? "python"
-  //   : currentMode.includes("java")
-  //   ? "java"
-  //   : currentMode.includes("c_cpp")
-  //   ? "cpp"
-  //   : "python";
-  // userCode.value[currentLanguage] = editor.value.getValue();
-  // editor.value.session.setMode("ace/mode/" + newLang);
-  // editor.value.setValue(userCode.value[newLang] || defaultCode[newLang]);
-
   if (!trigger.value) {
     initializeEditor(null, newLang);
   }
@@ -235,6 +236,8 @@ const runCode = async (isSubmit) => {
       });
 
       if (res.data.correct) {
+        cStore.correct(tStore.currentProblemNum);
+        emit("correct");
         Swal.fire({
           icon: "success",
           title: "정답입니다!",

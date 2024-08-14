@@ -8,7 +8,6 @@ export const problemStore = defineStore(
     const selectedProblemList = ref([]);
     const selectedProblem = ref();
     const userCodeList = ref({});
-    const correctProblem = ref(0);
 
     function setProblems(newProblems) {
       problems.value = newProblems;
@@ -52,16 +51,13 @@ export const problemStore = defineStore(
       return selectedProblemList.value[idx];
     };
 
-    function correct() {
-      correctProblem.value += 1;
-      if (correctProblem.value === 2) {
-        return true;
-      }
-    }
+    // function correct() {
+    //   correctProblem.value += 1;
+    //   if (correctProblem.value === 2) {
+    //     return true;
+    //   }
+    // }
 
-    function resetCorrect() {
-      correctProblem.value = 0;
-    }
     return {
       problems,
       selectedProblemList,
@@ -70,8 +66,6 @@ export const problemStore = defineStore(
       setProblems,
       setSelectedProblem,
       select,
-      correct,
-      resetCorrect,
       getProblem,
     };
   },

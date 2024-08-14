@@ -56,10 +56,12 @@ import { useMeetingStore } from "@/stores/meeting";
 import { friendStore } from "@/stores/friend";
 import { useSubmitStore } from "@/stores/submit";
 import { useItemStore } from "@/stores/item";
+import { useCorrectStore } from "@/stores/correct";
 
 const uStore = userStore();
 const mStore = useMeetingStore();
 const fStore = friendStore();
+const cStore = useCorrectStore();
 const iStore = useItemStore();
 const submitStore = useSubmitStore();
 const lobby = new WebSocket(
@@ -194,6 +196,7 @@ onMounted(() => {
   getRoomList({ page: currentPage.value });
   callInsertClass();
   iStore.setFontSize(20);
+  cStore.resetCorrect();
   submitStore.resetSubmitList();
   const shareData = [];
 

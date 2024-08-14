@@ -89,13 +89,15 @@ public class WebCrawler {
         // extract sample inputs
         Elements sampleInputs = document.select("[id^=sample-input]");
         for (Element input : sampleInputs) {
-            inputList.put(iidx++,input.text());
+            String cleanedText = input.text().replace("\r", "");
+            inputList.put(iidx++,cleanedText);
         }
 
         // extract sample outputs
         Elements sampleOutputs = document.select("[id^=sample-output]");
         for (Element output : sampleOutputs) {
-            outputList.put(oidx++,output.text());
+            String cleanedText = output.text().replace("\r", "");
+            outputList.put(oidx++,cleanedText);
         }
 
         prob.setNo(pid);

@@ -172,7 +172,7 @@ const getRoomList = function (params) {
 };
 
 onMounted(() => {
-  getRoomList();
+  getRoomList({ page: currentPage.value });
   callInsertClass();
   submitStore.resetSubmitList();
   const shareData = [];

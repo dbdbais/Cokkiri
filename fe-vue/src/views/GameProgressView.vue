@@ -12,6 +12,7 @@ import { useSubmitStore } from "@/stores/submit";
 import { onUnmounted } from "vue";
 import router from "@/router";
 import { useTriggerStore } from "@/stores/trigger";
+import { compileScript } from "vue/compiler-sfc";
 
 const enemyCharacter = "/src/assets/game-character.svg";
 const myCharacter = "/src/assets/game-character.svg";
@@ -203,6 +204,41 @@ function getRandomIntInclusive(min, max) {
 const close = () => {
   getItem.value = false;
 };
+const imageTier = (grade) => {
+  console.log(grade);
+  switch (grade) {
+    case "SEED":
+      return new URL("@/assets/rank/seed.svg", import.meta.url).href;
+    case "KIWI":
+      return new URL("@/assets/rank/kiwi.svg", import.meta.url).href;
+    case "APPLE":
+      return new URL("@/assets/rank/apple.svg", import.meta.url).href;
+    case "ORANGE":
+      return new URL("@/assets/rank/orange.svg", import.meta.url).href;
+    case "KOREAMELON":
+      return new URL("@/assets/rank/koreamelon.svg", import.meta.url).href;
+    case "DURIAN":
+      return new URL("@/assets/rank/durian.svg", import.meta.url).href;
+    default:
+      return new URL("@/assets/rank/seed.svg", import.meta.url).href;
+  }
+};
+
+const imageItem = (item) => {
+  console.log(item);
+  switch (item) {
+    case "blind":
+      return new URL("@/assets/item/blind.svg", import.meta.url).href;
+    case "minimum":
+      return new URL("@/assets/item/minimum.svg", import.meta.url).href;
+    case "prevent":
+      return new URL("@/assets/item/prevent.svg", import.meta.url).href;
+    case "fontBig":
+      return new URL("@/assets/item/fontBig.svg", import.meta.url).href;
+    case "fontSmall":
+      return new URL("@/assets/item/fontSmall.svg", import.meta.url).href;
+  }
+};
 </script>
 
 <template>
@@ -210,13 +246,13 @@ const close = () => {
     <GameRamdomItem v-if="getItem" :items="itemList" :user-item="userItem" @close="close" />
     <div class="game-prog-con box-col">
       <div class="exit box bold-text md" @click="closeRoom">
-        <img src="/src/assets/exit_room.svg" alt="나가기" />
+        <img src="@/assets/exit_room.svg" alt="나가기" />
         나가기
       </div>
       <img src="@/assets/timer_temp.svg" class="timer" />
       <div class="game-header box-row box-sb">
         <div class="user bold-text box box-col" v-for="(user, index) in users" :key="index">
-          <img class="tier" :src="'/src/assets/rank/' + user.tier + '.svg'" alt="티어" />
+          <img class="tier" :src="imageTier(user.tier)" alt="티어" />
           {{ user.nickname }}
         </div>
         <div class="box user-btn box-row" v-if="useItem">
@@ -234,7 +270,7 @@ const close = () => {
             <button v-for="(val, key) in items" :key="key" class="item bold-text" :class="{ used: !items[key] }"
               :disabled="!items[key]" @click="useItemFun(key)">
               <div class="box-col item-img md">
-                <img :src="'/src/assets/item/' + key + '.svg'" alt="아이템" style="margin-bottom: 10px" />
+                <img :src="imageItem(key)" alt="아이템" style="margin-bottom: 10px" />
                 {{ itemText[key] }}
               </div>
             </button>

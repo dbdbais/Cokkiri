@@ -6,7 +6,7 @@ import { getSolved } from "@/api/submit"
 import { problemStore } from "@/stores/problem"
 import Exp from "@/components/home/Exp.vue"
 import SubmitList from "@/components/home/modal/SubmitList.vue"
-import PasswordReset from "@/components/home/modal/PasswordReset.vue"
+// import PasswordReset from "@/components/home/modal/PasswordReset.vue"
 
 const uStore = userStore()
 const pStore = problemStore()

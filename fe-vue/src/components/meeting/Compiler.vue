@@ -188,7 +188,13 @@ watch(selectedLanguage, (newLang, oldLang) => {
   }
 });
 
+const lodingSubmit = ref(false);
+
 const runCode = async (isSubmit) => {
+  if (isSubmit === 1) {
+    lodingSubmit.value = true;
+  }
+
   const code = editor.value.getValue();
   const language = selectedLanguage.value;
 
@@ -220,6 +226,7 @@ const runCode = async (isSubmit) => {
         outputText.value = res.data.opt;
       }
     } else {
+      lodingSubmit.value = false;
       console.log(res.data);
       emit("submit-code", {
         username: uStore.user.nickname,
@@ -281,18 +288,22 @@ const clearInput = () => {
         </select>
 
         <div id="editor"></div>
-        <button class="run-btn bold-text" @click="runCode(0)">실행</button>
-        <button
-          class="submit-btn bold-text"
-          :style="{ scale: minimum * 0.01 }"
-          :class="{
-            prevent: prevent,
-          }"
-          :disabled="prevent"
-          @click="runCode(1)"
-        >
-          제출
-        </button>
+        <div class="flex-align" style="position: relative">
+          <button class="run-btn bold-text" @click="runCode(0)">실행</button>
+          <button
+            class="submit-btn bold-text"
+            :style="{ scale: minimum * 0.01 }"
+            :class="{
+              prevent: prevent,
+              loding: lodingSubmit,
+            }"
+            :disabled="prevent"
+            @click="runCode(1)"
+          >
+            {{ lodingSubmit ? "" : "제출" }}
+          </button>
+          <div class="dots-flow" v-if="lodingSubmit"></div>
+        </div>
         <button
           v-if="!roomData.isGame"
           class="share-btn bold-text"
@@ -452,5 +463,73 @@ textarea,
   background-color: rgb(117, 117, 117);
   border-color: gray;
   color: gray;
+}
+.dots-flow {
+  scale: 0.6;
+}
+.dots-flow:before {
+  -webkit-animation: dots-flow 0.85s infinite ease;
+  animation: dots-flow 0.85s infinite ease;
+  border-radius: 100%;
+  content: "";
+  height: 16px;
+  position: absolute;
+  top: 5px;
+  left: -67px;
+  -webkit-transform: translate(-50%, -40px);
+  transform: translate(-50%, -40px);
+  width: 16px;
+}
+.loding {
+  background-color: gray;
+}
+@-webkit-keyframes dots-flow {
+  0%,
+  100% {
+    -webkit-box-shadow: -26px 32px 0px 0 white, 0px 32px 0 0 white,
+      26px 32px 0 0 white;
+    box-shadow: -26px 32px 0px 0 white, 0px 32px 0 0 white, 26px 32px 0 0 white;
+  }
+  35% {
+    -webkit-box-shadow: -26px 32px 0 4px purple, 0px 32px 0 0 white,
+      26px 32px 0 0 white;
+    box-shadow: -26px 32px 0 4px purple, 0px 32px 0 0 white, 26px 32px 0 0 white;
+  }
+  50% {
+    -webkit-box-shadow: -26px 32px 0 0 white, 0px 32px 0 4px purple,
+      26px 32px 0 0 white;
+    box-shadow: -26px 32px 0 0 white, 0px 32px 0 4px purple, 26px 32px 0 0 white;
+  }
+  65% {
+    -webkit-box-shadow: -26px 32px 0px 0 white, 0px 32px 0 0 white,
+      26px 32px 0 4px purple;
+    box-shadow: -26px 32px 0px 0 white, 0px 32px 0 0 white,
+      26px 32px 0 4px purple;
+  }
+}
+
+@keyframes dots-flow {
+  0%,
+  100% {
+    -webkit-box-shadow: -26px 32px 0px 0 white, 0px 32px 0 0 white,
+      26px 32px 0 0 white;
+    box-shadow: -26px 32px 0px 0 white, 0px 32px 0 0 white, 26px 32px 0 0 white;
+  }
+  35% {
+    -webkit-box-shadow: -26px 32px 0 4px purple, 0px 32px 0 0 white,
+      26px 32px 0 0 white;
+    box-shadow: -26px 32px 0 4px purple, 0px 32px 0 0 white, 26px 32px 0 0 white;
+  }
+  50% {
+    -webkit-box-shadow: -26px 32px 0 0 white, 0px 32px 0 4px purple,
+      26px 32px 0 0 white;
+    box-shadow: -26px 32px 0 0 white, 0px 32px 0 4px purple, 26px 32px 0 0 white;
+  }
+  65% {
+    -webkit-box-shadow: -26px 32px 0px 0 white, 0px 32px 0 0 white,
+      26px 32px 0 4px purple;
+    box-shadow: -26px 32px 0px 0 white, 0px 32px 0 0 white,
+      26px 32px 0 4px purple;
+  }
 }
 </style>

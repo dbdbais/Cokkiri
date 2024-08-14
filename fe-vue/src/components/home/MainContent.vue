@@ -22,7 +22,14 @@
       >
         게임방
       </div>
-      <button @click="$emit('refresh')">새로고침</button>
+      <button
+        class="refresh md"
+        @click="$emit('refresh')"
+        @mouseenter="refreshHover = true"
+        @mouseleave="refreshHover = false"
+      >
+        <img :src="imageSrc()" alt="새로고침" style="width: 40px" />
+      </button>
     </div>
     <div id="room-container" class="rooms">
       <Room
@@ -41,14 +48,32 @@
 </template>
 
 <script setup>
+import { ref } from "vue";
 import Room from "./Room.vue";
 import Page from "@/components/common/Page.vue";
+
+const refreshHover = ref(false);
 
 defineProps({
   rooms: Object,
   currentPage: Number,
   categoryObj: Object,
 });
+
+function imageSrc() {
+  let img = "refresh";
+  if (refreshHover.value) {
+    img = "hover";
+  }
+  switch (img) {
+    case "refresh":
+      return new URL("@/assets/refresh.svg", import.meta.url).href;
+    case "hover":
+      return new URL("@/assets/refresh-hover.svg", import.meta.url).href;
+    default:
+      return new URL("@/assets/refresh.svg", import.meta.url).href;
+  }
+}
 </script>
 
 <style scoped>
@@ -63,8 +88,16 @@ defineProps({
   color: #5bb5d9;
   -webkit-text-stroke: #089eda;
 }
-
-.filter-btn:hover {
+.refresh {
+  width: 60px;
+  height: 60px;
+  border-radius: 10px;
+  border-width: 5px;
+  border-color: #5bb5d9;
+  background-color: #eaf3f7;
+}
+.filter-btn:hover,
+.refresh:hover {
   color: #eaf3f7;
   border-color: #eaf3f7;
   background-color: #5bb5d9;

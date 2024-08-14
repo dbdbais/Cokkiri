@@ -107,6 +107,7 @@ ws.onmessage = function (event) {
 
         for (let i = 3; i < data.length; i++) {
           problemListNum.value.push(Number(data[i]));
+          console.log(data[i]);
           getProblem(data[i])
             .then((res) => {
               problemList.value.push(res.data);
@@ -169,17 +170,17 @@ const startStudy = function () {
   ws.send("|@|");
 };
 
-const selectProblem = (problems, minLevel, maxLevel) => {
+const selectProblem = async (problems, minLevel, maxLevel) => {
   problemList.value = problems;
   if (roomData.value.isGame) {
-    getGameProblem({
+    await getGameProblem({
       sessionId: route.params.roomId,
       minDifficulty: minLevel,
       maxDifficulty: maxLevel,
     })
-      .then((res) => {
+      .then(async (res) => {
         console.log(res.data);
-        getProblemList(route.params.roomId).then((res) => {
+        await getProblemList(route.params.roomId).then((res) => {
           console.log(res.data);
           problemList.value = res.data;
         });
@@ -193,7 +194,7 @@ const selectProblem = (problems, minLevel, maxLevel) => {
   // send 보내야함
   let sendData = "|%|";
   problemList.value.forEach((problem) => {
-    sendData += "|!|" + problem;
+    sendData += "|!|" + problem.no;
   });
   ws.send(sendData);
   problemModal.value = false;

@@ -1,7 +1,7 @@
 <script setup>
 import { ref } from "vue"
 import { userStore } from "@/stores/user"
-import { login, modify } from "@/api/user"
+import { login, setModPassword } from "@/api/user"
 
 const uStore = userStore()
 const verifyPw = ref(false)
@@ -41,7 +41,7 @@ const resetPw = async () => {
         return
     }
     try {
-        const response = await modify({ id: uStore.user.id, password: inputText.value })
+        const response = await setModPassword({ id: uStore.user.id, password: inputText.value })
         console.log(response)
         if (response.data === 1) {
             swal.fire({

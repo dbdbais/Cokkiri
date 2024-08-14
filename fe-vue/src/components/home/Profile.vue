@@ -6,7 +6,7 @@
     </div>
     <div class="rank-con box-row box-main-exp" style="align-items: center">
       <img :src="imageSrc" alt="rank" class="rank-img" />
-      <Exp :tier="tier" :percentage="uStore.user.percent" class="rank-exp"></Exp>
+      <Exp :tier="tier" :percentage="uStore.user.score" class="rank-exp"></Exp>
     </div>
   </div>
 </template>

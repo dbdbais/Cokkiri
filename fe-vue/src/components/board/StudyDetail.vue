@@ -2,7 +2,8 @@
 import RecruitmentBadge from "./RecruitmentBadge.vue";
 import { joinStudy } from "@/api/board";
 import { userStore } from "@/stores/user";
-
+import { ref, computed } from "vue";
+const uStore = userStore();
 defineProps({
   detailData: Object,
 });
@@ -52,23 +53,17 @@ const sendJoin = function (sessionId) {
 
 <template>
   <div class="study-detail board-modal box-main-con slideDown">
-    <img
-      src="/src/assets/exit.svg"
-      alt="나가기"
-      class="exit"
-      @click="closeBtn"
-    />
+    <img src="/src/assets/exit.svg" alt="나가기" class="exit" @click="closeBtn" />
     <div class="detail-content">
       <RecruitmentBadge class="badge" :group-badge="detailData.isRecruitment" />
       <div class="title sub-title group-name">{{ detailData.regularName }}</div>
       <div class="top">
         <div class="box-psb text-p md member">
-          <div
-            v-for="(cnt, tier) in detailData.tiers"
-            :key="tier.index"
-            class="rank md"
-          >
+          <div v-for="(cnt, tier) in detailData.tiers" :key="tier.index" class="rank md">
+            <!-- <img :src="imageSrc" alt="등급" /> -->
+            
             <img :src="imageSrc(tier)" alt="등급" />
+            
             <span style="margin-left: 8px">{{ cnt }}명</span>
           </div>
         </div>
@@ -77,11 +72,7 @@ const sendJoin = function (sessionId) {
         <div class="box-psb box-col times">
           <div class="text-p nomal-text time-label">시간</div>
           <div class="time-list">
-            <div
-              v-for="time in detailData.times"
-              :key="time.index"
-              class="time bold-text box-main-group md"
-            >
+            <div v-for="time in detailData.times" :key="time.index" class="time bold-text box-main-group md">
               {{ time }}
             </div>
           </div>
@@ -89,11 +80,7 @@ const sendJoin = function (sessionId) {
         <div class="box-psb box-col rules">
           <div class="text-p nomal-text rule-label">규칙</div>
           <div class="rule-list">
-            <div
-              v-for="rule in detailData.rules"
-              :key="rule.id"
-              class="rule bold-text box-main-group md"
-            >
+            <div v-for="rule in detailData.rules" :key="rule.id" class="rule bold-text box-main-group md">
               {{ rule }}
             </div>
           </div>
@@ -102,10 +89,7 @@ const sendJoin = function (sessionId) {
       <div class="bottom">
         <div class="box-psb text-p intro">{{ detailData.regularComment }}</div>
       </div>
-      <button
-        class="nomal-text board-btn"
-        @click="sendJoin(detailData.sessionId)"
-      >
+      <button class="nomal-text board-btn" @click="sendJoin(detailData.sessionId)">
         가입신청
       </button>
     </div>
@@ -134,6 +118,7 @@ const sendJoin = function (sessionId) {
 .bottom {
   height: 130px;
 }
+
 .group-name {
   margin-top: 5px;
 }
@@ -163,13 +148,16 @@ const sendJoin = function (sessionId) {
   font-size: 25px;
   padding-left: 10px;
 }
+
 .rank img,
 span {
   background-color: transparent;
 }
+
 .rank img {
   scale: 1.3;
 }
+
 .times,
 .rules {
   width: 49%;

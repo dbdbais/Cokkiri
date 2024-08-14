@@ -68,6 +68,7 @@ onMounted(async () => {
 
 onUnmounted(() => {
   saveData();
+  iStore.setFontSize(20)
 });
 
 function saveData() {
@@ -262,9 +263,8 @@ const shareCode = (userCnt) => {
     pStore.selectedProblemList.length === 0
       ? "문제 없음"
       : tStore.currentProblemNum;
-  const data = `${problemNum}|!|${uStore.user.nickname}|!|${
-    userCodeList.value[tStore.currentProblemNum].language
-  }|!|${userCodeList.value[tStore.currentProblemNum].code}|!|${userCnt}`;
+  const data = `${problemNum}|!|${uStore.user.nickname}|!|${userCodeList.value[tStore.currentProblemNum].language
+    }|!|${userCodeList.value[tStore.currentProblemNum].code}|!|${userCnt}`;
   sendSubmit(data);
   console.log(userCnt);
 };
@@ -278,12 +278,7 @@ const clearInput = () => {
   <div>
     <div class="editor-con box-w">
       <div id="editor-container">
-        <select
-          id="language"
-          ref="language"
-          class="box language bold-text"
-          v-model="selectedLanguage"
-        >
+        <select id="language" ref="language" class="box language bold-text" v-model="selectedLanguage">
           <option value="python">Python</option>
           <option value="java">Java</option>
           <option value="cpp">C++</option>
@@ -293,25 +288,15 @@ const clearInput = () => {
         <div id="editor"></div>
         <div class="flex-align" style="position: relative">
           <button class="run-btn bold-text" @click="runCode(0)">실행</button>
-          <button
-            class="submit-btn bold-text"
-            :style="{ scale: minimum * 0.01 }"
-            :class="{
-              prevent: prevent,
-              loding: lodingSubmit,
-            }"
-            :disabled="prevent"
-            @click="runCode(1)"
-          >
+          <button class="submit-btn bold-text" :style="{ scale: minimum * 0.01 }" :class="{
+            prevent: prevent,
+            loding: lodingSubmit,
+          }" :disabled="prevent" @click="runCode(1)">
             {{ lodingSubmit ? "" : "제출" }}
           </button>
           <div class="dots-flow" v-if="lodingSubmit"></div>
         </div>
-        <button
-          v-if="!roomData.isGame"
-          class="share-btn bold-text"
-          @click="shareCode(userCnt)"
-        >
+        <button v-if="!roomData.isGame" class="share-btn bold-text" @click="shareCode(userCnt)">
           공유
         </button>
       </div>
@@ -326,13 +311,7 @@ const clearInput = () => {
             </button>
           </p>
 
-          <textarea
-            id="inputText"
-            class="nomal-text"
-            v-model="inputText"
-            rows="10"
-            cols="30"
-          ></textarea>
+          <textarea id="inputText" class="nomal-text" v-model="inputText" rows="10" cols="30"></textarea>
         </div>
         <div id="output">
           <p class="bold-text">Output</p>
@@ -462,14 +441,17 @@ textarea,
   font-size: 20px;
   white-space: pre-wrap;
 }
+
 .prevent {
   background-color: rgb(117, 117, 117);
   border-color: gray;
   color: gray;
 }
+
 .dots-flow {
   scale: 0.6;
 }
+
 .dots-flow:before {
   -webkit-animation: dots-flow 0.85s infinite ease;
   animation: dots-flow 0.85s infinite ease;
@@ -483,26 +465,32 @@ textarea,
   transform: translate(-50%, -40px);
   width: 16px;
 }
+
 .loding {
   background-color: gray;
 }
+
 @-webkit-keyframes dots-flow {
+
   0%,
   100% {
     -webkit-box-shadow: -26px 32px 0px 0 white, 0px 32px 0 0 white,
       26px 32px 0 0 white;
     box-shadow: -26px 32px 0px 0 white, 0px 32px 0 0 white, 26px 32px 0 0 white;
   }
+
   35% {
     -webkit-box-shadow: -26px 32px 0 4px purple, 0px 32px 0 0 white,
       26px 32px 0 0 white;
     box-shadow: -26px 32px 0 4px purple, 0px 32px 0 0 white, 26px 32px 0 0 white;
   }
+
   50% {
     -webkit-box-shadow: -26px 32px 0 0 white, 0px 32px 0 4px purple,
       26px 32px 0 0 white;
     box-shadow: -26px 32px 0 0 white, 0px 32px 0 4px purple, 26px 32px 0 0 white;
   }
+
   65% {
     -webkit-box-shadow: -26px 32px 0px 0 white, 0px 32px 0 0 white,
       26px 32px 0 4px purple;
@@ -512,22 +500,26 @@ textarea,
 }
 
 @keyframes dots-flow {
+
   0%,
   100% {
     -webkit-box-shadow: -26px 32px 0px 0 white, 0px 32px 0 0 white,
       26px 32px 0 0 white;
     box-shadow: -26px 32px 0px 0 white, 0px 32px 0 0 white, 26px 32px 0 0 white;
   }
+
   35% {
     -webkit-box-shadow: -26px 32px 0 4px purple, 0px 32px 0 0 white,
       26px 32px 0 0 white;
     box-shadow: -26px 32px 0 4px purple, 0px 32px 0 0 white, 26px 32px 0 0 white;
   }
+
   50% {
     -webkit-box-shadow: -26px 32px 0 0 white, 0px 32px 0 4px purple,
       26px 32px 0 0 white;
     box-shadow: -26px 32px 0 0 white, 0px 32px 0 4px purple, 26px 32px 0 0 white;
   }
+
   65% {
     -webkit-box-shadow: -26px 32px 0px 0 white, 0px 32px 0 0 white,
       26px 32px 0 4px purple;

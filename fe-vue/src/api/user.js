@@ -48,7 +48,7 @@ export function getUserName(name) {
 }
 export function setModPassword(data) {
   return axios({
-    url: `${baseURL}/modify`,
+    url: `${baseURL}/password`,
     method: "put",
     params: {
       userId: data.id,

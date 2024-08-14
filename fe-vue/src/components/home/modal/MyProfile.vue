@@ -1,14 +1,4 @@
 <script setup>
-<<<<<<< HEAD
-import { ref, computed, onBeforeMount } from "vue";
-import { userStore } from "@/stores/user";
-import { useModal } from "@/composables/useModal";
-import { getSolved } from "@/api/submit";
-import { problemStore } from "@/stores/problem";
-import Exp from "@/components/home/Exp.vue";
-import SubmitList from "@/components/home/modal/SubmitList.vue";
-// import PasswordReset from "@/components/home/modal/PasswordReset.vue"
-=======
 import { ref, computed, onBeforeMount } from "vue"
 import { userStore } from "@/stores/user"
 import { useModal } from "@/composables/useModal"
@@ -17,7 +7,6 @@ import { problemStore } from "@/stores/problem"
 import Exp from "@/components/home/Exp.vue"
 import SubmitList from "@/components/home/modal/SubmitList.vue"
 import PasswordReset from "@/components/home/modal/PasswordReset.vue"
->>>>>>> feature-fe/main-page
 
 const uStore = userStore();
 const pStore = problemStore();
@@ -123,7 +112,7 @@ const tier = (level) => {
                     </div>
                     <div class="box-col left-tier-box">
                         <img id="rank-img" :src="imageSrc" alt="rank" class="rank-img" />
-                        <Exp :tier="uStore.user.tier" :percentage="uStore.user.percent" class="rank-exp" />
+                        <Exp :tier="uStore.user.tier" :percentage="uStore.user.score" class="rank-exp" />
                     </div>
                     <div class="box-row left-count-box">
                         <span class="title main-title">푼 문제 수 : {{ solvedCnt }}</span>
@@ -143,30 +132,6 @@ const tier = (level) => {
                 </div>
             </div>
         </div>
-    </div>
-    <div class="box-row modal-content">
-        <div class="box-col modal-content-left">
-            <div class="box-row left-name-box">
-                <span class="title main-title">{{ uStore.user.nickname }}</span>
-            </div>
-            <div class="box-col left-tier-box">
-                <img id="rank-img" :src="imageSrc" alt="rank" class="rank-img" />
-                <Exp :tier="uStore.user.tier" :percentage="uStore.user.percent" class="rank-exp" />
-            </div>
-            <div class="box-row left-count-box">
-                <span class="title main-title">푼 문제 수 : {{ solvedCnt }}</span>
-            </div>
-        </div>
-        <div class="modal-content-right">
-            <span class="title main-title">푼 문제</span>
-            <div class="right-solved-box">
-                <div v-for="problem in solvedProblems" :key="problem.no" class="solved-box">
-                    <span :class="tier(problem.level)" @click="openSubmitListModal(problem.no)">{{ problem.no }}</span>
-                </div>
-            </div>
-        </div>
-    </div>
-    </div>
     </div>
     <div class="box-modal-bind">
         <PasswordReset v-if="isResetModalOpen" @close="closeResetModal" />

@@ -170,27 +170,37 @@ public class CompilerController {
             }
 
             if (sourceFile != null) {
+
                 Process process = processBuilder.start();
 
                 try (BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(process.getOutputStream(), StandardCharsets.UTF_8))) {
                     writer.write(input);
                 }
-
+                Runtime.getRuntime().gc();
                 // 메모리 모니터링 스레드 시작
-                MemoryMonitor memoryMonitor = new MemoryMonitor(memory);
-                memoryMonitor.start();
-
+//                MemoryMonitor memoryMonitor = new MemoryMonitor(memory);
+                boolean finishedInTime = process.waitFor(time, TimeUnit.SECONDS);
+//                memoryMonitor.start();
+//                System.out.println("123");
                 // 프로세스 실행 및 결과 읽기
                 result = readProcessOutput(process);
-                boolean finishedInTime = process.waitFor(time, TimeUnit.SECONDS); // 실행 시간 제한
-
+                 // 실행 시간 제한
+//                System.out.println("456");
                 // 메모리 모니터링 종료
-                memoryMonitor.stopMonitoring();
+//                memoryMonitor.stopMonitoring();
+                long usedMemoryMB = (Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory()) / (1024 * 1024);
 
                 if (!finishedInTime) {
-                    System.out.println("123");
-                    process.destroy(); // 프로세스 종료
+//                    System.out.println("123");
                     result = "Error: Time limit exceeded";
+                    System.out.println(result);
+                    process.destroy(); // 프로세스 종료
+                }
+                if (usedMemoryMB > memory) {
+//                    System.out.println("123");
+                    result = "Error: Memory limit exceeded";
+                    System.out.println(result);
+                    process.destroy(); // 프로세스 종료
                 }
 
                 sourceFile.delete();
@@ -233,32 +243,32 @@ public class CompilerController {
     }
 
     // 메모리 모니터링 클래스
-    private static class MemoryMonitor extends Thread {
-        private final long memoryLimitMB;
-        private volatile boolean running = true;
+//    private static class MemoryMonitor extends Thread {
+//        private final long memoryLimitMB;
+//        private volatile boolean running = true;
+//
+//        MemoryMonitor(long memoryLimitMB) {
+//            this.memoryLimitMB = memoryLimitMB;
+//            System.out.println(123);
+//        }
+//
+//        @Override
+//        public void run() {
+//            while (running) {
+//                long usedMemoryMB = (Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory()) / (1024 * 1024);
+//                if (usedMemoryMB > memoryLimitMB) {
+//                    throw new OutOfMemoryError("Memory limit exceeded");
+//                }
+//                try {
+//                    Thread.sleep(100); // 메모리 사용량을 주기적으로 확인
+//                } catch (InterruptedException e) {
+//                    Thread.currentThread().interrupt();
+//                }
+//            }
+//        }
+//
+//        void stopMonitoring() {
+//            running = false;
 
-        MemoryMonitor(long memoryLimitMB) {
-            this.memoryLimitMB = memoryLimitMB;
-            System.out.println(123);
-        }
 
-        @Override
-        public void run() {
-            while (running) {
-                long usedMemoryMB = (Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory()) / (1024 * 1024);
-                if (usedMemoryMB > memoryLimitMB) {
-                    throw new OutOfMemoryError("Memory limit exceeded");
-                }
-                try {
-                    Thread.sleep(100); // 메모리 사용량을 주기적으로 확인
-                } catch (InterruptedException e) {
-                    Thread.currentThread().interrupt();
-                }
-            }
-        }
-
-        void stopMonitoring() {
-            running = false;
-        }
-    }
 }

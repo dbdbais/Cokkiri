@@ -67,10 +67,10 @@ const callFilterSearch = async () => {
       <label class="title" for="silver">실버</label>
       <input id="gold" type="radio" name="tier" :checked="selectedTier === 3" @click="handleSelection(3)" />
       <label class="title" for="gold">골드</label>
-      <input id="platinum" type="radio" name="tier" :checked="selectedTier === 4" @click="handleSelection(4)" />
+      <!-- <input id="platinum" type="radio" name="tier" :checked="selectedTier === 4" @click="handleSelection(4)" />
       <label class="title" for="platinum">플래티넘</label>
       <input id="diamond" type="radio" name="tier" :checked="selectedTier === 5" @click="handleSelection(5)" />
-      <label class="title" for="diamond">다이아몬드</label>
+      <label class="title" for="diamond">다이아몬드</label> -->
     </div>
   </div>
 </template>

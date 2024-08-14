@@ -12,7 +12,7 @@ const userInfo = ref({});
 onMounted(async () => {
     try {
         const response = await getUser(props.comment.userId);
-        console.log(response);
+        // console.log(response);
         userInfo.value = response.data;
     } catch (error) {
         console.error(error);
@@ -52,7 +52,7 @@ const imageSrc = computed(() => {
             <img id="rank-img" :src="imageSrc" alt="rank" class="rank" />
             <div class="box-col comment-text">
                 <div class="box-row comment-text-top">
-                    <span>{{ props.comment.userId }}</span>
+                    <span>{{ props.comment.writer.nickname }}</span>
                     <span class="reply" @click="$emit('selectedReply', comment.id)">답글</span>
                 </div>
                 <span>{{ props.comment.content }}</span>

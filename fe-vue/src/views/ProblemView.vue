@@ -1,11 +1,13 @@
 <script setup>
-import { ref } from "vue";
+import { ref, watch } from "vue";
 import Logo from "@/components/common/Logo.vue";
 import ProblemList from "@/components/problem/ProblemList.vue";
 import ProblemSearch from "@/components/problem/ProblemSearch.vue";
+import { problemStore } from "@/stores/problem";
 
 const currentPage = ref(1);
 const totalPage = ref(1);
+const pStore = problemStore();
 
 const prevPage = function () {
   if (currentPage.value > 1) {
@@ -26,6 +28,11 @@ const setTotalPage = function (total) {
 const clearPage = function () {
   currentPage.value = 1;
 };
+
+watch(() => pStore.problems, (newValue, oldValue) => {
+  setTotalPage(Math.ceil(newValue.length / 8));
+});
+
 </script>
 
 <template>
@@ -36,7 +43,7 @@ const clearPage = function () {
     </div>
     <div class="problem-con box-col">
       <ProblemSearch @clear-page="clearPage" />
-      <ProblemList :current-page="currentPage" @emit-total-page="setTotalPage" />
+      <ProblemList :current-page="currentPage" />
       <div class="btn-con">
         <button class="btn-prev" @click="prevPage">◀</button>
         <button class="btn-next" @click="nextPage">▶</button>

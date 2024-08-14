@@ -19,11 +19,12 @@ const currentPageProblems = computed(() => {
 onMounted(() => {
   getAllProblems().then((response) => {
     store.setProblems(response.data);
-    emit("emitTotalPage", Math.ceil(store.problems.length / 8));
   }).catch((error) => {
     console.log(error);
   });
 });
+
+
 </script>
 
 <template>

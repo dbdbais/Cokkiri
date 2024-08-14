@@ -35,7 +35,7 @@ public class UserRestController {
     public List<User> getAllUser(){
         return userService.getUsers();
     }
-    @GetMapping("/{id}")
+    @GetMapping("{id}")
     public User getUser(@PathVariable String id){
         return userService.getUser(id);
     }

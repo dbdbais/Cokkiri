@@ -164,13 +164,17 @@ public class RegularService {
                 throw new RuntimeException("Regular not found");
             }
 
-            RegularUser regularUser = new RegularUser();
-            regularUser.setRegular(regularDto);
-            regularUser.setUser(user);
-            regularUser.setIsAccept(false);
-            regularUserRepository.save(regularUser);
+            if(regularUserRepository.findDuffl(regularDto, user).isEmpty()) {
+                RegularUser regularUser = new RegularUser();
+                regularUser.setRegular(regularDto);
+                regularUser.setUser(user);
+                regularUser.setIsAccept(false);
+                regularUserRepository.save(regularUser);
 
-            return 1;
+                return 1;
+            }
+
+            return 0;
         } catch (Exception e) {
             e.printStackTrace();
             return 0;
@@ -247,9 +251,14 @@ public class RegularService {
         }
 
         List<RegularUser> regularUsers = regularDto.getUsers();
+        List<String> users = new ArrayList<>();
+        List<String> tiers = new ArrayList<>();
+
         int count = 0;
         for(RegularUser regularUser: regularUsers) {
             if(regularUser.getIsAccept()) {
+                users.add(regularUser.getUser().getNickname());
+                tiers.add(regularUser.getUser().getTier().toString());
                 count++;
             }
         }
@@ -267,19 +276,9 @@ public class RegularService {
                         .sorted()
                         .map(RegularTimeDto::toString)
                         .collect(Collectors.toList()),
-                null,
-                null
+                users,
+                tiers
         );
-
-        List<String> users = new ArrayList<>();
-        List<String> tiers = new ArrayList<>();
-
-        for(RegularUser user: regularDto.getUsers()) {
-            users.add(user.getUser().getNickname());
-            tiers.add(user.getUser().getTier().toString());
-        }
-        regularResponseDto.setUsers(users);
-        regularResponseDto.setTiers(tiers);
 
         return regularResponseDto;
     }

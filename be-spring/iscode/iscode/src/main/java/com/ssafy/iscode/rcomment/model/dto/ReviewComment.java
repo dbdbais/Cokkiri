@@ -4,10 +4,14 @@ import com.ssafy.iscode.review.model.dto.Review;
 import com.ssafy.iscode.user.model.dto.User;
 import jakarta.persistence.*;
 import org.hibernate.annotations.ColumnDefault;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
+@EntityListeners(AuditingEntityListener.class)
 @Table(name = "rComment")
 public class ReviewComment {
 
@@ -37,6 +41,10 @@ public class ReviewComment {
 
     @OneToMany(mappedBy = "parent", orphanRemoval = true)
     private List<ReviewComment> children;
+
+    @CreatedDate
+    @Column(name = "createdTime",columnDefinition = "TIMESTAMP", updatable = false)
+    private LocalDateTime createdTime;
 
     public ReviewComment() {
     }

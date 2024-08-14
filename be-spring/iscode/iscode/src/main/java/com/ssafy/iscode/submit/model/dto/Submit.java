@@ -49,4 +49,16 @@ public class Submit {
         this.submit_code = submit_code;
         this.correct = correct;
     }
+
+    @Override
+    public String toString() {
+        return "Submit{" +
+                "no=" + no +
+                ", problem=" + problem +
+                ", user=" + user +
+                ", submit_code='" + submit_code + '\'' +
+                ", correct=" + correct +
+                ", createdTime=" + createdTime +
+                '}';
+    }
 }

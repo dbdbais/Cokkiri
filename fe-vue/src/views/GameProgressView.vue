@@ -35,13 +35,12 @@ const items = ref({
   prevent: false,
   fontBig: false,
   fontSmall: false,
-
 });
 
 const useBlind = ref(0);
 const useMinimum = ref(100);
 const usePrevernt = ref(false);
-const useBigFont = ref(() => { });
+const useBigFont = ref(() => {});
 const showitem = ref(false);
 const getItem = ref(false);
 const useItem = ref(false);
@@ -112,6 +111,11 @@ ws.onmessage = function (e) {
   } else if (event === "EXIT") {
     const userName = data[1];
     // 아이콘 빼기
+    console.log(event, userName);
+    users.value = users.value.filter((user) => {
+      // console.log(user, userName);
+      return user.nickname !== userName;
+    });
   } else if (event === "SUBMIT") {
     console.log("코드 제출");
     // if (pStore.correct()) {
@@ -266,7 +270,12 @@ const imageItem = (item) => {
 
 <template>
   <div class="md container">
-    <GameRamdomItem v-if="getItem" :items="itemList" :user-item="userItem" @close="close" />
+    <GameRamdomItem
+      v-if="getItem"
+      :items="itemList"
+      :user-item="userItem"
+      @close="close"
+    />
     <GameResult v-if="showResult" />
     <div class="game-prog-con box-col">
       <div class="exit box bold-text md" @click="closeRoom">
@@ -275,13 +284,22 @@ const imageItem = (item) => {
       </div>
       <img src="@/assets/timer_temp.svg" class="timer" />
       <div class="game-header box-row box-sb">
-        <div class="user bold-text box box-col" v-for="(user, index) in users" :key="index">
+        <div
+          class="user bold-text box box-col"
+          v-for="(user, index) in users"
+          :key="index"
+        >
           <img class="tier" :src="imageTier(user.tier)" alt="티어" />
           {{ user.nickname }}
         </div>
         <div class="box user-btn box-row" v-if="useItem">
           <div>
-            <button class="item bold-text" v-for="user in users" :key="user.index" @click="userUseItem(user.nickname)">
+            <button
+              class="item bold-text"
+              v-for="user in users"
+              :key="user.index"
+              @click="userUseItem(user.nickname)"
+            >
               {{ user.nickname }}
             </button>
           </div>
@@ -291,10 +309,20 @@ const imageItem = (item) => {
         </div>
         <div @mouseenter="showItemFun" @mouseleave="hideItmeFun">
           <div class="box slideUp item-box" v-if="showitem">
-            <button v-for="(val, key) in items" :key="key" class="item bold-text" :class="{ used: !items[key] }"
-              :disabled="!items[key]" @click="useItemFun(key)">
+            <button
+              v-for="(val, key) in items"
+              :key="key"
+              class="item bold-text"
+              :class="{ used: !items[key] }"
+              :disabled="!items[key]"
+              @click="useItemFun(key)"
+            >
               <div class="box-col item-img md">
-                <img :src="imageItem(key)" alt="아이템" style="margin-bottom: 10px" />
+                <img
+                  :src="imageItem(key)"
+                  alt="아이템"
+                  style="margin-bottom: 10px"
+                />
                 {{ itemText[key] }}
               </div>
             </button>
@@ -309,13 +337,25 @@ const imageItem = (item) => {
             </button> -->
           </div>
           <div class="item-guide md">
-            <img src="/src/assets/item-guide.svg" alt="아이템 가이드" class="floating" style="margin-top: 50px" />
+            <img
+              src="/src/assets/item-guide.svg"
+              alt="아이템 가이드"
+              class="floating"
+              style="margin-top: 50px"
+            />
           </div>
         </div>
       </div>
       <div class="game-content box-row">
-        <Main :roomData="roomData" :blind="useBlind" :minimum="useMinimum" :prevent="usePrevernt" :bigfont="useBigFont"
-          @submit-code="submitCode" @correct="correctCheck" />
+        <Main
+          :roomData="roomData"
+          :blind="useBlind"
+          :minimum="useMinimum"
+          :prevent="usePrevernt"
+          :bigfont="useBigFont"
+          @submit-code="submitCode"
+          @correct="correctCheck"
+        />
       </div>
     </div>
   </div>

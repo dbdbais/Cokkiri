@@ -164,7 +164,7 @@ const goRoom = function (roomId) {
         <span class="noti-title">방 초대</span>
         <div class="announ-con box room-con">
           <div v-for="(item, index) in notiRequest.room" :key="index" class="box-row noti-common-request-con">
-            <div v-if="index > 1" class="divider"></div>
+            <div v-if="index > 0" class="divider"></div>
             <div class="flex-align">
               <span class="badge box noti-common-request-text">
                 {{ item.roomId }}
@@ -334,7 +334,7 @@ div {
 .room-con {
   height: 200px;
   padding: 10px;
-  background-color: #d9bbff;
+  /* background-color: #d9bbff; */
   overflow-y: auto;
 }
 
@@ -365,6 +365,7 @@ div {
 
 .noti-common-request-text {
   font-size: 20px;
+  margin-left: 5px;
 }
 
 .btn-accept {

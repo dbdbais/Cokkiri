@@ -1,20 +1,42 @@
 <template>
   <div class="main-content box-main-con">
     <div class="box-row">
-      <div class="filter-btn box-main-noti" :class="{ active: categoryObj.all }" @click="$emit('is-game')">
+      <div
+        class="filter-btn box-main-noti"
+        :class="{ active: categoryObj.all }"
+        @click="$emit('is-game')"
+      >
         전체
       </div>
-      <div class="filter-btn box-main-noti" :class="{ active: categoryObj.study }" @click="$emit('is-game', false)">
+      <div
+        class="filter-btn box-main-noti"
+        :class="{ active: categoryObj.study }"
+        @click="$emit('is-game', false)"
+      >
         공부방
       </div>
-      <div class="filter-btn box-main-noti" :class="{ active: categoryObj.game }" @click="$emit('is-game', true)">
+      <div
+        class="filter-btn box-main-noti"
+        :class="{ active: categoryObj.game }"
+        @click="$emit('is-game', true)"
+      >
         게임방
       </div>
+      <button @click="$emit('refresh')">새로고침</button>
     </div>
     <div id="room-container" class="rooms">
-      <Room v-for="room in rooms" :key="room.id" :room="room" @click="$emit('go-room', room.sessionId)" />
+      <Room
+        v-for="room in rooms"
+        :key="room.id"
+        :room="room"
+        @click="$emit('go-room', room.sessionId)"
+      />
     </div>
-    <Page class="page" :current-page="currentPage" @change-page="(motion) => $emit('change-page', motion)" />
+    <Page
+      class="page"
+      :current-page="currentPage"
+      @change-page="(motion) => $emit('change-page', motion)"
+    />
   </div>
 </template>
 

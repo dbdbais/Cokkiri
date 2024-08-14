@@ -29,6 +29,7 @@
         @go-room="goRoom"
         @change-page="pageChange"
         @is-game="categoryList"
+        @refresh="refreshRoom"
       />
     </div>
   </div>
@@ -78,6 +79,10 @@ const categoryObj = ref({
   study: false,
 });
 const { isModalOpen, openModal, closeModal } = useModal();
+
+function refreshRoom() {
+  getRoomList({ page: currentPage.value });
+}
 
 const searchList = function (roomName) {
   getRoomList({ roomName: roomName });

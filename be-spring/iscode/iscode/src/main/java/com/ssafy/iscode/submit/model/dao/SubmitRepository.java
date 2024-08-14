@@ -71,6 +71,20 @@ public class SubmitRepository {
     }
 
     public boolean canReview(String userId, Long problemId) {
+
+
+        Long isSolved = (Long)em.createQuery("SELECT COUNT(s) FROM Submit s WHERE s.user.id = :userId AND s.problem.id = :problemId " +
+                "AND s.correct = true")
+                .setParameter("userId", userId)
+                .setParameter("problemId", problemId)
+                .getSingleResult();
+
+        if(isSolved >= 1){
+            System.out.println("solved");
+            return true;
+        }
+
+
         Long count = (Long) em.createQuery(
                         "SELECT COUNT(s) FROM Submit s WHERE s.user.id = :userId AND s.problem.id = :problemId"
                 )

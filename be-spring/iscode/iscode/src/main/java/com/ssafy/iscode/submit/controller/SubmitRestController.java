@@ -169,9 +169,10 @@ public class SubmitRestController {
             return submitResponseDTO;
         }
     }
-
+    
+    //팔터링 된 제출목록
     @GetMapping("/filter")
-    public List<SCodeResponseDTO> getFilteredSubmit(String userId, Long problemId){
+    public List<SCodeResponseDTO> getFilteredSubmit(@RequestParam String userId, @RequestParam Long problemId){
         List<SCodeResponseDTO> lst = submitService.getSubmitList(userId,problemId);
         for(SCodeResponseDTO s: lst){
             System.out.println(s);
@@ -183,7 +184,7 @@ public class SubmitRestController {
     public List<Long> getSolved(@RequestParam String userId){
         return submitService.getSolvedProblem(userId);
     }
-
+    // 리뷰를 달 수 있는지 여부
     @GetMapping("/view")
     public boolean canReview(@RequestParam String userId, @RequestParam Long problemId){
         return submitService.isReview(userId,problemId);

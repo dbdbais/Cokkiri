@@ -147,7 +147,6 @@ lobby.onmessage = function (event) {
     if (event === "NOTI") {
       console.log(event, param);
       messageStore.receiveNoti(param);
-      messageStore.receiveInvite(param);
     } else if (event === "FRIADD") {
       console.log("친구 신청 완료! (1)");
       addFriendFun();

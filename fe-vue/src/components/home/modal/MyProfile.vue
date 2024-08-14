@@ -9,7 +9,6 @@ import SubmitList from "@/components/home/modal/SubmitList.vue"
 
 const uStore = userStore()
 const pStore = problemStore()
-const solvedCnt = ref(0)
 const solvedProblems = ref([])
 const selectedNo = ref(0)
 const { isModalOpen, openModal, closeModal } = useModal()
@@ -32,6 +31,8 @@ const imageSrc = computed(() => {
             return new URL("@/assets/rank/seed.svg", import.meta.url).href;
     }
 });
+
+const solvedCnt = computed(() => solvedProblems.value.length)
 
 onBeforeMount(async () => {
     await fetchSolvedList()

@@ -58,7 +58,7 @@ const getUserData = async () => {
       <form class="box-col" @submit.prevent="submitForm">
         <img class="login-img" src="@/assets/login_elephant.svg" alt="" />
         <div class="input-group box-row">
-          <label for="username" class="lbl-id title">아이디 </label>
+          <label for="username" class="lbl-id title">이메일 </label>
           <input type="text" id="username" v-model="userData.id" />
         </div>
         <div class="input-group box-row pass-group">

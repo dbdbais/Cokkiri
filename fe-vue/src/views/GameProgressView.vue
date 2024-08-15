@@ -18,8 +18,6 @@ import { compileScript } from "vue/compiler-sfc";
 import { problemStore } from "@/stores/problem";
 import { useCorrectStore } from "@/stores/correct";
 
-const enemyCharacter = "/src/assets/game-character.svg";
-const myCharacter = "/src/assets/game-character.svg";
 const store = userStore();
 const gameStore = useGameStore();
 const pStore = problemStore();
@@ -137,14 +135,22 @@ ws.onmessage = function (e) {
     showResult.value = true;
   } else {
     cStore.userCorrect(data);
+    console.log(pStore.selectedProblemList);
     console.log(data);
     const userRank = data[0];
     const userName = data[1];
     getUserName(userName).then(async (res) => {
+      let problemScore = 0;
       console.log(res.data);
+      pStore.selectedProblemList.forEach((problem) => {
+        problemScore += problem.level * 3;
+      });
+
+      console.log((4 - Number(userRank)) * problemScore);
+
       await GamePoint({
         userId: res.data.id,
-        level: (10 - Number(userRank)) * 10,
+        level: (4 - Number(userRank)) * problemScore,
       }).then((res) => {
         console.log("경험치 증가!");
       });

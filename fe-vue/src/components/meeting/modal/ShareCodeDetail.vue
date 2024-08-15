@@ -42,17 +42,17 @@ const submitStore = useSubmitStore();
 
 <style scoped>
 .share-box {
-  width: 600px;
-  height: 600px;
+  width: 900px;
+  height: 650px;
   z-index: 5;
   background: #c191ff;
   position: absolute;
-  left: 650px;
-  top: 220px;
+  left: 500px;
+  top: 200px;
 }
 .share-content {
-  width: 550px;
-  height: 500px;
+  width: 850px;
+  height: 540px;
   margin-left: 20px;
   background-color: #dbe7ff;
 }
@@ -78,8 +78,8 @@ const submitStore = useSubmitStore();
   background-color: #c191ff;
 }
 .code {
-  width: 510px;
-  height: 380px;
+  width: 810px;
+  height: 420px;
   margin-left: 15px;
   overflow-y: auto;
 }

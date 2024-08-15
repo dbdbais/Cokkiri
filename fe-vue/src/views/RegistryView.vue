@@ -186,6 +186,9 @@ const emailConfirmCheckFun = async () => {
 <template>
   <div class="signup-container box-row">
     <div class="signup-box">
+      <RouterLink :to="{ name: 'login' }">
+        <img src="@/assets/mail-close.svg" alt="close-icon" class="close-icon" />
+      </RouterLink>
       <div class="form box-col">
         <img class="signup-img" src="@/assets/login_elephant.svg" alt="" />
         <!-- <div class="input-group box-col id-group">
@@ -202,21 +205,10 @@ const emailConfirmCheckFun = async () => {
         <div class="input-group box-col id-group">
           <label for="username" class="title lbl-id">이메일 </label>
           <div class="flex-align" style="position: relative">
-            <input
-              type="text"
-              id="email"
-              class="nomal-text"
-              v-model="email"
-              placeholder="example@ssafy.com"
-            />
-            <button
-              v-if="emailCheck"
-              type="button"
-              class="check-btn email-check"
-              :class="{ loding: loding }"
-              @click="emailCheckFun"
-            >
-              {{ loding ? "  " : "요청" }}
+            <input type="text" id="email" class="nomal-text" v-model="email" placeholder="example@ssafy.com" />
+            <button v-if="emailCheck" type="button" class="check-btn email-check" :class="{ loding: loding }"
+              @click="emailCheckFun">
+              {{ loding ? " " : "요청" }}
             </button>
             <span v-else class="check">요청</span>
             <div class="dots-flow" v-if="loding"></div>
@@ -224,19 +216,8 @@ const emailConfirmCheckFun = async () => {
         </div>
         <div class="input-group box-col id-group" style="margin-top: 10px">
           <div>
-            <input
-              type="text"
-              id="email-verify"
-              class="nomal-text"
-              v-model="emailConfirm"
-              placeholder="인증번호"
-            />
-            <button
-              v-if="emailConfirmCheck"
-              type="button"
-              class="check-btn email-check"
-              @click="emailConfirmCheckFun"
-            >
+            <input type="text" id="email-verify" class="nomal-text" v-model="emailConfirm" placeholder="인증번호" />
+            <button v-if="emailConfirmCheck" type="button" class="check-btn email-check" @click="emailConfirmCheckFun">
               확인
             </button>
             <span v-else class="check">확인</span>
@@ -245,19 +226,8 @@ const emailConfirmCheckFun = async () => {
         <div class="input-group box-col name-group">
           <label for="nickname" class="title lbl-name" id="name">닉네임 </label>
           <div>
-            <input
-              type="text"
-              id="nickname"
-              class="nomal-text"
-              v-model="nickname"
-              placeholder="닉네임"
-            />
-            <button
-              v-if="nicknameCheck"
-              type="button"
-              class="verify-btn"
-              @click="nicknameCheckFun"
-            >
+            <input type="text" id="nickname" class="nomal-text" v-model="nickname" placeholder="닉네임" />
+            <button v-if="nicknameCheck" type="button" class="verify-btn" @click="nicknameCheckFun">
               중복확인
             </button>
             <span v-else class="check">중복확인</span>
@@ -270,14 +240,9 @@ const emailConfirmCheckFun = async () => {
         </div>
 
         <div class="input-group box-col pass-group">
-          <label for="passwordconfirm" class="title lbl-pass-chk"
-            >비밀번호확인
+          <label for="passwordconfirm" class="title lbl-pass-chk">비밀번호확인
           </label>
-          <input
-            type="password"
-            id="passwordconfirm"
-            v-model="passwordConfirm"
-          />
+          <input type="password" id="passwordconfirm" v-model="passwordConfirm" />
         </div>
       </div>
       <button class="signup-btn" @click="submitForm">회원가입</button>
@@ -307,6 +272,16 @@ const emailConfirmCheckFun = async () => {
   border: 10px solid #0073e6;
   background-color: #a6c9ff;
   /* justify-content: space-around; */
+}
+
+.close-icon {
+  position: absolute;
+  top: -80px;
+  right: -600px;
+  /* top: 20px;
+  right: 20px; */
+  width: 80px;
+  cursor: pointer;
 }
 
 .form {
@@ -383,9 +358,11 @@ input {
   -webkit-text-stroke: 1px black;
   border: 5px solid #0073e6;
 }
+
 .check-btn {
   margin-top: 5px;
 }
+
 .check-btn:hover,
 .verify-btn:hover {
   background-color: #6a6aff;
@@ -420,6 +397,7 @@ input {
   color: gainsboro;
   border-color: gainsboro;
 }
+
 /**
   * Dots flow
   *
@@ -428,6 +406,7 @@ input {
 .dots-flow {
   scale: 0.8;
 }
+
 .dots-flow:before {
   -webkit-animation: dots-flow 0.85s infinite ease;
   animation: dots-flow 0.85s infinite ease;
@@ -441,26 +420,32 @@ input {
   transform: translate(-50%, -40px);
   width: 16px;
 }
+
 .loding {
   background-color: #a6a6ff;
 }
+
 @-webkit-keyframes dots-flow {
+
   0%,
   100% {
     -webkit-box-shadow: -26px 32px 0px 0 white, 0px 32px 0 0 white,
       26px 32px 0 0 white;
     box-shadow: -26px 32px 0px 0 white, 0px 32px 0 0 white, 26px 32px 0 0 white;
   }
+
   35% {
     -webkit-box-shadow: -26px 32px 0 4px purple, 0px 32px 0 0 white,
       26px 32px 0 0 white;
     box-shadow: -26px 32px 0 4px purple, 0px 32px 0 0 white, 26px 32px 0 0 white;
   }
+
   50% {
     -webkit-box-shadow: -26px 32px 0 0 white, 0px 32px 0 4px purple,
       26px 32px 0 0 white;
     box-shadow: -26px 32px 0 0 white, 0px 32px 0 4px purple, 26px 32px 0 0 white;
   }
+
   65% {
     -webkit-box-shadow: -26px 32px 0px 0 white, 0px 32px 0 0 white,
       26px 32px 0 4px purple;
@@ -470,22 +455,26 @@ input {
 }
 
 @keyframes dots-flow {
+
   0%,
   100% {
     -webkit-box-shadow: -26px 32px 0px 0 white, 0px 32px 0 0 white,
       26px 32px 0 0 white;
     box-shadow: -26px 32px 0px 0 white, 0px 32px 0 0 white, 26px 32px 0 0 white;
   }
+
   35% {
     -webkit-box-shadow: -26px 32px 0 4px purple, 0px 32px 0 0 white,
       26px 32px 0 0 white;
     box-shadow: -26px 32px 0 4px purple, 0px 32px 0 0 white, 26px 32px 0 0 white;
   }
+
   50% {
     -webkit-box-shadow: -26px 32px 0 0 white, 0px 32px 0 4px purple,
       26px 32px 0 0 white;
     box-shadow: -26px 32px 0 0 white, 0px 32px 0 4px purple, 26px 32px 0 0 white;
   }
+
   65% {
     -webkit-box-shadow: -26px 32px 0px 0 white, 0px 32px 0 0 white,
       26px 32px 0 4px purple;

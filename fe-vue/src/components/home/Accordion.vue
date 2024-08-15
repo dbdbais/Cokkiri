@@ -9,19 +9,14 @@
       </div>
       <div class="accordion-item" :class="isOpen(index) ? 'open' : ''">
         <div
-          v-for="friend in fStore.friendList"
-          :key="friend"
+          v-for="friend in friendList"
+          :key="friend.username"
           class="box-main-exp box-content"
         >
-          <img class="friend-profile" src="@/assets/elephant-profile2.svg" />
-          <slot :name="`content-${friend}`" class="title-member">
-            <span class="title friend-name">{{ friend }}</span>
+          <img class="friend-profile" :src="imageSrc(friend.tier)" />
+          <slot :name="`content-${friend.username}`" class="title-member">
+            <span class="title friend-name">{{ friend.username }}</span>
           </slot>
-          <img
-            src="@/assets/message.svg"
-            class="message-icon"
-            @click="openModal(member)"
-          />
         </div>
       </div>
     </div>
@@ -62,12 +57,13 @@
 <script setup>
 import { ref, onMounted, watch } from "vue";
 import { useModal } from "@/composables/useModal";
-import { getFriends, getAllUser } from "@/api/user";
+import { getFriends, getAllUser, getUserName } from "@/api/user";
 import { userStore } from "@/stores/user";
 import { friendStore } from "@/stores/friend";
 import Chat from "@/components/home/modal/Chat.vue";
 const uStore = userStore();
 const fStore = friendStore();
+const friendList = ref([]);
 
 onMounted(async () => {
   await getAllUser().then((res) => {
@@ -77,7 +73,39 @@ onMounted(async () => {
     console.log(res.data);
     fStore.setFriends(res.data);
   });
+  console.log(fStore.friendList);
+
+  await fStore.friendList.forEach((friend) => {
+    getUserName(friend).then((res) => {
+      console.log(res.data);
+      const friendInfo = {
+        username: res.data.nickname,
+        tier: res.data.tier,
+      };
+      friendList.value.push(friendInfo);
+    });
+    console.log(friend);
+  });
 });
+
+function imageSrc(tier) {
+  switch (tier) {
+    case "SEED":
+      return new URL("@/assets/rank/seed.svg", import.meta.url).href;
+    case "KIWI":
+      return new URL("@/assets/rank/kiwi.svg", import.meta.url).href;
+    case "APPLE":
+      return new URL("@/assets/rank/apple.svg", import.meta.url).href;
+    case "ORANGE":
+      return new URL("@/assets/rank/orange.svg", import.meta.url).href;
+    case "KOREAMELON":
+      return new URL("@/assets/rank/koreamelon.svg", import.meta.url).href;
+    case "DURIAN":
+      return new URL("@/assets/rank/durian.svg", import.meta.url).href;
+    default:
+      return new URL("@/assets/rank/seed.svg", import.meta.url).href;
+  }
+}
 
 const openIndex = ref([]);
 
@@ -162,14 +190,13 @@ const { isModalOpen, selectedMember, openModal, closeModal } = useModal();
 }
 
 .friend-name {
-  margin-left: 15px;
+  margin-left: 25px;
   font-size: 30px;
 }
 
 .friend-profile {
-  width: 45px;
-  height: 45px;
-  border-radius: 100%;
+  width: 35px;
+  height: 35px;
 }
 
 .message-icon {

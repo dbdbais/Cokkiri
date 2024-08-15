@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, onBeforeMount } from "vue";
 import { getFilteredSubmit } from "@/api/submit";
 import { userStore } from "@/stores/user";
 import WriteReview from "@/components/home/WriteReview.vue";
@@ -9,8 +9,9 @@ const props = defineProps({
 });
 const submitData = ref();
 const uStore = userStore();
+const currentReviewIndex = ref(0);
 
-onMounted(async () => {
+onBeforeMount(async () => {
     try {
         const response = await getFilteredSubmit(uStore.user.id, props.problemId);
         console.log(response);
@@ -20,46 +21,38 @@ onMounted(async () => {
     }
 })
 
-// const tmpSubmitData = ref([
-//     {
-//         submit_id: 1,
-//         correct: 1,
-//         created_time: "2021-10-10",
-//         code: "print('hello, world')",
-//         algo_num: 1000,
-//         user_id: "ssafy"
-//     },
-//     {
-//         submit_id: 2,
-//         correct: 1,
-//         created_time: "2021-10-10",
-//         code: "print('hello, world')",
-//         algo_num: 1000,
-//         user_id: "ssafy"
-//     },
-//     {
-//         submit_id: 3,
-//         correct: 1,
-//         created_time: "2021-10-10",
-//         code: "print('hello, world')",
-//         algo_num: 1000,
-//         user_id: "ssafy"
-//     }
-// ]);
+const movePrev = () => {
+    if (currentReviewIndex.value > 0) {
+        currentReviewIndex.value--;
+    }
+}
 
+const moveNext = () => {
+    if (currentReviewIndex.value < submitData.value.length - 1) {
+        currentReviewIndex.value++;
+    }
+}
 </script>
 
 <template>
     <div class="modal-overlay">
         <div class="modal-con">
             <div class="modal-header box-row">
-                <span class="title main-title">리뷰작성</span>
+                <span class="title main-title header-span">리뷰작성</span>
                 <img src="@/assets/exit.svg" alt="close" class="icon-close" @click="$emit('close')" />
             </div>
-            <div class="modal-content">
-                <WriteReview v-for="(submit, index) in submitData" :problem-id="problemId" :submit="submit"
-                    :index="index + 1" />
+            <div class="box-row modal-content">
+                <WriteReview v-if="submitData" :problem-id="problemId" :submit="submitData[currentReviewIndex]"
+                    :index="currentReviewIndex + 1" class="code-list" />
+                <!-- <WriteReview v-for="(submit, index) in submitData" :problem-id="problemId" :submit="submit"
+                    :index="index + 1" class="code-list" /> -->
             </div>
+            <button v-if="currentReviewIndex > 0" class="prev-btn" @click="movePrev">
+                <img src="@/assets/arrow_left_alt.svg" alt="prev" />
+            </button>
+            <button v-if="currentReviewIndex < submitData.length - 1" class="next-btn" @click="moveNext">
+                <img src="@/assets/arrow_right_alt.svg" alt="next" />
+            </button>
         </div>
     </div>
 </template>
@@ -71,9 +64,10 @@ onMounted(async () => {
 
 .modal-con {
     position: absolute;
-    right: 30px;
-    width: 800px;
-    height: 660px;
+    top: 520px;
+    right: 130px;
+    width: 650px;
+    height: 550px;
     border: 3px solid #3B72FF;
     border-radius: 10px;
     background-color: #DBE7FF;
@@ -85,18 +79,21 @@ onMounted(async () => {
     align-items: center;
 }
 
+.header-span {
+    font-size: 40px;
+}
+
 .modal-content {
-    margin-top: 20px;
-    height: 500px;
-    overflow: auto;
+    justify-content: center;
+    margin-top: 10px;
+    width: 600px;
+    height: 400px;
+    overflow-y: auto;
+    overflow-x: hidden;
 }
 
 .icon-close {
-    width: 60px;
-}
-
-.modal-header span {
-    font-size: 55px;
+    width: 40px;
 }
 
 .input-con span {
@@ -151,5 +148,32 @@ textarea {
 
 .btn span {
     font-size: 25px;
+}
+
+.code-list {
+    margin-bottom: 5px;
+}
+
+.prev-btn {
+    position: absolute;
+    bottom: 5px;
+    left: 50px;
+    background-color: transparent;
+    color: #3B72FF;
+    border: none;
+}
+
+.next-btn {
+    position: absolute;
+    bottom: 5px;
+    right: 50px;
+    background-color: transparent;
+    color: #3B72FF;
+    border: none;
+}
+
+.prev-btn>img,
+.next-btn>img {
+    width: 50px;
 }
 </style>

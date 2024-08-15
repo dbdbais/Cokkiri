@@ -59,13 +59,17 @@ const moveNext = () => {
 
 <style scoped>
 .modal-overlay {
-    background-color: rgba(0, 0, 0, 0);
+    background-color: rgba(0, 0, 0, 0.4) !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 1920px !important;
+    height: 1080px !important;
 }
 
 .modal-con {
     position: absolute;
-    top: 520px;
-    right: 130px;
+    top: 525px;
+    right: 125px;
     width: 650px;
     height: 550px;
     border: 3px solid #3B72FF;

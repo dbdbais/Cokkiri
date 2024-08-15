@@ -65,10 +65,10 @@
 ![목업업](resources/산출물_목업.png)
 
 ### ERD
-![ERD](resources/산출물_ERD.png)
+![ERD](resources/산출물_erd.png)
 
 ### API 명세서
-![API명세서](resources/산출물_API명세서.png)
+![API명세서](resources/산출물_api명세서.png)
 
 ## ✅기대 효과
 - 기술적 기대효과
@@ -83,6 +83,59 @@
     - 게임적 요소를 넣어 스터디 유지력 상승
 
 ## 개발 환경
+- Front-End
+    - Vue.js 3.4.29
+    - Vue-router 4.3.3
+    - Pinia 2.1.7
+    - Openvidu Browser 2.30.0
+    - Npm 10.5.0
+    - Node 20.12.2
+    - Javascript
+    - HTML5
+    - CSS3
+- Back-End
+    - Java 17.0.12
+    - Spring Boot 3.3.2
+	- Spring data JPA 3.3.2
+	- Spring Thymeleaf 3.3.2
+	- Spring Web 3.3.2
+	- Spring Web Services 3.3.2
+	- Spring Websocket 3.3.2
+	- Spring Webflux 3.3.2
+	- Spring Mail 3.3.2
+	- MyBatis 3.0.3
+	- Jackson 2.16.1
+	- Jsoup 1.15.3
+	- Lombok 1.18.28
+	- Openvidu-java-client 2.30.0
+	- MySQL 8.0.37
+    - JPA
+    - Gradle
+- Infra
+    - Docker
+    - Docker Compose
+    - Openvidu 2.23.0
+    - NginX
+    - Ubuntu 22.04
+    - Jenkins
+
+## 개발 도구
+- 이슈 관리
+    - JIRA
+- 형상 관리
+    - Gitlab
+- 커뮤니케이션 도구
+    - Notion
+    - Mattermost
+- 디자인
+    - Figma
+- UCC
+    - 프리미어 프로
+- 개발 툴
+    - VS Code 1.90.2
+    - IntelliJ IDEA 2024.1.4
+- 기타 툴
+    - Postman 11.7.0
 
 ## ✅팀 소개
 ![팀원소개](resources/팀원소개.png)

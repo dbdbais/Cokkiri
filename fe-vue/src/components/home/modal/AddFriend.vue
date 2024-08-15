@@ -111,7 +111,7 @@ const imageSrc = (grade) => {
               class="box-row box-main-exp friend-item"
             >
               <img
-                :src="imageSrc(friend.tier.toLowerCase())"
+                :src="imageSrc(friend.tier.toUpperCase())"
                 alt="friend"
                 class="friend-profile"
               />

@@ -1,6 +1,7 @@
 <script setup>
 import { onMounted, ref, watch } from "vue";
 import { getAllProblems } from "@/api/problem";
+import { selectedProblem } from "@/api/waitingroom";
 
 const problemList = ref([]);
 const selectProblem = ref([]);
@@ -10,7 +11,9 @@ const selectedProblemList = ref({});
 
 defineProps({
   roomData: Object,
+  roomId: Number,
 });
+const emit = defineEmits(["problem-select"]);
 
 onMounted(() => {
   getProblemsList();
@@ -30,7 +33,7 @@ const getProblemsList = () => {
     });
 };
 
-const selectedProblem = (no) => {
+const selectedProblemFun = (no) => {
   if (selectedProblemList.value[no]) {
     selectProblem.value = selectProblem.value.filter((problemNo) => {
       return problemNo !== no;
@@ -49,6 +52,16 @@ const selectedProblem = (no) => {
   }
 };
 
+function select(roomData, roomId, problemList, minLevel, maxLevel) {
+  console.log(roomId, problemList);
+  if (!roomData.isGame) {
+    selectedProblem(problemList, roomId).then((res) => {
+      console.log(res.data);
+    });
+  }
+  emit("problem-select", problemList, minLevel, maxLevel);
+}
+
 watch([minLevel, maxLevel], () => {
   getProblemsList();
 });
@@ -56,30 +69,60 @@ watch([minLevel, maxLevel], () => {
 
 <template>
   <div class="problem-list box box-col slideDown">
-    <img src="/src/assets/exit.svg" alt="나가기" class="exit" @click="$emit('close')" />
+    <img
+      src="/src/assets/exit.svg"
+      alt="나가기"
+      class="exit"
+      @click="$emit('close')"
+    />
     <div class="filter flex-align bold-text">
       <div class="flex-align">
         <label for="">LEVEL</label>
-        <input type="number" class="nomal-text" min="1" :max="maxLevel" v-model="minLevel" />
+        <input
+          type="number"
+          class="nomal-text"
+          min="1"
+          :max="maxLevel"
+          v-model="minLevel"
+        />
       </div>
       <span class="nomal-text"> ~ </span>
       <div class="flex-align">
         <label for="">LEVEL</label>
-        <input type="number" class="nomal-text" :min="minLevel" max="9" v-model="maxLevel" />
+        <input
+          type="number"
+          class="nomal-text"
+          :min="minLevel"
+          max="9"
+          v-model="maxLevel"
+        />
       </div>
     </div>
     <div class="problem-list-box box box-col">
-      <div class="problem-item box bold-text flex-align" v-for="problem in problemList" :key="problem.no">
+      <div
+        class="problem-item box bold-text flex-align"
+        v-for="problem in problemList"
+        :key="problem.no"
+      >
         <div class="badge md">LEVEL {{ problem.level }}</div>
-        <span class="no">NO.{{ String(problem.no).padStart(5, "0") }}</span><span class="dash nomal-text">-</span>
+        <span class="no">NO.{{ String(problem.no).padStart(5, "0") }}</span
+        ><span class="dash nomal-text">-</span>
         <span class="name">{{ problem.title }}</span>
-        <button v-if="!roomData.isGame" class="select-btn bold-text"
-          :class="{ selected: selectedProblemList[problem.no] }" @click="selectedProblem(problem.no)">
+        <button
+          v-if="!roomData.isGame"
+          class="select-btn bold-text"
+          :class="{ selected: selectedProblemList[problem.no] }"
+          @click="selectedProblemFun(problem.no)"
+        >
           {{ selectedProblemList[problem.no] ? "취소" : "선택" }}
         </button>
       </div>
     </div>
-    <button class="selected-btn bold-text" @click="$emit('problem-select', selectProblem, minLevel, maxLevel)">
+    <!-- <button class="selected-btn bold-text" @click="$emit('problem-select', selectProblem, minLevel, maxLevel)"> -->
+    <button
+      class="selected-btn bold-text"
+      @click="select(roomData, roomId, selectProblem, minLevel, maxLevel)"
+    >
       선택 완료
     </button>
   </div>

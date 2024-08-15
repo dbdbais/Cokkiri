@@ -70,8 +70,8 @@ public class UserService {
     }
 
     @Transactional
-    @Scheduled(cron = "0 0/30 * * * ?") //for real
-    //@Scheduled(cron = "0 * * * * *")  // 매 1분마다 실행
+    //@Scheduled(cron = "0 0/30 * * * ?") //for real
+    @Scheduled(cron = "0 * * * * *")  // 매 1분마다 실행
     public void isMissionAccomplished(){
         System.out.println("mission accomplished? ");
         List<User> users = userRepository.findAllWithIncompleteMissions();

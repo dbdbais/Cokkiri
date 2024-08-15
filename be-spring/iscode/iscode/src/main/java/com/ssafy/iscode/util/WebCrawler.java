@@ -34,6 +34,21 @@ public class WebCrawler {
         int memory = 0;
 
         Elements elem = document.select("#problem-body");
+        String baseUrl = "https://www.acmicpc.net";
+        // #problem-body 내부의 모든 img 태그 선택
+        Elements imgElements = elem.select("img");
+
+        for (Element img : imgElements) {
+            String src = img.attr("src");
+
+            // 만약 src가 /upload로 시작한다면
+            if (src.startsWith("/upload")) {
+                // 절대 경로로 변환
+                String absoluteUrl = baseUrl + src;
+                // src 속성 업데이트
+                img.attr("src", absoluteUrl);
+            }
+        }
 
         // delete button element & hint
         elem.select("button").remove();

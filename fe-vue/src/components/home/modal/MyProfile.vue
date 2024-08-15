@@ -97,11 +97,11 @@ const tier = (level) => {
 
 <template>
     <div class="modal-overlay">
-        <div class="modal-con" :class="{ shifed: isResetModalOpen || isSubmitModalOpen }">
+        <div class="modal-con"
+            :class="{ 'right-shift': isResetModalOpen, 'right-shift-close': !isResetModalOpen, 'left-shift': isSubmitModalOpen }">
             <div class="modal-header box-row">
                 <span class="title main-title header-text">마이프로필</span>
                 <div class="modal-header-right box-row">
-                    <span class="reset-pw" @click="openResetModal">비밀번호 변경</span>
                     <img class="close-icon" src="@/assets/exit.svg" @click="$emit('close')">
                 </div>
             </div>
@@ -109,6 +109,7 @@ const tier = (level) => {
                 <div class="box-col modal-content-left">
                     <div class="box-row left-name-box">
                         <span class="title main-title">{{ uStore.user.nickname }}</span>
+                        <img src="@/assets/settings_gray.svg" class="reset-pw" @click="openResetModal"></img>
                     </div>
                     <div class="box-col left-tier-box">
                         <img id="rank-img" :src="imageSrc" alt="rank" class="rank-img" />
@@ -154,7 +155,17 @@ const tier = (level) => {
     padding: 20px 30px;
 }
 
-.shifed {
+.right-shift {
+    transition: transform 0.4s ease-in-out;
+    transform: translate(30%, 0);
+}
+
+.right-shift-close {
+    transition: transform 0.4s ease-in-out;
+    transform: translate(0, 0);
+}
+
+.left-shift {
     transition: transform 0.4s ease-in-out;
     transform: translate(-35%, 0);
 }
@@ -171,17 +182,15 @@ const tier = (level) => {
 }
 
 .reset-pw {
-    margin-right: 20px;
-    font-size: 20px;
-    font-weight: 800;
-    border-radius: 5px;
-    background-color: #3b72ff;
-    color: white;
-    padding: 10px;
+    position: absolute;
+    border-radius: 50%;
+    width: 35px;
+    top: 8px;
+    right: 10px;
 }
 
 .reset-pw:hover {
-    background-color: #81c3ff;
+    background-color: rgb(199, 199, 199);
 }
 
 .close-icon {
@@ -223,6 +232,7 @@ const tier = (level) => {
 }
 
 .left-name-box {
+    position: relative;
     height: 60px;
     justify-content: center;
     align-items: center;
@@ -289,11 +299,12 @@ const tier = (level) => {
     border-radius: 10px;
     background-color: #dbe7ff;
     margin-top: 10px;
+    padding: 10px;
     overflow: auto;
 }
 
 .solved-box {
-    padding: 10px 20px;
+    display: inline-block;
 }
 
 .bronze,

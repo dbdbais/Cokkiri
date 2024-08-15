@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onBeforeMount } from "vue";
+import { ref, onBeforeMount, watch } from "vue";
 import { userStore } from "@/stores/user";
 import { useModal } from "@/composables/useModal";
 import { getProblem } from "@/api/problem";
@@ -16,6 +16,17 @@ const { isModalOpen: isSubmitModalOpen, openModal: openSubmitModal, closeModal: 
 onBeforeMount(async () => {
     try {
         const response = await getProblem(props.problemId);
+        console.log(response);
+        problemData.value = response.data;
+        problemText.value = getProblemText(response.data.info);
+    } catch (e) {
+        console.error(e);
+    }
+});
+
+watch(() => props.problemId, async (newVal) => {
+    try {
+        const response = await getProblem(newVal);
         console.log(response);
         problemData.value = response.data;
         problemText.value = getProblemText(response.data.info);
@@ -67,6 +78,12 @@ const getProblemText = (htmlText) => {
 <style scoped>
 .modal-overlay {
     background-color: rgba(0, 0, 0, 0);
+    /* background-color: red; */
+    /* left: 100px; */
+    width: 650px;
+    height: 500px;
+    top: 295px;
+    left: 1145px;
 }
 
 .title {
@@ -87,7 +104,9 @@ const getProblemText = (htmlText) => {
 
 .modal-con {
     position: absolute;
-    right: 130px;
+    /* right: 130px; */
+    top: 0;
+    left: 0;
     width: 650px;
     height: 500px;
     border: 3px solid #3B72FF;

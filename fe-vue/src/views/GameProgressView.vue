@@ -3,6 +3,7 @@ import Main from "@/components/meeting/Main.vue";
 import BattleStatus from "@/components/gameprogress/BattleStatus.vue";
 import GameRamdomItem from "@/components/gameprogress/GameRandomItem.vue";
 import GameResult from "@/components/gameprogress/GameResult.vue";
+import GameTimer from "@/components/gameprogress/GameTimer.vue";
 import { onMounted, ref } from "vue";
 import { useRoute } from "vue-router";
 import { userStore } from "@/stores/user";
@@ -290,7 +291,7 @@ const imageItem = (item) => {
         <img src="@/assets/exit_room.svg" alt="나가기" />
         나가기
       </div>
-      <img src="@/assets/timer_temp.svg" class="timer" />
+      <GameTimer class="timer" />
       <div class="game-header box-row box-sb">
         <div class="user bold-text box box-col" v-for="(user, index) in users" :key="index">
           <img class="tier" :src="imageTier(user.tier)" alt="티어" />
@@ -452,9 +453,9 @@ const imageItem = (item) => {
 
 .timer {
   position: absolute;
-  width: 250px;
+  width: 180px;
   right: 0px;
-  top: 110px;
+  top: 80px;
 }
 
 .prog-gui-con {

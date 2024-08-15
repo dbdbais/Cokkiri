@@ -3,13 +3,12 @@ import { ref, computed, onBeforeMount } from "vue"
 import { userStore } from "@/stores/user"
 import { useModal } from "@/composables/useModal"
 import { getSolved } from "@/api/submit"
-import { problemStore } from "@/stores/problem"
+import { getProblem } from "@/api/problem"
 import Exp from "@/components/home/Exp.vue"
 import PasswordReset from "@/components/home/modal/PasswordReset.vue"
 import ProblemInfo from "@/components/home/modal/ProblemInfo.vue"
 
 const uStore = userStore();
-const pStore = problemStore();
 const solvedProblems = ref([]);
 const selectedNo = ref(0);
 const {
@@ -46,30 +45,36 @@ const solvedCnt = computed(() => solvedProblems.value.length);
 
 onBeforeMount(async () => {
     await fetchSolvedList();
-    solvedProblems.value = processData();
+    solvedProblems.value = await processData();
+    console.log(solvedProblems.value);
 });
 
 const fetchSolvedList = async () => {
     try {
         const response = await getSolved(uStore.user.id);
-        console.log(response);
         solvedProblems.value = response.data;
     } catch (error) {
         console.error(error);
     }
 };
 
-const processData = () => {
+const processData = async () => {
     var solvedList = [];
-    for (let solved of solvedProblems.value) {
-        solvedList.push({
-            no: solved,
-            level: pStore.problems.find((item) => item.no === solved).level,
-        });
+    try {
+        for (let solved of solvedProblems.value) {
+            const response = await getProblem(solved);
+            if (response.status === 200) {
+                solvedList.push({
+                    no: solved,
+                    level: response.data.level,
+                });
+            }
+        }
+        return solvedList;
+    } catch (error) {
+        console.error(error);
+        return solvedList;
     }
-    console.log("MyProfile solvedList: ");
-    console.log(solvedList);
-    return solvedList;
 };
 
 const openProblemInfo = (problemId) => {

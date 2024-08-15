@@ -6,19 +6,26 @@ const baseURL = "userapi";
 /* *******************
        User API
   ******************* */
+export function getAllUser() {
+  return axios({
+    url: `${baseURL}`,
+    method: "get",
+  });
+}
+
+export function GamePoint(data) {
+  return axios({
+    url: `${baseURL}/correct`,
+    method: "put",
+    params: data,
+  });
+}
 
 export function register(data) {
   return axios({
     url: `${baseURL}/register`,
     method: "post",
     data,
-  });
-}
-
-export function getAllUser() {
-  return axios({
-    url: `${baseURL}`,
-    method: "get",
   });
 }
 

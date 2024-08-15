@@ -13,11 +13,6 @@ const pStore = problemStore();
 const solvedProblems = ref([]);
 const selectedNo = ref(0);
 const {
-    isModalOpen: isSubmitModalOpen,
-    openModal: openSubmitModal,
-    closeModal: closeSubmitModal,
-} = useModal();
-const {
     isModalOpen: isResetModalOpen,
     openModal: openResetModal,
     closeModal: closeResetModal,
@@ -72,11 +67,13 @@ const processData = () => {
             level: pStore.problems.find((item) => item.no === solved).level,
         });
     }
+    console.log("MyProfile solvedList: ");
     console.log(solvedList);
     return solvedList;
 };
 
 const openProblemInfo = (problemId) => {
+    closeProblemInfoModal();
     selectedNo.value = problemId;
     openProblemInfoModal();
 };
@@ -314,6 +311,9 @@ const tier = (level) => {
 
 .solved-box {
     display: inline-block;
+    text-align: center;
+    width: 75px;
+    margin: 2px 10px;
 }
 
 .bronze,
@@ -321,6 +321,8 @@ const tier = (level) => {
 .gold,
 .platinum,
 .diamond {
+    display: inline-block;
+    width: 75px;
     margin: 5px;
     padding: 5px;
     border-radius: 10px;
@@ -333,16 +335,28 @@ const tier = (level) => {
     color: #ac8531;
 }
 
+.bronze:hover {
+    background-color: #fddc6b;
+}
+
 .silver {
     border: 5px solid #b5a5a5;
     background-color: #e7d0d0;
     color: #b5a5a5;
 }
 
+.silver:hover {
+    background-color: #e7e0e0;
+}
+
 .gold {
-    border: 5px solid #b69e21;
-    background-color: #ffd700;
+    border: 5px solid hsl(50, 69%, 42%);
+    background-color: hsl(51, 100%, 50%);
     color: #b69e21;
+}
+
+.gold:hover {
+    background-color: hsl(50, 100%, 60%);
 }
 
 .box-modal-bind {

@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from "vue";
+import { ref, watch } from "vue";
 import { create } from "@/api/review";
 import { userStore } from "@/stores/user";
 import { auto } from "@/api/review"
@@ -59,6 +59,11 @@ const fetchAuto = async () => {
 const toggle = () => {
     codeSelected.value = !codeSelected.value;
 };
+
+watch(() => props.submit, () => {
+    reviewContent.value = "";
+    isUseAi.value = false;
+});
 </script>
 
 <template>
@@ -103,7 +108,7 @@ const toggle = () => {
     justify-content: space-between;
     border-radius: 10px;
     background-color: #3B72FF;
-    padding: 5px;
+    padding: 5px 10px;
 }
 
 .code-header>span {
@@ -145,6 +150,9 @@ textarea {
     width: 100%;
     height: 150px;
     font-size: 18px;
+    /* font-weight: 600; */
+    font-family: "yg-jalnan";
+    padding: 10px;
 }
 
 .btn-con {

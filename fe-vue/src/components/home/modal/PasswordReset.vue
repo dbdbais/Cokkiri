@@ -92,7 +92,7 @@ const resetPw = async () => {
 
 <style scoped>
 .modal-overlay {
-    background-color: rgba(0, 0, 0, 0) !important;
+    background-color: rgba(0, 0, 0, 0.4) !important;
 }
 
 .modal-con {

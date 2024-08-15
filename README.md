@@ -1,5 +1,5 @@
 # (코)딩하는 사람 (끼)리 (스)터디
-![코끼리](resources/코끼리.png)
+![코끼리](resources/코끼리.PNG)
 
 ## ✅프로젝트 소개
 - 프로젝트 기간: 2024-07-02 ~ 2024-08-16
@@ -11,7 +11,7 @@
     - 알고리즘 학습과 Gamification 요소를 결합하여 학습 동기와 성과를 향상시키는 웹 기반 플랫폼을 만드는 것을 목표로 함
 
 ## ✅기술스택
-![기술스택](resources/기술스택.png)
+![기술스택](resources/기술스택.PNG)
 
 ## ✅아키텍처
 ![아키텍처](resources/아키텍처.png)
@@ -59,16 +59,16 @@
 ## ✅산출물
 
 ### 요구사항 명세서
-![요구사항명세서](resources/산출물_요구사항명세서.png)
+![요구사항명세서](resources/산출물_요구사항명세서.PNG)
 
 ### 목업
-![목업업](resources/산출물_목업.png)
+![목업업](resources/산출물_목업.PNG)
 
 ### ERD
-![ERD](resources/산출물_erd.png)
+![ERD](resources/산출물_erd.PNG)
 
 ### API 명세서
-![API명세서](resources/산출물_api명세서.png)
+![API명세서](resources/산출물_api명세서.PNG)
 
 ## ✅기대 효과
 - 기술적 기대효과
@@ -138,4 +138,4 @@
     - Postman 11.7.0
 
 ## ✅팀 소개
-![팀원소개](resources/팀원소개.png)
+![팀원소개](resources/팀원소개.PNG)

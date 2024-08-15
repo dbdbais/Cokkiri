@@ -112,7 +112,7 @@ const tier = (level) => {
                     </div>
                     <div class="box-col left-tier-box">
                         <img id="rank-img" :src="imageSrc" alt="rank" class="rank-img" />
-                        <Exp :tier="uStore.user.tier" :percentage="uStore.user.percent" class="rank-exp" />
+                        <Exp :tier="uStore.user.tier" :percentage="uStore.user.score" class="rank-exp" />
                     </div>
                     <div class="box-row left-count-box">
                         <span class="title main-title">푼 문제 수 : {{ solvedCnt }}</span>

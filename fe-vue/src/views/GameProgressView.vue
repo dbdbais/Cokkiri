@@ -6,7 +6,7 @@ import GameResult from "@/components/gameprogress/GameResult.vue";
 import { onMounted, ref } from "vue";
 import { useRoute } from "vue-router";
 import { userStore } from "@/stores/user";
-import { getUserName } from "@/api/user";
+import { getUserName, GamePoint } from "@/api/user";
 import { getWaitingRoom } from "@/api/waitingroom";
 import { useGameStore } from "@/stores/game";
 import { useSubmitStore } from "@/stores/submit";
@@ -112,6 +112,11 @@ ws.onmessage = function (e) {
   } else if (event === "EXIT") {
     const userName = data[1];
     // 아이콘 빼기
+    console.log(event, userName);
+    users.value = users.value.filter((user) => {
+      // console.log(user, userName);
+      return user.nickname !== userName;
+    });
   } else if (event === "SUBMIT") {
     console.log("코드 제출");
     // if (pStore.correct()) {
@@ -131,6 +136,18 @@ ws.onmessage = function (e) {
     showResult.value = true;
   } else {
     cStore.userCorrect(data);
+    console.log(data);
+    const userRank = data[0];
+    const userName = data[1];
+    getUserName(userName).then(async (res) => {
+      console.log(res.data);
+      await GamePoint({
+        userId: res.data.id,
+        level: (10 - Number(userRank)) * 10,
+      }).then((res) => {
+        console.log("경험치 증가!");
+      });
+    });
 
     if (event === "3") {
       setTimeout(() => {

@@ -129,10 +129,16 @@ function getRandomIntInclusive(min, max) {
 
 onMounted(async () => {
   loadingStore.loading();
+
+  // getGameProblem(roomData.value.roomId)
   chatStore.resetChatList();
   setTimeout(() => {
     loadingStore.loadingSuccess();
     console.log(roomData.value);
+    getProblemList(route.params.roomId).then((res) => {
+      console.log(res.data);
+      problemList.value = res.data;
+    });
     roomData.value.users.forEach((user) => {
       getUserName(user)
         .then((res) => {
@@ -231,6 +237,7 @@ const exitRoom = async function () {
       <WaitingRoomProblemList
         v-if="problemModal"
         :room-data="roomData"
+        :room-id="route.params.roomId"
         @problem-select="selectProblem"
         @close="problemModal = false"
       />

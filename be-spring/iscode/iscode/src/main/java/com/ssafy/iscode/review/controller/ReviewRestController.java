@@ -70,6 +70,6 @@ public class ReviewRestController {
 
     @PostMapping("/auto")
     public String autoCreate(@RequestBody String submitCode) throws IOException {
-        return apiConnection.useOpenAI(submitCode,"유저가 제출한 코드를 보고 어떤 로직으로 동작하였고, 어떤 자료구조를 썼으며, 어떠한 알고리즘을 사용했는지 리뷰를 작성하고 이를 기반으로 제출 코드에 주석을 달아줘.");
+        return apiConnection.useOpenAI(submitCode,"유저가 제출한 코드를 보고 어떤 로직으로 동작하였고, 어떤 자료구조를 썼으며, 어떠한 알고리즘을 사용했는지 리뷰를 작성해줘.");
     }
 }

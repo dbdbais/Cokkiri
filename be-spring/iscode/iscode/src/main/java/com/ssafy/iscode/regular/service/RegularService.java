@@ -401,9 +401,14 @@ public class RegularService {
 
                 List<String> timeDetail = List.of(timeStr.split("\\" + SEPARATOR));
 
+                int weekdayNum = Arrays.asList(WEEKDAY).indexOf(timeDetail.get(0));
+                if(weekdayNum < 0) {
+                    weekdayNum = 0;
+                }
+
                 RegularTimeDto regularTimeDto = new RegularTimeDto();
                 regularTimeDto.setRegular(regularDto);
-                regularTimeDto.setWeekday(Arrays.asList(WEEKDAY).indexOf(timeDetail.get(0)));
+                regularTimeDto.setWeekday(weekdayNum);
                 regularTimeDto.setStart(Integer.parseInt(timeDetail.get(1)));
                 regularTimeDto.setEnd(Integer.parseInt(timeDetail.get(2)));
                 regularTimeRepository.save(regularTimeDto);

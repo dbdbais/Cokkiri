@@ -163,21 +163,24 @@ const goRoom = function (roomId) {
       <div v-if="isSelected == 'noti'">
         <span class="noti-title">방 초대</span>
         <div class="announ-con box room-con">
-          <div v-for="(item, index) in notiRequest.room" :key="index" class="box-row noti-common-request-con">
+          <div v-for="(item, index) in notiRequest.room" :key="index" class="box-col">
             <div v-if="index > 0" class="divider"></div>
-            <div class="flex-align">
-              <span class="badge box noti-common-request-text">
-                {{ item.roomId }}
-              </span>
-              {{ item.userName }}
-            </div>
-            <div class="box-row">
-              <button class="btn-accept bold-text" @click="goRoom(item.roomId)">
-                수락
-              </button>
-              <button class="btn-reject bold-text" @click="requestReject('room', item)">
-                거절
-              </button>
+            <div class="box-row noti-common-request-con">
+              <div class="flex-align ">
+                <span class="badge box noti-common-request-text">
+                  {{ item.roomId }}
+                </span>
+                {{ item.userName }}
+              </div>
+              <div class="box-row">
+                <button class="btn-accept bold-text" @click="goRoom(item.roomId)">
+                  수락
+                </button>
+                <button class="btn-reject bold-text" @click="requestReject('room', item)">
+                  거절
+                </button>
+              </div>
+
             </div>
           </div>
         </div>
@@ -200,8 +203,9 @@ const goRoom = function (roomId) {
         </div>
         <span class="noti-title">정기 스터디</span>
         <div class="announ-con box regular-con">
-          <div v-for="(regular, index) in notiRequest.regular" :key="index">
+          <div v-for="(regular, index) in notiRequest.regular" :key="index" class="box-col">
             <div v-for="(user, index) in regular.users" :key="index" class="box-row noti-common-request-con">
+              <div v-if="index > 0" class="divider"></div>
               <div class="flex-align">
                 <div class="badge box md">{{ regular.regularName }}</div>
                 <span style="margin-left: 10px" class="noti-common-request-text">{{ user }}</span>

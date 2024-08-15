@@ -1,12 +1,19 @@
 <template>
   <div class="box-main-con box-col">
-    <div class="box-row" style="justify-content: space-between; align-items: center">
+    <div
+      class="box-row"
+      style="justify-content: space-between; align-items: center"
+    >
       <div id="name" class="title main-title">{{ uStore.user.nickname }}</div>
       <img class="logout" src="@/assets/logout2.svg" @click="logout" />
     </div>
     <div class="rank-con box-row box-main-exp" style="align-items: center">
-      <img :src="imageSrc" alt="rank" class="rank-img" />
-      <Exp :tier="tier" :percentage="uStore.user.score" class="rank-exp"></Exp>
+      <img :src="imageSrc()" alt="rank" class="rank-img" />
+      <Exp
+        :tier="uStore.user.tier"
+        :percentage="uStore.user.score"
+        class="rank-exp"
+      ></Exp>
     </div>
   </div>
 </template>
@@ -29,8 +36,8 @@ onMounted(() => {
 });
 const grade = uStore.user.tier;
 
-const imageSrc = computed(() => {
-  switch (grade) {
+function imageSrc() {
+  switch (uStore.user.tier) {
     case "SEED":
       return new URL("@/assets/rank/seed.svg", import.meta.url).href;
     case "KIWI":
@@ -46,7 +53,7 @@ const imageSrc = computed(() => {
     default:
       return new URL("@/assets/rank/seed.svg", import.meta.url).href;
   }
-});
+}
 
 const logout = function () {
   uStore.logout();

@@ -46,7 +46,7 @@ import MainContent from "@/components/home/MainContent.vue";
 import MyProfile from "@/components/home/modal/MyProfile.vue";
 
 import { getWaitingRoomList, goWaitingRoom } from "@/api/waitingroom";
-import { getAllUser, getFriends } from "@/api/user";
+import { getAllUser, getFriends, getUser } from "@/api/user";
 import { insertClass } from "@/api/problem";
 import { ref, onMounted, onUnmounted } from "vue";
 import { useRouter } from "vue-router";
@@ -198,6 +198,10 @@ const getRoomList = function (params) {
 };
 
 onMounted(() => {
+  getUser(uStore.user.id).then((res) => {
+    uStore.setUser(res.data);
+    console.log(res.data);
+  });
   getRoomList({ page: currentPage.value });
   callInsertClass();
   iStore.setFontSize(20);

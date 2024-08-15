@@ -1,11 +1,20 @@
 <script setup>
 import { useCorrectStore } from "@/stores/correct";
-import { onUnmounted, ref } from "vue";
+import { problemStore } from "@/stores/problem";
+import { onMounted, onUnmounted, ref } from "vue";
 import { useRouter } from "vue-router";
 
 const cStore = useCorrectStore();
 const ranking = ref(cStore.userRankList);
 const router = useRouter();
+const pStore = problemStore();
+
+let problemPoint = 0;
+
+pStore.selectedProblemList.forEach((problem) => {
+  problemPoint += problem.level * 3;
+});
+
 function rankCheck(rank) {
   switch (rank) {
     case "1":
@@ -20,6 +29,10 @@ function rankCheck(rank) {
 function closeRoom() {
   router.replace({ name: "home" });
 }
+
+onMounted(() => {
+  console.log(ranking);
+});
 </script>
 
 <template>
@@ -35,9 +48,11 @@ function closeRoom() {
           <span class="rank bold-text" :class="rankCheck(user.userRank)">
             {{ user.userRank }}
           </span>
-          <span class="name bold-text">
+          <div class="name bold-text">
             {{ user.username }}
-          </span>
+            <span class="exp">+EXP</span>
+            <span class="score">{{ (4 - user.userRank) * problemPoint }}</span>
+          </div>
           <div class="time bold-text md box">
             {{
               String(
@@ -108,7 +123,13 @@ function closeRoom() {
   padding: 5px 10px;
   background-color: #dbe7ff;
 }
-
+.exp {
+  font-size: 15px;
+}
+.score {
+  font-size: 15px;
+  margin-left: 5px;
+}
 .one {
   font-size: 55px;
   left: 53px;

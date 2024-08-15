@@ -5,8 +5,8 @@ import { useModal } from "@/composables/useModal"
 import { getSolved } from "@/api/submit"
 import { problemStore } from "@/stores/problem"
 import Exp from "@/components/home/Exp.vue"
-import SubmitList from "@/components/home/modal/SubmitList.vue"
 import PasswordReset from "@/components/home/modal/PasswordReset.vue"
+import ProblemInfo from "@/components/home/modal/ProblemInfo.vue"
 
 const uStore = userStore();
 const pStore = problemStore();
@@ -21,6 +21,11 @@ const {
     isModalOpen: isResetModalOpen,
     openModal: openResetModal,
     closeModal: closeResetModal,
+} = useModal();
+const {
+    isModalOpen: isProblemInfoModalOpen,
+    openModal: openProblemInfoModal,
+    closeModal: closeProblemInfoModal,
 } = useModal();
 
 const imageSrc = computed(() => {
@@ -71,9 +76,9 @@ const processData = () => {
     return solvedList;
 };
 
-const openSubmitListModal = (problemId) => {
+const openProblemInfo = (problemId) => {
     selectedNo.value = problemId;
-    openSubmitModal();
+    openProblemInfoModal();
 };
 
 const tier = (level) => {
@@ -98,7 +103,7 @@ const tier = (level) => {
 <template>
     <div class="modal-overlay">
         <div class="modal-con"
-            :class="{ 'right-shift': isResetModalOpen, 'right-shift-close': !isResetModalOpen, 'left-shift': isSubmitModalOpen }">
+            :class="{ 'right-shift': isResetModalOpen, 'shift-close': !isResetModalOpen && !isProblemInfoModalOpen, 'left-shift': isProblemInfoModalOpen }">
             <div class="modal-header box-row">
                 <span class="title main-title header-text">마이프로필</span>
                 <div class="modal-header-right box-row">
@@ -122,11 +127,11 @@ const tier = (level) => {
                 <div class="modal-content-right">
                     <div class="box-row right-header-box">
                         <span class="title main-title">푼 문제</span>
-                        <span class="write-review" @click="openSubmitModal">리뷰 작성하기</span>
+                        <!-- <span class="write-review" @click="openSubmitModal">리뷰 작성하기</span> -->
                     </div>
                     <div class="right-solved-box">
                         <div v-for="problem in solvedProblems" :key="problem.no" class="solved-box">
-                            <span :class="tier(problem.level)" @click="openSubmitListModal(problem.no)">{{ problem.no
+                            <span :class="tier(problem.level)" @click="openProblemInfo(problem.no)">{{ problem.no
                                 }}</span>
                         </div>
                     </div>
@@ -136,7 +141,7 @@ const tier = (level) => {
     </div>
     <div class="box-modal-bind">
         <PasswordReset v-if="isResetModalOpen" @close="closeResetModal" />
-        <SubmitList v-if="isSubmitModalOpen" @close="closeSubmitModal" :problem-id="selectedNo" />
+        <ProblemInfo v-if="isProblemInfoModalOpen" @close="closeProblemInfoModal" :problem-id="selectedNo" />
     </div>
 </template>
 
@@ -160,14 +165,14 @@ const tier = (level) => {
     transform: translate(30%, 0);
 }
 
-.right-shift-close {
+.shift-close {
     transition: transform 0.4s ease-in-out;
     transform: translate(0, 0);
 }
 
 .left-shift {
     transition: transform 0.4s ease-in-out;
-    transform: translate(-35%, 0);
+    transform: translate(-33%, 0);
 }
 
 .modal-header {
@@ -275,6 +280,10 @@ const tier = (level) => {
 
 .right-header-box {
     justify-content: space-between;
+}
+
+.right-header-box>span {
+    margin-top: 5px;
 }
 
 .write-review {

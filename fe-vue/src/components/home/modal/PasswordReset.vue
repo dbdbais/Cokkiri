@@ -8,6 +8,7 @@ const verifyPw = ref(false)
 const curPw = ref("")
 const newPw = ref("")
 const newPwCheck = ref("")
+const emit = defineEmits(["close"])
 
 const requestVerifyPw = async () => {
     try {
@@ -49,6 +50,9 @@ const resetPw = async () => {
                 icon: "success",
                 title: "비밀번호가 변경되었습니다."
             })
+            newPw.value = ""
+            newPwCheck.value = ""
+            emit("close")
         } else {
             swal.fire({
                 icon: "error",

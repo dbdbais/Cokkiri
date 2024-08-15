@@ -10,9 +10,10 @@ const props = defineProps({
     index: Number
 });
 
-const codeSelected = ref(false);
+const codeSelected = ref(true);
 const reviewContent = ref("");
 const uStore = userStore();
+const isUseAi = ref(false);
 
 const writeReview = async () => {
     try {
@@ -23,11 +24,14 @@ const writeReview = async () => {
             content: reviewContent.value
         });
         console.log(response);
-        Swal.fire({
-            icon: "success",
-            title: "리뷰 작성이 완료되었습니다.",
-        });
-        reviewContent.value = "";
+        if (response.data === 1) {
+            Swal.fire({
+                icon: "success",
+                title: "리뷰 작성이 완료되었습니다.",
+            });
+            reviewContent.value = "";
+            isUseAi.value = false;
+        }
     } catch (error) {
         console.error(error);
         Swal.fire({
@@ -38,10 +42,14 @@ const writeReview = async () => {
 };
 
 const fetchAuto = async () => {
+    if (isUseAi.value === true) return;
     try {
-        console.log(tmpCode.value);
-        const response = await auto(tmpCode.value);
+        console.log(props.submit.code);
+        const response = await auto(props.submit.code);
         console.log(response);
+        if (response.status === 200) {
+            isUseAi.value = true;
+        }
         reviewContent.value = response.data;
     } catch (e) {
         console.error(e);
@@ -55,36 +63,52 @@ const toggle = () => {
 
 <template>
     <div>
-        <div class="code-header box-row" @click="toggle">
-            <span class="title main-title">{{ props.index }}번 코드</span>
-            <span class="title main-title">{{ props.submit.createdTime.split("T").join(" ") }}</span>
-        </div>
-    </div>
-    <div v-if="codeSelected">
-        <div class="input-con code-con">
-            <span class="title">코드</span><br />
-            <div class="code">
-                <highlightjs language="python" :code="props.submit.code"></highlightjs>
+        <div>
+            <div class="code-header box-row" @click="toggle">
+                <span class="title main-title">{{ props.index }}번 코드</span>
+                <span class="title main-title">{{ props.submit.createdTime.split("T").join(" ").slice(0, -3) }}</span>
             </div>
         </div>
-        <div class=" input-con review-con">
-            <span class="title">리뷰내용</span><br />
-            <textarea v-model="reviewContent"></textarea>
-        </div>
-        <div class="box-row btn-con">
-            <div class="btn" @click="fetchAuto">
-                <span class="title">자동작성</span>
+        <div v-if="codeSelected" class="code-content">
+            <div class="input-con code-con">
+                <span class="title">코드</span><br />
+                <div class="code">
+                    <highlightjs language="python" :code="props.submit.code"></highlightjs>
+                </div>
             </div>
-            <div class="btn" @click="writeReview">
-                <span class="title">작성하기</span>
+            <div class=" input-con review-con">
+                <span class="title">리뷰내용</span><br />
+                <textarea v-model="reviewContent"></textarea>
+            </div>
+            <div class="box-row btn-con">
+                <div class="btn" @click="fetchAuto" :class="{ disabled: isUseAi }">
+                    <span class="title">AI 작성</span>
+                </div>
+                <div class="btn" @click="writeReview">
+                    <span class="title">제출하기</span>
+                </div>
             </div>
         </div>
     </div>
 </template>
 
 <style scoped>
+.code-list {
+    /* border: 3px solid #3B72FF; */
+    border-radius: 15px;
+}
+
 .code-header {
+    width: 550px;
     justify-content: space-between;
+    border-radius: 10px;
+    background-color: #3B72FF;
+    padding: 5px;
+}
+
+.code-header>span {
+    font-size: 25px;
+    color: rgb(137, 204, 230);
 }
 
 .icon-close {
@@ -97,6 +121,10 @@ const toggle = () => {
 
 .input-con span {
     font-size: 30px;
+}
+
+.code-content {
+    padding: 15px;
 }
 
 .code-con {
@@ -115,7 +143,8 @@ const toggle = () => {
 
 textarea {
     width: 100%;
-    height: 200px;
+    height: 150px;
+    font-size: 18px;
 }
 
 .btn-con {
@@ -127,6 +156,10 @@ textarea {
     padding: 10px 0;
     text-align: center;
     border-radius: 10px;
+}
+
+.disabled {
+    background-color: #c7c7c7 !important;
 }
 
 .btn:nth-child(1) {

@@ -145,6 +145,7 @@ const findedComment = computed(() => {
 
 watch(() => props.currentPage, () => {
     fetchGetListByReviewId()
+    commentDto.value.reviewId = props.review.rid;
 })
 </script>
 

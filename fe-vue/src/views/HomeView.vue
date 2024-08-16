@@ -68,8 +68,13 @@ function refreshRoom() {
 }
 
 const searchList = function (roomName) {
-  currentPage.value = 1;
   getRoomList({ roomName: roomName, page: currentPage.value });
+  categoryObj.value = {
+    all: true,
+    game: false,
+    study: false,
+  };
+  currentPage.value = 1;
 };
 
 const categoryList = function (isGame) {
@@ -212,7 +217,7 @@ const pageChange = function (motion) {
   }
   console.log("motion: ", motion);
   console.log(currentPage.value);
-  getRoomList({ page: currentPage.value });
+  getRoomList({ isGame: category.value, page: currentPage.value });
 };
 
 const callInsertClass = async () => {

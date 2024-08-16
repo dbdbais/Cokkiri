@@ -93,7 +93,7 @@ const changeIndex = (index) => {
                     </div>
                     <div v-else>
                         <!-- <div v-for="review in tmpReviewData" :key="review.id"> -->
-                        <ReviewItem v-if="currentReview" :review="currentReview" />
+                        <ReviewItem v-if="currentReview" :review="currentReview" :current-page="currentPage" />
                         <!-- </div> -->
                         <div class="btn-pagi box-row">
                             <div class="btn-prev" @click="prevPage">◀</div>

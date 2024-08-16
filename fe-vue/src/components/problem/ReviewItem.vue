@@ -1,11 +1,12 @@
 <script setup>
-import { ref, onBeforeMount, computed } from 'vue';
+import { ref, onBeforeMount, computed, watch } from 'vue';
 import { insert, getListByReviewId } from '@/api/comment';
 import Comment from '@/components/problem/Comment.vue';
 import { userStore } from '@/stores/user';
 
 const props = defineProps({
     review: Object,
+    currentPage: Number
 });
 const uStore = userStore();
 const commentDto = ref({
@@ -141,6 +142,10 @@ function findCommentById(comments, targetId) {
 const findedComment = computed(() => {
     return findCommentById(commentData.value, selectedReplyId.value);
 });
+
+watch(() => props.currentPage, () => {
+    fetchGetListByReviewId()
+})
 </script>
 
 <template>

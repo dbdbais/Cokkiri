@@ -4,33 +4,15 @@
     <div id="main-left" class="box-col">
       <div class="box-row profile-header">
         <div class="btn-profile title main-title">개인 프로필</div>
-        <img
-          class="myprofile-icon"
-          src="@/assets/myprofile-smile.svg"
-          @click="openModal"
-        />
+        <img class="myprofile-icon" src="@/assets/myprofile-smile.svg" @click="openModal" />
       </div>
       <Profile class="profile" />
       <FriendsList id="friends-list" />
     </div>
     <div id="main-right" class="box-col">
-      <Header
-        id="header"
-        class="box-col"
-        @create="getRoomList"
-        @search="searchList"
-        @go-room="goRightNow"
-      />
-      <MainContent
-        id="main-content"
-        :rooms="rooms"
-        :current-page="currentPage"
-        :category-obj="categoryObj"
-        @go-room="goRoom"
-        @change-page="pageChange"
-        @is-game="categoryList"
-        @refresh="refreshRoom"
-      />
+      <Header id="header" class="box-col" @create="getRoomList" @search="searchList" @go-room="goRightNow" />
+      <MainContent id="main-content" :rooms="rooms" :current-page="currentPage" :category-obj="categoryObj"
+        @go-room="goRoom" @change-page="pageChange" @is-game="categoryList" @refresh="refreshRoom" />
     </div>
   </div>
   <MyProfile v-if="isModalOpen" @close="closeModal" />
@@ -81,11 +63,13 @@ const categoryObj = ref({
 const { isModalOpen, openModal, closeModal } = useModal();
 
 function refreshRoom() {
+  currentPage.value = 1;
   getRoomList({ page: currentPage.value });
 }
 
 const searchList = function (roomName) {
-  getRoomList({ roomName: roomName });
+  currentPage.value = 1;
+  getRoomList({ roomName: roomName, page: currentPage.value });
 };
 
 const categoryList = function (isGame) {
@@ -100,8 +84,8 @@ const categoryList = function (isGame) {
   } else if (isGame === false) {
     categoryObj.value.study = true;
   }
-
-  getRoomList({ isGame: isGame });
+  currentPage.value = 1;
+  getRoomList({ isGame: isGame, page: currentPage.value });
 };
 
 const goRightNow = function () {

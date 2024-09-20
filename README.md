@@ -239,3 +239,7 @@
 
 ## 9️⃣팀 소개✅
 ![팀원소개](resources/팀원소개.png)
+
+## 🔟UCC 영상🎬
+### [UCC 보기](https://github.com/user-attachments/assets/528b5e06-7524-4290-bd29-c38a71419581)
+

@@ -21,7 +21,10 @@
 ### 메인 페이지
 #### 메인
 - 로그인 후 나타나는 메인 페이지입니다.
-![메인페이지](resources/기능_메인페이지.png)
+
+
+<img src="https://github.com/user-attachments/assets/eb89094e-4cdd-4b0c-a386-5453502c2c51" style="width:2000px; height:auto;" alt="일일미션">
+
 
 #### 마이 페이지
 
@@ -40,32 +43,24 @@
 #### 비밀번호 초기화
 ![임시비번](resources/기능_임시비밀번호발급.PNG)
 
-#### 코드 리뷰 작성
-- 해결한 문제에 제출했던 코드에 대한 리뷰를 작성할 수 있습니다.
-- 생성형 AI의 도움을 받아 AI 작성이 가능합니다.
-
-![코드리뷰작성](resources/기능_코드리뷰작성.png)
-
 #### 일일 미션
 - 일일 미션을 통해 플랫폼에 자체에 재미를 더합니다.
 
-![일일미션](resources/기능_일일미션.png)
+<img src="https://github.com/user-attachments/assets/bcc890dd-5b9c-43de-958d-2e24f7bbfbf2" style="width:2000px; height:auto;" alt="일일미션">
+
 
 #### 친구 추가
-- 닉네임으로 사용자를 검색하고 추가할 수 있습니다.
 
-![친구추가](resources/기능_친구추가.png)
+<img src="https://github.com/user-attachments/assets/4ef737e0-0099-4b1c-bc1c-e68f922a7004" style="width:2000px; height:auto;" alt="친구추가 초대">
 
 ### 스터디 모집 게시판
 ##### 스터디 모집
 - 이름, 규칙, 시간을 설정하여 원하는 스터디를 만들고 스터디원을 모집할 수 있습니다.
 
-![스터디모집집](resources/기능_스터디모집.png)
-
 ##### 스터디 가입
 - 스터디 목록에서 스터디를 선택하고 해당 스터디에 대한 정보를 확인하여 가입 신청할 수 있습니다.
 
-![스터디가입](resources/기능_스터디가입.png)
+<img src="https://github.com/user-attachments/assets/58187d1f-6b38-4e52-bac3-aed3387ace43" style="width:2000px; height:auto;" alt="친구추가 초대">
 
 ### 문제 목록 페이지
 #### 문제 목록
@@ -77,23 +72,37 @@
 
 - 사용자들이 풀이한 문제에 대해 리뷰를 작성할 수 있습니다. AI가 코드를 보고 자동 작성을 할 수도 있습니다.
 
-    ![리뷰작성](resources/기능_리뷰%20작성.png)
+<img src="https://github.com/user-attachments/assets/8e4e0ef0-18a2-43cb-877e-fe62d847fcf1" style="width:2000px; height:auto;" alt="친구추가 초대">
+
+<img src="https://github.com/user-attachments/assets/0e3aa540-0d3c-4875-8333-a4c8a8ca1d37" style="width:2000px; height:auto;" alt="친구추가 초대">
 
 
-#### 리뷰 공유 및 작성
+
+#### 리뷰 공유 및 댓글 기능
 - 사용자들이 해결한 문제에 대해 코드 리뷰를 작성하면 코드와 코드 리뷰가 공유되어 알고리즘 실력을 향상시킬 수 있습니다.
 
 - 공유된 코드 리뷰에 대해서 댓글을 작성하고 알고리즘적 소통을 통해 알고리즘 실력을 향상시킬 수 있습니다.
 
-![리뷰댓글](resources/기능_리뷰댓글.png)
+
+<img src="https://github.com/user-attachments/assets/a84e9db6-747a-41ca-922d-ec7ad786a565" style="width:2000px; height:auto;" alt="친구추가 초대">
+
+
+<img src="https://github.com/user-attachments/assets/95499336-33b0-4909-acfe-84e3f78f2e95" style="width:2000px; height:auto;" alt="친구추가 초대">
+
+
 
 ### 스터디 대기 페이지
+
 #### 스터디 대기
 - 스터디 대기 방에서 문제를 선택하고 친구를 초대할 수 있습니다.
 
-![스터디대기페이지](resources/기능_스터디대기.png)
+<img src="https://github.com/user-attachments/assets/58e4ef99-1606-4f01-b9c6-7fbd8ee33bd4" style="width:2000px; height:auto;" alt="친구추가 초대">
+
 
 ### 스터디 진행 페이지
+
+<img src="https://github.com/user-attachments/assets/66dafcb1-618b-4cae-a9df-02fffbaee872" style="width:2000px; height:auto;" alt="친구추가 초대">
+
 #### 웹 컴파일러
 - 스터디 진행 중 코드와 입력을 작성하여 실행하거나, 제출하여 컴파일한 결과를 받을 수 있습니다.
 
@@ -105,7 +114,8 @@
 #### 문제 힌트
 - 생성형 AI를 활용하여 문제에 대한 힌트를 제공받고 문제를 해결하여 알고리즘 실력을 향상시킬 수 있습니다.
 
-![스터디힌트](resources/기능_스터디힌트.png)
+<img src="https://github.com/user-attachments/assets/2f4f8125-ea46-4a23-941a-532ac341db6c" style="width:2000px; height:auto;" alt="친구추가 초대">
+
 #### 코드 공유
 - 스터디 진행 간 작성한 코드를 즉시 공유하여 스터디의 편의성을 높이고 알고리즘적 소통을 지원합니다.
 
@@ -115,26 +125,32 @@
 #### 게임 대기
 - 사용자가 알고리즘 난이도를 설정하면 랜덤한 문제가 출제됩니다.
 
-![게임대기페이지](resources/기능_게임대기.png)
+
+<img src="https://github.com/user-attachments/assets/12f0507c-7dbf-4852-9f4d-1f7bb148e54e" style="width:2000px; height:auto;" alt="친구추가 초대">
+
+
 #### 친구 초대
 - 친구를 초대하여 함께 알고리즘 게임을 진행할 수 있습니다.
 
-![친구초대](resources/기능_친구초대.png)
 
 ### 게임 진행 페이지
 #### 게임 진행
 - 게임적 요소를 추가하여 사용자에게 아이템을 부여하고 타이머를 통해 긴장감을 부여합니다.
 
-![알고리즘게임](resources/기능_알고리즘게임.png)
+
 #### 게임 아이템
 - 제공받은 아이템은 특정 유저를 지정하여 한 번 사용할 수 있습니다.
 
-![알고리즘게임아이템](resources/기능_알고리즘게임아이템.png)
+
+<img src="https://github.com/user-attachments/assets/5f6cf2e5-9a06-4410-8627-6e4a8d955686" style="width:2000px; height:auto;" alt="친구추가 초대">
+
 
 #### 게임 결과
 - 문제의 제출 기록과 채점 결과를 볼 수 있으며, 맞춘 사용자가 3명이상 나오면 게임이 종료되고 게임 결과가 출력됩니다.
 
-![게임결과](resources/기능_게임결과.png)
+
+<img src="https://github.com/user-attachments/assets/0931f7bc-0751-414b-a6c6-404e8ec2da1e" style="width:2000px; height:auto;" alt="친구추가 초대">
+
 
 ### 로그인, 회원가입 페이지
 #### 로그인
